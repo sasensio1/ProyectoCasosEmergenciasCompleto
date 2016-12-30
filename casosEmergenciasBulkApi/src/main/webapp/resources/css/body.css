@@ -1,0 +1,660 @@
+labelCargandobody {
+	background-color: #FFFFFF;
+	padding: 0px;
+	margin: 3px;
+}
+
+body input[type="button"] {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+body input[type="text"] {
+	height: 20px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+body input[type="email"] {
+	height: 20px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+body input[type="tel"] {
+	height: 20px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+body input[type="submit"] {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+body select {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	padding: 2px;
+}
+
+body label {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+.divEntidad {
+	width: 98%;
+	margin-left: 5px;
+}
+
+.divEntidad div {
+	width: 100%;
+	padding-top: 2px;
+	padding-bottom: 4px;
+}
+
+.divEntidad div div {
+	float: left;
+	width: 30%;
+	font-family: Helvetica, Arial, sans-serif;
+	border-bottom: 1px solid #ececec;
+	font-size: 91%;
+	height: 20px;
+}
+
+.divEntidad div div .divAreaTexto {
+	padding: 10px;
+}
+
+.divEntidad div div .divObligatorio {
+	width: 3px;
+	float: left;
+	height: 15px;
+	background-color: red;
+	margin-right: 4px;
+}
+
+.divEntidad div .divLabel {
+	width: 20%;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: right;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+.divEntidad div .divLabel label {
+	padding-right: 10px;
+	font-weight: bold;
+}
+
+/* Estilos de DIV añadidos para páginas con distinta estructura */
+.divEntidad .divSubEntidad div {
+	width: 100%;
+	padding-top: 2px;
+	padding-bottom: 4px;
+}
+
+.divEntidad .divSubEntidad div .divLabel {
+	width: 20%;
+	text-align: right;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.divEntidad .divSubEntidad div .divLabel {
+	width: 20%;
+	height: 60px;
+	text-align: right;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.divEntidad .divSubEntidad div .divLabel label {
+	padding-right: 10px;
+	font-weight: bold;
+}
+
+.divEntidad .divSubEntidad div div {
+	float: left;
+	width: 30%;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	height: 20px;
+}
+
+.divEntidad .divSubEntidad div div .divObligatorio {
+	width: 3px;
+	float: left;
+	height: 15px;
+	background-color: red;
+	margin-right: 4px;
+}
+/* --------------------------------------------------------- */
+
+.subtitlePrincipalAltaEntidad .titleObligatorio {
+	width: 3px;
+	margin: 6px;
+	background-color: red;
+	float: left;
+	margin-right: 4px;
+	float: left;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Helvetica, Arial, sans-serif;
+	height: 15px;
+}
+
+.subtitlePrincipalAltaEntidad .titleObligatorioTexto {
+	padding: 6px 0px 6px 0px;
+	float: left;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+.divEntidad .subtitleAltaEntidad div {
+	width: 100%;
+	height: 15px;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	background-color: #f5f4f3;
+	padding-left: 4px;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+.divEntidad .subtitleAltaEntidad div label {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.divCabeceraEntidad {
+	margin: auto;
+    width: 50%;
+}
+
+/* >>>>> ESTILOS PARA BOTONES */
+.botoneraListado {
+	width: 100%;
+	margin: 8px 2px 5px 2px;
+}
+.botoneraListado ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+.botoneraListado li {
+	display: inline;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.botoneraListado li input {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12.5px;
+	font-weight: normal;
+	padding: 5px 10px;
+	border-color: #4a90e2;
+	background-color: #0070d2;
+	color: #fff;
+	background-image: none;
+	border-radius: 3px;
+	cursor: pointer;
+	align-items: flex-start;
+	text-align: center;
+}
+
+.botoneraCentrado{
+	
+    width: 50%;
+    padding: 10px;
+    
+}
+
+.botoneraCentrado ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+.botoneraCentrado li {
+	display: inline;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.botoneraCentrado li input {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12.5px;
+	font-weight: normal;
+	padding: 5px 10px;
+	border-color: #4a90e2;
+	background-color: #0070d2;
+	color: #fff;
+	background-image: none;
+	border-radius: 3px;
+	cursor: pointer;
+	align-items: flex-start;
+	text-align: center;
+}
+
+.botoneraEntidad {
+	float: left;
+}
+
+.botoneraEntidad ul {
+	margin: 0px 0px 10px 0px;
+	padding: 0px;
+}
+
+.botoneraEntidad li {
+	display: inline;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.botoneraEntidad li input {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	padding: 5px 10px;
+	background: #e8e8e9 url('../../resources/images/btn_sprite.png')
+		repeat-x right top;
+	border-radius: 3px;
+	cursor: pointer;
+	align-items: flex-start;
+	text-align: center;
+}
+
+.botoneraInferior {
+ 	float: left; 
+	position: relative;
+	margin: 40px 0px 0px 0px; 
+}
+/* <<<<< ESTILOS PARA BOTONES */
+
+.divTituloEntidad {
+	padding-top: 10px;
+	float: left;
+	width: 35%;
+}
+
+.divTituloEntidad label {
+	padding-left: 10px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.lupa {
+	background: url('../../resources/images/lupa.png') repeat-x right top;
+	cursor: pointer;
+	border: solid 0px #000000;
+	width: 20px;
+	height: 15px;
+	display: inline;
+	margin-left: 3px;
+}
+
+.limpiarCampo {
+	cursor: pointer;
+	text-decoration: underline;
+	color: blue;
+	border: solid 0px #000000;
+	background: none;
+	display: inline;
+	font-size: 11px;
+}
+
+/* >>>>> ESTILOS PARA MENSAJES DE ACTUALIZACIÓN DE CASOS */
+.divError {
+	display: none;
+	border: 1px solid #DF0000;
+	background-color: #FFCECE;
+	text-align: left;
+	padding: 10px 0px 10px 5px;
+	margin: 0px 0px 10px 0px;
+}
+
+.divAdvertencia {
+	display: none;
+	border: 1px solid #9F6000;
+    background-color: #FEEFB3;
+	text-align: left;
+	padding: 10px 0px 10px 5px;
+	margin: 0px 0px 10px 0px;
+}
+
+.labelDivError {
+	color: #DF0000;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;	
+}
+
+.labelDivAdvertencia {
+	color: #9F6000;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;	
+}
+
+
+.divOk {
+	display: none;
+	border: 1px solid #298D07;
+	background-color: #DFFDD5;
+	text-align: left;
+	padding: 10px 0px 10px 5px;
+	margin: 0px 0px 10px 0px;
+}
+
+.labelDivOk {
+	color: #298D07;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+/* <<<<< ESTILOS PARA MENSAJES DE ACTUALIZACIÓN DE CASOS */
+
+.divBusquedaDialog {
+	margin: 5px 0px 16px 0px;
+}
+
+.divBusquedaDialog input {
+	display: inline;
+	margin: 5px 12px 3px 0px;
+}
+
+.divBusquedaDialog input[type="button"] {
+	background: #e8e8e9 url('../../resources/images/btn_sprite.png')
+		repeat-x right top;
+}
+
+.divBusquedaDialog label {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 9px;
+	font-weight: normal;
+}
+
+.dialogCancelarCaso input[type="button"] {
+	background: #e8e8e9 url('../../resources/images/btn_sprite.png')
+		repeat-x right top;
+}
+
+.buttonLink {
+	cursor: pointer;
+	text-decoration: underline;
+	color: blue;
+	border: solid 0px #000000;
+	background: none;
+}
+
+.requiredTextArea{
+    border-color: red;
+    border-width: 2px;
+    outline-color: red;
+    outline-width: 2px;
+
+}
+
+/* >>>>> ESTILOS PARA ENLACES */
+.link {
+	text-decoration: none;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	color: #006cb5;
+}
+
+.link:hover {
+	text-decoration: none;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	color: #006cb5;
+}
+
+.link:visited {
+	text-decoration: none;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	color: #006cb5;
+}
+/* <<<<< ESTILOS PARA ENLACES */
+
+/* >>>>> ESTILOS PARA FORMULARIOS DE BÚSQUEDA */
+.formBusqueda {
+	width: 98%;
+	background: #F3F3F3;
+	border: solid 1px #959599;
+	margin-left: 5px;
+	margin-bottom: 20px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.tablaBusqueda {	
+	width: 98%;
+	margin: 10px;
+}
+
+.tablaBusquedaTitulo {
+	font-weight: bold;
+	font-size: 12px;
+	padding-bottom: 15px;
+}
+
+.tablaBusquedaEtiquetas {
+	text-align: right;
+	width: 8%;
+	padding: 10px;
+}
+
+.tablaBusquedaTextos {
+	text-align: left;
+	width: 92%;
+}
+
+.tablaBusquedaTextos input[type="text"] {
+	width: 200px;
+}
+
+.tablaBusquedaTextos input[type="email"] {
+	width: 200px;
+}
+
+.tablaBusquedaTextos input[type="tel"] {
+	width: 200px;
+}
+
+.tablaBusquedaTextos select {
+    width: 200px;
+}
+
+.tablaBusquedaBotonera {
+	text-align: left;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+/* <<<<< ESTILOS PARA FORMULARIOS DE BÚSQUEDA */
+
+/* >>>>> ESTILOS PARA TABLA DE SERVICIOS DE SUMINISTROS */
+.divEntidadDatos {
+	width: 80%;
+	position: relative;
+	float: left;
+	vertical-align: middle;
+}
+
+.divEntidadIndicadores {
+	width: 20%;
+	position: relative;
+	float: left;
+	vertical-align: middle;
+}
+
+.divIndicadoresEventos {
+	margin-top: 20px;
+	padding: 5px 10px 10px 10px;
+	background-color: #F3F3F3;
+	border-top: 2px solid #000000;
+	border-left: 1px solid #EAEAEA;
+	border-right: 1px solid #EAEAEA;
+	border-bottom: 1px solid #EAEAEA;
+		
+	-webkit-border-radius: 5px;
+	-webkit-border-bottom-right-radius: 2px;
+	-webkit-border-bottom-left-radius: 2px;
+	-moz-border-radius: 5px;
+	-moz-border-radius-bottomright: 2px;
+	-moz-border-radius-bottomleft: 2px;
+	border-radius: 5px;
+	border-bottom-right-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+
+.divSuministrosIndicadoresTitulo {
+	margin-top: 5px;
+	background-color: #995905;
+}
+
+.divSuministrosIndicadoresTitulo div .divLabel {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+.divContactosIndicadoresTitulo {
+	margin-top: 5px;
+	background-color: #8370C2;
+}
+
+.divContactosIndicadoresTitulo div .divLabel {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+table.servicesTable {
+	width: 98%;
+	margin: 0 auto;
+	clear: both;
+	border-collapse: separate;
+	border-spacing: 0;
+	text-align: left;
+}
+
+table.servicesTable td {
+	padding: 5px;
+}
+
+table.servicesTable td.filaLiteral {
+	width: 45%;
+	border-bottom: 1px solid #DDDDDD;
+	text-align: left;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+table.servicesTable td.filaImagen {
+	width: 15%;
+	border-bottom: 1px solid #DDDDDD;
+	text-align: left;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+}
+
+table.servicesTable td.filaValor {
+	width: 40%;
+	border-bottom: 1px solid #DDDDDD;
+	text-align: left;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+}
+
+table.servicesTable td.filaVacia {
+	width: 100%;
+	border-bottom: 1px solid #DDDDDD;
+	text-align: center;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+}
+
+.tablaAsociarSuministroEtiquetas {
+	text-align: left;
+	width: 10%;
+	padding: 10px;
+}
+
+.tablaAsociarSuministroTextos {
+	text-align: left;
+	width: 25%;
+}
+
+/* <<<<< ESTILOS PARA TABLA DE SERVICIOS DE SUMINISTROS */
+
+div .cabeceraTitulo {
+	text-align: left;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	padding: 5px;
+	margin-left: 5px;
+}
+
+div .cabeceraSubTitulo {
+	text-align: left;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 5px;
+	margin-left: 5px;
+}
+
+.dialogLupa select{
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	padding: 2px;
+}   
+
+
+/* <<<<< ESTILOS PARA DIV DE CARGAR PAGINA */
+
+.divCargando {
+	position: fixed;
+	text-align: center;
+	background-color: white; 
+	opacity: 0.5;
+	padding-top:25%;
+	z-index:100;
+	width: 100%; 
+	height: 100%;
+	overflow: hidden;
+
+	 
+}
+
+.labelCargando {
+	
+vertical-align:middle;
+font-size: 15;
+font-weight: 800;
+opacity: inherit;
+
+}

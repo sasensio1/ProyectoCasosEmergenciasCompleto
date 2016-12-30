@@ -1,0 +1,188 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  	<modelVersion>4.0.0</modelVersion>
+  	<groupId>com.enel</groupId>
+  	<artifactId>casosEmergencias</artifactId>
+  	<packaging>war</packaging>
+  	<version>0.0.1-SNAPSHOT</version>
+  	<name>emechil Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+  
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<jdk.version>1.8</jdk.version>
+		<spring-mvc.version>4.2.5.RELEASE</spring-mvc.version>
+		<springframework.version>4.0.6.RELEASE</springframework.version>
+		<jstl.version>1.2</jstl.version>
+		<javax.servlet>3.1.0</javax.servlet>
+		<hibernate.version>4.3.11.Final</hibernate.version>
+		<log.version>1.2.17</log.version>
+		<postgresql.version>9.4-1201-jdbc4</postgresql.version>
+		
+		<quartz.version>2.2.1</quartz.version>
+	</properties>
+	
+	<dependencies>
+		<!-- spring mvc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-mvc.version}</version>
+		</dependency>
+		 <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring-mvc.version}</version>
+        </dependency>
+		 <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-mvc.version}</version>
+        </dependency>
+        
+        <dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-jdbc</artifactId>
+		    <version>${spring-mvc.version}</version>
+		</dependency>       
+        
+        <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring-mvc.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-orm</artifactId>
+		    <version>${spring-mvc.version}</version>
+		</dependency> 
+        
+        <!-- jstl for jsp page -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl.version}</version>
+		</dependency>
+		
+		<!-- servlet api -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>${javax.servlet}</version>
+		</dependency>
+		
+		<!-- jsp api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+				
+		<dependency>  
+		    <groupId>javax</groupId>    
+		    <artifactId>javaee-web-api</artifactId>    
+		    <version>7.0</version> <!-- Put here the version of your Java EE app, in my case 7.0 -->
+		    <scope>provided</scope>
+		</dependency>
+		
+		<!-- BBDD -->
+	    <dependency>
+	      <groupId>org.postgresql</groupId>
+	      <artifactId>postgresql</artifactId>
+	      <version>${postgresql.version}</version>
+	    </dependency>
+	    
+	   	<!-- Hibernate -->
+		<dependency>
+           <groupId>org.hibernate</groupId>
+           <artifactId>hibernate-core</artifactId>
+           <version>${hibernate.version}</version>
+       </dependency>
+       <dependency>
+           <groupId>org.hibernate</groupId>
+           <artifactId>hibernate-entitymanager</artifactId>
+           <version>${hibernate.version}</version>
+       </dependency>
+       
+       
+       <dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.2.2</version>
+		</dependency>
+       
+       	<!-- dependency log -->
+       	<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log.version}</version>
+		</dependency>
+   
+	</dependencies>
+	
+ 	<build>
+    	<finalName>casosEmergencias</finalName>
+ 		<plugins>	  
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.2</version>
+            </plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.3</version>
+			<configuration>
+				<source>${jdk.version}</source>
+				<target>${jdk.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+			</configuration>
+		</plugin>
+		
+		<!-- configure Eclipse workspace --> 
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-eclipse-plugin</artifactId>
+			<version>2.9</version>
+			<configuration>
+				<downloadSources>true</downloadSources>
+				<downloadJavadocs>true</downloadJavadocs>
+				<wtpversion>2.0</wtpversion>
+			</configuration>
+		</plugin>
+		
+		<plugin>
+	          <groupId>org.apache.maven.plugins</groupId>
+	          <artifactId>maven-dependency-plugin</artifactId>
+	          <version>2.3</version>
+	          <executions>
+	            <execution>
+	              <phase>package</phase>
+	              <goals><goal>copy</goal></goals>
+	              <configuration>
+	                <artifactItems>
+	                  <artifactItem>
+	                    <groupId>org.eclipse.jetty</groupId>
+	                    <artifactId>jetty-runner</artifactId>
+	                    <version>9.2.7.v20150116</version>
+	                    <destFileName>jetty-runner.jar</destFileName>
+	                  </artifactItem>
+	                </artifactItems>
+	              </configuration>
+	            </execution>
+	          </executions>
+		</plugin>
+        
+       <plugin>
+	        <groupId>com.heroku.sdk</groupId>
+	        <artifactId>heroku-maven-plugin</artifactId>
+	        <version>1.0.3</version>
+	        <configuration>
+	        	<appName>heroku-en-dev</appName>
+			</configuration>			
+     	</plugin>
+    </plugins>
+    
+  </build>
+</project>
