@@ -310,6 +310,9 @@ public class ContactServiceImpl implements ContactService{
 					respuestaRelacionActivoContacto = CreateRelacionActivoContacto.createCreateRelacionActivoContactoInSalesforce(userSessionInfoFromDB, suministroSfid,contactoSfid);
 					if (respuestaRelacionActivoContacto != null) {
 						RelacionActivoContactoVO relacionActivoContactoHeroku=new RelacionActivoContactoVO();
+						
+						relacionActivoContactoHeroku.setContactoId(contactoSfid);
+
 						if (respuestaRelacionActivoContacto.getRelacionActivoId() != null && !"".equals(respuestaRelacionActivoContacto.getRelacionActivoId())) {
 							relacionActivoContactoHeroku.setSfid(respuestaRelacionActivoContacto.getRelacionActivoId());
 							logger.info("Relacion Activo creado con sfid:" + respuestaRelacionActivoContacto.getRelacionActivoId());
@@ -322,7 +325,7 @@ public class ContactServiceImpl implements ContactService{
 							relacionActivoContactoHeroku.setActivoId(respuestaRelacionActivoContacto.getActivoId());
 							logger.info("Relacion Activo creado con activoId:" + respuestaRelacionActivoContacto.getActivoId());
 						}
-												
+																								
 						ParserModelVO.parseDataModelVO(relacionActivoContacto, relacionActivoContactoHeroku);
 						if (respuestaRelacionActivoContacto.getInsertActivoBoolean() !=true) {
 							relacionActivoContacto.setInsertActivoBoolean(respuestaRelacionActivoContacto.getInsertActivoBoolean());
