@@ -24,6 +24,7 @@
 		<httpcomponents.version>4.5.2</httpcomponents.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<commons-discovery.version>0.5</commons-discovery.version>
+		<commons-lang.version>2.6</commons-lang.version>
 		<quartz.version>2.2.3</quartz.version>
 		<quartz-jobs.version>2.2.3</quartz-jobs.version>
 		<force-rest-api.version>0.0.23</force-rest-api.version>
@@ -147,6 +148,11 @@
 		    <groupId>commons-discovery</groupId>
 		    <artifactId>commons-discovery</artifactId>
 		    <version>${commons-discovery.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-lang</groupId>
+		    <artifactId>commons-lang</artifactId>
+		    <version>${commons-lang.version}</version>
 		</dependency>
 		<!-- Log4j -->
 		<dependency>
