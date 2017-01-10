@@ -38,7 +38,6 @@ public class RelacionActivoContactoVO implements Serializable {
 	@Column(name="createddate")
 	private Date createdDate;
 	
-
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

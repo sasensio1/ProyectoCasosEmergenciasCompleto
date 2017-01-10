@@ -69,6 +69,7 @@ public class AssetVO implements Serializable {
 		@JoinColumn(name="accountid", referencedColumnName="sfid", insertable = false, updatable=false)
 		private AccountVO cuentaJoin;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar accountid
 
+		
 		public Boolean getIsDeleted() {
 			return isDeleted;
 		}
