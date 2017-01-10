@@ -40,6 +40,7 @@ import com.casosemergencias.model.Caso;
 import com.casosemergencias.model.Contacto;
 import com.casosemergencias.model.Direccion;
 import com.casosemergencias.model.HerokuUser;
+import com.casosemergencias.model.RelacionActivoContacto;
 import com.casosemergencias.model.Suministro;
 import com.casosemergencias.util.ParserModelVO;
 import com.casosemergencias.util.PickListByField;
@@ -317,10 +318,50 @@ public class ContactController {
 		return false;
 	}
 	
-	@RequestMapping(value = "/private/asociarSuministro", method = RequestMethod.GET)
-	public String getDireccionData(@RequestParam String sfid,@RequestParam String contactSfid) {
-		logger.debug("Ejecutar consulta");
-		String returnUrl="";
+	@RequestMapping(value = "/private/asociarSuministro", method = RequestMethod.POST)
+	public ModelAndView saveAsociarSuministro(HttpServletRequest request) throws EmergenciasException{
+		
+		logger.info("--- Inicio -- asociarSuministro ---");
+		ModelAndView model = new ModelAndView();
+		RelacionActivoContacto relacionActivoInsertado= new RelacionActivoContacto();
+
+		String contactSfid = (String) request.getParameter("sfidContact");
+		String suministroSfid = (String) request.getParameter("sfidSuministro");
+
+
+		
+		try {
+			relacionActivoInsertado=contactService.insertSalesforceRelacionActivo(suministroSfid,contactSfid);
+			if (relacionActivoInsertado != null) {
+				if(relacionActivoInsertado.getInsertActivoBoolean()==true){
+					logger.info("Relacion Activo Contacto guardado correctamente con sfid:" + relacionActivoInsertado.getSfid());
+					model.setViewName("redirect:entidadContacto?editMode="+Constantes.SUM_ASSOCIATION_CONTACT_OK+"&sfid=" + contactSfid);
+				}		
+				else{
+					logger.info("Asociacion Duplicada:" + relacionActivoInsertado.getSfid());
+					model.setViewName("redirect:entidadContacto?editMode="+Constantes.SUM_ASSET_SEARCH_CONTACT_ERROR+"&sfid=" + contactSfid);
+				}
+			}	
+			else{
+				logger.info("Se ha producido un error guardando la relacion Activo Contacto");
+				model.addObject("mostrarMensaje", true);
+				model.addObject("hayError", true);
+				model.addObject("codigoError", ConstantesError.EMERG_ERROR_CODE_004);
+				model.addObject("mensajeResultado", ConstantesError.HEROKU_SERVICE_PRODUCT_CREATION_GENERIC_ERROR);
+				model.setViewName("redirect:entidadContacto?editMode=VIEW&sfid=" + contactSfid);	
+			}
+		}		
+		catch(EmergenciasException exception) {
+			logger.info("No se ha guardado correctamente la relacion Activo Contacto");
+			model.addObject("mostrarMensaje", true);
+			model.addObject("hayError", true);
+			model.addObject("codigoError", exception.getCode());
+			model.addObject("mensajeResultado", exception.getMessage());
+			model.setViewName("redirect:entidadContacto?editMode=VIEW&sfid=" + contactSfid);
+
+		}
+
+		/*String returnUrl="";
 
 		Boolean asociarSuministro=contactService.asociarSuministro(sfid,contactSfid);	
 		if(asociarSuministro!=null){
@@ -332,8 +373,8 @@ public class ContactController {
 		}
 		else {
 			returnUrl= "redirect:entidadContacto?editMode="+Constantes.SUM_ASSET_SEARCH_CONTACT_ERROR+"&sfid=" + contactSfid;
-		}
-		return returnUrl;
+		}*/
+		return model;
 	}
 	
 	/**

@@ -74,6 +74,8 @@ public class RelacionActivoContactoVO implements Serializable {
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="contact__c", referencedColumnName="sfid", insertable = false, updatable=false)
 	private ContactVO contacto;
+	
+
 
 	public Boolean getIsDeleted() {
 		return isDeleted;
@@ -194,6 +196,8 @@ public class RelacionActivoContactoVO implements Serializable {
 	public void setTipoRelacionActivoClave(String tipoRelacionActivoClave) {
 		this.tipoRelacionActivoClave = tipoRelacionActivoClave;
 	}
+
+	
 	
 	
 	

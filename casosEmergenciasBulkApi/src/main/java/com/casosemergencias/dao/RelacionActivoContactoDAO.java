@@ -20,7 +20,7 @@ public class RelacionActivoContactoDAO {
 	final static Logger logger = Logger.getLogger(RelacionActivoContactoDAO.class);
 		
 	@Autowired
-	private SessionFactory sessionFactory;
+	private  SessionFactory sessionFactory;
 	
 	/**
 	 * Devuelve una lista con todos las RelacionesActivoContacto de BBDD
