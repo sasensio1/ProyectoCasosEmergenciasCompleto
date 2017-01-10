@@ -1,7 +1,7 @@
 package com.casosemergencias.dao.vo;
 import java.io.Serializable;
 import java.util.Date;
- 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,6 +38,7 @@ public class RelacionActivoContactoVO implements Serializable {
 	@Column(name="createddate")
 	private Date createdDate;
 	
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
