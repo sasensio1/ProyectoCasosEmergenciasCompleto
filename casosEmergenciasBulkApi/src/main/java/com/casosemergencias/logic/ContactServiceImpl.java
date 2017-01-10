@@ -19,6 +19,7 @@ import com.casosemergencias.dao.DireccionDAO;
 import com.casosemergencias.dao.RelacionActivoContactoDAO;
 import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.AssetVO;
+import com.casosemergencias.dao.vo.CaseCommentVO;
 import com.casosemergencias.dao.vo.CaseVO;
 import com.casosemergencias.dao.vo.ContactVO;
 import com.casosemergencias.dao.vo.DireccionVO;
@@ -26,13 +27,19 @@ import com.casosemergencias.dao.vo.RelacionActivoContactoVO;
 import com.casosemergencias.dao.vo.StreetVO;
 import com.casosemergencias.dao.vo.SuministroVO;
 import com.casosemergencias.exception.EmergenciasException;
+import com.casosemergencias.logic.sf.response.CreateCaseCommentResponse;
+import com.casosemergencias.logic.sf.response.CreateRelacionActivoContactoResponse;
 import com.casosemergencias.logic.sf.response.SearchDirectionResponse;
+import com.casosemergencias.logic.sf.rest.CreateCaseComment;
+import com.casosemergencias.logic.sf.rest.CreateRelacionActivoContacto;
 import com.casosemergencias.logic.sf.rest.SearchDirection;
 import com.casosemergencias.logic.sf.util.SalesforceLoginChecker;
 import com.casosemergencias.model.Calle;
+import com.casosemergencias.model.CaseComment;
 import com.casosemergencias.model.Caso;
 import com.casosemergencias.model.Contacto;
 import com.casosemergencias.model.Direccion;
+import com.casosemergencias.model.RelacionActivoContacto;
 import com.casosemergencias.model.Suministro;
 import com.casosemergencias.model.UserSessionInfo;
 import com.casosemergencias.util.ParserModelVO;
@@ -170,7 +177,7 @@ public class ContactServiceImpl implements ContactService{
 		return null;
 	}
 
-	@Override
+	/*@Override
 	public Boolean asociarSuministro(String sfid, String contactSfid) {
 		List<AssetVO> listAssetVO= assetDAO.readAssetBySuministroid(sfid);
 		if(listAssetVO!=null && !listAssetVO.isEmpty()){
@@ -190,7 +197,9 @@ public class ContactServiceImpl implements ContactService{
 				}
 		}
 		return null;
-	}
+	}*/
+	
+	
 	
 	@Override
 	public Direccion getSalesforceAddress(Calle street,Direccion direccion) throws EmergenciasException {
@@ -268,6 +277,99 @@ public class ContactServiceImpl implements ContactService{
 		logger.trace("--- Servicio getSFDirection completado ---");
 		return direccionSf;
 	}
+	
+	
+	
+	
+	@Override		
+	public RelacionActivoContacto insertSalesforceRelacionActivo(String suministroSfid,String contactoSfid)throws EmergenciasException {
+		
+		logger.trace("--- Servicio insertSalesforceRelacionActivo iniciado ---");
+		// 1. Leer usuario de fichero de propiedades
+		Properties properties = new Properties();
+		String username = null;
+		String password = null;
+		String token = null;
+		UserSessionInfo userSessionInfoFromDB = null;
+		CreateRelacionActivoContactoResponse respuestaRelacionActivoContacto = null;
+		RelacionActivoContacto relacionActivoContacto=new RelacionActivoContacto();
+		
+		try (InputStream propsInputStream = getClass().getClassLoader().getResourceAsStream("/environment/dev/config.properties")) {
+			properties.load(propsInputStream);
+			username = properties.getProperty("heroku.user");
+			password = properties.getProperty("heroku.pass");
+			token = properties.getProperty("heroku.token");
+			
+			if (username != null && !"".equals(username) && password != null && !"".equals(password) && token != null && !"".equals(token)) {
+				UserSessionInfo sessionInfoToLogin = new UserSessionInfo();
+				sessionInfoToLogin.setUsername(properties.getProperty("heroku.user"));
+				sessionInfoToLogin.setPassword(properties.getProperty("heroku.pass"));
+				sessionInfoToLogin.setAccessToken(properties.getProperty("heroku.token"));
+				userSessionInfoFromDB = salesforceLoginChecker.getUserSessionInfo(sessionInfoToLogin);
+				if (userSessionInfoFromDB != null) {
+					respuestaRelacionActivoContacto = CreateRelacionActivoContacto.createCreateRelacionActivoContactoInSalesforce(userSessionInfoFromDB, suministroSfid,contactoSfid);
+					if (respuestaRelacionActivoContacto != null) {
+						RelacionActivoContactoVO relacionActivoContactoHeroku=new RelacionActivoContactoVO();
+						if (respuestaRelacionActivoContacto.getRelacionActivoId() != null && !"".equals(respuestaRelacionActivoContacto.getRelacionActivoId())) {
+							relacionActivoContactoHeroku.setSfid(respuestaRelacionActivoContacto.getRelacionActivoId());
+							logger.info("Relacion Activo creado con sfid:" + respuestaRelacionActivoContacto.getRelacionActivoId());
+						}
+						if (respuestaRelacionActivoContacto.getTipoRelacionActivoClave() != null && !"".equals(respuestaRelacionActivoContacto.getTipoRelacionActivoClave())) {
+							relacionActivoContactoHeroku.setTipoRelacionActivoClave(respuestaRelacionActivoContacto.getTipoRelacionActivoClave());
+							logger.info("Relacion Activo creado con tipoRelacionActivoClave:" + respuestaRelacionActivoContacto.getTipoRelacionActivoClave() );
+						}
+						if (respuestaRelacionActivoContacto.getActivoId() != null && !"".equals(respuestaRelacionActivoContacto.getActivoId())) {
+							relacionActivoContactoHeroku.setActivoId(respuestaRelacionActivoContacto.getActivoId());
+							logger.info("Relacion Activo creado con activoId:" + respuestaRelacionActivoContacto.getActivoId());
+						}
+												
+						ParserModelVO.parseDataModelVO(relacionActivoContacto, relacionActivoContactoHeroku);
+						if (respuestaRelacionActivoContacto.getInsertActivoBoolean() !=true) {
+							relacionActivoContacto.setInsertActivoBoolean(respuestaRelacionActivoContacto.getInsertActivoBoolean());
+							logger.info("No se realiza la asociación" + respuestaRelacionActivoContacto.getInsertActivoBoolean());
+						}
+						else{
+							relacionActivoContacto.setInsertActivoBoolean(respuestaRelacionActivoContacto.getInsertActivoBoolean());
+							logger.info("Relacion Activo creado con insertActivoBoolean(:" + respuestaRelacionActivoContacto.getInsertActivoBoolean());
+							
+							Integer idActivo = relacionDAO.insertRelacionActivoContacto(relacionActivoContactoHeroku);
+							if (idActivo>0) {
+								logger.info("RelacionActivoContacto insertado correctamente en Heroku");
+							} else {
+								relacionActivoContacto = null;
+								logger.error("No se ha podido insertar la RelacionActivoContacto en Heroku. Ha fallado la inserción en base de datos");
+								throw new EmergenciasException(ConstantesError.EMERG_ERROR_CODE_003, ConstantesError.HEROKU_SERVICE_PRODUCT_CREATION_OK_WITH_ERROR);
+							}
+						}
+					} else {
+						relacionActivoContacto = null;
+						logger.warn("Se ha producido un error al insertar la relacion Activo Contacto en SalesForce");
+						throw new EmergenciasException(ConstantesError.EMERG_ERROR_CODE_002, ConstantesError.SALESFORCE_SERVICE_PRODUCT_CREATION_ERROR);
+					}
+				}
+			}
+		} catch (IOException exception) {
+			logger.error("Error obteniendo los datos del usuario: ", exception);
+			throw new EmergenciasException(ConstantesError.EMERG_ERROR_CODE_006, ConstantesError.SALESFORCE__SEARCH_REL_ACTIVO_CONTACTO_ERROR);
+		}
+		logger.trace("--- Servicio insertSalesforceRelacionActivo completado ---");
+		return relacionActivoContacto;
+				
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/*@Override
 	public Caso populateCaseInfoToInsert(String direccionSf, String contactSfid,String herokuCaseOwner) {
