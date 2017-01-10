@@ -88,7 +88,16 @@ public class DireccionVO extends ObjectVO implements Serializable {
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "streetmd__c", referencedColumnName = "sfid", insertable = false, updatable = false)
-	private StreetVO calleJoin;
+	private StreetVO calleJoin;//martgarc: 10/01/2017: Para cargar el objeto hay que cargar el id en campo calle.
+	
+	//INI:martgarc: 10/01/2017: para hacer las cargas de los cambios, necesitamos tener id de la picklist
+	@Column(name = "street_type__c")
+	private String idTipoCallePickList;
+
+	@Column(name = "region__c")
+	private String idRegionPickList;
+
+	//FIN:martgarc: 10/01/2017
 	
 	public DireccionVO(Boolean isdeleted, Date systemmodstamp, String hcLastop, String hcError, Integer id, String sfid,
 			Date createddate, String region, String comuna, String tipoCalle, String calle, String numero,
@@ -296,5 +305,21 @@ public class DireccionVO extends ObjectVO implements Serializable {
 
 	public void setCalleJoin(StreetVO calleJoin) {
 		this.calleJoin = calleJoin;
+	}
+
+	public String getIdTipoCallePickList() {
+		return idTipoCallePickList;
+	}
+
+	public void setIdTipoCallePickList(String idTipoCallePickList) {
+		this.idTipoCallePickList = idTipoCallePickList;
+	}
+
+	public String getIdRegionPickList() {
+		return idRegionPickList;
+	}
+
+	public void setIdRegionPickList(String idRegionPickList) {
+		this.idRegionPickList = idRegionPickList;
 	}
 }

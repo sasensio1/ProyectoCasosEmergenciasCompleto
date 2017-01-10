@@ -162,68 +162,68 @@ public class SuministroVO extends ObjectVO implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "readingprocess__c", referencedColumnName = "codigo", insertable = false, updatable = false)
 	@Where(clause = "objeto='pointofdelivery__c'  AND campo='ReadingProcess__c'")
-	private PickListsVO procesoLecturaPickList;
+	private PickListsVO procesoLecturaPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizartipo  procesoLectura
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "metertype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
 	@Where(clause = "objeto='pointofdelivery__c'  AND campo='MeterType__c'")
-	private PickListsVO tipoMedidaPickList;
+	private PickListsVO tipoMedidaPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizartipo  tipoMedida
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "segmenttype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumTipoSegmentoVO tipoSegmentoPickList;
+	private PickListsSumTipoSegmentoVO tipoSegmentoPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizartipo  tipoSegmento
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "electricalsubstationconnection__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumSubestacionElecVO subestacionElecPickList;
+	private PickListsSumSubestacionElecVO subestacionElecPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizartipo  subestacionElectricaConexion
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "meterproperty__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumPropiedadMedidorVO propMedidorPickList;
+	private PickListsSumPropiedadMedidorVO propMedidorPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizartipo propiedadMedidor
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "connectiontype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumTipoConexionVO tipoConexionPickList;
+	private PickListsSumTipoConexionVO tipoConexionPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizartipo Conexion
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "readingtype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumTipoLecturaVO tipoLecturaPickList;
+	private PickListsSumTipoLecturaVO tipoLecturaPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar tipoLectura
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "transformertype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumTipoTransfVO tipoTransformadorPickList;
+	private PickListsSumTipoTransfVO tipoTransformadorPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizartipo Transformador
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "municipalityallocation__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumComunaRepartoVO comunaRepartoPickList;
+	private PickListsSumComunaRepartoVO comunaRepartoPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar comunaReparto
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fullelectric__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumFullElectricVO fullElectricPickList;
+	private PickListsSumFullElectricVO fullElectricPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar fullElectric
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "disciplinarymeasure__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumMedidaDisciplinaVO medidaDisciplinaPickList;
+	private PickListsSumMedidaDisciplinaVO medidaDisciplinaPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar medidaDisciplina
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "companyid__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumEmpresaVO empresaPickList;
+	private PickListsSumEmpresaVO empresaPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar idEmpresa
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "connectionstatus__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumEstadoConVO estadoConexionPickList;
+	private PickListsSumEstadoConVO estadoConexionPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar estadoConexion
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "pointofdeliverystatus__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumEstadoSumVO estadoSuministroPickList;
+	private PickListsSumEstadoSumVO estadoSuministroPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar estadoSuministro
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "electrodependant__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumElectrodependienteVO electrodependientePickList;
+	private PickListsSumElectrodependienteVO electrodependientePickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar electrodependiente
 	
 	@OneToOne(fetch=FetchType.LAZY, optional=true)
 	@JoinColumn(name="detailaddress__c", referencedColumnName="sfid", insertable = false, updatable=false)
-	private DireccionVO dirSuministroJoin;
+	private DireccionVO dirSuministroJoin;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar direccion
 
 	public SuministroVO() {
 	}

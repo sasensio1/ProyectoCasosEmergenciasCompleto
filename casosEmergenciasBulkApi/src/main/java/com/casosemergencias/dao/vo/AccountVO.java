@@ -105,10 +105,15 @@ public class AccountVO extends ObjectVO implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "parentid", referencedColumnName = "sfid", insertable = false, updatable = false)
 	private AccountVO parent;
+
+	//INI:martgarc: 10/01/2017: para hacer las cargas de los cambios, necesitamos tener id de la picklist
+	@Column(name = "parentid")
+	private String parentid;
+	//FIN:martgarc: 10/01/2017
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "address__c", referencedColumnName = "sfid", insertable = false, updatable = false)
-	private DireccionVO direccionJoin;
+	private DireccionVO direccionJoin;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar direccion
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "accountid", referencedColumnName = "sfid", insertable = false, updatable = false, nullable = true)
@@ -125,15 +130,15 @@ public class AccountVO extends ObjectVO implements Serializable {
 	/*Joins con picklist*/
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "identitytype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsAccountTipoIdentidadVO tipoIdentidadPickList;
+	private PickListsAccountTipoIdentidadVO tipoIdentidadPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar tipoIdentidad
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "type", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsAccountTipoVO tipoPickList;
+	private PickListsAccountTipoVO tipoPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar tipo
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "companyid__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsAccountIdEmpresaVO idEmpresaPickList;
+	private PickListsAccountIdEmpresaVO idEmpresaPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar idEmpresa
 	
 	// Tipo de registro de cuenta
 	public AccountVO(Boolean isDeleted, Date systemDate, String hcLastop, String hcError, Integer id, String sfid,
@@ -478,6 +483,14 @@ public class AccountVO extends ObjectVO implements Serializable {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	public String getParentid() {
+		return parentid;
+	}
+
+	public void setParentid(String parentid) {
+		this.parentid = parentid;
 	}
 	
 	

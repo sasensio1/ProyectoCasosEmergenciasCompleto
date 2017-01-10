@@ -123,13 +123,15 @@ public class ContactVO extends ObjectVO implements Serializable {
 	
 	@OneToOne(fetch=FetchType.LAZY, optional=true)
 	@JoinColumn(name="accountid", referencedColumnName="sfid", insertable = false, updatable=false)
-	private AccountVO cuentaJoin;
+	private AccountVO cuentaJoin;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar accountid
 	
 	@OneToOne(fetch=FetchType.LAZY, optional=true)
 	@JoinColumn(name="contactaddress__c", referencedColumnName="sfid", insertable = false, updatable=false)
 	private DireccionVO dirContactoJoin;
 	
-	
+	//INI:martgarc: 10/01/2017: para hacer las cargas de los cambios, necesitamos tener id de la picklist
+	@Column(name = "contactaddress__c")
+	private String idDirContacto;
 	
 	/*Recuento de seguidores de Twitter*/ 
 	/*Influencer*/
@@ -140,17 +142,17 @@ public class ContactVO extends ObjectVO implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "preferredchannelcontact__c", referencedColumnName = "codigo", insertable = false, updatable = false)
 	@WhereJoinTable(clause = "campo = 'PreferredChannelContact__c' and objeto = 'Contact'")
-	private PickListsContactCanalPreferenteContactoVO canalPreferenteContactoPickList;
+	private PickListsContactCanalPreferenteContactoVO canalPreferenteContactoPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar canalPreferenteContacto
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "identitytype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
 	@WhereJoinTable(clause = "campo = 'IdentityType__c' and objeto = 'Contact'")
-	private PickListsContactTipoIdentidadVO tipoIdentidadPickList;
+	private PickListsContactTipoIdentidadVO tipoIdentidadPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar tipoIdentidad
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "contacttype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
 	@WhereJoinTable(clause = "campo = 'ContactType__c' and objeto = 'Contact'")
-	private PickListsContactTipoContactoVO tipoContactoPickList;
+	private PickListsContactTipoContactoVO tipoContactoPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar tipoContacto
 	
 	public ContactVO() {
 		super();
@@ -516,5 +518,13 @@ public class ContactVO extends ObjectVO implements Serializable {
 
 	public void setDirContactoJoin(DireccionVO dirContactoJoin) {
 		this.dirContactoJoin = dirContactoJoin;
+	}
+
+	public String getIdDirContacto() {
+		return idDirContacto;
+	}
+
+	public void setIdDirContacto(String idDirContacto) {
+		this.idDirContacto = idDirContacto;
 	}
 }

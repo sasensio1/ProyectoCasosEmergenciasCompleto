@@ -113,6 +113,19 @@ public class StreetVO extends ObjectVO implements Serializable {
 	@Where(clause = "objeto='street__c'  AND campo='Street_Type__c'")
 	private PickListsStreetTypeVO streetTypePickList;
 	
+	
+	//INI:martgarc: 10/01/2017: para hacer las cargas de los cambios, necesitamos tener id de la picklist
+	@Column(name = "municipality__c")
+	private String idMunicipalityPickList;
+	
+	@Column(name = "region__c")
+	private String idRegionPickList;
+	
+	@Column(name = "street_type__c")
+	private String idStreetTypePickList;
+
+	//FIN:martgarc: 10/01/2017
+	
 	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
@@ -349,5 +362,29 @@ public class StreetVO extends ObjectVO implements Serializable {
 	public Object instantiateTargetLogic() {
 		Calle calle = new Calle();
 		return calle;
+	}
+
+	public String getIdMunicipalityPickList() {
+		return idMunicipalityPickList;
+	}
+
+	public void setIdMunicipalityPickList(String idMunicipalityPickList) {
+		this.idMunicipalityPickList = idMunicipalityPickList;
+	}
+
+	public String getIdRegionPickList() {
+		return idRegionPickList;
+	}
+
+	public void setIdRegionPickList(String idRegionPickList) {
+		this.idRegionPickList = idRegionPickList;
+	}
+
+	public String getIdStreetTypePickList() {
+		return idStreetTypePickList;
+	}
+
+	public void setIdStreetTypePickList(String idStreetTypePickList) {
+		this.idStreetTypePickList = idStreetTypePickList;
 	}
 }
