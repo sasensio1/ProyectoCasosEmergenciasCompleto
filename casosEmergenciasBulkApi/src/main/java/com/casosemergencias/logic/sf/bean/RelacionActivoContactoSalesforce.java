@@ -26,8 +26,8 @@ public class RelacionActivoContactoSalesforce {
 	public static RelacionActivoContactoSalesforce copyFieldsFromHerokuToSalesForceRelacionActivoContacto(String suministroSfid,String contactoSfid) {
 		RelacionActivoContactoSalesforce relacionActivoContactotSF = new RelacionActivoContactoSalesforce();
 
-		relacionActivoContactotSF.setContactoSfid((suministroSfid!= null && !"".equals(suministroSfid) ? suministroSfid: ""));
-		relacionActivoContactotSF.setSuministroSfid((contactoSfid!= null && !"".equals(contactoSfid) ? contactoSfid : ""));
+		relacionActivoContactotSF.setContactoSfid((contactoSfid!= null && !"".equals(contactoSfid) ? contactoSfid: ""));
+		relacionActivoContactotSF.setSuministroSfid((suministroSfid!= null && !"".equals(suministroSfid) ? suministroSfid : ""));
 		
 		return relacionActivoContactotSF;
 	}

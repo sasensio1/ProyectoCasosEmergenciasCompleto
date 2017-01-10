@@ -184,11 +184,7 @@ function asociarSuministro(sfid,contactSfid){
 	document.getElementById("idSuministro").value=sfid;
 	verCargando();	
 	$('#asociarSuministroId').submit();
-	
-
-	
-	//window.location="../private/asociarSuministro?sfid=" + sfid +"&contactSfid="+contactSfid ;
-	
+		
 }
 
 function checkUpdates() {
