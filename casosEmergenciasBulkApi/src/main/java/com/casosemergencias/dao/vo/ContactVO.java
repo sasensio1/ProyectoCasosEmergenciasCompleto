@@ -549,4 +549,11 @@ public class ContactVO extends ObjectVO implements Serializable {
 	public void setIdDirContacto(String idDirContacto) {
 		this.idDirContacto = idDirContacto;
 	}
+
+	@Override
+	public String toString() {
+		return "ContactVO [sfid=" + sfid + ", name=" + name + ", fechaNacimiento=" + fechaNacimiento
+				+ ", telefonoSecundario=" + telefonoSecundario + "]";
+	}
+	
 }

@@ -492,6 +492,11 @@ public class AccountVO extends ObjectVO implements Serializable {
 	public void setParentid(String parentid) {
 		this.parentid = parentid;
 	}
+
+	@Override
+	public String toString() {
+		return "AccountVO [sfid=" + sfid + ", name=" + name + ", telefonoSecundario=" + telefonoSecundario + "]";
+	}
 	
 	
 	
