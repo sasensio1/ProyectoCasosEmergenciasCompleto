@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.WhereJoinTable;
 
 import com.casosemergencias.model.Contacto;
+import com.casosemergencias.util.Utils;
 
 @Entity
 @Table(name="salesforce.contact")
@@ -263,6 +264,13 @@ public class ContactVO extends ObjectVO implements Serializable {
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
+	
+	public void setFechaNacimientoString(String fechaNacimientoString) {
+		Date fechaNacimientoDate = Utils.parseStringToDate(fechaNacimientoString);
+		if (fechaNacimientoDate != null) {
+			setFechaNacimiento(fechaNacimientoDate);
+		}
+	}
 
 	public String getCanalPreferenteContacto() {
 		return canalPreferenteContacto;
@@ -326,6 +334,13 @@ public class ContactVO extends ObjectVO implements Serializable {
 
 	public void setCasosReiterados(Boolean casosReiterados) {
 		this.casosReiterados = casosReiterados;
+	}
+	
+	public void setCasosReiteradosString(String casosReiteradosString) {
+		Boolean casosReiteradosBoolean = Utils.parseStringToBoolean(casosReiteradosString);
+		if (casosReiteradosBoolean != null) {
+			setCasosReiterados(casosReiteradosBoolean);
+		}
 	}
 
 	public String getEmail() {
@@ -512,6 +527,13 @@ public class ContactVO extends ObjectVO implements Serializable {
 		this.seguidoresTwitter = seguidoresTwitter;
 	}
 
+	public void setSeguidoresTwitterString(String seguidoresTwitterString) {
+		Integer seguidoresInt = Utils.parseStringToInteger(seguidoresTwitterString);
+		if (seguidoresInt != null) {
+			setSeguidoresTwitter(seguidoresInt);
+		}
+	}
+	
 	public DireccionVO getDirContactoJoin() {
 		return dirContactoJoin;
 	}

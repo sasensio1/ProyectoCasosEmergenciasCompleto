@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +12,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -62,34 +58,14 @@ public class BatchObjectsParser {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void populateObjectListFromXmlStream(InputStream batchstream, List<ContactVO> contactsList) {
 		System.out.println("Entrando en populateObjectListFromXmlStream");
-		
-		// 0. Se prepara la clase que se llamara por reflexion
-		//no paramater
-		Class noparams[] = {};
-
-		//String parameter
-		Class[] paramString = new Class[1];
-		paramString[0] = String.class;
-
-		//int parameter
-		Class[] paramInt = new Class[1];
-		paramInt[0] = Integer.TYPE;
-
-		Class[] paramDate = new Class[1];
-		paramDate[0] = Date.class;
-		
-		Class[] paramBoolean = new Class[1];
-		paramBoolean[0] = Boolean.TYPE;
-		
 		ContactVO contact = new ContactVO();
-		Class contactClass;
-		
 		try {
-		
-			contactClass = Class.forName("com.casosemergencias.dao.vo.ContactVO");
-		
+			// 0. Se prepara la clase que se llamara por reflexion
+			Class[] paramString = new Class[1];
+			paramString[0] = String.class;
+			Class contactClass = Class.forName("com.casosemergencias.dao.vo.ContactVO");
 			Object object = contactClass.newInstance();
-					
+			
 			// 1. Transformamos los bytes en un objeto DOM
 			System.out.println("Se convierten los bytes de la respuesta en un documento XML para su posterior parseo");
 			Document xmlDocument = null;
@@ -126,17 +102,8 @@ public class BatchObjectsParser {
 									}
 								}
 								if (nodeValue != null && !"".equals(nodeValue) && objectMapper.containsKey(nodeName)) {
-									Class[] params = new Class[1];
-									if (isValidDate(nodeValue)) {
-										params = paramDate;
-									} else if (NumberUtils.isNumber(nodeValue)) {
-										params = paramInt;
-									} else if (Boolean.parseBoolean(nodeValue)) {
-										params = paramBoolean;
-									} else {
-										params = paramString;
-									}
-									Method method = contactClass.getDeclaredMethod("set" + objectMapper.get(nodeName), params);
+									
+									Method method = contactClass.getDeclaredMethod("set" + objectMapper.get(nodeName), paramString);
 									method.invoke(object, nodeValue);
 								}
 							}
@@ -170,15 +137,5 @@ public class BatchObjectsParser {
 		builder = factory.newDocumentBuilder();
 		document = builder.parse(new InputSource(stream));
 		return document;
-	}
-	
-	public boolean isValidDate(String dateString) {
-	    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-	    try {
-	        df.parse(dateString);
-	        return true;
-	    } catch (ParseException e) {
-	        return false;
-	    }
 	}
 }

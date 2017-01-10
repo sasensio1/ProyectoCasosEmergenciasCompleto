@@ -2,7 +2,6 @@ package com.casosemergencias.batch;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -38,9 +37,8 @@ public class BulkApiQueriesBatch {
 	final static Logger logger = Logger.getLogger(BulkApiQueriesBatch.class);
 	
 	public static void main(String[] args) throws IOException {
-		List<ContactVO> contacts = new ArrayList<ContactVO>();
 		salesforceBulkApiLogin();
-		contacts = getUpdatedContactsLastDay();
+		List<ContactVO> contacts = getUpdatedContactsLastDay();
 		//System.out.println("Contactos a actualizar: " + contacts.size());
 	}
 
@@ -117,7 +115,7 @@ public class BulkApiQueriesBatch {
 				        System.out.println("-------------- waiting ----------" + info);
 				      }
 				}
-
+				
 				if (queryResults != null) {
 					for (String resultId : queryResults) {
 						BatchObjectsParser objectsParser = new BatchObjectsParser();
@@ -143,4 +141,6 @@ public class BulkApiQueriesBatch {
 		}
 		return contactsList;
 	}
+	
+	
 }
