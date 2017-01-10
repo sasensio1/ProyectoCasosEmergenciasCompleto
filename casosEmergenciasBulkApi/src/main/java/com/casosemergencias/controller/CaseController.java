@@ -44,6 +44,7 @@ import com.casosemergencias.logic.ContactService;
 import com.casosemergencias.logic.DireccionService;
 import com.casosemergencias.logic.PickListsService;
 import com.casosemergencias.logic.SuministroService;
+import com.casosemergencias.model.Calle;
 import com.casosemergencias.model.CaseComment;
 import com.casosemergencias.model.CaseHistory;
 import com.casosemergencias.model.Caso;
@@ -451,7 +452,7 @@ public class CaseController {
 	}
 	
 	@RequestMapping(value ="/private/cancelarCaso", method = RequestMethod.POST)
-	public String cancelarCaso(CaseView casoRequest,  HttpServletRequest request){
+	public ModelAndView cancelarCaso(CaseView casoRequest,  HttpServletRequest request){
 			
 		logger.info("--- Inicio -- cancelarCaso ---");
 		logger.debug("--- cancelarCaso -- sfid del caso: " + casoRequest.getSfid() + "---");
@@ -459,13 +460,43 @@ public class CaseController {
 		HttpSession session = request.getSession(true);
 		HerokuUser user = (HerokuUser)session.getAttribute(Constantes.SESSION_HEROKU_USER);
 				
+		ModelAndView model = new ModelAndView();
 		Caso caso = new Caso();
-		ParserModelVO.parseDataModelVO(casoRequest, caso);
-		boolean casoCancelado = casoService.cancelarCaso(caso,  user.getName());
+		CaseComment comentarioCasoInsertado = new CaseComment();
 
-		logger.info("--- Fin -- cancelarCaso ---");
+
+		ParserModelVO.parseDataModelVO(casoRequest, caso);
+		CaseComment commentCasoCancelado = casoService.cancelarCaso(caso,  user.getName());
+
 		
-		return "redirect:entidadCaso?sfid=" + caso.getSfid() + "&editMode=" + (casoCancelado ? Constantes.CANCEL_CASE_OK : Constantes.CANCEL_CASE_ERROR);
+		try {
+			comentarioCasoInsertado = caseCommentService.insertSalesforceCaseComment(commentCasoCancelado);			
+			if (comentarioCasoInsertado != null) {
+				logger.info("Comentario guardado correctamente con sfid:" + comentarioCasoInsertado.getSfid());
+				model.setViewName("redirect:entidadCaso?sfid=" + caso.getSfid()+"&editMode="+Constantes.CANCEL_CASE_OK);			
+			}
+			else{				
+				logger.info("Se ha producido un error guardando el comentario");
+				model.addObject("mostrarMensaje", true);
+				model.addObject("hayError", true);
+				model.addObject("codigoError", ConstantesError.EMERG_ERROR_CODE_004);
+				model.addObject("mensajeResultado", ConstantesError.HEROKU_CASE_COMMENT_CREATION_GENERIC_ERROR);
+				model.setViewName("private/entidadCaso?editMode=VIEW&sfid="+caso.getSfid());				
+			}
+		}			
+		catch(EmergenciasException exception) {
+			logger.info("No se ha guardado correctamente el comentario");
+			model.addObject("mostrarMensaje", true);
+			model.addObject("hayError", true);
+			model.addObject("codigoError", exception.getCode());
+			model.addObject("mensajeResultado", exception.getMessage());
+			model.setViewName("private/entidadCaso?editMode=VIEW&sfid="+caso.getSfid());
+		}
+		
+		logger.info("--- Fin -- guardarComentarioCaso ---");
+		return model;
+		
+
 	}
 	
 	/**
@@ -581,31 +612,53 @@ public class CaseController {
 	}
 	
 	@RequestMapping(value ="/private/saveComentarioCaso", method = RequestMethod.POST)
-	public String saveComentarioCaso(CaseCommentView casoRequest,  HttpServletRequest request){
+	public ModelAndView saveComentarioCaso(CaseCommentView casoRequest, HttpServletRequest request) throws EmergenciasException{
 		
 		
-		logger.info("--- Inicio -- actualizarCaso ---");
-		//Recuperamos el heroku user para concatenarlo al comentario.
+		logger.info("--- Inicio -- guardarComentarioCaso ---");
+		
+		CaseComment comentarioCasoInsertado = new CaseComment();
+		ModelAndView model = new ModelAndView();
+		
+		
+		//Recuperamos el heroku user para concatenarlo al comentario y setteamos campo isPublished
 		HttpSession session = request.getSession(true);
 		HerokuUser user = (HerokuUser)session.getAttribute(Constantes.SESSION_HEROKU_USER);
 		String comentario = user.getName() + ": " + casoRequest.getComment();
 		casoRequest.setComment(comentario);
+		casoRequest.setIspublished(false);
 		
 		CaseComment comentarioCaso = new CaseComment();
 		ParserModelVO.parseDataModelVO(casoRequest, comentarioCaso);
-		Boolean insertCaseComment = caseCommentService.insertCaseComment(comentarioCaso);
-		
-		logger.info("--- Fin -- actualizarCaso ---");
-		logger.info("UPDATED CASE"+insertCaseComment);
-		
-		if(insertCaseComment == true){			
-			return "redirect:entidadCaso?sfid=" + comentarioCaso.getCaseid() +"&editMode="+Constantes.CREATED_MODE_CREATED_OK;
+				
+		try {
+			comentarioCasoInsertado = caseCommentService.insertSalesforceCaseComment(comentarioCaso);			
+			if (comentarioCasoInsertado != null) {
+				logger.info("Comentario guardado correctamente con sfid:" + comentarioCasoInsertado.getSfid());
+				model.setViewName("redirect:entidadCaso?sfid=" + comentarioCaso.getCaseid() +"&editMode="+Constantes.CREATED_MODE_CREATED_OK);			
+			}
+			else{				
+				logger.info("Se ha producido un error guardando el comentario");
+				model.addObject("mostrarMensaje", true);
+				model.addObject("hayError", true);
+				model.addObject("codigoError", ConstantesError.EMERG_ERROR_CODE_004);
+				model.addObject("mensajeResultado", ConstantesError.HEROKU_CASE_COMMENT_CREATION_GENERIC_ERROR);
+				model.setViewName("redirect:comentarioCasePage?sfid="+comentarioCaso.getCaseid());				
+			}
+		}			
+		catch(EmergenciasException exception) {
+			logger.info("No se ha guardado correctamente el comentario");
+			model.addObject("mostrarMensaje", true);
+			model.addObject("hayError", true);
+			model.addObject("codigoError", exception.getCode());
+			model.addObject("mensajeResultado", exception.getMessage());
+			model.setViewName("redirect:comentarioCasePage?sfid="+comentarioCaso.getCaseid());
 		}
-		else{
-			return "redirect:entidadCaso?sfid=" + comentarioCaso.getCaseid() +"&editMode="+Constantes.CREATED_MODE_CREATED_ERROR;
-		}		
-	}
-
+		
+		logger.info("--- Fin -- guardarComentarioCaso ---");
+		return model;
+	}	
+		
 	
 	private void fillNewCaseFormInfo(CaseView casoView) {
 		logger.trace("Entrando en fillNewCaseFormInfo()");

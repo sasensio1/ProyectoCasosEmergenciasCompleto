@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.casosemergencias.dao.vo.CaseCommentVO;
+import com.casosemergencias.dao.vo.CaseVO;
 
 @Repository
 public class CaseCommentDAO {
@@ -153,30 +154,25 @@ public class CaseCommentDAO {
 	
 	
 	@Transactional
-	public Boolean insertCaseComment(CaseCommentVO caseComment) {
+	public Boolean insertCaseComment(CaseCommentVO comentarioCaso) {
 
-		logger.debug("--- Inicio -- insert ---");
+		logger.debug("--- Inicio -- insertCaseComment ---");
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		try {
-			if(caseComment.getComment().isEmpty()==true){
-				return false;
-			}
-			else{
-				session.save(caseComment);
-				tx.commit();
-				logger.debug("--- Fin -- insert ---");
-				return true;
-			}
+			session.save(comentarioCaso);
+			tx.commit();
+			logger.debug("--- Fin -- insertCaseComment ---");
+			return true;
 		} catch (HibernateException e) {
 			tx.rollback();
-			logger.error("--- Error en insertCase: ", e);
-			logger.error("--- Fin -- updateCase ---");
+			logger.error("--- Error en insertCaseComment: ", e);
 			return false;
 		} finally {
 			session.close();
 		}
+
 	}
 	
 	

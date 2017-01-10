@@ -4,7 +4,7 @@
 
 <!-- Dialog combo Asociar Suministro a Contacto -->
 <div id="dialogAsociarSuministroContacto" title="Búsqueda" class="dialogLupa">	
-	<form id="asociarSuministroId" action="listarAsociarSuministros"  method="POST" name="formAsociarSuministro">	
+	<form id="asociarSuministroId" action="asociarSuministro"  method="POST" name="formAsociarSuministro">	
 		<input id="sfidContAsociadoID" type="hidden" value="${contacto.sfid}" name="sfidContAsociado">
 		<div id="divAssociationErrorSearch" class="divError">
 			<label class="labelDivError"><s:message code="notificaciones_label_error_campos_incompletos"/></label>
@@ -64,6 +64,16 @@
 						<input id="buscar" type="button" name="buscar" value="Buscar" />					
 					</td>					
 				</tr>
+				<tr>
+					<td class="tablaAsociarSuministroTextos">
+						<input type="hidden" name="sfidContact" value="" id="idContact" class="buttontext">
+					</td>
+				</tr>  
+				 <tr>
+					<td class="tablaAsociarSuministroTextos">
+						<input type="hidden" name="sfidSuministro" value="" id="idSuministro" class="buttontext">
+					</td>
+				</tr>  
 			</table>
 		</div>		
 	</form>

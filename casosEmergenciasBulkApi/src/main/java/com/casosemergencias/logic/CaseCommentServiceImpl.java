@@ -1,10 +1,13 @@
 package com.casosemergencias.logic;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +16,22 @@ import com.casosemergencias.dao.CaseCommentDAO;
 import com.casosemergencias.dao.CaseDAO;
 import com.casosemergencias.dao.vo.CaseCommentVO;
 import com.casosemergencias.dao.vo.CaseVO;
+import com.casosemergencias.dao.vo.DireccionVO;
+import com.casosemergencias.dao.vo.StreetVO;
+import com.casosemergencias.exception.EmergenciasException;
+import com.casosemergencias.logic.sf.response.CreateCaseCommentResponse;
+import com.casosemergencias.logic.sf.response.SearchDirectionResponse;
+import com.casosemergencias.logic.sf.rest.CreateCase;
+import com.casosemergencias.logic.sf.rest.CreateCaseComment;
+import com.casosemergencias.logic.sf.rest.SearchDirection;
+import com.casosemergencias.logic.sf.util.SalesforceLoginChecker;
+import com.casosemergencias.model.Calle;
 import com.casosemergencias.model.CaseComment;
 import com.casosemergencias.model.Caso;
+import com.casosemergencias.model.Direccion;
+import com.casosemergencias.model.UserSessionInfo;
 import com.casosemergencias.util.ParserModelVO;
+import com.casosemergencias.util.constants.ConstantesError;
 
 public class CaseCommentServiceImpl implements CaseCommentService{
 
@@ -25,6 +41,9 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 	public CaseCommentDAO caseCommentDAO;
 	
 	@Autowired CaseDAO caseDAO;
+	
+	@Autowired
+	private SalesforceLoginChecker salesforceLoginChecker;
 	
 	@Override
 	public List<CaseComment> obtenerListaComentariosDeUnCaso(String caseSfid) {
@@ -44,7 +63,7 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 		return casoRetorno;
 	}
 	
-	@Override
+	/*@Override
 	public Boolean insertCaseComment(CaseComment caseComment) {
 		CaseCommentVO caseCommentVO = new CaseCommentVO();
 		
@@ -53,7 +72,7 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 		caseCommentVO.setCaseid(caseComment.getCaseid());
 		Boolean insert = caseCommentDAO.insertCaseComment(caseCommentVO);
 		return insert;
-	}
+	}*/
 	
 	
 	/*
@@ -98,5 +117,77 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 		}
 		return null;
 	}
+	
+	
+	
+	
+	
+	@Override
+	public CaseComment insertSalesforceCaseComment(CaseComment comentarioCaso)throws EmergenciasException {
+		
+		logger.trace("--- Servicio insertSalesforceComment iniciado ---");
+		// 1. Leer usuario de fichero de propiedades
+		Properties properties = new Properties();
+		String username = null;
+		String password = null;
+		String token = null;
+		UserSessionInfo userSessionInfoFromDB = null;
+		CreateCaseCommentResponse respuestaComentarioCaso = null;
+		CaseCommentVO caseCommentVO = null;
+		
+
+		try (InputStream propsInputStream = getClass().getClassLoader().getResourceAsStream("/environment/dev/config.properties")) {
+			properties.load(propsInputStream);
+			username = properties.getProperty("heroku.user");
+			password = properties.getProperty("heroku.pass");
+			token = properties.getProperty("heroku.token");
+			
+			if (username != null && !"".equals(username) && password != null && !"".equals(password) && token != null && !"".equals(token)) {
+				UserSessionInfo sessionInfoToLogin = new UserSessionInfo();
+				sessionInfoToLogin.setUsername(properties.getProperty("heroku.user"));
+				sessionInfoToLogin.setPassword(properties.getProperty("heroku.pass"));
+				sessionInfoToLogin.setAccessToken(properties.getProperty("heroku.token"));
+				userSessionInfoFromDB = salesforceLoginChecker.getUserSessionInfo(sessionInfoToLogin);
+				if (userSessionInfoFromDB != null) {
+					respuestaComentarioCaso = CreateCaseComment.createCaseCommentInSalesforce(userSessionInfoFromDB, comentarioCaso);
+					if (respuestaComentarioCaso != null) {
+						if (respuestaComentarioCaso.getIdComentarioCaso() != null && !"".equals(respuestaComentarioCaso.getIdComentarioCaso())) {
+							comentarioCaso.setSfid(respuestaComentarioCaso.getIdComentarioCaso());
+							logger.info("Comentario de caso creado con sfid:" + respuestaComentarioCaso.getIdComentarioCaso());
+						}
+						if (respuestaComentarioCaso.getIdComentarioCaso() != null && !"".equals(respuestaComentarioCaso.getIdComentarioCaso())) {
+							comentarioCaso.setSfid(respuestaComentarioCaso.getIdComentarioCaso());
+							logger.info("Comentario de caso creado con sfid:" + respuestaComentarioCaso.getIdComentarioCaso());
+						}
+						if (respuestaComentarioCaso.getCreatedDate() != null && !"".equals(respuestaComentarioCaso.getCreatedDate())) {
+							comentarioCaso.setCreateddate(respuestaComentarioCaso.getCreatedDate());
+							logger.info("Comentario de caso creado con CreatedDate:" + respuestaComentarioCaso.getCreatedDate());
+						}
+												
+						caseCommentVO = new CaseCommentVO();
+						ParserModelVO.parseDataModelVO(comentarioCaso, caseCommentVO);
+						Boolean caseBoolean = caseCommentDAO.insertCaseComment(caseCommentVO);
+						if (caseBoolean != null && caseBoolean!=false) {
+							logger.info("Comentario insertado correctamente en Heroku");
+						} else {
+							comentarioCaso = null;
+							logger.error("No se ha podido insertar el comentario en Heroku. Ha fallado la inserción en base de datos");
+							throw new EmergenciasException(ConstantesError.EMERG_ERROR_CODE_003, ConstantesError.HEROKU_CASECOMMENT_CCREATION_OK_WITH_ERROR);
+						}
+					} else {
+						comentarioCaso = null;
+						logger.warn("Se ha producido un error al insertar el comentario en SalesForce");
+						throw new EmergenciasException(ConstantesError.EMERG_ERROR_CODE_002, ConstantesError.SALESFORCE_CASE_COMMENT_CREATION_ERROR);
+					}
+				}
+			}
+		} catch (IOException exception) {
+			logger.error("Error obteniendo los datos del usuario: ", exception);
+			throw new EmergenciasException(ConstantesError.EMERG_ERROR_CODE_006, ConstantesError.SALESFORCE__SEARCH_COMMENT_CASE_ERROR);
+		}
+		logger.trace("--- Servicio insertSalesforceComment completado ---");
+		return comentarioCaso;
+	}
+
 
 }

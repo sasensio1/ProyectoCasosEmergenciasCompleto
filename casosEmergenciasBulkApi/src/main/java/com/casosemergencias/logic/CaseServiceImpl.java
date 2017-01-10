@@ -206,14 +206,14 @@ public class CaseServiceImpl implements CaseService{
 	 * 
 	 * @return
 	 */
-	public boolean cancelarCaso(Caso caso, String userName) {
+	public CaseComment cancelarCaso(Caso caso, String userName) {
 		
 		String subestadoCancelacion = caso.getSubestado();
 		boolean esAlta;
 		boolean canceladoOk = false;
-		String comentarioCaso = userName + ": ";
+		String comentarioBody = userName + ": ";
 
-		CaseCommentVO comentario = new CaseCommentVO();
+		CaseCommentVO comentarioVO = new CaseCommentVO();
 		CaseVO casoVO = new CaseVO();
 		
 		//Recuperamos el caso que estamos cancelando
@@ -234,7 +234,7 @@ public class CaseServiceImpl implements CaseService{
 				casoVO.setSubmotivo(Constantes.COD_CASO_SUBMOTIVO_CONS_FUERA_ZONA_CONCE);
 			}
 			
-			comentarioCaso += "Ejecutivo Cancela el caso por "+Constantes.COD_CASO_SUBSTATUS_CLIENTE_LUZ_DESC_COMENTARIO;
+			comentarioBody += "Ejecutivo Cancela el caso por "+Constantes.COD_CASO_SUBSTATUS_CLIENTE_LUZ_DESC_COMENTARIO;
 			
 		}else{
 			//cliente si luz
@@ -245,32 +245,29 @@ public class CaseServiceImpl implements CaseService{
 			}			
 			
 			if((Constantes.COD_CASO_SUBSTATUS_COMUNICACION_INTERRUMPIDA).equals(subestadoCancelacion)){
-				comentarioCaso += "Ejecutivo Cancela el caso por "+Constantes.COD_CASO_SUBSTATUS_COMUNICACION_INTERRUMPIDA_DESC;
+				comentarioBody += "Ejecutivo Cancela el caso por "+Constantes.COD_CASO_SUBSTATUS_COMUNICACION_INTERRUMPIDA_DESC;
 			}else if((Constantes.COD_CASO_SUBSTATUS_PRUEBA_ERROR_INGRESO).equals(subestadoCancelacion)){
-				comentarioCaso += "Ejecutivo Cancela el caso por "+Constantes.COD_CASO_SUBSTATUS_PRUEBA_ERROR_INGRESO_DESC;				
+				comentarioBody += "Ejecutivo Cancela el caso por "+Constantes.COD_CASO_SUBSTATUS_PRUEBA_ERROR_INGRESO_DESC;				
 			}else if((Constantes.COD_CASO_SUBSTATUS_ERROR_INGRESO).equals(subestadoCancelacion)){
-				comentarioCaso += "Ejecutivo Cancela el caso por "+Constantes.COD_CASO_SUBSTATUS_ERROR_INGRESO_DESC;				
+				comentarioBody += "Ejecutivo Cancela el caso por "+Constantes.COD_CASO_SUBSTATUS_ERROR_INGRESO_DESC;				
 			}
 		}
 
 		casoVO.setSubEstado(subestadoCancelacion);
 		casoVO.setCancelar(true);
-		
-		comentario.setCaseid(caso.getSfid());	
-		comentario.setIspublished(false);
-		comentario.setComment(comentarioCaso);
-		
+				
 		casoVO.setDescription(caso.getDescription());
 		Integer id = caseDao.updateCase(casoVO);
-		Boolean insert = false;
 		
-		if(id > 0){
-			insert = caseCommentDao.insertCaseComment(comentario);
-			if(insert){
-				canceladoOk = true;
-			}
-		}
-		return canceladoOk;
+		comentarioVO.setCaseid(caso.getSfid());	
+		comentarioVO.setIspublished(false);
+		comentarioVO.setComment(comentarioBody);
+		
+		CaseComment comentarioCaso =new CaseComment();
+		ParserModelVO.parseDataModelVO(comentarioVO, comentarioCaso);
+
+
+		return comentarioCaso;
 	}
 	
 	@Override

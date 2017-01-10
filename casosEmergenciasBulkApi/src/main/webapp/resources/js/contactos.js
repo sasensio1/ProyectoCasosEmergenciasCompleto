@@ -85,7 +85,7 @@ function cargarTablaSuministros(){
 	        "deferLoading": -1,
 			"ajax": { 
 	        	"type": formulario.attr('method'),
-	        	 "url": formulario.attr('action'), 	               	
+	        	 "url":'listarAsociarSuministros', 	               		               	
 	        	 "contentType": 'application/json; charset=utf-8' ,
 	        	 "error": function(data) {
 	        		 alert('Se ha producido un error obteniendo la lista de suministros. Repita la operaci&oacute;n y, si el error persiste, contacte con el administrador de la plataforma.');
@@ -180,8 +180,14 @@ function abrirDialogoCasoDireccion(){
 
 function asociarSuministro(sfid,contactSfid){
 	$("#dialogAsociarSuministroContacto").dialog('close');
+	document.getElementById("idContact").value=contactSfid;
+	document.getElementById("idSuministro").value=sfid;
 	verCargando();	
-	window.location="../private/asociarSuministro?sfid=" + sfid +"&contactSfid="+contactSfid ;
+	$('#asociarSuministroId').submit();
+	
+
+	
+	//window.location="../private/asociarSuministro?sfid=" + sfid +"&contactSfid="+contactSfid ;
 	
 }
 
