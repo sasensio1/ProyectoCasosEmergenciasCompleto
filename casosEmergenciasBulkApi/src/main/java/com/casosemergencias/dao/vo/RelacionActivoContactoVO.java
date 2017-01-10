@@ -65,15 +65,15 @@ public class RelacionActivoContactoVO implements Serializable {
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="typeofrelationship__c", referencedColumnName="codigo", insertable = false, updatable=false)
 	@WhereJoinTable(clause = "campo ='TypeofRelationship__c' and objeto='ServiceProduct__c'")
-	private PickListsRelacionActivoVO tipoRelacionActivo;
+	private PickListsRelacionActivoVO tipoRelacionActivo;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar tipoRelacionActivoClave
 	
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="asset__c", referencedColumnName="sfid", insertable = false, updatable=false)
-	private AssetVO activo;
+	private AssetVO activo;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar activoId
 	
 	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="contact__c", referencedColumnName="sfid", insertable = false, updatable=false)
-	private ContactVO contacto;
+	private ContactVO contacto;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar contactoId
 	
 
 

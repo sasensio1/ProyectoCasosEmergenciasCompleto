@@ -59,15 +59,15 @@ public class AssetVO implements Serializable {
 
 		@OneToOne(fetch=FetchType.EAGER)
 		@JoinColumn(name="contactid", referencedColumnName="sfid", insertable = false, updatable=false)
-		private ContactVO contactoJoin;
+		private ContactVO contactoJoin;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar accountid
 		
 		@OneToOne(fetch=FetchType.EAGER)
 		@JoinColumn(name="pointofdelivery__c", referencedColumnName="sfid", insertable = false, updatable=false)
-		private SuministroVO suministroJoin;
+		private SuministroVO suministroJoin;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar suministroid
 		
 		@OneToOne(fetch=FetchType.EAGER)
 		@JoinColumn(name="accountid", referencedColumnName="sfid", insertable = false, updatable=false)
-		private AccountVO cuentaJoin;
+		private AccountVO cuentaJoin;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar accountid
 
 		public Boolean getIsDeleted() {
 			return isDeleted;
