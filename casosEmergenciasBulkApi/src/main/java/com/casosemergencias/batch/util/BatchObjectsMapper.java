@@ -16,6 +16,7 @@ import com.casosemergencias.dao.vo.HerokuUserVO;
 import com.casosemergencias.dao.vo.RelacionActivoContactoVO;
 import com.casosemergencias.dao.vo.StreetVO;
 import com.casosemergencias.dao.vo.SuministroVO;
+import com.casosemergencias.dao.vo.TaskVO;
 import com.casosemergencias.dao.vo.UserVO;
 import com.casosemergencias.util.constants.ConstantesBulkApi;
 
@@ -33,6 +34,7 @@ public class BatchObjectsMapper {
 	private Map<String, String> serviceProductMap;
 	private Map<String, String> streetMap;
 	private Map<String, String> userMap;
+	private Map<String, String> taskMap;
 	private LinkedHashMap<String, String> objectSelectsMap;
 	
 	public BatchObjectsMapper() {
@@ -50,29 +52,31 @@ public class BatchObjectsMapper {
 		initServiceProductMap();
 		initStreetMap();
 		initUserMap();
+		initTaskMap();
 	}
 	
 	private void initAccountMap() {
 		accountMap = new HashMap<String, String>();
 		accountMap.put("Id", "Sfid");
 		accountMap.put("Name", "Name");
-		accountMap.put("fatherslastname__c", "ApellidoPaterno");
-		accountMap.put("motherslastname__c", "ApellidoMaterno");
-		accountMap.put("identitytype__c", "TipoIdentidad");
-		accountMap.put("parent__identityNumber__c", "ParentRutEmpresa");
-		accountMap.put("masterrecord__identitynumber__c", "AccountRun");
-		accountMap.put("identitynumber__c", "Run");
-		accountMap.put("birthdate__c", "FechaNacimientoString");
-		accountMap.put("phone", "Phone");
-		accountMap.put("mainphone__c", "TelefonoPrincipal");
-		accountMap.put("secondaryPhone__c", "TelefonoSecundario");
-		accountMap.put("primaryemail__c", "EmailPrincipal");
-		accountMap.put("secondaryemail__c", "EmailSecundario");
-		accountMap.put("address__c", "Direccion");
-		accountMap.put("accountsource", "Accountsource");
-		accountMap.put("companyid__c", "IdEmpresa");
-		accountMap.put("type", "Tipo");
-		accountMap.put("parentid", "Parentid");
+		accountMap.put("FathersLastName__c", "ApellidoPaterno");
+		accountMap.put("MothersLastName__c", "ApellidoMaterno");
+		accountMap.put("IdentityType__c", "TipoIdentidad");
+		accountMap.put("IdentityNumber__c", "Run");
+		accountMap.put("BirthDate__c", "FechaNacimientoString");
+		accountMap.put("Phone", "Phone");
+		accountMap.put("MainPhone__c", "TelefonoPrincipal");
+		accountMap.put("SecondaryPhone__c", "TelefonoSecundario");
+		accountMap.put("PrimaryEmail__c", "EmailPrincipal");
+		accountMap.put("SecondaryEmail__c", "EmailSecundario");
+		accountMap.put("Address__c", "Direccion");
+		accountMap.put("AccountSource", "Accountsource");
+		accountMap.put("CompanyID__c", "IdEmpresa");
+		accountMap.put("Type", "Tipo");
+		accountMap.put("ParentId", "Parentid");
+		/* ---- NO EXISTEN EN SALESFORCE ---- */
+		//accountMap.put("parent__identityNumber__c", "ParentRutEmpresa");
+		//accountMap.put("masterrecord__identitynumber__c", "AccountRun");
 	}
 	
 	private void initContactMap() {
@@ -80,188 +84,207 @@ public class BatchObjectsMapper {
 		contactMap.put("Id", "Sfid");
 		contactMap.put("Name", "Name");
 		contactMap.put("Birthdate", "FechaNacimientoString");
-		contactMap.put("preferredchannelcontact__c", "CanalPreferenteContacto");
-		contactMap.put("associatedaccounttype__c", "TipoCuentaAsociado");
-		contactMap.put("motherslastname__c", "ApellidoMaterno");
-		contactMap.put("identitytype__c", "TipoIdentidad");
+		contactMap.put("PreferredChannelContact__c", "CanalPreferenteContacto");
+		contactMap.put("AssociatedAccountType__c", "TipoCuentaAsociado");
+		contactMap.put("MothersLastName__c", "ApellidoMaterno");
+		contactMap.put("IdentityType__c", "TipoIdentidad");
 		contactMap.put("SecondaryPhone__c", "TelefonoSecundario");
-		contactMap.put("secondaryemail__c", "EmailSecundario");
-		contactMap.put("sf4twitter__fcbk_username__c", "Sf4twitterFcbkUsername");
-		contactMap.put("repeatedcases__c", "CasosReiteradosString");
-		contactMap.put("email", "Email");
-		contactMap.put("identitynumber__c", "Run");
-		contactMap.put("concatenatecontacaddress__c", "DirContacto");
-		contactMap.put("sf4twitter__twitter_user_id__c", "Sf4twitterTwitterUserId");
-		contactMap.put("sf4twitter__fcbk_user_id__c", "Sf4twitterFcbkUserId");
-		contactMap.put("sf4twitter__twitter_username__c", "Sf4twitterTwitterUsername");
-		contactMap.put("contacttype__c", "TipoContacto");
-		contactMap.put("phone", "Phone");
-		contactMap.put("fatherslastname__c", "ApellidoPaterno");
-		contactMap.put("sf4twitter__influencer__c", "Influencer");
-		contactMap.put("sf4twitter__twitter_bio__c", "TwitterBio");
-		contactMap.put("sf4twitter__influencer_type__c", "InfluencerType");
-		contactMap.put("sf4twitter__twitter_follower_count__c", "SeguidoresTwitter");
-		contactMap.put("accountid", "Accountid");
-		contactMap.put("firstname", "Firstname");
-		contactMap.put("contactaddress__c", "IdDirContacto");
+		contactMap.put("SecondaryEmail__c", "EmailSecundario");
+		contactMap.put("sf4twitter__Fcbk_Username__c", "Sf4twitterFcbkUsername");
+		contactMap.put("RepeatedCases__c", "CasosReiteradosString");
+		contactMap.put("Email", "Email");
+		contactMap.put("IdentityNumber__c", "Run");
+		contactMap.put("ConcatenateContacAddress__c", "DirContacto");
+		contactMap.put("sf4twitter__Twitter_User_Id__c", "Sf4twitterTwitterUserId");
+		contactMap.put("sf4twitter__Fcbk_User_Id__c", "Sf4twitterFcbkUserId");
+		contactMap.put("sf4twitter__Twitter_Username__c", "Sf4twitterTwitterUsername");
+		contactMap.put("ContactType__c", "TipoContacto");
+		contactMap.put("Phone", "Phone");
+		contactMap.put("FathersLastName__c", "ApellidoPaterno");
+		contactMap.put("sf4twitter__Influencer__c", "Influencer");
+		contactMap.put("sf4twitter__Twitter_Bio__c", "TwitterBio");
+		contactMap.put("sf4twitter__Influencer_Type__c", "InfluencerType");
+		contactMap.put("sf4twitter__Twitter_Follower_Count__c", "SeguidoresTwitter");
+		contactMap.put("AccountId", "Accountid");
+		contactMap.put("FirstName", "Firstname");
+		contactMap.put("ContactAddress__c", "IdDirContacto");
 	}
 	
 	private void initAssetMap() {
 		assetMap = new HashMap<String, String>();
 		assetMap.put("Id", "Sfid");
-		assetMap.put("name", "Name");
-		assetMap.put("contactid", "Contactid");
-		assetMap.put("accountid", "Accountid");
-		assetMap.put("pointofdelivery__c", "Pointofdelivery__c");
+		assetMap.put("Name", "Name");
+		assetMap.put("ContactId", "Contactid");
+		assetMap.put("AccountId", "Accountid");
+		assetMap.put("PointofDelivery__c", "Pointofdelivery__c");
 	}
 	
 	private void initAddressMap() {
 		addressMap = new HashMap<String, String>();
 		addressMap.put("Id", "Sfid");
-		addressMap.put("createddate", "CreateddateString");
-		addressMap.put("region__c", "Region");
-		addressMap.put("municipality__c", "Comuna");
-		addressMap.put("street_type__c", "TipoCalle");
-		addressMap.put("streetmd__c", "Calle");
-		addressMap.put("number__c", "Numero");
-		addressMap.put("department__c", "Departamento");
-		addressMap.put("name", "Name");
-		addressMap.put("concatenatedaddress__c", "DireccionConcatenada");
-		addressMap.put("corner__c", "Esquina");
+		addressMap.put("CreatedDate", "CreateddateString");
+		addressMap.put("Region__c", "Region");
+		addressMap.put("Municipality__c", "Comuna");
+		addressMap.put("Street_type__c", "TipoCalle");
+		addressMap.put("StreetMD__c", "Calle");
+		addressMap.put("Number__c", "Numero");
+		addressMap.put("Department__c", "Departamento");
+		addressMap.put("Name", "Name");
+		addressMap.put("ConcatenatedAddress__c", "DireccionConcatenada");
+		addressMap.put("Corner__c", "Esquina");
 	}
 	
 	private void initCaseCommentMap() {
 		caseCommentMap = new HashMap<String, String>();
 		caseCommentMap.put("Id", "Sfid");
-		caseCommentMap.put("name", "Name");
-		caseCommentMap.put("createdbyid", "Createdbyid");
-		caseCommentMap.put("createddate", "CreateddateString");
-		caseCommentMap.put("ispublished", "IspublishedString");
-		caseCommentMap.put("parentid", "Caseid");
-		caseCommentMap.put("commentbody", "Comment");
-		caseCommentMap.put("lastmodifieddate", "Lastmodifieddate");
-		caseCommentMap.put("lastmodifiedbyid", "Lastmodifiedbyid");
+		caseCommentMap.put("CreatedById", "Createdbyid");
+		caseCommentMap.put("CreatedDate", "CreateddateString");
+		caseCommentMap.put("IsPublished", "IspublishedString");
+		caseCommentMap.put("ParentId", "Caseid");
+		caseCommentMap.put("CommentBody", "Comment");
+		caseCommentMap.put("LastModifiedDate", "Lastmodifieddate");
+		caseCommentMap.put("LastModifiedById", "Lastmodifiedbyid");
+		/* ---- NO EXISTEN EN SALESFORCE ---- */
+		//caseCommentMap.put("Name", "Name");
 	}
 	
 	private void initCaseHistoryMap() {
 		caseHistoryMap = new HashMap<String, String>();
 		caseHistoryMap.put("Id", "Sfid");
-		caseHistoryMap.put("createdbyid", "Createdbyid");
-		caseHistoryMap.put("createddate", "CreateddateString");
-		caseHistoryMap.put("newvalue", "Newvalue");
-		caseHistoryMap.put("oldvalue", "Oldvalue");
-		caseHistoryMap.put("field", "Field");
-		caseHistoryMap.put("caseid", "Caseid");
+		caseHistoryMap.put("CreatedById", "Createdbyid");
+		caseHistoryMap.put("CreatedDate", "CreateddateString");
+		caseHistoryMap.put("NewValue", "Newvalue");
+		caseHistoryMap.put("OldValue", "Oldvalue");
+		caseHistoryMap.put("Field", "Field");
+		caseHistoryMap.put("CaseId", "Caseid");
 	}
 	
 	private void initGroupMap() {
 		groupMap = new HashMap<String, String>();
 		groupMap.put("Id", "Sfid");
-		groupMap.put("name", "Name");
-		groupMap.put("createddate", "CreateddateString");
-		groupMap.put("label", "Label");
+		groupMap.put("Name", "Name");
+		groupMap.put("CreatedDate", "CreateddateString");
+		/* ---- NO EXISTEN EN SALESFORCE ---- */
+		//groupMap.put("label", "Label");
 	}
 	
 	private void initHerokuUserMap() {
 		herokuUserMap = new HashMap<String, String>();
 		herokuUserMap.put("Id", "Sfid");
-		herokuUserMap.put("name", "Name");
-		herokuUserMap.put("username__c", "Username");
-		herokuUserMap.put("password__c", "Password");
-		herokuUserMap.put("mail__c", "Email");
-		herokuUserMap.put("sentmail__c", "EnvioMailString");
-		herokuUserMap.put("active__c", "si");
-		herokuUserMap.put("country__c", "Country");
-		herokuUserMap.put("unity__c", "Unidad");
+		herokuUserMap.put("Name", "Name");
+		herokuUserMap.put("Username__c", "Username");
+		herokuUserMap.put("Password__c", "Password");
+		herokuUserMap.put("Mail__c", "Email");
+		herokuUserMap.put("SentMail__c", "EnvioMailString");
+		herokuUserMap.put("Active__c", "si");
+		herokuUserMap.put("Country__c", "Country");
+		herokuUserMap.put("Unity__c", "Unidad");
 	}
 	
 	private void initPointOfDeliveryMap() {
 		pointOfDeliveryMap = new HashMap<String, String>();
 		pointOfDeliveryMap.put("Id", "Sfid");
-		pointOfDeliveryMap.put("name", "Name");
-		pointOfDeliveryMap.put("fullelectric__c", "FullElectric");
-		pointOfDeliveryMap.put("opencases__c", "CasosAbiertosString");
-		pointOfDeliveryMap.put("transformertype__c", "TipoTransformador");
-		pointOfDeliveryMap.put("cuttingdebt__c", "CortePorDeudaString");
-		pointOfDeliveryMap.put("readingtype__c", "TipoLectura");
-		pointOfDeliveryMap.put("readingprocess__c", "ProcesoLectura");
-		pointOfDeliveryMap.put("connectionstatus__c", "EstadoConexion");
-		pointOfDeliveryMap.put("metertype__c", "TipoMedida");
-		pointOfDeliveryMap.put("municipalityallocation__c", "ComunaReparto");
-		pointOfDeliveryMap.put("municipality__c", "Comuna");
-		pointOfDeliveryMap.put("meternumber__c", "NumeroMedidor");
-		pointOfDeliveryMap.put("metermodel__c", "ModeloMedidor");
-		pointOfDeliveryMap.put("pointofdeliverynumber__c", "NumeroSuministro");
-		pointOfDeliveryMap.put("transformernumber__c", "NumeroTransformador");
-		pointOfDeliveryMap.put("pointofdeliverystatus__c", "EstadoSuministro");
-		pointOfDeliveryMap.put("meterbrand__c", "MarcaMedidor");
-		pointOfDeliveryMap.put("cutoffdate__c", "FechaCorteString");
-		pointOfDeliveryMap.put("meterproperty__c", "PropiedadMedidor");
-		pointOfDeliveryMap.put("companyid__c", "IdEmpresa");
-		pointOfDeliveryMap.put("detailaddress__c", "Direccion");
-		pointOfDeliveryMap.put("paymentprocess__c", "PagoEnProcesoString");
-		pointOfDeliveryMap.put("ballotname__c", "NombreDuenoBoleta");
-		pointOfDeliveryMap.put("block__c", "Bloque");
-		pointOfDeliveryMap.put("connectiontype__c", "TipoConexion");
-		pointOfDeliveryMap.put("electrodependant__c", "Electrodependiente");
-		pointOfDeliveryMap.put("disciplinarymeasure__c", "MedidaDisciplina");
-		pointOfDeliveryMap.put("rationingschedule__c", "HorarioRacionamiento");
-		pointOfDeliveryMap.put("repeatedcases__c", "CasosReiteradosString");
-		pointOfDeliveryMap.put("rate__c", "Tarifa");
-		pointOfDeliveryMap.put("feedernumber__c", "Alimentador");
-		pointOfDeliveryMap.put("distributionaddress__c", "DireccionBoleta");
-		pointOfDeliveryMap.put("electricalsubstationconnection__c", "SubestacionElectricaConexion");
-		pointOfDeliveryMap.put("route__c", "Ruta");
-		pointOfDeliveryMap.put("segmenttype__c", "TipoSegmento");
-		pointOfDeliveryMap.put("pointofdeliveryaddress__c", "DireccionConcatenada");
+		pointOfDeliveryMap.put("Name", "Name");
+		pointOfDeliveryMap.put("FullElectric__c", "FullElectric");
+		pointOfDeliveryMap.put("OpenCases__c", "CasosAbiertosString");
+		pointOfDeliveryMap.put("TransformerType__c", "TipoTransformador");
+		pointOfDeliveryMap.put("CuttingDebt__c", "CortePorDeudaString");
+		pointOfDeliveryMap.put("ReadingType__c", "TipoLectura");
+		pointOfDeliveryMap.put("ReadingProcess__c", "ProcesoLectura");
+		pointOfDeliveryMap.put("ConnectionStatus__c", "EstadoConexion");
+		pointOfDeliveryMap.put("MeterType__c", "TipoMedida");
+		pointOfDeliveryMap.put("MunicipalityAllocation__c", "ComunaReparto");
+		pointOfDeliveryMap.put("Municipality__c", "Comuna");
+		pointOfDeliveryMap.put("MeterNumber__c", "NumeroMedidor");
+		pointOfDeliveryMap.put("MeterModel__c", "ModeloMedidor");
+		pointOfDeliveryMap.put("PointofDeliveryNumber__c", "NumeroSuministro");
+		pointOfDeliveryMap.put("TransformerNumber__c", "NumeroTransformador");
+		pointOfDeliveryMap.put("PointofDeliveryStatus__c", "EstadoSuministro");
+		pointOfDeliveryMap.put("MeterBrand__c", "MarcaMedidor");
+		pointOfDeliveryMap.put("CutoffDate__c", "FechaCorteString");
+		pointOfDeliveryMap.put("MeterProperty__c", "PropiedadMedidor");
+		pointOfDeliveryMap.put("CompanyID__c", "IdEmpresa");
+		pointOfDeliveryMap.put("DetailAddress__c", "Direccion");
+		pointOfDeliveryMap.put("PaymentProcess__c", "PagoEnProcesoString");
+		pointOfDeliveryMap.put("BallotName__c", "NombreDuenoBoleta");
+		pointOfDeliveryMap.put("Block__c", "Bloque");
+		pointOfDeliveryMap.put("ConnectionType__c", "TipoConexion");
+		pointOfDeliveryMap.put("Electrodependant__c", "Electrodependiente");
+		pointOfDeliveryMap.put("DisciplinaryMeasure__c", "MedidaDisciplina");
+		pointOfDeliveryMap.put("RationingSchedule__c", "HorarioRacionamiento");
+		pointOfDeliveryMap.put("RepeatedCases__c", "CasosReiteradosString");
+		pointOfDeliveryMap.put("Rate__c", "Tarifa");
+		pointOfDeliveryMap.put("FeederNumber__c", "Alimentador");
+		pointOfDeliveryMap.put("DistributionAddress__c", "DireccionBoleta");
+		pointOfDeliveryMap.put("ElectricalSubstationConnection__c", "SubestacionElectricaConexion");
+		pointOfDeliveryMap.put("Route__c", "Ruta");
+		pointOfDeliveryMap.put("SegmentType__c", "TipoSegmento");
+		pointOfDeliveryMap.put("PointofDeliveryAddress__c", "DireccionConcatenada");
 	}
 	
 	private void initRepeatedCasesMap() {
 		repeatedCasesMap = new HashMap<String, String>();
 		repeatedCasesMap.put("Id", "Sfid");
-		repeatedCasesMap.put("name", "Name");
-		repeatedCasesMap.put("numbercases__c", "NumCasosString");
-		repeatedCasesMap.put("numberdays__c", "NumDiasString");
+		repeatedCasesMap.put("Name", "Name");
+		repeatedCasesMap.put("NumberCases__c", "NumCasosString");
+		repeatedCasesMap.put("NumberDays__c", "NumDiasString");
+		repeatedCasesMap.put("CreatedDate", "CreatedDateString");
 	}
 	
 	private void initServiceProductMap() {
 		serviceProductMap = new HashMap<String, String>();
 		serviceProductMap.put("Id", "Sfid");
-		serviceProductMap.put("name", "Name");
-		serviceProductMap.put("contact__c", "ContactoId");
-		serviceProductMap.put("principal__c", "PrincipalString");
-		serviceProductMap.put("asset__c", "ActivoId");
-		serviceProductMap.put("typeofrelationship__c", "TipoRelacionActivoClave");
+		serviceProductMap.put("Name", "Name");
+		serviceProductMap.put("Contact__c", "ContactoId");
+		serviceProductMap.put("Principal__c", "PrincipalString");
+		serviceProductMap.put("Asset__c", "ActivoId");
+		serviceProductMap.put("TypeofRelationship__c ", "TipoRelacionActivoClave");
 	}
 	
 	private void initStreetMap() {
 		streetMap = new HashMap<String, String>();
 		streetMap.put("Id", "Sfid");
-		streetMap.put("name", "Name");
-		streetMap.put("recordtypeid", "RecordTypeId");
-		streetMap.put("currencyisocode", "CurrencyIsoCode");
-		streetMap.put("region__c", "Region");
-		streetMap.put("literal_region__c", "LiteralRegion");
-		streetMap.put("municipality__c", "Municipality");
-		streetMap.put("literal_municipality__c", "LiteralMunicipality");
-		streetMap.put("street__c", "Street");
-		streetMap.put("street_type__c", "StreetType");
-		streetMap.put("literal_street_type__c", "LiteralStreetType");
-		streetMap.put("lastmodifiedbyid", "LastModifiedById");
-		streetMap.put("createdbyid", "CreatedById");
-		streetMap.put("ownerid", "OwnerId");
-		streetMap.put("country__c", "Country");
-		streetMap.put("company__c", "Company");
+		streetMap.put("Name", "Name");
+		streetMap.put("RecordTypeId", "RecordTypeId");
+		streetMap.put("CurrencyIsoCode", "CurrencyIsoCode");
+		streetMap.put("Region__c", "Region");
+		streetMap.put("Literal_region__c", "LiteralRegion");
+		streetMap.put("Municipality__c", "Municipality");
+		streetMap.put("Literal_Municipality__c", "LiteralMunicipality");
+		streetMap.put("Street__c", "Street");
+		streetMap.put("Street_Type__c", "StreetType");
+		streetMap.put("Literal_Street_type__c", "LiteralStreetType");
+		streetMap.put("LastModifiedById", "LastModifiedById");
+		streetMap.put("CreatedById", "CreatedById");
+		streetMap.put("OwnerId", "OwnerId");
+		streetMap.put("Country__c", "Country");
+		streetMap.put("Company__c", "Company");
 	}
 	
 	private void initUserMap() {
 		userMap = new HashMap<String, String>();
 		userMap.put("Id", "Sfid");
-		userMap.put("name", "Name");
+		userMap.put("Name", "Name");
 	}
 	
-	public LinkedHashMap<String, String> setobjectSelectsMap() {
-		return objectSelectsMap;
+	private void initTaskMap() {
+		taskMap = new HashMap<String, String>();
+		taskMap.put("id", "Sfid");
+		taskMap.put("tasktype__c", "Tasktype__c");
+		taskMap.put("activitydate", "ActivitydateString");
+		taskMap.put("calldisposition", "Calldisposition");
+		taskMap.put("casephone__c", "Casephone__c");
+		taskMap.put("status", "Status");
+		taskMap.put("description", "Description");
+		taskMap.put("createddate", "CreateddateString");
+		taskMap.put("subject", "Subject");
+		taskMap.put("priority", "Priority");
+		taskMap.put("whoid", "Whoid");
+		taskMap.put("accountid", "Accountid");
+		taskMap.put("ownerid", "Ownerid");
+		taskMap.put("tasksubtype", "Tasksubtype");
+		/* ---- NO EXISTEN EN SALESFORCE ---- */
+		//taskMap.put("account__company__c", "Account__company__c");
 	}
 	
 	private void initObjectSelectsMap() {
@@ -281,7 +304,6 @@ public class BatchObjectsMapper {
 		objectSelectsMap.put(ConstantesBulkApi.ENTITY_TASK, ConstantesBulkApi.ENTITY_TASK_SELECT);
 		objectSelectsMap.put(ConstantesBulkApi.ENTITY_USER, ConstantesBulkApi.ENTITY_USER_SELECT);
 	}
-	
 	
 	public Map<String, String> getAccountMap() {
 		return accountMap;
@@ -335,6 +357,10 @@ public class BatchObjectsMapper {
 		return userMap;
 	}
 	
+	public Map<String, String> getTaskMap() {
+		return taskMap;
+	}
+	
 	public Map<String, String> getObjectSelectsMap() {
 		return objectSelectsMap;
 	}
@@ -367,6 +393,8 @@ public class BatchObjectsMapper {
 			map = streetMap;
 		} else if (object instanceof UserVO) {
 			map = userMap;
+		} else if (object instanceof TaskVO) {
+			map = taskMap;
 		}
 		return map;
 	} 
