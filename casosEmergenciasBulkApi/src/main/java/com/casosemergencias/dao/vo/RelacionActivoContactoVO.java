@@ -14,6 +14,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.WhereJoinTable;
 
+import com.casosemergencias.util.Utils;
+
 @Entity
 @Table(name="salesforce.serviceproduct__c")
 public class RelacionActivoContactoVO implements Serializable {
@@ -179,6 +181,13 @@ public class RelacionActivoContactoVO implements Serializable {
 
 	public void setPrincipal(Boolean principal) {
 		this.principal = principal;
+	}
+	
+	public void setPrincipalString(String principalString) {
+		Boolean principalBoolean = Utils.parseStringToBoolean(principalString);
+		if (principalBoolean != null) {
+			setPrincipal(principalBoolean);
+		}
 	}
 
 	public String getActivoId() {

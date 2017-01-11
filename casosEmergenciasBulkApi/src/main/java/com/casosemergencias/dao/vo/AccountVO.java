@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import org.hibernate.collection.internal.PersistentBag;
 
 import com.casosemergencias.model.Cuenta;
+import com.casosemergencias.util.Utils;
 
 @Entity
 @Table(name = "salesforce.account")
@@ -281,11 +282,18 @@ public class AccountVO extends ObjectVO implements Serializable {
 	public Date getFechaNacimiento() {
 		return fechaNacimiento;
 	}
-
+	
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
-
+	
+	public void setFechaNacimientoString(String fechaNacimientoString) {
+		Date fechaNacimientoDate = Utils.parseStringToDate(fechaNacimientoString);
+		if (fechaNacimientoDate != null) {
+			setFechaNacimiento(fechaNacimientoDate);
+		}
+	}
+	
 	public String getPhone() {
 		return phone;
 	}
@@ -495,9 +503,14 @@ public class AccountVO extends ObjectVO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "AccountVO [sfid=" + sfid + ", name=" + name + ", telefonoSecundario=" + telefonoSecundario + "]";
+		return "AccountVO [sfid=" + sfid + ", name=" + name + ", apellidoPaterno=" + apellidoPaterno
+				+ ", apellidoMaterno=" + apellidoMaterno + ", tipoIdentidad=" + tipoIdentidad + ", parentRutEmpresa="
+				+ parentRutEmpresa + ", accountRun=" + accountRun + ", run=" + run + ", fechaNacimiento="
+				+ fechaNacimiento + ", phone=" + phone + ", telefonoPrincipal=" + telefonoPrincipal
+				+ ", telefonoSecundario=" + telefonoSecundario + ", emailPrincipal=" + emailPrincipal
+				+ ", emailSecundario=" + emailSecundario + ", direccion=" + direccion + ", accountsource="
+				+ accountsource + ", idEmpresa=" + idEmpresa + ", tipo=" + tipo + ", parentid=" + parentid + "]";
 	}
-	
-	
-	
+
+		
 }

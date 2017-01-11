@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.casosemergencias.model.Group;
+import com.casosemergencias.util.Utils;
 
 @Entity
 @Table(name="salesforce.group")
@@ -113,7 +114,12 @@ public class GroupVO extends ObjectVO implements Serializable {
 	public void setCreateddate(Date createddate) {
 		this.createddate = createddate;
 	}
-
+	public void setCreateddateString(String createddateString) {
+		Date createddateDate = Utils.parseStringToDate(createddateString);
+		if (createddateDate != null) {
+			setCreateddate(createddateDate);
+		}
+	}
 	@Override
 	public Object instantiateTargetLogic() {
 		Group group = new Group();

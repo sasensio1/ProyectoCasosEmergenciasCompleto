@@ -331,7 +331,7 @@ public class ContactVO extends ObjectVO implements Serializable {
 	public Boolean getCasosReiterados() {
 		return casosReiterados;
 	}
-
+	
 	public void setCasosReiterados(Boolean casosReiterados) {
 		this.casosReiterados = casosReiterados;
 	}

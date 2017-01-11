@@ -260,6 +260,27 @@ public class BatchObjectsMapper {
 		userMap.put("name", "Name");
 	}
 	
+	public LinkedHashMap<String, String> setobjectSelectsMap() {
+		return objectSelectsMap;
+	}
+	
+	private void initObjectSelectsMap() {
+		objectSelectsMap = new LinkedHashMap<String, String>();
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, ConstantesBulkApi.ENTITY_ACCOUNT_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ADDRESS, ConstantesBulkApi.ENTITY_ADDRESS_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ASSET, ConstantesBulkApi.ENTITY_ASSET_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, ConstantesBulkApi.ENTITY_CASE_COMMENT_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, ConstantesBulkApi.ENTITY_CASE_HISTORY_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CONTACT, ConstantesBulkApi.ENTITY_CONTACT_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_GROUP, ConstantesBulkApi.ENTITY_GROUP_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, ConstantesBulkApi.ENTITY_HEROKU_USER_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY, ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_REPEATED_CASES, ConstantesBulkApi.ENTITY_REPEATED_CASES_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_SERVICE_PRODUCT, ConstantesBulkApi.ENTITY_SERVICE_PRODUCT_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_STREET, ConstantesBulkApi.ENTITY_STREET_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_TASK, ConstantesBulkApi.ENTITY_TASK_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_USER, ConstantesBulkApi.ENTITY_USER_SELECT);
+	}
 	
 	
 	public Map<String, String> getAccountMap() {
@@ -348,23 +369,5 @@ public class BatchObjectsMapper {
 			map = userMap;
 		}
 		return map;
-	}
-	
-	private void initObjectSelectsMap() {
-		objectSelectsMap = new LinkedHashMap<String, String>();
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, ConstantesBulkApi.ENTITY_ACCOUNT_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ADDRESS, ConstantesBulkApi.ENTITY_ADDRESS_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ASSET, ConstantesBulkApi.ENTITY_ASSET_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, ConstantesBulkApi.ENTITY_CASE_COMMENT_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, ConstantesBulkApi.ENTITY_CASE_HISTORY_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CONTACT, ConstantesBulkApi.ENTITY_CONTACT_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_GROUP, ConstantesBulkApi.ENTITY_GROUP_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, ConstantesBulkApi.ENTITY_HEROKU_USER_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY, ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_REPEATED_CASES, ConstantesBulkApi.ENTITY_REPEATED_CASES_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_SERVICE_PRODUCT, ConstantesBulkApi.ENTITY_SERVICE_PRODUCT_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_STREET, ConstantesBulkApi.ENTITY_STREET_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_TASK, ConstantesBulkApi.ENTITY_TASK_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_USER, ConstantesBulkApi.ENTITY_USER_SELECT);
 	} 
 }

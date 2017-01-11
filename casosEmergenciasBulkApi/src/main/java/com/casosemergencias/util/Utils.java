@@ -74,7 +74,7 @@ public class Utils {
 				javaInteger = Integer.valueOf(integerValue);
 			} catch (NumberFormatException e) {}
 		}
-		logger.info("Valor del integer: " + javaInteger);
+		logger.info("Valor del integer: " + javaInteger.intValue());
 		return javaInteger;
 	}
 	
@@ -83,17 +83,17 @@ public class Utils {
 	 * 
 	 * @param doubleValue
 	 *            Double value in String.
-	 * @return Double integer value parsed as a Java Object.
+	 * @return Double Double value parsed as a Java Object.
 	 */
 	public static Double parseStringToDouble (String doubleValue) {
-		Double javaInteger = null;
+		Double javaDouble = null;
 		if (!isNullOrEmptyString(doubleValue)) {
 			try {
-				javaInteger = Double.valueOf(doubleValue);
+				javaDouble = Double.valueOf(doubleValue);
 			} catch (NumberFormatException e) {}
 		}
-		logger.info("Valor del double: " + javaInteger);
-		return javaInteger;
+		logger.info("Valor del double: " + javaDouble.doubleValue());
+		return javaDouble;
 	}
 	
 	/**
