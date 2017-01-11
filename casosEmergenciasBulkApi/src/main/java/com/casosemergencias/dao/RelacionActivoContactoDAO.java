@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.RelacionActivoContactoVO;
 
 @Repository
@@ -141,6 +142,125 @@ public class RelacionActivoContactoDAO {
 		}
 
 	}
+	
+	
+	/**
+	 * Inserta un listado de RelacionActivoContactos venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void insertRelacionActivoContactoListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- insert Listado RelacionActivoContactos ---");
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();		
+		for(Object object:objectList){
+			RelacionActivoContactoVO relacionActivoContactoToInsert = new RelacionActivoContactoVO();
+			try{
+				relacionActivoContactoToInsert=(RelacionActivoContactoVO)object;
+				session.save(relacionActivoContactoToInsert);
+				tx.commit();
+				logger.debug("--- Fin -- insertRelacionActivoContacto ---" + relacionActivoContactoToInsert.getSfid());
+			} catch (HibernateException e) {
+			tx.rollback();
+			logger.error("--- Error en insertRelacionActivoContacto: ---" + relacionActivoContactoToInsert.getSfid(), e);
+			}						
+		}
+		logger.debug("--- Fin -- insert Listado RelacionActivoContactos ---");
+		session.close();
+	}
+	
+
+	/**
+	 * Actualiza un listado de relacionActivoContactos venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void updateRelacionActivoContactoListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- update Listado RelacionActivoContactos ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			RelacionActivoContactoVO relacionActivoContactoToUpdate = new RelacionActivoContactoVO();
+			try{
+				relacionActivoContactoToUpdate=(RelacionActivoContactoVO)object;
+				Query sqlUpdateQuery =session.createQuery("UPDATE RelacionActivoContactoVO SET "
+				+ "name= :name,createddate= :createddate,contact__c= :contact__c,"
+				+ "principal__c= :principal__c,asset__c= :asset__c,"
+				+ "typeofrelationship__c= :typeofrelationship__c"
+				+
+				" WHERE sfid = :sfidFiltro");
+				
+				//Seteamos los campos a actualizar
+				
+				sqlUpdateQuery.setParameter("name", relacionActivoContactoToUpdate.getName());
+				sqlUpdateQuery.setParameter("createddate", relacionActivoContactoToUpdate.getCreatedDate());
+				sqlUpdateQuery.setParameter("contact__c", relacionActivoContactoToUpdate.getContactoId());
+				sqlUpdateQuery.setParameter("principal__c", relacionActivoContactoToUpdate.getPrincipal());
+				sqlUpdateQuery.setParameter("asset__c", relacionActivoContactoToUpdate.getActivoId());
+				sqlUpdateQuery.setParameter("typeofrelationship__c", relacionActivoContactoToUpdate.getTipoRelacionActivoClave());
+
+				
+				//Seteamos el campo por el que filtramos la actualización
+				
+				sqlUpdateQuery.setParameter("sfidFiltro", relacionActivoContactoToUpdate.getSfid());
+				
+				//Ejecutamos la actualizacion
+				sqlUpdateQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- updateRelacionActivoContacto ---" + relacionActivoContactoToUpdate.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en updateRelacionActivoContacto: ---" + relacionActivoContactoToUpdate.getSfid(), e);
+			} 						
+		}
+		logger.debug("--- Fin -- update Listado RelacionActivoContactos ---");
+		session.close();
+
+	}
+		
+	/**
+	 * Borra un listado de relacionActivoContactos venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void deleteRelacionActivoContactoListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- delete Listado RelacionActivoContactos ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			RelacionActivoContactoVO relacionActivoContactoToDelete = new RelacionActivoContactoVO();
+			try{
+				relacionActivoContactoToDelete=(RelacionActivoContactoVO)object;
+				Query sqlDeleteQuery =session.createQuery("DELETE RelacionActivoContactoVO  WHERE sfid = :sfidFiltro");
+				
+				//Seteamos el campo por el que filtramos el borrado			
+				sqlDeleteQuery.setParameter("sfidFiltro", relacionActivoContactoToDelete.getSfid());				
+				//Ejecutamos la actualizacion				
+				sqlDeleteQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- deleteRelacionActivoContacto ---" + relacionActivoContactoToDelete.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en deleteRelacionActivoContacto: ---" + relacionActivoContactoToDelete.getSfid(), e);
+			} 					
+		}
+		logger.debug("--- Fin -- delete Listado RelacionActivoContactos ---");
+		session.close();
+
+	}
+	
+	
+	
+	
+	
 
 	
 }

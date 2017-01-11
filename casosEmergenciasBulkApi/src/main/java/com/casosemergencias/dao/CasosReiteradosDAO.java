@@ -7,9 +7,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.CasosReiteradosVO;
 
 @Repository
@@ -150,4 +153,125 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	    }
 	      return null;
 	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * Inserta un listado de CasoReiterados venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void insertCasosReiteradosListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- insert Listado CasoReiterados ---");
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();		
+		for(Object object:objectList){
+			CasosReiteradosVO casoReiteradoToInsert = new CasosReiteradosVO();
+			try{
+				casoReiteradoToInsert=(CasosReiteradosVO)object;
+				session.save(casoReiteradoToInsert);
+				tx.commit();
+				logger.debug("--- Fin -- insertCasoReiterado ---" + casoReiteradoToInsert.getSfid());
+			} catch (HibernateException e) {
+			tx.rollback();
+			logger.error("--- Error en insertCasoReiterado: ---" + casoReiteradoToInsert.getSfid(), e);
+			}						
+		}
+		logger.debug("--- Fin -- insert Listado CasoReiterados ---");
+		session.close();
+	}
+	
+
+	/**
+	 * Actualiza un listado de casoReiterados venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void updateCasosReiteradosListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- update Listado CasoReiterados ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			CasosReiteradosVO casoReiteradoToUpdate = new CasosReiteradosVO();
+			try{
+				casoReiteradoToUpdate=(CasosReiteradosVO)object;
+				Query sqlUpdateQuery =session.createQuery("UPDATE CasosReiteradosVO SET "
+				+ "name= :name,numbercases__c= :numbercases__c,numberdays__c= :numberdays__c,"
+				+ "createddate= :createddate"				
+				+	
+				" WHERE sfid = :sfidFiltro");
+				
+				//Seteamos los campos a actualizar
+				
+				sqlUpdateQuery.setParameter("name", casoReiteradoToUpdate.getName());
+				sqlUpdateQuery.setParameter("numbercases__c", casoReiteradoToUpdate.getNumCasos());
+				sqlUpdateQuery.setParameter("numberdays__c", casoReiteradoToUpdate.getNumDias());
+				sqlUpdateQuery.setParameter("createddate", casoReiteradoToUpdate.getCreatedDate());
+
+				//Seteamos el campo por el que filtramos la actualización
+				
+				sqlUpdateQuery.setParameter("sfidFiltro", casoReiteradoToUpdate.getSfid());
+				
+				//Ejecutamos la actualizacion
+				sqlUpdateQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- updateCasoReiterado ---" + casoReiteradoToUpdate.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en updateCasoReiterado: ---" + casoReiteradoToUpdate.getSfid(), e);
+			} 						
+		}
+		logger.debug("--- Fin -- update Listado CasoReiterados ---");
+		session.close();
+
+	}
+		
+	/**
+	 * Borra un listado de casoReiterados venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void deleteCasosReiteradosListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- delete Listado CasoReiterados ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			CasosReiteradosVO casoReiteradoToDelete = new CasosReiteradosVO();
+			try{
+				casoReiteradoToDelete=(CasosReiteradosVO)object;
+				Query sqlDeleteQuery =session.createQuery("DELETE CasosReiteradosVO  WHERE sfid = :sfidFiltro");
+				
+				//Seteamos el campo por el que filtramos el borrado			
+				sqlDeleteQuery.setParameter("sfidFiltro", casoReiteradoToDelete.getSfid());				
+				//Ejecutamos la actualizacion				
+				sqlDeleteQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- deleteCasoReiterado ---" + casoReiteradoToDelete.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en deleteCasoReiterado: ---" + casoReiteradoToDelete.getSfid(), e);
+			} 					
+		}
+		logger.debug("--- Fin -- delete Listado CasoReiterados ---");
+		session.close();
+
+	}
+	
+	
+	
+	
+	
+	
+	
 }

@@ -36,9 +36,7 @@ public class RelacionActivoContactoVO implements Serializable {
 	//campo de Heroku
 	@Column(name = "_hc_err")
 	private String hcError;
-	//campo de Heroku
-	@Column(name="createddate")
-	private Date createdDate;
+
 	
 
 	@Id
@@ -51,6 +49,9 @@ public class RelacionActivoContactoVO implements Serializable {
 
 	@Column(name = "name")
 	private String name;
+	
+	@Column(name="createddate")
+	private Date createdDate;
 	
 	@Column(name = "contact__c")
 	private String contactoId;

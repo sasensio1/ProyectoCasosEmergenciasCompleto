@@ -7,9 +7,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.UserVO;
 
 @Repository
@@ -111,5 +114,117 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 	    }
 	    return null;
 	}
+	
+	
+	
+	/**
+	 * Inserta un listado de Usuarios venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void insertUserListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- insert Listado Usuarios ---");
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();		
+		for(Object object:objectList){
+			UserVO usuarioToInsert = new UserVO();
+			try{
+				usuarioToInsert=(UserVO)object;
+				session.save(usuarioToInsert);
+				tx.commit();
+				logger.debug("--- Fin -- insertUsuario ---" + usuarioToInsert.getSfid());
+			} catch (HibernateException e) {
+			tx.rollback();
+			logger.error("--- Error en insertUsuario: ---" + usuarioToInsert.getSfid(), e);
+			}						
+		}
+		logger.debug("--- Fin -- insert Listado Usuarios ---");
+		session.close();
+	}
+	
+
+	/**
+	 * Actualiza un listado de usuarios venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void updateUserListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- update Listado Usuarios ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			UserVO usuarioToUpdate = new UserVO();
+			try{
+				usuarioToUpdate=(UserVO)object;
+				Query sqlUpdateQuery =session.createQuery("UPDATE UserVO SET "
+				+ "name= :name"			
+				+	
+				" WHERE sfid = :sfidFiltro");
+				
+				//Seteamos los campos a actualizar
+				
+				sqlUpdateQuery.setParameter("name", usuarioToUpdate.getName());
+
+				//Seteamos el campo por el que filtramos la actualización
+				
+				sqlUpdateQuery.setParameter("sfidFiltro", usuarioToUpdate.getSfid());
+				
+				//Ejecutamos la actualizacion
+				sqlUpdateQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- updateUsuario ---" + usuarioToUpdate.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en updateUsuario: ---" + usuarioToUpdate.getSfid(), e);
+			} 						
+		}
+		logger.debug("--- Fin -- update Listado Usuarios ---");
+		session.close();
+
+	}
+		
+	/**
+	 * Borra un listado de usuarios venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void deleteUserListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- delete Listado Usuarios ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			UserVO usuarioToDelete = new UserVO();
+			try{
+				usuarioToDelete=(UserVO)object;
+				Query sqlDeleteQuery =session.createQuery("DELETE UserVO  WHERE sfid = :sfidFiltro");
+				
+				//Seteamos el campo por el que filtramos el borrado			
+				sqlDeleteQuery.setParameter("sfidFiltro", usuarioToDelete.getSfid());				
+				//Ejecutamos la actualizacion				
+				sqlDeleteQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- deleteUsuario ---" + usuarioToDelete.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en deleteUsuario: ---" + usuarioToDelete.getSfid(), e);
+			} 					
+		}
+		logger.debug("--- Fin -- delete Listado Usuarios ---");
+		session.close();
+
+	}
+	
+	
+	
+	
+	
 
 }
