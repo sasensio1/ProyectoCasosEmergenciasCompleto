@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.casosemergencias.model.CasosReiterados;
+import com.casosemergencias.util.Utils;
 
 
 
@@ -108,7 +109,13 @@ public class CasosReiteradosVO extends ObjectVO implements Serializable {
 		this.numCasos = numCasos;
 	}
 
-
+	public void setNumCasosString(String numCasosString) {
+		Double numCasosDouble = Utils.parseStringToDouble(numCasosString);
+		if (numCasosDouble != null) {
+			setNumCasos(numCasosDouble);
+		}
+	}
+	
 	public Double getNumDias() {
 		return numDias;
 	}
@@ -118,7 +125,13 @@ public class CasosReiteradosVO extends ObjectVO implements Serializable {
 		this.numDias = numDias;
 	}
 
-
+	public void setNumDiasString(String numDiasString) {
+		Double numDiasDouble = Utils.parseStringToDouble(numDiasString);
+		if (numDiasDouble != null) {
+			setNumDias(numDiasDouble);
+		}
+	}
+	
 	public String getSfid() {
 		return sfid;
 	}

@@ -65,7 +65,25 @@ public class Utils {
 				javaInteger = Integer.valueOf(integerValue);
 			} catch (NumberFormatException e) {}
 		}
-		logger.info("Valor del boolean: " + javaInteger);
+		logger.info("Valor del integer: " + javaInteger);
+		return javaInteger;
+	}
+	
+	/**
+	 * Parses an double value in String to a Java Double object.
+	 * 
+	 * @param doubleValue
+	 *            Double value in String.
+	 * @return Double integer value parsed as a Java Object.
+	 */
+	public static Double parseStringToDouble (String doubleValue) {
+		Double javaInteger = null;
+		if (!isNullOrEmptyString(doubleValue)) {
+			try {
+				javaInteger = Double.valueOf(doubleValue);
+			} catch (NumberFormatException e) {}
+		}
+		logger.info("Valor del double: " + javaInteger);
 		return javaInteger;
 	}
 	

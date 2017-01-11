@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.WhereJoinTable;
 
 import com.casosemergencias.model.HerokuUser;
+import com.casosemergencias.util.Utils;
 
 
 
@@ -148,11 +149,23 @@ public class HerokuUserVO extends ObjectVO implements Serializable {
 	public void setEnvioMail(Boolean envioMail) {
 		this.envioMail = envioMail;
 	}
+	public void setEnvioMailString(String envioMailString) {
+		Boolean envioMailBoolean = Utils.parseStringToBoolean(envioMailString);
+		if (envioMailBoolean != null) {
+			setEnvioMail(envioMailBoolean);
+		}
+	}
 	public Boolean getActivo() {
 		return activo;
 	}
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
+	}
+	public void setActivoString(String activoString) {
+		Boolean activoBoolean = Utils.parseStringToBoolean(activoString);
+		if (activoBoolean != null) {
+			setActivo(activoBoolean);
+		}
 	}
 	public String getCountry() {
 		return country;

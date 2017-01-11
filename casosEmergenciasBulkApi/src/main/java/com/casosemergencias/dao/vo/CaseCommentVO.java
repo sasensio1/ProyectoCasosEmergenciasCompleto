@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.casosemergencias.model.CaseComment;
+import com.casosemergencias.util.Utils;
 
 @Entity
 @Table(name = "salesforce.casecomment")
@@ -156,6 +157,13 @@ public class CaseCommentVO extends ObjectVO implements Serializable {
 		this.createddate = createddate;
 	}
 
+	public void setCreateddateString(String createddateString) {
+		Date createddateDate = Utils.parseStringToDate(createddateString);
+		if (createddateDate != null) {
+			setCreateddate(createddateDate);
+		}
+	}
+	
 	public Boolean getIspublished() {
 		return ispublished;
 	}
@@ -164,6 +172,13 @@ public class CaseCommentVO extends ObjectVO implements Serializable {
 		this.ispublished = ispublished;
 	}
 
+	public void setIspublishedString(String ispublishedString) {
+		Boolean ispublishedBoolean = Utils.parseStringToBoolean(ispublishedString);
+		if (ispublishedBoolean != null) {
+			setIspublished(ispublishedBoolean);
+		}
+	}
+	
 	public String getCaseid() {
 		return caseid;
 	}
