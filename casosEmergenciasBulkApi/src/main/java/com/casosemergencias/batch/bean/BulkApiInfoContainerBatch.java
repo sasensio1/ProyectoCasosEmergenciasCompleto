@@ -4,12 +4,12 @@ import java.util.List;
 
 public class BulkApiInfoContainerBatch {
 	
-	/** Bean params. */
+	/** Paremeters. */
 	public enum OperationType { INSERT, UPDATE, DELETE };
 	private OperationType operation;
 	private List<Object> objectList;
 		
-	/** GETTERS */
+	/** Getters. */
 	public OperationType getOperation() {
 		return operation;
 	}
@@ -18,7 +18,7 @@ public class BulkApiInfoContainerBatch {
 		return objectList;
 	}
 		
-	/** SETTERS */
+	/** Setters. */
 	public void setOperation(OperationType operation) {
 		this.operation = operation;
 	}

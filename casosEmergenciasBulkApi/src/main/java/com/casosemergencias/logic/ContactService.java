@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.casosemergencias.exception.EmergenciasException;
 import com.casosemergencias.model.Calle;
-import com.casosemergencias.model.Caso;
 import com.casosemergencias.model.Contacto;
 import com.casosemergencias.model.Direccion;
 import com.casosemergencias.model.RelacionActivoContacto;

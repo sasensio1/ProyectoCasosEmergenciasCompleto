@@ -44,7 +44,6 @@ import com.casosemergencias.logic.ContactService;
 import com.casosemergencias.logic.DireccionService;
 import com.casosemergencias.logic.PickListsService;
 import com.casosemergencias.logic.SuministroService;
-import com.casosemergencias.model.Calle;
 import com.casosemergencias.model.CaseComment;
 import com.casosemergencias.model.CaseHistory;
 import com.casosemergencias.model.Caso;

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.casosemergencias.dao.vo.CaseCommentVO;
-import com.casosemergencias.dao.vo.CaseVO;
 
 @Repository
 public class CaseCommentDAO {

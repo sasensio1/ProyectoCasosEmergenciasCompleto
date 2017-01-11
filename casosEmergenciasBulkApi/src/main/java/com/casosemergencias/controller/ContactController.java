@@ -30,16 +30,13 @@ import com.casosemergencias.controller.views.ContactView;
 import com.casosemergencias.controller.views.DireccionView;
 import com.casosemergencias.controller.views.SuministroView;
 import com.casosemergencias.exception.EmergenciasException;
-import com.casosemergencias.logic.CaseService;
 import com.casosemergencias.logic.ContactService;
 import com.casosemergencias.logic.DireccionService;
 import com.casosemergencias.logic.PickListsService;
 import com.casosemergencias.logic.SuministroService;
 import com.casosemergencias.model.Calle;
-import com.casosemergencias.model.Caso;
 import com.casosemergencias.model.Contacto;
 import com.casosemergencias.model.Direccion;
-import com.casosemergencias.model.HerokuUser;
 import com.casosemergencias.model.RelacionActivoContacto;
 import com.casosemergencias.model.Suministro;
 import com.casosemergencias.util.ParserModelVO;
@@ -67,9 +64,6 @@ public class ContactController {
 	
 	@Autowired
 	private DireccionService direccionService;
-	
-	@Autowired
-	private CaseService casoService;
 
 	@RequestMapping(value = "/private/homeContacts", method = RequestMethod.GET)
 	public ModelAndView listadoContactos() {

@@ -1,7 +1,5 @@
 package com.casosemergencias.logic.sf.bean;
 
-import com.casosemergencias.model.CaseComment;
-
 public class RelacionActivoContactoSalesforce {
 	
 	private String suministroSfid ;

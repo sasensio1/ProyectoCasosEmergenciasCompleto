@@ -7,19 +7,13 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.casosemergencias.dao.AccountDAO;
-import com.casosemergencias.dao.AssetDAO;
 import com.casosemergencias.dao.CalleDAO;
 import com.casosemergencias.dao.CaseDAO;
 import com.casosemergencias.dao.ContactDAO;
 import com.casosemergencias.dao.DireccionDAO;
 import com.casosemergencias.dao.RelacionActivoContactoDAO;
-import com.casosemergencias.dao.vo.AccountVO;
-import com.casosemergencias.dao.vo.AssetVO;
-import com.casosemergencias.dao.vo.CaseCommentVO;
 import com.casosemergencias.dao.vo.CaseVO;
 import com.casosemergencias.dao.vo.ContactVO;
 import com.casosemergencias.dao.vo.DireccionVO;
@@ -27,15 +21,12 @@ import com.casosemergencias.dao.vo.RelacionActivoContactoVO;
 import com.casosemergencias.dao.vo.StreetVO;
 import com.casosemergencias.dao.vo.SuministroVO;
 import com.casosemergencias.exception.EmergenciasException;
-import com.casosemergencias.logic.sf.response.CreateCaseCommentResponse;
 import com.casosemergencias.logic.sf.response.CreateRelacionActivoContactoResponse;
 import com.casosemergencias.logic.sf.response.SearchDirectionResponse;
-import com.casosemergencias.logic.sf.rest.CreateCaseComment;
 import com.casosemergencias.logic.sf.rest.CreateRelacionActivoContacto;
 import com.casosemergencias.logic.sf.rest.SearchDirection;
 import com.casosemergencias.logic.sf.util.SalesforceLoginChecker;
 import com.casosemergencias.model.Calle;
-import com.casosemergencias.model.CaseComment;
 import com.casosemergencias.model.Caso;
 import com.casosemergencias.model.Contacto;
 import com.casosemergencias.model.Direccion;
@@ -43,7 +34,6 @@ import com.casosemergencias.model.RelacionActivoContacto;
 import com.casosemergencias.model.Suministro;
 import com.casosemergencias.model.UserSessionInfo;
 import com.casosemergencias.util.ParserModelVO;
-import com.casosemergencias.util.constants.Constantes;
 import com.casosemergencias.util.constants.ConstantesError;
 import com.casosemergencias.util.datatables.DataTableProperties;
 
@@ -63,16 +53,10 @@ public class ContactServiceImpl implements ContactService{
 	private CaseDAO casoDAO;
 	
 	@Autowired
-	private AssetDAO assetDAO;
-	
-	@Autowired
 	private CalleDAO calleDAO;
 	
 	@Autowired
 	private DireccionDAO direccionDAO;
-	
-	@Autowired
-	private AccountDAO cuentaDAO;
 	
 	@Autowired
 	private SalesforceLoginChecker salesforceLoginChecker;
@@ -213,8 +197,7 @@ public class ContactServiceImpl implements ContactService{
 		UserSessionInfo userSessionInfoFromDB = null;
 		SearchDirectionResponse respuestaDireccion = null;
 		Direccion direccionSf = new Direccion();
-		Calle streetSf= new Calle();
-		
+	
 
 		try (InputStream propsInputStream = getClass().getClassLoader().getResourceAsStream("/environment/dev/config.properties")) {
 			properties.load(propsInputStream);

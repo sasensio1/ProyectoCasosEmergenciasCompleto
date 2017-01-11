@@ -13,12 +13,8 @@ import org.apache.log4j.Logger;
 
 import com.casosemergencias.exception.EmergenciasException;
 import com.casosemergencias.logic.sf.bean.ComentarioCasoSalesforce;
-import com.casosemergencias.logic.sf.bean.DireccionSalesForce;
 import com.casosemergencias.logic.sf.response.CreateCaseCommentResponse;
-import com.casosemergencias.logic.sf.response.SearchDirectionResponse;
-import com.casosemergencias.model.Calle;
 import com.casosemergencias.model.CaseComment;
-import com.casosemergencias.model.Direccion;
 import com.casosemergencias.model.UserSessionInfo;
 import com.casosemergencias.util.constants.ConstantesError;
 import com.casosemergencias.util.constants.ConstantesSalesforceLogin;
