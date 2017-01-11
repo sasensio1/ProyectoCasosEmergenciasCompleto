@@ -264,7 +264,7 @@ public class BatchObjectsMapper {
 	private void initUserMap() {
 		userMap = new HashMap<String, String>();
 		userMap.put("Id", "Sfid");
-		userMap.put("Name", "Name");
+		userMap.put("Name", "Name");		
 	}
 	
 	private void initTaskMap() {
@@ -280,11 +280,14 @@ public class BatchObjectsMapper {
 		taskMap.put("subject", "Subject");
 		taskMap.put("priority", "Priority");
 		taskMap.put("whoid", "Whoid");
+		//taskMap.put("account__company__c", "Account__company__c");
 		taskMap.put("accountid", "Accountid");
 		taskMap.put("ownerid", "Ownerid");
-		taskMap.put("tasksubtype", "Tasksubtype");
-		/* ---- NO EXISTEN EN SALESFORCE ---- */
-		//taskMap.put("account__company__c", "Account__company__c");
+		taskMap.put("tasksubtype", "Tasksubtype");		
+	}
+	
+	public LinkedHashMap<String, String> setobjectSelectsMap() {
+		return objectSelectsMap;
 	}
 	
 	private void initObjectSelectsMap() {
