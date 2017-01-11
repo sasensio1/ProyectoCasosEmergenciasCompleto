@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.CaseCommentVO;
 import com.casosemergencias.dao.vo.CaseVO;
 
@@ -174,6 +175,128 @@ public class CaseCommentDAO {
 		}
 
 	}
+	
+	
+	
+	
+	
+	/**
+	 * Inserta un listado de ComentarioCasos venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void insertCaseCommentListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- insert Listado ComentarioCasos ---");
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();		
+		for(Object object:objectList){
+			CaseCommentVO comentarioCasoToInsert = new CaseCommentVO();
+			try{
+				comentarioCasoToInsert=(CaseCommentVO)object;
+				session.save(comentarioCasoToInsert);
+				tx.commit();
+				logger.debug("--- Fin -- insertComentarioCaso ---" + comentarioCasoToInsert.getSfid());
+			} catch (HibernateException e) {
+			tx.rollback();
+			logger.error("--- Error en insertComentarioCaso: ---" + comentarioCasoToInsert.getSfid(), e);
+			}						
+		}
+		logger.debug("--- Fin -- insert Listado ComentarioCasos ---");
+		session.close();
+	}
+	
+
+	/**
+	 * Actualiza un listado de comentarioCasos venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void updateCaseCommentListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- update Listado ComentarioCasos ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			CaseCommentVO comentarioCasoToUpdate = new CaseCommentVO();
+			try{
+				comentarioCasoToUpdate=(CaseCommentVO)object;
+				Query sqlUpdateQuery =session.createQuery("UPDATE CaseCommentVO SET "
+				+ "createdbyid= :createdbyid,createddate= :createddate,"
+				+ "ispublished= :ispublished,parentid= :parentid,"
+				+ "commentbody= :commentbody,lastmodifieddate= :lastmodifieddate,"
+				+ "lastmodifiedbyid= :lastmodifiedbyid"			
+				+	
+				" WHERE sfid = :sfidFiltro");
+				
+				//Seteamos los campos a actualizar
+				
+				sqlUpdateQuery.setParameter("createdbyid", comentarioCasoToUpdate.getCreatedbyid());
+				sqlUpdateQuery.setParameter("createddate", comentarioCasoToUpdate.getCreateddate());
+				sqlUpdateQuery.setParameter("ispublished", comentarioCasoToUpdate.getIspublished());
+				sqlUpdateQuery.setParameter("parentid", comentarioCasoToUpdate.getCaseid());
+				sqlUpdateQuery.setParameter("commentbody", comentarioCasoToUpdate.getComment());
+				sqlUpdateQuery.setParameter("lastmodifieddate", comentarioCasoToUpdate.getLastmodifieddate());
+				sqlUpdateQuery.setParameter("lastmodifiedbyid", comentarioCasoToUpdate.getLastmodifiedbyid());
+
+				
+				//Seteamos el campo por el que filtramos la actualización
+				
+				sqlUpdateQuery.setParameter("sfidFiltro", comentarioCasoToUpdate.getSfid());
+				
+				//Ejecutamos la actualizacion
+				sqlUpdateQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- updateComentarioCaso ---" + comentarioCasoToUpdate.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en updateComentarioCaso: ---" + comentarioCasoToUpdate.getSfid(), e);
+			} 						
+		}
+		logger.debug("--- Fin -- update Listado ComentarioCasos ---");
+		session.close();
+
+	}
+		
+	/**
+	 * Borra un listado de comentarioCasos venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void deleteCaseCommentListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- delete Listado ComentarioCasos ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			CaseCommentVO comentarioCasoToDelete = new CaseCommentVO();
+			try{
+				comentarioCasoToDelete=(CaseCommentVO)object;
+				Query sqlDeleteQuery =session.createQuery("DELETE CaseCommentVO  WHERE sfid = :sfidFiltro");
+				
+				//Seteamos el campo por el que filtramos el borrado			
+				sqlDeleteQuery.setParameter("sfidFiltro", comentarioCasoToDelete.getSfid());				
+				//Ejecutamos la actualizacion				
+				sqlDeleteQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- deleteComentarioCaso ---" + comentarioCasoToDelete.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en deleteComentarioCaso: ---" + comentarioCasoToDelete.getSfid(), e);
+			} 					
+		}
+		logger.debug("--- Fin -- delete Listado ComentarioCasos ---");
+		session.close();
+
+	}
+	
+	
+	
 	
 	
 }

@@ -7,9 +7,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.CaseHistoryVO;
 
 @Repository
@@ -206,4 +209,132 @@ public class CaseHistoryDAO {
 	    }
 		return null;
 	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * Inserta un listado de HistorialCasos venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void insertCaseHistoryListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- insert Listado HistorialCasos ---");
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();		
+		for(Object object:objectList){
+			CaseHistoryVO historialCasoToInsert = new CaseHistoryVO();
+			try{
+				historialCasoToInsert=(CaseHistoryVO)object;
+				session.save(historialCasoToInsert);
+				tx.commit();
+				logger.debug("--- Fin -- insertHistorialCaso ---" + historialCasoToInsert.getSfid());
+			} catch (HibernateException e) {
+			tx.rollback();
+			logger.error("--- Error en insertHistorialCaso: ---" + historialCasoToInsert.getSfid(), e);
+			}						
+		}
+		logger.debug("--- Fin -- insert Listado HistorialCasos ---");
+		session.close();
+	}
+	
+
+	/**
+	 * Actualiza un listado de historialCasos venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void updateCaseHistoryListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- update Listado HistorialCasos ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			CaseHistoryVO historialCasoToUpdate = new CaseHistoryVO();
+			try{
+				historialCasoToUpdate=(CaseHistoryVO)object;
+				Query sqlUpdateQuery =session.createQuery("UPDATE CaseHistoryVO SET "
+				+ "createdbyid= :createdbyid,createddate= :createddate,newvalue= :newvalue,"
+				+ "oldvalue= :oldvalue,field= :field,caseid= :caseid"
+				+
+				
+				" WHERE sfid = :sfidFiltro");
+				
+				//Seteamos los campos a actualizar
+				
+				sqlUpdateQuery.setParameter("createdbyid", historialCasoToUpdate.getCreatedbyid());
+				sqlUpdateQuery.setParameter("createddate", historialCasoToUpdate.getCreateddate());
+				sqlUpdateQuery.setParameter("newvalue", historialCasoToUpdate.getNewvalue());
+				sqlUpdateQuery.setParameter("oldvalue", historialCasoToUpdate.getOldvalue());
+				sqlUpdateQuery.setParameter("field", historialCasoToUpdate.getField());
+				sqlUpdateQuery.setParameter("caseid", historialCasoToUpdate.getCaseid());
+
+				//Seteamos el campo por el que filtramos la actualización
+				
+				sqlUpdateQuery.setParameter("sfidFiltro", historialCasoToUpdate.getSfid());
+				
+				//Ejecutamos la actualizacion
+				sqlUpdateQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- updateHistorialCaso ---" + historialCasoToUpdate.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en updateHistorialCaso: ---" + historialCasoToUpdate.getSfid(), e);
+			} 						
+		}
+		logger.debug("--- Fin -- update Listado HistorialCasos ---");
+		session.close();
+
+	}
+		
+	/**
+	 * Borra un listado de historialCasos venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void deleteCaseHistoryListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- delete Listado HistorialCasos ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			CaseHistoryVO historialCasoToDelete = new CaseHistoryVO();
+			try{
+				historialCasoToDelete=(CaseHistoryVO)object;
+				Query sqlDeleteQuery =session.createQuery("DELETE CaseHistoryVO  WHERE sfid = :sfidFiltro");
+				
+				//Seteamos el campo por el que filtramos el borrado			
+				sqlDeleteQuery.setParameter("sfidFiltro", historialCasoToDelete.getSfid());				
+				//Ejecutamos la actualizacion				
+				sqlDeleteQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- deleteHistorialCaso ---" + historialCasoToDelete.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en deleteHistorialCaso: ---" + historialCasoToDelete.getSfid(), e);
+			} 					
+		}
+		logger.debug("--- Fin -- delete Listado HistorialCasos ---");
+		session.close();
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

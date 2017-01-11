@@ -226,6 +226,8 @@ public class CaseCommentVO extends ObjectVO implements Serializable {
 	public void setUserJoinModifyComment(UserVO userJoinModifyComment) {
 		this.userJoinModifyComment = userJoinModifyComment;
 	}
+	
+	
 
 	@Override
 	public Object instantiateTargetLogic() {

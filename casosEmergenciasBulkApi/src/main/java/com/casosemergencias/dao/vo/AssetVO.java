@@ -164,4 +164,14 @@ public class AssetVO implements Serializable {
 		public void setCuentaJoin(AccountVO cuentaJoin) {
 			this.cuentaJoin = cuentaJoin;
 		}
+
+		public String getSuministroid() {
+			return suministroid;
+		}
+
+		public void setSuministroid(String suministroid) {
+			this.suministroid = suministroid;
+		}
+		
+		
 }

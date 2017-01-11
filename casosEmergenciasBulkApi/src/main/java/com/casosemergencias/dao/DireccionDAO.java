@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.DireccionVO;
 import com.casosemergencias.dao.vo.StreetVO;
 import com.casosemergencias.util.datatables.DataTableColumnInfo;
@@ -516,4 +517,141 @@ public class DireccionDAO {
 	    }
 		return null;
 	}
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Inserta un listado de Direcciones venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void insertDireccionListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- insert Listado Direcciones ---");
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();		
+		for(Object object:objectList){
+			DireccionVO direccionToInsert = new DireccionVO();
+			try{
+				direccionToInsert=(DireccionVO)object;
+				session.save(direccionToInsert);
+				tx.commit();
+				logger.debug("--- Fin -- insertDireccion ---" + direccionToInsert.getSfid());
+			} catch (HibernateException e) {
+			tx.rollback();
+			logger.error("--- Error en insertDireccion: ---" + direccionToInsert.getSfid(), e);
+			}						
+		}
+		logger.debug("--- Fin -- insert Listado Direcciones ---");
+		session.close();
+	}
+	
+
+	/**
+	 * Actualiza un listado de direcciones venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void updateDireccionListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- update Listado Direcciones ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			DireccionVO direccionToUpdate = new DireccionVO();
+			try{
+				direccionToUpdate=(DireccionVO)object;
+				Query sqlUpdateQuery =session.createQuery("UPDATE DireccionVO SET "
+				+ "createddate= :createddate,region__c= :region__c,municipality__c= :municipality__c,"
+				+ "street_type__c= :street_type__c,streetmd__c= :streetmd__c,"
+				+ "number__c= :number__c,department__c= :department__c,"
+				+ "name= :name,concatenatedaddress__c= :concatenatedaddress__c,corner__c= :corner__c,"
+				+ "street_type__c= :street_type__c,region__c= :region__c"
+				+
+				
+				" WHERE sfid = :sfidFiltro");
+				
+				//Seteamos los campos a actualizar
+				
+				sqlUpdateQuery.setParameter("createddate", direccionToUpdate.getCreateddate());
+				sqlUpdateQuery.setParameter("region__c", direccionToUpdate.getRegion());
+				sqlUpdateQuery.setParameter("municipality__c", direccionToUpdate.getComuna());
+				sqlUpdateQuery.setParameter("street_type__c", direccionToUpdate.getTipoCalle());
+				sqlUpdateQuery.setParameter("streetmd__c", direccionToUpdate.getCalle());
+				sqlUpdateQuery.setParameter("number__c", direccionToUpdate.getNumero());
+				sqlUpdateQuery.setParameter("department__c", direccionToUpdate.getDepartamento());
+				sqlUpdateQuery.setParameter("name", direccionToUpdate.getName());
+				sqlUpdateQuery.setParameter("concatenatedaddress__c", direccionToUpdate.getDireccionConcatenada());
+				sqlUpdateQuery.setParameter("corner__c", direccionToUpdate.getEsquina());
+				sqlUpdateQuery.setParameter("street_type__c", direccionToUpdate.getIdTipoCallePickList());
+				sqlUpdateQuery.setParameter("region__c", direccionToUpdate.getIdRegionPickList());
+
+				
+				//Seteamos el campo por el que filtramos la actualización
+				
+				sqlUpdateQuery.setParameter("sfidFiltro", direccionToUpdate.getSfid());
+				
+				//Ejecutamos la actualizacion
+				sqlUpdateQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- updateDireccion ---" + direccionToUpdate.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en updateDireccion: ---" + direccionToUpdate.getSfid(), e);
+			} 						
+		}
+		logger.debug("--- Fin -- update Listado Direcciones ---");
+		session.close();
+
+	}
+		
+	/**
+	 * Borra un listado de direcciones venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void deleteDireccionListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- delete Listado Direcciones ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			DireccionVO direccionToDelete = new DireccionVO();
+			try{
+				direccionToDelete=(DireccionVO)object;
+				Query sqlDeleteQuery =session.createQuery("DELETE DireccionVO  WHERE sfid = :sfidFiltro");
+				
+				//Seteamos el campo por el que filtramos el borrado			
+				sqlDeleteQuery.setParameter("sfidFiltro", direccionToDelete.getSfid());				
+				//Ejecutamos la actualizacion				
+				sqlDeleteQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- deleteDireccion ---" + direccionToDelete.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en deleteDireccion: ---" + direccionToDelete.getSfid(), e);
+			} 					
+		}
+		logger.debug("--- Fin -- delete Listado Direcciones ---");
+		session.close();
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

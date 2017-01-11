@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.HerokuUserVO;
 
 
@@ -374,4 +375,131 @@ public class HerokuUserDAO {
 
 		return numModif;
 	}
+	
+	
+	
+	
+	/**
+	 * Inserta un listado de UsuarioHerokus venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void insertHerokuUserListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- insert Listado UsuarioHerokus ---");
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();		
+		for(Object object:objectList){
+			HerokuUserVO usuarioHerokuToInsert = new HerokuUserVO();
+			try{
+				usuarioHerokuToInsert=(HerokuUserVO)object;
+				session.save(usuarioHerokuToInsert);
+				tx.commit();
+				logger.debug("--- Fin -- insertUsuarioHeroku ---" + usuarioHerokuToInsert.getSfid());
+			} catch (HibernateException e) {
+			tx.rollback();
+			logger.error("--- Error en insertUsuarioHeroku: ---" + usuarioHerokuToInsert.getSfid(), e);
+			}						
+		}
+		logger.debug("--- Fin -- insert Listado UsuarioHerokus ---");
+		session.close();
+	}
+	
+
+	/**
+	 * Actualiza un listado de usuarioHerokus venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void updateHerokuUserListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- update Listado UsuarioHerokus ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			HerokuUserVO usuarioHerokuToUpdate = new HerokuUserVO();
+			try{
+				usuarioHerokuToUpdate=(HerokuUserVO)object;
+				Query sqlUpdateQuery =session.createQuery("UPDATE HerokuUserVO SET "
+				+ "name= :name,username__c= :username__c,password__c= :password__c,"
+				+ "mail__c= :mail__c,sentmail__c= :sentmail__c,"
+				+ "active__c= :active__c,country__c= :country__c,"
+				+ "unity__c= :unity__c"				
+				+	
+				" WHERE sfid = :sfidFiltro");
+				
+				//Seteamos los campos a actualizar
+				
+				sqlUpdateQuery.setParameter("name", usuarioHerokuToUpdate.getName());
+				sqlUpdateQuery.setParameter("username__c", usuarioHerokuToUpdate.getUsername());
+				sqlUpdateQuery.setParameter("password__c", usuarioHerokuToUpdate.getPassword());
+				sqlUpdateQuery.setParameter("mail__c", usuarioHerokuToUpdate.getEmail());
+				sqlUpdateQuery.setParameter("sentmail__c", usuarioHerokuToUpdate.getEnvioMail());
+				sqlUpdateQuery.setParameter("active__c", usuarioHerokuToUpdate.getActivo());
+				sqlUpdateQuery.setParameter("country__c", usuarioHerokuToUpdate.getCountry());
+				sqlUpdateQuery.setParameter("unity__c", usuarioHerokuToUpdate.getUnidad());
+
+				//Seteamos el campo por el que filtramos la actualización
+				
+				sqlUpdateQuery.setParameter("sfidFiltro", usuarioHerokuToUpdate.getSfid());
+				
+				//Ejecutamos la actualizacion
+				sqlUpdateQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- updateUsuarioHeroku ---" + usuarioHerokuToUpdate.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en updateUsuarioHeroku: ---" + usuarioHerokuToUpdate.getSfid(), e);
+			} 						
+		}
+		logger.debug("--- Fin -- update Listado UsuarioHerokus ---");
+		session.close();
+
+	}
+		
+	/**
+	 * Borra un listado de usuarioHerokus venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void deleteHerokuUserListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- delete Listado UsuarioHerokus ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			HerokuUserVO usuarioHerokuToDelete = new HerokuUserVO();
+			try{
+				usuarioHerokuToDelete=(HerokuUserVO)object;
+				Query sqlDeleteQuery =session.createQuery("DELETE HerokuUserVO  WHERE sfid = :sfidFiltro");
+				
+				//Seteamos el campo por el que filtramos el borrado			
+				sqlDeleteQuery.setParameter("sfidFiltro", usuarioHerokuToDelete.getSfid());				
+				//Ejecutamos la actualizacion				
+				sqlDeleteQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- deleteUsuarioHeroku ---" + usuarioHerokuToDelete.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en deleteUsuarioHeroku: ---" + usuarioHerokuToDelete.getSfid(), e);
+			} 					
+		}
+		logger.debug("--- Fin -- delete Listado UsuarioHerokus ---");
+		session.close();
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

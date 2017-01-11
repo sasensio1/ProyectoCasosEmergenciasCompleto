@@ -917,4 +917,6 @@ public class SuministroVO extends ObjectVO implements Serializable {
 	public void setMedidaDisciplinaPickList(PickListsSumMedidaDisciplinaVO medidaDisciplinaPickList) {
 		this.medidaDisciplinaPickList = medidaDisciplinaPickList;
 	}
+	
+	
 }

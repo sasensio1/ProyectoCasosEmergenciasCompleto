@@ -31,6 +31,9 @@ public class HerokuUserVO extends ObjectVO implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
+	@Column(name = "sfid")
+	private String sfid;
+	
 	@Column(name = "name")
 	private String name;
 	
@@ -54,9 +57,6 @@ public class HerokuUserVO extends ObjectVO implements Serializable {
 	
 	@Column(name = "unity__c")
 	private String unidad;
-	
-	@Column(name = "sfid")
-	private String sfid;
 	
 	//campo de Heroku
 	@Column(name = "_hc_err")

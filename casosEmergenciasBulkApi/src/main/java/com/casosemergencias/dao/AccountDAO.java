@@ -672,7 +672,7 @@ public class AccountDAO {
 	 */
 		
 	@Transactional
-	public void updateAcountListSf(List<Object> objectList) {
+	public void updateAccountListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- update Listado Cuentas ---");
 
 		Session session = sessionFactory.openSession();
@@ -736,7 +736,7 @@ public class AccountDAO {
 	 */
 		
 	@Transactional
-	public void deleteAcountListSf(List<Object> objectList) {
+	public void deleteAccountListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- delete Listado Cuentas ---");
 
 		Session session = sessionFactory.openSession();
