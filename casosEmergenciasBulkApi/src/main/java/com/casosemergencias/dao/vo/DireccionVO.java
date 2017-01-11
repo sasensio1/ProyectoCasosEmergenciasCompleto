@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.WhereJoinTable;
 
 import com.casosemergencias.model.Direccion;
+import com.casosemergencias.util.Utils;
 
 
 @Entity
@@ -184,7 +185,14 @@ public class DireccionVO extends ObjectVO implements Serializable {
 	public void setCreateddate(Date createddate) {
 		this.createddate = createddate;
 	}
-
+	
+	public void setCreateddateString(String createddateString) {
+		Date createddateDate = Utils.parseStringToDate(createddateString);
+		if (createddateDate != null) {
+			setCreateddate(createddateDate);
+		}
+	}
+	
 	public String getRegion() {
 		return region;
 	}

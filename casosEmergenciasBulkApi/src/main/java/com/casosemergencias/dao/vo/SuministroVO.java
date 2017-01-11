@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Where;
 
 import com.casosemergencias.model.Suministro;
+import com.casosemergencias.util.Utils;
 
 @Entity
 @Table(name = "salesforce.pointofdelivery__c")
@@ -183,7 +184,7 @@ public class SuministroVO extends ObjectVO implements Serializable {
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "connectiontype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumTipoConexionVO tipoConexionPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizartipo Conexion
+	private PickListsSumTipoConexionVO tipoConexionPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar tipoConexion
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "readingtype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
@@ -191,7 +192,7 @@ public class SuministroVO extends ObjectVO implements Serializable {
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "transformertype__c", referencedColumnName = "codigo", insertable = false, updatable = false)
-	private PickListsSumTipoTransfVO tipoTransformadorPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizartipo Transformador
+	private PickListsSumTipoTransfVO tipoTransformadorPickList;//martgarc: 10/01/2017: Para las cargas de objeto, actualizar tipoTransformador
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "municipalityallocation__c", referencedColumnName = "codigo", insertable = false, updatable = false)
@@ -360,7 +361,14 @@ public class SuministroVO extends ObjectVO implements Serializable {
 	public void setCasosAbiertos(Boolean casosAbiertos) {
 		this.casosAbiertos = casosAbiertos;
 	}
-
+	
+	public void setCasosAbiertosString(String casosAbiertosString) {
+		Boolean casosAbiertosBoolean = Utils.parseStringToBoolean(casosAbiertosString);
+		if (casosAbiertosBoolean != null) {
+			setCasosAbiertos(casosAbiertosBoolean);
+		}
+	}
+	
 	public String getTipoTransformador() {
 		return tipoTransformador;
 	}
@@ -376,7 +384,14 @@ public class SuministroVO extends ObjectVO implements Serializable {
 	public void setCortePorDeuda(Boolean cortePorDeuda) {
 		this.cortePorDeuda = cortePorDeuda;
 	}
-
+	
+	public void setCortePorDeudaString(String cortePorDeudaString) {
+		Boolean cortePorDeudaBoolean = Utils.parseStringToBoolean(cortePorDeudaString);
+		if (cortePorDeudaBoolean != null) {
+			setCortePorDeuda(cortePorDeudaBoolean);
+		}
+	}
+	
 	public String getTipoLectura() {
 		return tipoLectura;
 	}
@@ -480,7 +495,14 @@ public class SuministroVO extends ObjectVO implements Serializable {
 	public void setFechaCorte(Date fechaCorte) {
 		this.fechaCorte = fechaCorte;
 	}
-
+	
+	public void setFechaCorteString(String fechaCorteString) {
+		Date fechaCorteDate = Utils.parseStringToDate(fechaCorteString);
+		if (fechaCorteDate != null) {
+			setFechaCorte(fechaCorteDate);
+		}
+	}
+	
 	public String getPropiedadMedidor() {
 		return propiedadMedidor;
 	}
@@ -512,7 +534,14 @@ public class SuministroVO extends ObjectVO implements Serializable {
 	public void setPagoEnProceso(Boolean pagoEnProceso) {
 		this.pagoEnProceso = pagoEnProceso;
 	}
-
+	
+	public void setPagoEnProcesoString(String pagoEnProcesoString) {
+		Boolean pagoEnProcesoBoolean = Utils.parseStringToBoolean(pagoEnProcesoString);
+		if (pagoEnProcesoBoolean != null) {
+			setPagoEnProceso(pagoEnProcesoBoolean);
+		}
+	}
+	
 	public String getNombreDuenoBoleta() {
 		return nombreDuenoBoleta;
 	}
@@ -575,7 +604,14 @@ public class SuministroVO extends ObjectVO implements Serializable {
 	public void setCasosReiterados(Double casosReiterados) {
 		this.casosReiterados = casosReiterados;
 	}
-
+	
+	public void setCasosReiteradosString(String casosReiteradosString) {
+		Double casosReiteradosDouble = Utils.parseStringToDouble(casosReiteradosString);
+		if (casosReiteradosDouble != null) {
+			setCasosReiterados(casosReiteradosDouble);
+		}
+	}
+	
 	public String getTarifa() {
 		return tarifa;
 	}
