@@ -210,7 +210,6 @@ public class CaseServiceImpl implements CaseService{
 		
 		String subestadoCancelacion = caso.getSubestado();
 		boolean esAlta;
-		boolean canceladoOk = false;
 		String comentarioBody = userName + ": ";
 
 		CaseCommentVO comentarioVO = new CaseCommentVO();
@@ -257,7 +256,7 @@ public class CaseServiceImpl implements CaseService{
 		casoVO.setCancelar(true);
 				
 		casoVO.setDescription(caso.getDescription());
-		Integer id = caseDao.updateCase(casoVO);
+		caseDao.updateCase(casoVO);
 		
 		comentarioVO.setCaseid(caso.getSfid());	
 		comentarioVO.setIspublished(false);

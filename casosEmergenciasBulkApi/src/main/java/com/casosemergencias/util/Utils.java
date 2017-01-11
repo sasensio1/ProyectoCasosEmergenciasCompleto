@@ -1,11 +1,20 @@
 package com.casosemergencias.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class Utils {
 	final static Logger logger = Logger.getLogger(Utils.class);
@@ -65,7 +74,7 @@ public class Utils {
 				javaInteger = Integer.valueOf(integerValue);
 			} catch (NumberFormatException e) {}
 		}
-		logger.info("Valor del integer: " + javaInteger);
+		logger.info("Valor del integer: " + javaInteger.intValue());
 		return javaInteger;
 	}
 	
@@ -74,17 +83,40 @@ public class Utils {
 	 * 
 	 * @param doubleValue
 	 *            Double value in String.
-	 * @return Double integer value parsed as a Java Object.
+	 * @return Double Double value parsed as a Java Object.
 	 */
 	public static Double parseStringToDouble (String doubleValue) {
-		Double javaInteger = null;
+		Double javaDouble = null;
 		if (!isNullOrEmptyString(doubleValue)) {
 			try {
-				javaInteger = Double.valueOf(doubleValue);
+				javaDouble = Double.valueOf(doubleValue);
 			} catch (NumberFormatException e) {}
 		}
-		logger.info("Valor del double: " + javaInteger);
-		return javaInteger;
+		logger.info("Valor del double: " + javaDouble.doubleValue());
+		return javaDouble;
+	}
+	
+	/**
+	 * Converts a xml document in InputStream format to DOM document format.
+	 * 
+	 * @param stream
+	 *            XML document to convert.
+	 * @return Document XML document converted.
+	 * @throws ParserConfigurationException
+	 *             It there is any error parsing the XML document.
+	 * @throws SAXException
+	 *             It there is any error parsing the XML document.
+	 * @throws IOException
+	 *             It there is any error parsing the XML document.
+	 */
+	public static Document convertInputStreamToXmlDocument(InputStream stream) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory factory = null;
+		DocumentBuilder builder = null;
+		Document document = null;
+		factory = DocumentBuilderFactory.newInstance();
+		builder = factory.newDocumentBuilder();
+		document = builder.parse(new InputSource(stream));
+		return document;
 	}
 	
 	/**

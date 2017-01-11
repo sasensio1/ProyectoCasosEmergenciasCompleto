@@ -1,8 +1,6 @@
 package com.casosemergencias.logic.sf.bean;
 
-import com.casosemergencias.model.Calle;
 import com.casosemergencias.model.CaseComment;
-import com.casosemergencias.model.Direccion;
 
 public class ComentarioCasoSalesforce {
 	

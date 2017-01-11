@@ -20,7 +20,6 @@ import org.springframework.util.StringUtils;
 import com.casosemergencias.exception.EmergenciasException;
 import com.casosemergencias.logic.UserSessionInfoService;
 import com.casosemergencias.model.UserSessionInfo;
-import com.casosemergencias.util.constants.Constantes;
 import com.casosemergencias.util.constants.ConstantesError;
 import com.casosemergencias.util.constants.ConstantesSalesforceLogin;
 import com.force.api.ApiSession;

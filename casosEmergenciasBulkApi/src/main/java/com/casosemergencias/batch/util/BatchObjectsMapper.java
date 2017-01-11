@@ -16,6 +16,7 @@ import com.casosemergencias.dao.vo.HerokuUserVO;
 import com.casosemergencias.dao.vo.RelacionActivoContactoVO;
 import com.casosemergencias.dao.vo.StreetVO;
 import com.casosemergencias.dao.vo.SuministroVO;
+import com.casosemergencias.dao.vo.TaskVO;
 import com.casosemergencias.dao.vo.UserVO;
 import com.casosemergencias.util.constants.ConstantesBulkApi;
 
@@ -33,6 +34,7 @@ public class BatchObjectsMapper {
 	private Map<String, String> serviceProductMap;
 	private Map<String, String> streetMap;
 	private Map<String, String> userMap;
+	private Map<String, String> taskMap;
 	private LinkedHashMap<String, String> objectSelectsMap;
 	
 	public BatchObjectsMapper() {
@@ -50,6 +52,7 @@ public class BatchObjectsMapper {
 		initServiceProductMap();
 		initStreetMap();
 		initUserMap();
+		initTaskMap();
 	}
 	
 	private void initAccountMap() {
@@ -260,9 +263,47 @@ public class BatchObjectsMapper {
 		userMap.put("name", "Name");
 	}
 	
+	private void initTaskMap() {
+		taskMap = new HashMap<String, String>();
+		taskMap.put("id", "Sfid");
+		taskMap.put("tasktype__c", "Tasktype__c");
+		taskMap.put("activitydate", "ActivitydateString");
+		taskMap.put("calldisposition", "Calldisposition");
+		taskMap.put("casephone__c", "Casephone__c");
+		taskMap.put("status", "Status");
+		taskMap.put("description", "Description");
+		taskMap.put("createddate", "CreateddateString");
+		taskMap.put("subject", "Subject");
+		taskMap.put("priority", "Priority");
+		taskMap.put("whoid", "Whoid");
+		//taskMap.put("account__company__c", "Account__company__c");
+		taskMap.put("accountid", "Accountid");
+		taskMap.put("ownerid", "Ownerid");
+		taskMap.put("tasksubtype", "Tasksubtype");		
+	}
+	
 	public LinkedHashMap<String, String> setobjectSelectsMap() {
 		return objectSelectsMap;
 	}
+	
+	private void initObjectSelectsMap() {
+		objectSelectsMap = new LinkedHashMap<String, String>();
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, ConstantesBulkApi.ENTITY_ACCOUNT_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ADDRESS, ConstantesBulkApi.ENTITY_ADDRESS_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ASSET, ConstantesBulkApi.ENTITY_ASSET_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, ConstantesBulkApi.ENTITY_CASE_COMMENT_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, ConstantesBulkApi.ENTITY_CASE_HISTORY_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CONTACT, ConstantesBulkApi.ENTITY_CONTACT_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_GROUP, ConstantesBulkApi.ENTITY_GROUP_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, ConstantesBulkApi.ENTITY_HEROKU_USER_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY, ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_REPEATED_CASES, ConstantesBulkApi.ENTITY_REPEATED_CASES_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_SERVICE_PRODUCT, ConstantesBulkApi.ENTITY_SERVICE_PRODUCT_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_STREET, ConstantesBulkApi.ENTITY_STREET_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_TASK, ConstantesBulkApi.ENTITY_TASK_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_USER, ConstantesBulkApi.ENTITY_USER_SELECT);
+	}
+	
 	
 	public Map<String, String> getAccountMap() {
 		return accountMap;
@@ -316,6 +357,14 @@ public class BatchObjectsMapper {
 		return userMap;
 	}
 	
+	public Map<String, String> getTaskMap() {
+		return taskMap;
+	}
+	
+	public Map<String, String> getObjectSelectsMap() {
+		return objectSelectsMap;
+	}
+	
 	public Map<String, String> getMapFromType(Object object) {
 		Map<String, String> map = null;
 		if (object instanceof ContactVO) {
@@ -344,25 +393,9 @@ public class BatchObjectsMapper {
 			map = streetMap;
 		} else if (object instanceof UserVO) {
 			map = userMap;
+		} else if (object instanceof TaskVO) {
+			map = taskMap;
 		}
 		return map;
-	}
-	
-	private void initObjectSelectsMap() {
-		objectSelectsMap = new LinkedHashMap<String, String>();
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, ConstantesBulkApi.ENTITY_ACCOUNT_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ADDRESS, ConstantesBulkApi.ENTITY_ADDRESS_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_ASSET, ConstantesBulkApi.ENTITY_ASSET_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, ConstantesBulkApi.ENTITY_CASE_COMMENT_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, ConstantesBulkApi.ENTITY_CASE_HISTORY_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CONTACT, ConstantesBulkApi.ENTITY_CONTACT_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_GROUP, ConstantesBulkApi.ENTITY_GROUP_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, ConstantesBulkApi.ENTITY_HEROKU_USER_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY, ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_REPEATED_CASES, ConstantesBulkApi.ENTITY_REPEATED_CASES_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_SERVICE_PRODUCT, ConstantesBulkApi.ENTITY_SERVICE_PRODUCT_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_STREET, ConstantesBulkApi.ENTITY_STREET_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_TASK, ConstantesBulkApi.ENTITY_TASK_SELECT);
-		objectSelectsMap.put(ConstantesBulkApi.ENTITY_USER, ConstantesBulkApi.ENTITY_USER_SELECT);
 	} 
 }

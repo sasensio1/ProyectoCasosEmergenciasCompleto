@@ -60,7 +60,8 @@ public class ConstantesBulkApi {
 	public static final String ENTITY_STREET_SELECT = "SELECT Id, name, recordtypeid, currencyisocode, region__c, "
 			+ "literal_region__c, municipality__c, literal_municipality__c, street__c, street_type__c, "
 			+ "literal_street_type__c, lastmodifiedbyid, createdbyid, ownerid, country__c, company__c";
-	public static final String ENTITY_TASK_SELECT = "";
+	public static final String ENTITY_TASK_SELECT = "SELECT Id, name, tasktype__c, activitydate, calldisposition, casephone__c, "
+			+ "status, description, createddate, subject, priority, whoid, accountid, ownerid, tasksubtype";
 	public static final String ENTITY_USER_SELECT = "SELECT Id, name";
 	
 	/** Fragmento FROM, comun para todas las entidades. */
