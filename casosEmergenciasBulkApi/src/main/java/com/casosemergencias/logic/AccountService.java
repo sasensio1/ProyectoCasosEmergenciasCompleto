@@ -14,4 +14,6 @@ public interface AccountService {
 	public List<Cuenta> readAllCuentas(DataTableProperties propDatatable);
 	
 	public Integer getNumCuentas(DataTableProperties propDatatable);
+	
+	public void updateAccountSfList(List<Object> objectList);
 }

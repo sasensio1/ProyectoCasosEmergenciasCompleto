@@ -191,6 +191,13 @@ public class CasosReiteradosVO extends ObjectVO implements Serializable {
 		this.createdDate = createdDate;
 	}
 
+	public void setCreatedDateString(String createdDateString) {
+		Date createdDateDate = Utils.parseStringToDate(createdDateString);
+		if (createdDateDate != null) {
+			setCreatedDate(createdDateDate);
+		}
+	}
+	
 	@Override
 	public Object instantiateTargetLogic() {
 		CasosReiterados casoReit = new CasosReiterados();

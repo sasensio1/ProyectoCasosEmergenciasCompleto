@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.StreetVO;
 
 @Repository
@@ -140,8 +139,7 @@ public class CalleDAO {
 				+ "literal_municipality__c= :literal_municipality__c,street__c= :street__c,"
 				+ "street_type__c= :street_type__c,literal_street_type__c= :literal_street_type__c,"
 				+ "lastmodifiedbyid= :lastmodifiedbyid,createdbyid= :createdbyid,ownerid= :ownerid,"
-				+ "country__c= :country__c,company__c= :company__c,municipality__c= :municipality__c,"	
-				+ "region__c= :region__c,street_type__c= :street_type__c"					
+				+ "country__c= :country__c,company__c= :company__c"					
 
 				+	
 				" WHERE sfid = :sfidFiltro");
@@ -165,9 +163,6 @@ public class CalleDAO {
 				sqlUpdateQuery.setParameter("ownerid", calleToUpdate.getOwnerId());
 				sqlUpdateQuery.setParameter("country__c", calleToUpdate.getCountry());
 				sqlUpdateQuery.setParameter("company__c", calleToUpdate.getCompany());
-				sqlUpdateQuery.setParameter("municipality__c", calleToUpdate.getIdMunicipalityPickList());
-				sqlUpdateQuery.setParameter("region__c", calleToUpdate.getIdRegionPickList());
-				sqlUpdateQuery.setParameter("street_type__c", calleToUpdate.getIdStreetTypePickList());
 				
 				//Seteamos el campo por el que filtramos la actualizacións
 				

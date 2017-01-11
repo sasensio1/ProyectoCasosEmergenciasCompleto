@@ -172,7 +172,7 @@ public class AssetDAO {
 				activoToUpdate=(AssetVO)object;
 				Query sqlUpdateQuery =session.createQuery("UPDATE AssetVO SET "
 				+ "name= :name,contactid= :contactid,accountid= :accountid,"
-				+ "suministroid= :suministroid"				
+				+ "pointofdelivery__c= :pointofdelivery__c"				
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
@@ -181,7 +181,7 @@ public class AssetDAO {
 				sqlUpdateQuery.setParameter("name", activoToUpdate.getName());
 				sqlUpdateQuery.setParameter("contactid", activoToUpdate.getContactid());
 				sqlUpdateQuery.setParameter("accountid", activoToUpdate.getAccountid());
-				sqlUpdateQuery.setParameter("suministroid", activoToUpdate.getSuministroid());
+				sqlUpdateQuery.setParameter("pointofdelivery__c", activoToUpdate.getSuministroid());
 
 				
 				//Seteamos el campo por el que filtramos la actualización

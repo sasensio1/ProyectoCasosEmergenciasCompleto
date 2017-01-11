@@ -573,8 +573,7 @@ public class DireccionDAO {
 				+ "createddate= :createddate,region__c= :region__c,municipality__c= :municipality__c,"
 				+ "street_type__c= :street_type__c,streetmd__c= :streetmd__c,"
 				+ "number__c= :number__c,department__c= :department__c,"
-				+ "name= :name,concatenatedaddress__c= :concatenatedaddress__c,corner__c= :corner__c,"
-				+ "street_type__c= :street_type__c,region__c= :region__c"
+				+ "name= :name,concatenatedaddress__c= :concatenatedaddress__c,corner__c= :corner__c"
 				+
 				
 				" WHERE sfid = :sfidFiltro");
@@ -591,8 +590,6 @@ public class DireccionDAO {
 				sqlUpdateQuery.setParameter("name", direccionToUpdate.getName());
 				sqlUpdateQuery.setParameter("concatenatedaddress__c", direccionToUpdate.getDireccionConcatenada());
 				sqlUpdateQuery.setParameter("corner__c", direccionToUpdate.getEsquina());
-				sqlUpdateQuery.setParameter("street_type__c", direccionToUpdate.getIdTipoCallePickList());
-				sqlUpdateQuery.setParameter("region__c", direccionToUpdate.getIdRegionPickList());
 
 				
 				//Seteamos el campo por el que filtramos la actualización

@@ -101,30 +101,17 @@ public class StreetVO extends ObjectVO implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "municipality__c", referencedColumnName = "codigo", insertable = false, updatable = false)
 	@Where(clause = "objeto='street__c'  AND campo='Municipality__c'")
-	private PickListsStreetMunicipalityVO municipalityPickList;
+	private PickListsStreetMunicipalityVO municipalityPickList;//jortizsisamon: 11/01/2017: Para cargar el objeto hay que cargar el id en campo municipality.
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "region__c", referencedColumnName = "codigo", insertable = false, updatable = false)
 	@Where(clause = "objeto='street__c'  AND campo='Region__c'")
-	private PickListsStreetRegionVO regionPickList;
+	private PickListsStreetRegionVO regionPickList;//jortizsisamon: 11/01/2017: Para cargar el objeto hay que cargar el id en campo region.
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "street_type__c", referencedColumnName = "codigo", insertable = false, updatable = false)
 	@Where(clause = "objeto='street__c'  AND campo='Street_Type__c'")
-	private PickListsStreetTypeVO streetTypePickList;
-	
-	
-	//INI:martgarc: 10/01/2017: para hacer las cargas de los cambios, necesitamos tener id de la picklist
-	@Column(name = "municipality__c")
-	private String idMunicipalityPickList;
-	
-	@Column(name = "region__c")
-	private String idRegionPickList;
-	
-	@Column(name = "street_type__c")
-	private String idStreetTypePickList;
-
-	//FIN:martgarc: 10/01/2017
+	private PickListsStreetTypeVO streetTypePickList;//jortizsisamon: 11/01/2017: Para cargar el objeto hay que cargar el id en campo streetType.
 	
 	public Boolean getIsDeleted() {
 		return isDeleted;
@@ -357,34 +344,12 @@ public class StreetVO extends ObjectVO implements Serializable {
 		}
 		return result;
 	}
+	
+	
 
 	@Override
 	public Object instantiateTargetLogic() {
 		Calle calle = new Calle();
 		return calle;
-	}
-
-	public String getIdMunicipalityPickList() {
-		return idMunicipalityPickList;
-	}
-
-	public void setIdMunicipalityPickList(String idMunicipalityPickList) {
-		this.idMunicipalityPickList = idMunicipalityPickList;
-	}
-
-	public String getIdRegionPickList() {
-		return idRegionPickList;
-	}
-
-	public void setIdRegionPickList(String idRegionPickList) {
-		this.idRegionPickList = idRegionPickList;
-	}
-
-	public String getIdStreetTypePickList() {
-		return idStreetTypePickList;
-	}
-
-	public void setIdStreetTypePickList(String idStreetTypePickList) {
-		this.idStreetTypePickList = idStreetTypePickList;
 	}
 }

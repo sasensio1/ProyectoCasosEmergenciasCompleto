@@ -57,13 +57,12 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	 */
 	@SuppressWarnings("unchecked")
 	public TaskVO readTaskById(Integer id) {
-		
 		logger.debug("--- Inicio -- readTaskById ---");
 		
 		Session session = sessionFactory.openSession();
 			
 		try {
-			Query query = session.createQuery("from TaskVO as user WHERE task.id = :id");
+			Query query = session.createQuery("from TaskVO as task WHERE task.id = :id");
 			query.setInteger("id", id);
 			
 			List<TaskVO> taskList = query.list(); 
@@ -95,14 +94,13 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 		Session session = sessionFactory.openSession();
 		
 		try {
-			Query query = session.createQuery("from TaskVO account WHERE task.sfid = :sfid ");
+			Query query = session.createQuery("from TaskVO task WHERE task.sfid = :sfid ");
 			query.setString("sfid", sfid);
 			List<TaskVO> taskList = query.list(); 
 			
 			if (taskList != null && !taskList.isEmpty()) {
 				return taskList.get(0);
 			}
-
 
 			logger.debug("--- Fin -- readTaskBySfid ---");
 	    } catch (HibernateException e) {
@@ -120,10 +118,9 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public void insertTaskListSf(List<Object> objectList) {
-		logger.debug("--- Inicio -- insert Listado Cuentas ---");
+		logger.debug("--- Inicio -- insert Listado Tareas ---");
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -133,16 +130,15 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 				taskToInsert=(TaskVO)object;
 				session.save(taskToInsert);
 				tx.commit();
-				logger.debug("--- Fin -- insertTask ---" + taskToInsert.getSfid());
+				logger.debug("--- Fin -- insertTaskListSf ---" + taskToInsert.getSfid());
 			} catch (HibernateException e) {
-			tx.rollback();
-			logger.error("--- Error en insertTask: ---" + taskToInsert.getSfid(), e);
+				tx.rollback();
+				logger.error("--- Error en insertTaskListSf: ---" + taskToInsert.getSfid(), e);
 			}						
 		}
-		logger.debug("--- Fin -- insert Listado Tasks ---");
+		logger.debug("--- Fin -- insertTaskListSf ---");
 		session.close();
 	}
-	
 
 	/**
 	 * Actualiza un listado de tasks venidos de Salesforce en BBDD de Heroku.
@@ -150,7 +146,6 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public void updateTaskListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- update Listado Tasks ---");
@@ -166,24 +161,22 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 				+ "status= :status,description= :description,"
 				+ "createddate= :createddate,subject= :subject,priority= :priority,whoid= :whoid,"
 				+ "accountid= :accountid,ownerid= :ownerid,tasksubtype= :tasksubtype,"					
-				+	
-				" WHERE sfid = :sfidFiltro");
+				+ " WHERE sfid = :sfidFiltro");
 				
 				//Seteamos los campos a actualizar
-				
-				sqlUpdateQuery.setParameter("tasktype__c", taskToUpdate.getTasktype__c());
-				sqlUpdateQuery.setParameter("activitydate", taskToUpdate.getActivitydate());
-				sqlUpdateQuery.setParameter("calldisposition", taskToUpdate.getCalldisposition());
-				sqlUpdateQuery.setParameter("casephone__c", taskToUpdate.getCasephone__c());
+				sqlUpdateQuery.setParameter("tasktype__c", taskToUpdate.getTaskType());
+				sqlUpdateQuery.setParameter("activitydate", taskToUpdate.getActivityDate());
+				sqlUpdateQuery.setParameter("calldisposition", taskToUpdate.getCallDisposition());
+				sqlUpdateQuery.setParameter("casephone__c", taskToUpdate.getCasePhone());
 				sqlUpdateQuery.setParameter("status", taskToUpdate.getStatus());
 				sqlUpdateQuery.setParameter("description", taskToUpdate.getDescription());
-				sqlUpdateQuery.setParameter("createddate", taskToUpdate.getCreateddate());
+				sqlUpdateQuery.setParameter("createddate", taskToUpdate.getCreatedDate());
 				sqlUpdateQuery.setParameter("subject", taskToUpdate.getSubject());
 				sqlUpdateQuery.setParameter("priority", taskToUpdate.getPriority());
-				sqlUpdateQuery.setParameter("whoid", taskToUpdate.getWhoid());
-				sqlUpdateQuery.setParameter("accountid", taskToUpdate.getAccountid());
-				sqlUpdateQuery.setParameter("ownerid", taskToUpdate.getOwnerid());
-				sqlUpdateQuery.setParameter("tasksubtype", taskToUpdate.getTasksubtype());
+				sqlUpdateQuery.setParameter("whoid", taskToUpdate.getWhoId());
+				sqlUpdateQuery.setParameter("accountid", taskToUpdate.getAccountId());
+				sqlUpdateQuery.setParameter("ownerid", taskToUpdate.getOwnerId());
+				sqlUpdateQuery.setParameter("tasksubtype", taskToUpdate.getTaskSubtype());
 				
 				//Seteamos el campo por el que filtramos la actualización
 				
@@ -192,14 +185,13 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 				//Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
-				logger.debug("--- Fin -- updateTask ---" + taskToUpdate.getSfid());
+				logger.debug("--- Fin -- updateTaskListSf ---" + taskToUpdate.getSfid());
 			} catch (HibernateException e) {
-			logger.error("--- Error en updateTask: ---" + taskToUpdate.getSfid(), e);
+				logger.error("--- Error en updateTaskListSf: ---" + taskToUpdate.getSfid(), e);
 			} 						
 		}
 		logger.debug("--- Fin -- update Listado Tasks ---");
 		session.close();
-
 	}
 		
 	/**
@@ -208,38 +200,29 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public void deleteTaskListSf(List<Object> objectList) {
-		logger.debug("--- Inicio -- delete Listado Cuentas ---");
+		logger.debug("--- Inicio -- delete Listado Tareas ---");
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			TaskVO taskToDelete = new TaskVO();
 			try{
 				taskToDelete=(TaskVO)object;
-				Query sqlDeleteQuery =session.createQuery("DELETE TaskVO  WHERE sfid = :sfidFiltro");
+				Query sqlDeleteQuery =session.createQuery("DELETE TaskVO WHERE sfid = :sfidFiltro");
 				
 				//Seteamos el campo por el que filtramos el borrado			
 				sqlDeleteQuery.setParameter("sfidFiltro", taskToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
 							
-				logger.debug("--- Fin -- deleteTask ---" + taskToDelete.getSfid());
+				logger.debug("--- Fin -- deleteTaskListSf ---" + taskToDelete.getSfid());
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteTask: ---" + taskToDelete.getSfid(), e);
+			logger.error("--- Error en deleteTaskListSf: ---" + taskToDelete.getSfid(), e);
 			} 					
 		}
 		logger.debug("--- Fin -- delete Listado Tasks ---");
 		session.close();
 
 	}
-	
-	
-	
-	
-	
-	
-	
 }
-

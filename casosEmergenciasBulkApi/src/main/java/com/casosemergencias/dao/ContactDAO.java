@@ -701,7 +701,7 @@ public class ContactDAO {
 				+ "identitytype__c= :identitytype__c,secondaryphone__c= :secondaryphone__c,secondaryemail__c= :secondaryemail__c,"
 				+ "sf4twitter__fcbk_username__c= :sf4twitter__fcbk_username__c,repeatedcases__c= :repeatedcases__c,email= :email,"
 				+ "identitynumber__c= :identitynumber__c,concatenatecontacaddress__c= :concatenatecontacaddress__c,"
-				+ "sf4twitter__twitter_user_id__c= :sf4twitter__twitter_user_id__c,sf4twitter__fcbk_user_id__c= :sf4twitter__fcbk_user_id__c"		
+				+ "sf4twitter__twitter_user_id__c= :sf4twitter__twitter_user_id__c,sf4twitter__fcbk_user_id__c= :sf4twitter__fcbk_user_id__c,"		
 				+ "sf4twitter__twitter_username__c= :sf4twitter__twitter_username__c,contacttype__c= :contacttype__c,phone= :phone,"
 				+ "fatherslastname__c= :fatherslastname__c,sf4twitter__influencer__c= :sf4twitter__influencer__c,"
 				+ "sf4twitter__twitter_bio__c= :sf4twitter__twitter_bio__c,sf4twitter__influencer_type__c= :sf4twitter__influencer_type__c,"

@@ -89,4 +89,11 @@ public class AccountServiceImpl implements AccountService {
 	public Integer getNumCuentas(DataTableProperties propDatatable) {
 		return accountDao.countCuentas(propDatatable);
 	}
+	
+	
+	@Override
+	public void updateAccountSfList(List<Object> objectList) {
+		accountDao.updateAccountListSf(objectList);
+	}
+	
 }
