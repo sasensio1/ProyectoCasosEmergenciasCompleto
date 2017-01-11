@@ -632,4 +632,144 @@ public class AccountDAO {
 	    }
 		return null;
 	}
+	
+	
+	/**
+	 * Inserta un listado de Cuentas venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void insertAccountListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- insert Listado Cuentas ---");
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();		
+		for(Object object:objectList){
+			AccountVO cuentaToInsert = new AccountVO();
+			try{
+				cuentaToInsert=(AccountVO)object;
+				session.save(cuentaToInsert);
+				tx.commit();
+				logger.debug("--- Fin -- insertCuenta ---" + cuentaToInsert.getSfid());
+			} catch (HibernateException e) {
+			tx.rollback();
+			logger.error("--- Error en insertCuenta: ---" + cuentaToInsert.getSfid(), e);
+			}						
+		}
+		logger.debug("--- Fin -- insert Listado Cuentas ---");
+		session.close();
+	}
+	
+
+	/**
+	 * Actualiza un listado de cuentas venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void updateAcountListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- update Listado Cuentas ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			AccountVO cuentaToUpdate = new AccountVO();
+			try{
+				cuentaToUpdate=(AccountVO)object;
+				Query sqlUpdateQuery =session.createQuery("UPDATE AccountVO SET "
+				+ "name= :name,fatherslastname__c= :fatherslastname__c,motherslastname__c= :motherslastname__c,"
+				+ "identitytype__c= :identitytype__c,parent__identityNumber__c= :parent__identityNumber__c,"
+				+ "masterrecord__identitynumber__c= :masterrecord__identitynumber__c,identitynumber__c= :identitynumber__c,"
+				+ "birthdate__c= :birthdate__c,phone= :phone,mainphone__c= :mainphone__c,secondaryphone__c= :secondaryphone__c,"
+				+ "primaryemail__c= :primaryemail__c,secondaryemail__c= :secondaryemail__c,address__c= :address__c,"
+				+ "accountsource= :accountsource,companyid__c= :companyid__c,type= :type,parentid= :parentid"					
+				+	
+				" WHERE sfid = :sfidFiltro");
+				
+				//Seteamos los campos a actualizar
+				
+				sqlUpdateQuery.setParameter("name", cuentaToUpdate.getName());
+				sqlUpdateQuery.setParameter("fatherslastname__c", cuentaToUpdate.getApellidoPaterno());
+				sqlUpdateQuery.setParameter("motherslastname__c", cuentaToUpdate.getApellidoMaterno());
+				sqlUpdateQuery.setParameter("identitytype__c", cuentaToUpdate.getTipoIdentidad());
+				sqlUpdateQuery.setParameter("parent__identityNumber__c", cuentaToUpdate.getParentRutEmpresa());
+				sqlUpdateQuery.setParameter("masterrecord__identitynumber__c", cuentaToUpdate.getAccountRun());
+				sqlUpdateQuery.setParameter("identitynumber__c", cuentaToUpdate.getRun());
+				sqlUpdateQuery.setParameter("birthdate__c", cuentaToUpdate.getFechaNacimiento());
+				sqlUpdateQuery.setParameter("phone", cuentaToUpdate.getPhone());
+				sqlUpdateQuery.setParameter("mainphone__c", cuentaToUpdate.getTelefonoPrincipal());
+				sqlUpdateQuery.setParameter("secondaryphone__c", cuentaToUpdate.getTelefonoSecundario());
+				sqlUpdateQuery.setParameter("primaryemail__c", cuentaToUpdate.getEmailPrincipal());
+				sqlUpdateQuery.setParameter("secondaryemail__c", cuentaToUpdate.getEmailSecundario());
+				sqlUpdateQuery.setParameter("address__c", cuentaToUpdate.getDireccion());
+				sqlUpdateQuery.setParameter("accountsource", cuentaToUpdate.getAccountsource());
+				sqlUpdateQuery.setParameter("companyid__c", cuentaToUpdate.getIdEmpresa());
+				sqlUpdateQuery.setParameter("type", cuentaToUpdate.getTipo());
+				sqlUpdateQuery.setParameter("parentid", cuentaToUpdate.getParentid());
+				
+				//Seteamos el campo por el que filtramos la actualización
+				
+				sqlUpdateQuery.setParameter("sfidFiltro", cuentaToUpdate.getSfid());
+				
+				//Ejecutamos la actualizacion
+				sqlUpdateQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- updateCuenta ---" + cuentaToUpdate.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en updateCuenta: ---" + cuentaToUpdate.getSfid(), e);
+			} 						
+		}
+		logger.debug("--- Fin -- update Listado Cuentas ---");
+		session.close();
+
+	}
+		
+	/**
+	 * Borra un listado de cuentas venidos de Salesforce en BBDD de Heroku.
+	 * 
+	 * @param List<Object>
+	 * @return
+	 */
+		
+	@Transactional
+	public void deleteAcountListSf(List<Object> objectList) {
+		logger.debug("--- Inicio -- delete Listado Cuentas ---");
+
+		Session session = sessionFactory.openSession();
+		for(Object object:objectList){
+			AccountVO cuentaToDelete = new AccountVO();
+			try{
+				cuentaToDelete=(AccountVO)object;
+				Query sqlDeleteQuery =session.createQuery("DELETE AccountVO  WHERE sfid = :sfidFiltro");
+				
+				//Seteamos el campo por el que filtramos el borrado			
+				sqlDeleteQuery.setParameter("sfidFiltro", cuentaToDelete.getSfid());				
+				//Ejecutamos la actualizacion				
+				sqlDeleteQuery.executeUpdate();
+							
+				logger.debug("--- Fin -- deleteCuenta ---" + cuentaToDelete.getSfid());
+			} catch (HibernateException e) {
+			logger.error("--- Error en deleteCuenta: ---" + cuentaToDelete.getSfid(), e);
+			} 					
+		}
+		logger.debug("--- Fin -- delete Listado Cuentas ---");
+		session.close();
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
