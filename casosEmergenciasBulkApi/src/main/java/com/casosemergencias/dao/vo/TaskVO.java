@@ -12,13 +12,12 @@ import javax.persistence.Table;
 
 import com.casosemergencias.util.Utils;
 
-
 @Entity
 @Table(name = "salesforce.task")
 public class TaskVO extends ObjectVO implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	// campo de Heroku
 	// Used to track the IsDeleted field from Salesforce allowing Heroku Connect
 	// to handle deletes when polling for updates
@@ -35,224 +34,179 @@ public class TaskVO extends ObjectVO implements Serializable {
 	// campo de Heroku
 	@Column(name = "_hc_err")
 	private String hcError;
-	
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(name = "sfid")
 	private String sfid;
-	
+
 	@Column(name = "tasktype__c")
-	private String tasktype__c;
+	private String taskType;
 
 	@Column(name = "activitydate")
-	private Date activitydate;
-	
+	private Date activityDate;
+
 	@Column(name = "calldisposition")
-	private String calldisposition;
-	
+	private String callDisposition;
+
 	@Column(name = "casephone__c")
-	private String casephone__c;
-	
+	private String casePhone;
+
 	@Column(name = "status")
 	private String status;
-	
+
 	@Column(name = "description")
 	private String description;
-	
+
 	@Column(name = "createddate")
-	private Date createddate;
-	
+	private Date createdDate;
+
 	@Column(name = "subject")
 	private String subject;
-	
+
 	@Column(name = "priority")
 	private String priority;
-	
+
 	@Column(name = "whoid")
-	private String whoid;
-	
-	/*@Column(name = "account__company__c")
-	private String account__company__c;*/
-	
+	private String whoId;
+
+	/*
+	 * NO ESTÁ EN SALESFORCE
+	 * @Column(name = "account__company__c")
+	 * private String account__company__c;
+	 */
+
 	@Column(name = "accountid")
-	private String accountid;
+	private String accountId;
 
 	@Column(name = "ownerid")
-	private String ownerid;
+	private String ownerId;
 
 	@Column(name = "tasksubtype")
-	private String tasksubtype;
-	
+	private String taskSubtype;
+
 	public TaskVO() {
 		super();
 	}
-	
+
 	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
-
-
 
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 
-
-
 	public Date getSystemDate() {
 		return systemDate;
 	}
-
-
 
 	public void setSystemDate(Date systemDate) {
 		this.systemDate = systemDate;
 	}
 
-
-
 	public String getHcLastop() {
 		return hcLastop;
 	}
-
-
 
 	public void setHcLastop(String hcLastop) {
 		this.hcLastop = hcLastop;
 	}
 
-
-
 	public String getHcError() {
 		return hcError;
 	}
-
-
 
 	public void setHcError(String hcError) {
 		this.hcError = hcError;
 	}
 
-
-
 	public Integer getId() {
 		return id;
 	}
-
-
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
-
 	public String getSfid() {
 		return sfid;
 	}
-
-
 
 	public void setSfid(String sfid) {
 		this.sfid = sfid;
 	}
 
-
-
-	public String getTasktype__c() {
-		return tasktype__c;
+	public String getTaskType() {
+		return taskType;
 	}
 
-
-
-	public void setTasktype__c(String tasktype__c) {
-		this.tasktype__c = tasktype__c;
+	public void setTaskType(String taskType) {
+		this.taskType = taskType;
 	}
 
-
-
-	public Date getActivitydate() {
-		return activitydate;
+	public Date getActivityDate() {
+		return activityDate;
 	}
 
-
-
-	public void setActivitydate(Date activitydate) {
-		this.activitydate = activitydate;
+	public void setActivityDate(Date activityDate) {
+		this.activityDate = activityDate;
 	}
 
-	public void setActivitydateString(String activitydateString) {
-		Date activitydateDate = Utils.parseStringToDate(activitydateString);
-		if (activitydateDate != null) {
-			setActivitydate(activitydateDate);
+	public void setActivityDateString(String activityDateString) {
+		Date activityDateDate = Utils.parseStringToDate(activityDateString);
+		if (activityDateDate != null) {
+			setActivityDate(activityDateDate);
 		}
 	}
 
-	public String getCalldisposition() {
-		return calldisposition;
+	public String getCallDisposition() {
+		return callDisposition;
 	}
 
-
-
-	public void setCalldisposition(String calldisposition) {
-		this.calldisposition = calldisposition;
+	public void setCallDisposition(String callDisposition) {
+		this.callDisposition = callDisposition;
 	}
 
-
-
-	public String getCasephone__c() {
-		return casephone__c;
+	public String getCasePhone() {
+		return casePhone;
 	}
 
-
-
-	public void setCasephone__c(String casephone__c) {
-		this.casephone__c = casephone__c;
+	public void setCasePhone(String casePhone) {
+		this.casePhone = casePhone;
 	}
-
-
 
 	public String getStatus() {
 		return status;
 	}
 
-
-
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-
 
 	public String getDescription() {
 		return description;
 	}
 
-
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-
-
-	public Date getCreateddate() {
-		return createddate;
+	public Date getCreatedDate() {
+		return createdDate;
 	}
 
-
-
-	public void setCreateddate(Date createddate) {
-		this.createddate = createddate;
+	public void setCreatedDate(Date createddate) {
+		this.createdDate = createddate;
 	}
 
-	public void setCreateddateString(String createddateString) {
-		Date createddateDate = Utils.parseStringToDate(createddateString);
-		if (createddateDate != null) {
-			setCreateddate(createddateDate);
+	public void setCreatedDateString(String createdDateString) {
+		Date createdDateDate = Utils.parseStringToDate(createdDateString);
+		if (createdDateDate != null) {
+			setCreatedDate(createdDateDate);
 		}
 	}
 
@@ -260,79 +214,52 @@ public class TaskVO extends ObjectVO implements Serializable {
 		return subject;
 	}
 
-
-
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-
-
 
 	public String getPriority() {
 		return priority;
 	}
 
-
-
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
 
-
-
-	public String getWhoid() {
-		return whoid;
+	public String getWhoId() {
+		return whoId;
 	}
 
-
-
-	public void setWhoid(String whoid) {
-		this.whoid = whoid;
+	public void setwhoId(String whoId) {
+		this.whoId = whoId;
 	}
 
-
-
-	public String getAccountid() {
-		return accountid;
+	public String getAccountId() {
+		return accountId;
 	}
 
-
-
-	public void setAccountid(String accountid) {
-		this.accountid = accountid;
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
 	}
 
-
-
-	public String getOwnerid() {
-		return ownerid;
+	public String getOwnerId() {
+		return ownerId;
 	}
 
-
-
-	public void setOwnerid(String ownerid) {
-		this.ownerid = ownerid;
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
 	}
 
-
-
-	public String getTasksubtype() {
-		return tasksubtype;
+	public String getTaskSubtype() {
+		return taskSubtype;
 	}
 
-
-
-	public void setTasksubtype(String tasksubtype) {
-		this.tasksubtype = tasksubtype;
+	public void setTaskSubtype(String taskSubtype) {
+		this.taskSubtype = taskSubtype;
 	}
 
 	@Override
 	public Object instantiateTargetLogic() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
-	
-	
 }

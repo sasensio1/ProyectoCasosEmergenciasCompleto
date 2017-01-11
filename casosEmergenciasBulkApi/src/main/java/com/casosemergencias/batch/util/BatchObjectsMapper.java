@@ -270,24 +270,21 @@ public class BatchObjectsMapper {
 	private void initTaskMap() {
 		taskMap = new HashMap<String, String>();
 		taskMap.put("id", "Sfid");
-		taskMap.put("tasktype__c", "Tasktype__c");
-		taskMap.put("activitydate", "ActivitydateString");
-		taskMap.put("calldisposition", "Calldisposition");
-		taskMap.put("casephone__c", "Casephone__c");
-		taskMap.put("status", "Status");
-		taskMap.put("description", "Description");
-		taskMap.put("createddate", "CreateddateString");
-		taskMap.put("subject", "Subject");
-		taskMap.put("priority", "Priority");
-		taskMap.put("whoid", "Whoid");
+		taskMap.put("TaskType__c", "TaskType");
+		taskMap.put("ActivityDate", "ActivityDateString");
+		taskMap.put("CallDisposition", "CallDisposition");
+		taskMap.put("CasePhone__c", "CasePhone");
+		taskMap.put("Status", "Status");
+		taskMap.put("Description", "Description");
+		taskMap.put("CreatedDate", "CreatedDateString");
+		taskMap.put("Subject", "Subject");
+		taskMap.put("Priority", "Priority");
+		taskMap.put("WhoId", "WhoId");
+		taskMap.put("AccountId", "AccountId");
+		taskMap.put("OwnerId", "OwnerId");
+		taskMap.put("TaskSubtype", "TaskSubtype");
+		/* ---- NO EXISTEN EN SALESFORCE ---- */
 		//taskMap.put("account__company__c", "Account__company__c");
-		taskMap.put("accountid", "Accountid");
-		taskMap.put("ownerid", "Ownerid");
-		taskMap.put("tasksubtype", "Tasksubtype");		
-	}
-	
-	public LinkedHashMap<String, String> setobjectSelectsMap() {
-		return objectSelectsMap;
 	}
 	
 	private void initObjectSelectsMap() {
