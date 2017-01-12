@@ -82,6 +82,7 @@
 	                <value>com.casosemergencias.dao.vo.CaseCommentVO</value>
 	                <value>com.casosemergencias.dao.vo.UserVO</value>
 	                <value>com.casosemergencias.dao.vo.AssetVO</value>
+	                <value>com.casosemergencias.dao.vo.TaskVO</value>
 	                <value>com.casosemergencias.dao.vo.PickListsVO</value>
 	                <value>com.casosemergencias.dao.vo.PickListsCaseHistoryFieldVO</value>
 	                <value>com.casosemergencias.dao.vo.PickListsCaseVO</value>
@@ -159,6 +160,7 @@
 	<bean id="picklistTableCreatorBatch" class="com.casosemergencias.batch.PicklistTableCreatorBatch"/>
 	<bean id="fieldLabelTableCreatorJob" class="com.casosemergencias.batch.FieldLabelTableCreatorJob"/>
 	<bean id="picklistTableCreatorJob" class="com.casosemergencias.batch.PicklistTableCreatorJob"/>
+	<bean id="bulkApiQueriesBatch" class="com.casosemergencias.batch.BulkApiQueriesBatch"/>
 
 	<mvc:resources mapping="/resources/**" location="/resources/"/> 
 	

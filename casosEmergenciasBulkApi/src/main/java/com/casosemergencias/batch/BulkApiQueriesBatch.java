@@ -170,7 +170,7 @@ public class BulkApiQueriesBatch {
 				
 				if (queryResults != null) {
 					for (String resultId : queryResults) {
-						bulkApiContainer = objectsParser.populateObjectListFromXmlStream(connection.getQueryResultStream(job.getId(), info.getId(), resultId));
+						bulkApiContainer = objectsParser.populateObjectListFromXmlStream(connection.getQueryResultStream(job.getId(), info.getId(), resultId), OBJECTS_MAPPER);
 				    }
 					connection.closeJob(job.getId());
 				}
