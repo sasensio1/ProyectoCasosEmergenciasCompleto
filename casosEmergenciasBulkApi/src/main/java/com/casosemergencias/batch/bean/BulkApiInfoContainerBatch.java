@@ -3,12 +3,17 @@ package com.casosemergencias.batch.bean;
 import java.util.List;
 
 public class BulkApiInfoContainerBatch {
-	
 	/** Paremeters. */
 	public enum OperationType { INSERT, UPDATE, DELETE };
 	private OperationType operation;
 	private List<Object> objectList;
-		
+	
+	/** Constructors. */
+	public BulkApiInfoContainerBatch(OperationType operationType, List<Object> objectList) {
+		this.operation = operationType;
+		this.objectList = objectList;
+	}
+	
 	/** Getters. */
 	public OperationType getOperation() {
 		return operation;

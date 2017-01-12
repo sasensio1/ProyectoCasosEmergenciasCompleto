@@ -35,10 +35,12 @@ public class BatchObjectsMapper {
 	private Map<String, String> streetMap;
 	private Map<String, String> userMap;
 	private Map<String, String> taskMap;
+	private Map<String, String> objectNamesEquivalenceMap;
 	private LinkedHashMap<String, String> objectSelectsMap;
 	
 	public BatchObjectsMapper() {
 		initObjectSelectsMap();
+		initObjectNamesEquivalenceMap();
 		initAccountMap();
 		initContactMap();
 		initAssetMap();
@@ -305,6 +307,24 @@ public class BatchObjectsMapper {
 		objectSelectsMap.put(ConstantesBulkApi.ENTITY_USER, ConstantesBulkApi.ENTITY_USER_SELECT);
 	}
 	
+	private void initObjectNamesEquivalenceMap() {
+		objectNamesEquivalenceMap = new HashMap<String, String>();
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, "AccountVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_ADDRESS, "DireccionVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_ASSET, "AssetVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, "CaseCommentVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, "CaseHistoryVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_CONTACT, "ContactVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_GROUP, "GroupVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, "HerokuUserVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY, "SuministroVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_REPEATED_CASES, "CasosReiteradosVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_SERVICE_PRODUCT, "RelacionActivoContactoVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_STREET, "StreetVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_TASK, "TaskVO");
+		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_USER, "UserVO");
+	}
+	
 	public Map<String, String> getAccountMap() {
 		return accountMap;
 	}
@@ -365,7 +385,11 @@ public class BatchObjectsMapper {
 		return objectSelectsMap;
 	}
 	
-	public Map<String, String> getMapFromType(Object object) {
+	public Map<String, String> getObjectNamesEquivalenceMap() {
+		return objectNamesEquivalenceMap;
+	}
+	
+	public Map<String, String> getParamsMap(Object object) {
 		Map<String, String> map = null;
 		if (object instanceof ContactVO) {
 			map = contactMap;

@@ -145,7 +145,7 @@ public class BulkApiQueriesBatch {
 				completeQuery.append(selectQueryFragment);
 				completeQuery.append(ConstantesBulkApi.ALL_ENTITIES_FROM_CLAUSE);
 				completeQuery.append(entityName);
-				completeQuery.append(ConstantesBulkApi.ALL_ENTITIES_WHERE_CLAUSE);
+				//completeQuery.append(ConstantesBulkApi.ALL_ENTITIES_WHERE_CLAUSE);
 				LOGGER.debug("Consulta a realizar: " + completeQuery);
 				// --------------------------------------------------------
 				
