@@ -124,6 +124,7 @@
 	               	<value>com.casosemergencias.dao.vo.PickListsStreetMunicipalityVO</value>
 	               	<value>com.casosemergencias.dao.vo.PickListsStreetRegionVO</value>
 	               	<value>com.casosemergencias.dao.vo.PickListsStreetTypeVO</value>
+	               	<value>com.casosemergencias.dao.vo.HistoricBatchVO</value>
 	            </list>
 		  </property>
 		  <property name="hibernateProperties">
