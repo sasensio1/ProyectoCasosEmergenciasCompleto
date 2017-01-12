@@ -128,5 +128,18 @@ public class DireccionServiceImpl implements DireccionService{
 		logger.debug("--- Fin -- getDatosCalleWS ---");
 		return datosWS;
 	}
+	
+	@Override
+	public void insertAddressSfList(List<Object> addressList){
+		direccionDao.insertDireccionListSf(addressList);
+	}
+	@Override
+	public void updateAddressSfList(List<Object> addressList){
+		direccionDao.updateDireccionListSf(addressList);
+	}
+	@Override
+	public void deleteAddressSfList(List<Object> addressList){
+		direccionDao.deleteDireccionListSf(addressList);
+	}
 
 }

@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -155,34 +156,43 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 			TaskVO taskToUpdate = new TaskVO();
 			try{
 				taskToUpdate=(TaskVO)object;
+				
+				//1.1-Definimos los parámetros que no sean de tipo String		
+				 Date activitydate=null;
+				 Date createddate=null;
+				 
+				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE TaskVO SET "
-				+ "tasktype__c= :tasktype__c,activitydate= :activitydate,"
+				+ "tasktype__c= :tasktype__c,activitydate="+activitydate+","
 				+ "calldisposition= :calldisposition,casephone__c= :casephone__c,"
 				+ "status= :status,description= :description,"
-				+ "createddate= :createddate,subject= :subject,priority= :priority,whoid= :whoid,"
+				+ "createddate="+createddate+",subject= :subject,priority= :priority,whoid= :whoid,"
 				+ "accountid= :accountid,ownerid= :ownerid,tasksubtype= :tasksubtype,"					
 				+ " WHERE sfid = :sfidFiltro");
+							
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				//Seteamos los campos a actualizar
-				sqlUpdateQuery.setParameter("tasktype__c", taskToUpdate.getTaskType());
-				sqlUpdateQuery.setParameter("activitydate", taskToUpdate.getActivityDate());
-				sqlUpdateQuery.setParameter("calldisposition", taskToUpdate.getCallDisposition());
-				sqlUpdateQuery.setParameter("casephone__c", taskToUpdate.getCasePhone());
-				sqlUpdateQuery.setParameter("status", taskToUpdate.getStatus());
-				sqlUpdateQuery.setParameter("description", taskToUpdate.getDescription());
-				sqlUpdateQuery.setParameter("createddate", taskToUpdate.getCreatedDate());
-				sqlUpdateQuery.setParameter("subject", taskToUpdate.getSubject());
-				sqlUpdateQuery.setParameter("priority", taskToUpdate.getPriority());
-				sqlUpdateQuery.setParameter("whoid", taskToUpdate.getWhoId());
-				sqlUpdateQuery.setParameter("accountid", taskToUpdate.getAccountId());
-				sqlUpdateQuery.setParameter("ownerid", taskToUpdate.getOwnerId());
-				sqlUpdateQuery.setParameter("tasksubtype", taskToUpdate.getTaskSubtype());
-				
-				//Seteamos el campo por el que filtramos la actualización
-				
-				sqlUpdateQuery.setParameter("sfidFiltro", taskToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+				    //1.3.1-Seteamos los campos que no filtren la query						
+					sqlUpdateQuery.setParameter("tasktype__c", taskToUpdate.getTaskType());
+					sqlUpdateQuery.setParameter("calldisposition", taskToUpdate.getCallDisposition());
+					sqlUpdateQuery.setParameter("casephone__c", taskToUpdate.getCasePhone());
+					sqlUpdateQuery.setParameter("status", taskToUpdate.getStatus());
+					sqlUpdateQuery.setParameter("description", taskToUpdate.getDescription());
+					sqlUpdateQuery.setParameter("subject", taskToUpdate.getSubject());
+					sqlUpdateQuery.setParameter("priority", taskToUpdate.getPriority());
+					sqlUpdateQuery.setParameter("whoid", taskToUpdate.getWhoId());
+					sqlUpdateQuery.setParameter("accountid", taskToUpdate.getAccountId());
+					sqlUpdateQuery.setParameter("ownerid", taskToUpdate.getOwnerId());
+					sqlUpdateQuery.setParameter("tasksubtype", taskToUpdate.getTaskSubtype());
+					
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query								
+					sqlUpdateQuery.setParameter("sfidFiltro", taskToUpdate.getSfid());
+					
+				//1.4- Seteamos los campos a actualizar distintos de String			
+				createddate=taskToUpdate.getCreatedDate();
+				activitydate=taskToUpdate.getActivityDate();
+
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateTaskListSf ---" + taskToUpdate.getSfid());

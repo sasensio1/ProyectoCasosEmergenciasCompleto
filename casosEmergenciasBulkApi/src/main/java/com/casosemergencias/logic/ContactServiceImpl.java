@@ -343,20 +343,6 @@ public class ContactServiceImpl implements ContactService{
 				
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	/*@Override
 	public Caso populateCaseInfoToInsert(String direccionSf, String contactSfid,String herokuCaseOwner) {
 		logger.debug("Rellenamos los datos del caso para insertarlo por direccion");
@@ -391,4 +377,17 @@ public class ContactServiceImpl implements ContactService{
 		casoToInsert.setCanalNotificacion((canalNotificacion != null && !"".equals(canalNotificacion) ? canalNotificacion : Constantes.COD_CONTACTO_CANAL_PREF_CONTACT_003));
 		return casoToInsert;
 	}*/
+	
+	@Override
+	public void insertContactSfList(List<Object> contactList) {
+		contactDao.insertContactListSf(contactList);
+	}
+	@Override
+	public void updateContactSfList(List<Object> contactList) {
+		contactDao.updateContactListSf(contactList);
+	}
+	@Override
+	public void deleteContactSfList(List<Object> contactList) {
+		contactDao.deleteContactListSf(contactList);
+	}
 }

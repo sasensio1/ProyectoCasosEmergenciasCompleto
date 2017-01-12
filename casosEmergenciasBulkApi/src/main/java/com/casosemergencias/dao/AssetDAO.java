@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -162,7 +163,7 @@ public class AssetDAO {
 	 */
 		
 	@Transactional
-	public void updateAcountListSf(List<Object> objectList) {
+	public void updateAssetListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- update Listado Activos ---");
 
 		Session session = sessionFactory.openSession();
@@ -170,25 +171,31 @@ public class AssetDAO {
 			AssetVO activoToUpdate = new AssetVO();
 			try{
 				activoToUpdate=(AssetVO)object;
+				
+				//1.1-Definimos los parámetros que no sean de tipo String				
+				Date createddate= null;
+				
+				//1.2-Construimos la query						
 				Query sqlUpdateQuery =session.createQuery("UPDATE AssetVO SET "
 				+ "name= :name,contactid= :contactid,accountid= :accountid,"
-				+ "pointofdelivery__c= :pointofdelivery__c"				
+				+ "pointofdelivery__c= :pointofdelivery__c,createdDate="+createddate				
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("name", activoToUpdate.getName());
-				sqlUpdateQuery.setParameter("contactid", activoToUpdate.getContactid());
-				sqlUpdateQuery.setParameter("accountid", activoToUpdate.getAccountid());
-				sqlUpdateQuery.setParameter("pointofdelivery__c", activoToUpdate.getSuministroid());
-
-				
-				//Seteamos el campo por el que filtramos la actualización
-				
-				sqlUpdateQuery.setParameter("sfidFiltro", activoToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+					//1.3.1-Seteamos el campos que no filtren la query						
+					sqlUpdateQuery.setParameter("name", activoToUpdate.getName());
+					sqlUpdateQuery.setParameter("contactid", activoToUpdate.getContactid());
+					sqlUpdateQuery.setParameter("accountid", activoToUpdate.getAccountid());
+					sqlUpdateQuery.setParameter("pointofdelivery__c", activoToUpdate.getSuministroid());
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
+					sqlUpdateQuery.setParameter("sfidFiltro", activoToUpdate.getSfid());
+					
+				//1.4- Seteamos los campos a actualizar distintos de String				
+				createddate=activoToUpdate.getCreatedDate();
+								
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateActivo ---" + activoToUpdate.getSfid());
@@ -209,7 +216,7 @@ public class AssetDAO {
 	 */
 		
 	@Transactional
-	public void deleteAcountListSf(List<Object> objectList) {
+	public void deleteAssetListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- delete Listado Activos ---");
 
 		Session session = sessionFactory.openSession();

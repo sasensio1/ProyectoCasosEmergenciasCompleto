@@ -17,5 +17,11 @@ public interface DireccionService {
 	
 	public Map<String, Object> getDatosCalleWS(String idComuna, String nombreCalle);
 	
+	public void insertAddressSfList(List<Object> addressList);
+	
+	public void updateAddressSfList(List<Object> addressList);
+
+	public void deleteAddressSfList(List<Object> addressList);
+	
 	/*public void sendDirectionToSF(Direccion direccion);*/
 }

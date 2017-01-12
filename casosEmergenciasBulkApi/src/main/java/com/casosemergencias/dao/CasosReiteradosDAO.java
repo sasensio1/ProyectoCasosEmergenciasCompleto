@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -205,24 +206,33 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 			CasosReiteradosVO casoReiteradoToUpdate = new CasosReiteradosVO();
 			try{
 				casoReiteradoToUpdate=(CasosReiteradosVO)object;
+				
+				//1.1-Definimos los parámetros que no sean de tipo String				
+				Double numbercases__c=null;
+				Double numberdays__c=null;
+				Date createddate=null;
+				
+				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE CasosReiteradosVO SET "
-				+ "name= :name,numbercases__c= :numbercases__c,numberdays__c= :numberdays__c,"
-				+ "createddate= :createddate"				
+				+ "name= :name,numbercases__c="+numbercases__c+",numberdays__c="+numberdays__c+","
+				+ "createddate="+createddate				
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("name", casoReiteradoToUpdate.getName());
-				sqlUpdateQuery.setParameter("numbercases__c", casoReiteradoToUpdate.getNumCasos());
-				sqlUpdateQuery.setParameter("numberdays__c", casoReiteradoToUpdate.getNumDias());
-				sqlUpdateQuery.setParameter("createddate", casoReiteradoToUpdate.getCreatedDate());
+				    //1.3.1-Seteamos los campos que no filtren la query						
+					sqlUpdateQuery.setParameter("name", casoReiteradoToUpdate.getName());
+	
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query							
+					sqlUpdateQuery.setParameter("sfidFiltro", casoReiteradoToUpdate.getSfid());
+				
+				//1.4- Seteamos los campos a actualizar distintos de String				
+				numbercases__c=casoReiteradoToUpdate.getNumCasos();
+				numberdays__c=casoReiteradoToUpdate.getNumDias();
+				createddate=casoReiteradoToUpdate.getCreatedDate();
 
-				//Seteamos el campo por el que filtramos la actualización
-				
-				sqlUpdateQuery.setParameter("sfidFiltro", casoReiteradoToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateCasoReiterado ---" + casoReiteradoToUpdate.getSfid());

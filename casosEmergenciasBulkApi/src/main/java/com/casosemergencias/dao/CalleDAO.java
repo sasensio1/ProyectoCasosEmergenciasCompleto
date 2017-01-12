@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -132,8 +133,14 @@ public class CalleDAO {
 			StreetVO calleToUpdate = new StreetVO();
 			try{
 				calleToUpdate=(StreetVO)object;
+				
+				//1.1-Definimos los parámetros que no sean de tipo String				
+				Date createddate=null;
+				Date lastmodifieddate=null;
+
+				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE StreetVO SET "
-				+ "createddate= :createddate,lastmodifieddate= :lastmodifieddate,name= :name,"
+				+ "createddate="+createddate+",lastmodifieddate="+lastmodifieddate+",name= :name,"
 				+ "recordtypeid= :recordtypeid,currencyisocode= :currencyisocode,region__c= :region__c,"
 				+ "literal_region__c= :literal_region__c,municipality__c= :municipality__c,"
 				+ "literal_municipality__c= :literal_municipality__c,street__c= :street__c,"
@@ -144,31 +151,33 @@ public class CalleDAO {
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("createddate", calleToUpdate.getCreatedDate());
-				sqlUpdateQuery.setParameter("lastmodifieddate", calleToUpdate.getLastModifiedDate());
-				sqlUpdateQuery.setParameter("name", calleToUpdate.getName());
-				sqlUpdateQuery.setParameter("recordtypeid", calleToUpdate.getRecordTypeId());
-				sqlUpdateQuery.setParameter("currencyisocode", calleToUpdate.getCurrencyIsoCode());
-				sqlUpdateQuery.setParameter("region__c", calleToUpdate.getRegion());
-				sqlUpdateQuery.setParameter("literal_region__c", calleToUpdate.getLiteralRegion());
-				sqlUpdateQuery.setParameter("municipality__c", calleToUpdate.getMunicipality());
-				sqlUpdateQuery.setParameter("literal_municipality__c", calleToUpdate.getLiteralMunicipality());
-				sqlUpdateQuery.setParameter("street__c", calleToUpdate.getStreet());
-				sqlUpdateQuery.setParameter("street_type__c", calleToUpdate.getStreetType());
-				sqlUpdateQuery.setParameter("literal_street_type__c", calleToUpdate.getLiteralStreetType());
-				sqlUpdateQuery.setParameter("lastmodifiedbyid", calleToUpdate.getLastModifiedById());
-				sqlUpdateQuery.setParameter("createdbyid", calleToUpdate.getCreatedById());
-				sqlUpdateQuery.setParameter("ownerid", calleToUpdate.getOwnerId());
-				sqlUpdateQuery.setParameter("country__c", calleToUpdate.getCountry());
-				sqlUpdateQuery.setParameter("company__c", calleToUpdate.getCompany());
-				
-				//Seteamos el campo por el que filtramos la actualizacións
-				
-				sqlUpdateQuery.setParameter("sfidFiltro", calleToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+				    //1.3.1-Seteamos los campos que no filtren la query						
+					sqlUpdateQuery.setParameter("name", calleToUpdate.getName());
+					sqlUpdateQuery.setParameter("recordtypeid", calleToUpdate.getRecordTypeId());
+					sqlUpdateQuery.setParameter("currencyisocode", calleToUpdate.getCurrencyIsoCode());
+					sqlUpdateQuery.setParameter("region__c", calleToUpdate.getRegion());
+					sqlUpdateQuery.setParameter("literal_region__c", calleToUpdate.getLiteralRegion());
+					sqlUpdateQuery.setParameter("municipality__c", calleToUpdate.getMunicipality());
+					sqlUpdateQuery.setParameter("literal_municipality__c", calleToUpdate.getLiteralMunicipality());
+					sqlUpdateQuery.setParameter("street__c", calleToUpdate.getStreet());
+					sqlUpdateQuery.setParameter("street_type__c", calleToUpdate.getStreetType());
+					sqlUpdateQuery.setParameter("literal_street_type__c", calleToUpdate.getLiteralStreetType());
+					sqlUpdateQuery.setParameter("lastmodifiedbyid", calleToUpdate.getLastModifiedById());
+					sqlUpdateQuery.setParameter("createdbyid", calleToUpdate.getCreatedById());
+					sqlUpdateQuery.setParameter("ownerid", calleToUpdate.getOwnerId());
+					sqlUpdateQuery.setParameter("country__c", calleToUpdate.getCountry());
+					sqlUpdateQuery.setParameter("company__c", calleToUpdate.getCompany());
+					
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query		
+					sqlUpdateQuery.setParameter("sfidFiltro", calleToUpdate.getSfid());
+
+				//1.4- Seteamos los campos a actualizar distintos de String	
+				createddate=calleToUpdate.getCreatedDate();
+				lastmodifieddate=calleToUpdate.getLastModifiedDate();
+
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateCalle ---" + calleToUpdate.getSfid());

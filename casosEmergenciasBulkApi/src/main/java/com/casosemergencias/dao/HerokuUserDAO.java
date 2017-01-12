@@ -425,30 +425,38 @@ public class HerokuUserDAO {
 			HerokuUserVO usuarioHerokuToUpdate = new HerokuUserVO();
 			try{
 				usuarioHerokuToUpdate=(HerokuUserVO)object;
+				
+				//1.1-Definimos los parámetros que no sean de tipo String				
+				Boolean sentmail__c=null;
+				Boolean active__c=null;
+				
+				//1.2-Construimos la query			
 				Query sqlUpdateQuery =session.createQuery("UPDATE HerokuUserVO SET "
 				+ "name= :name,username__c= :username__c,password__c= :password__c,"
-				+ "mail__c= :mail__c,sentmail__c= :sentmail__c,"
-				+ "active__c= :active__c,country__c= :country__c,"
+				+ "mail__c= :mail__c,sentmail__c="+sentmail__c+","
+				+ "active__c="+active__c+",country__c= :country__c,"
 				+ "unity__c= :unity__c"				
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("name", usuarioHerokuToUpdate.getName());
-				sqlUpdateQuery.setParameter("username__c", usuarioHerokuToUpdate.getUsername());
-				sqlUpdateQuery.setParameter("password__c", usuarioHerokuToUpdate.getPassword());
-				sqlUpdateQuery.setParameter("mail__c", usuarioHerokuToUpdate.getEmail());
-				sqlUpdateQuery.setParameter("sentmail__c", usuarioHerokuToUpdate.getEnvioMail());
-				sqlUpdateQuery.setParameter("active__c", usuarioHerokuToUpdate.getActivo());
-				sqlUpdateQuery.setParameter("country__c", usuarioHerokuToUpdate.getCountry());
-				sqlUpdateQuery.setParameter("unity__c", usuarioHerokuToUpdate.getUnidad());
-
-				//Seteamos el campo por el que filtramos la actualización
+				    //1.3.1-Seteamos los campos que no filtren la query						
+					sqlUpdateQuery.setParameter("name", usuarioHerokuToUpdate.getName());
+					sqlUpdateQuery.setParameter("username__c", usuarioHerokuToUpdate.getUsername());
+					sqlUpdateQuery.setParameter("password__c", usuarioHerokuToUpdate.getPassword());
+					sqlUpdateQuery.setParameter("mail__c", usuarioHerokuToUpdate.getEmail());
+					sqlUpdateQuery.setParameter("country__c", usuarioHerokuToUpdate.getCountry());
+					sqlUpdateQuery.setParameter("unity__c", usuarioHerokuToUpdate.getUnidad());
+					
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
+					sqlUpdateQuery.setParameter("sfidFiltro", usuarioHerokuToUpdate.getSfid());
 				
-				sqlUpdateQuery.setParameter("sfidFiltro", usuarioHerokuToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+				//1.4- Seteamos los campos a actualizar distintos de String				
+				sentmail__c	=usuarioHerokuToUpdate.getEnvioMail();
+				active__c=usuarioHerokuToUpdate.getActivo();
+						
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateUsuarioHeroku ---" + usuarioHerokuToUpdate.getSfid());

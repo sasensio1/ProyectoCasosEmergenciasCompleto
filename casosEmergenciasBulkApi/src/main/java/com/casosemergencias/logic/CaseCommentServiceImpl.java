@@ -181,6 +181,20 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 		logger.trace("--- Servicio insertSalesforceComment completado ---");
 		return comentarioCaso;
 	}
+	
+	@Override
+	public void insertCaseCommentSfList(List<Object> caseCommentList) {
+		caseCommentDAO.insertCaseCommentListSf(caseCommentList);
+	}
+	
+	@Override
+	public void updateCaseCommentSfList(List<Object> caseCommentList) {
+		caseCommentDAO.updateCaseCommentListSf(caseCommentList);
+	}
+	@Override
+	public void deleteCaseCommentSfList(List<Object> caseCommentList) {
+		caseCommentDAO.deleteCaseCommentListSf(caseCommentList);
+	}
 
 
 }

@@ -163,20 +163,26 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 			UserVO usuarioToUpdate = new UserVO();
 			try{
 				usuarioToUpdate=(UserVO)object;
+				//1.1-Definimos los parámetros que no sean de tipo String				
+				
+				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE UserVO SET "
 				+ "name= :name"			
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
+			    
+					//1.3.1-Seteamos los campos que no filtren la query						
+					sqlUpdateQuery.setParameter("name", usuarioToUpdate.getName());
+	
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query								
+					sqlUpdateQuery.setParameter("sfidFiltro", usuarioToUpdate.getSfid());
 				
-				sqlUpdateQuery.setParameter("name", usuarioToUpdate.getName());
+				//1.4- Seteamos los campos a actualizar distintos de String				
 
-				//Seteamos el campo por el que filtramos la actualización
 				
-				sqlUpdateQuery.setParameter("sfidFiltro", usuarioToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateUsuario ---" + usuarioToUpdate.getSfid());

@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -680,42 +681,49 @@ public class AccountDAO {
 			AccountVO cuentaToUpdate = new AccountVO();
 			try{
 				cuentaToUpdate=(AccountVO)object;
+				
+				//1.1-Definimos los parámetros que no sean de tipo String
+				Date birthdate__c= null;
+				
+				//1.2-Construimos la query			
 				Query sqlUpdateQuery =session.createQuery("UPDATE AccountVO SET "
 				+ "name= :name,fatherslastname__c= :fatherslastname__c,motherslastname__c= :motherslastname__c,"
 				+ "identitytype__c= :identitytype__c,parent__identityNumber__c= :parent__identityNumber__c,"
 				+ "masterrecord__identitynumber__c= :masterrecord__identitynumber__c,identitynumber__c= :identitynumber__c,"
-				+ "birthdate__c= :birthdate__c,phone= :phone,mainphone__c= :mainphone__c,secondaryphone__c= :secondaryphone__c,"
+				+ "birthdate__c="+birthdate__c+",phone= :phone,mainphone__c= :mainphone__c,secondaryphone__c= :secondaryphone__c,"
 				+ "primaryemail__c= :primaryemail__c,secondaryemail__c= :secondaryemail__c,address__c= :address__c,"
 				+ "accountsource= :accountsource,companyid__c= :companyid__c,type= :type,parentid= :parentid"					
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("name", cuentaToUpdate.getName());
-				sqlUpdateQuery.setParameter("fatherslastname__c", cuentaToUpdate.getApellidoPaterno());
-				sqlUpdateQuery.setParameter("motherslastname__c", cuentaToUpdate.getApellidoMaterno());
-				sqlUpdateQuery.setParameter("identitytype__c", cuentaToUpdate.getTipoIdentidad());
-				sqlUpdateQuery.setParameter("parent__identityNumber__c", cuentaToUpdate.getParentRutEmpresa());
-				sqlUpdateQuery.setParameter("masterrecord__identitynumber__c", cuentaToUpdate.getAccountRun());
-				sqlUpdateQuery.setParameter("identitynumber__c", cuentaToUpdate.getRun());
-				sqlUpdateQuery.setParameter("birthdate__c", cuentaToUpdate.getFechaNacimiento());
-				sqlUpdateQuery.setParameter("phone", cuentaToUpdate.getPhone());
-				sqlUpdateQuery.setParameter("mainphone__c", cuentaToUpdate.getTelefonoPrincipal());
-				sqlUpdateQuery.setParameter("secondaryphone__c", cuentaToUpdate.getTelefonoSecundario());
-				sqlUpdateQuery.setParameter("primaryemail__c", cuentaToUpdate.getEmailPrincipal());
-				sqlUpdateQuery.setParameter("secondaryemail__c", cuentaToUpdate.getEmailSecundario());
-				sqlUpdateQuery.setParameter("address__c", cuentaToUpdate.getDireccion());
-				sqlUpdateQuery.setParameter("accountsource", cuentaToUpdate.getAccountsource());
-				sqlUpdateQuery.setParameter("companyid__c", cuentaToUpdate.getIdEmpresa());
-				sqlUpdateQuery.setParameter("type", cuentaToUpdate.getTipo());
-				sqlUpdateQuery.setParameter("parentid", cuentaToUpdate.getParentid());
+					//1.3.1-Seteamos el campos que no filtren la query						
+					sqlUpdateQuery.setParameter("name", cuentaToUpdate.getName());
+					sqlUpdateQuery.setParameter("fatherslastname__c", cuentaToUpdate.getApellidoPaterno());
+					sqlUpdateQuery.setParameter("motherslastname__c", cuentaToUpdate.getApellidoMaterno());
+					sqlUpdateQuery.setParameter("identitytype__c", cuentaToUpdate.getTipoIdentidad());
+					sqlUpdateQuery.setParameter("parent__identityNumber__c", cuentaToUpdate.getParentRutEmpresa());
+					sqlUpdateQuery.setParameter("masterrecord__identitynumber__c", cuentaToUpdate.getAccountRun());
+					sqlUpdateQuery.setParameter("identitynumber__c", cuentaToUpdate.getRun());
+					sqlUpdateQuery.setParameter("phone", cuentaToUpdate.getPhone());
+					sqlUpdateQuery.setParameter("mainphone__c", cuentaToUpdate.getTelefonoPrincipal());
+					sqlUpdateQuery.setParameter("secondaryphone__c", cuentaToUpdate.getTelefonoSecundario());
+					sqlUpdateQuery.setParameter("primaryemail__c", cuentaToUpdate.getEmailPrincipal());
+					sqlUpdateQuery.setParameter("secondaryemail__c", cuentaToUpdate.getEmailSecundario());
+					sqlUpdateQuery.setParameter("address__c", cuentaToUpdate.getDireccion());
+					sqlUpdateQuery.setParameter("accountsource", cuentaToUpdate.getAccountsource());
+					sqlUpdateQuery.setParameter("companyid__c", cuentaToUpdate.getIdEmpresa());
+					sqlUpdateQuery.setParameter("type", cuentaToUpdate.getTipo());
+					sqlUpdateQuery.setParameter("parentid", cuentaToUpdate.getParentid());
 				
-				//Seteamos el campo por el que filtramos la actualización
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
+					sqlUpdateQuery.setParameter("sfidFiltro", cuentaToUpdate.getSfid());
 				
-				sqlUpdateQuery.setParameter("sfidFiltro", cuentaToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+				//1.4- Seteamos los campos a actualizar distintos de String				
+				birthdate__c=cuentaToUpdate.getFechaNacimiento();
+								
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateCuenta ---" + cuentaToUpdate.getSfid());

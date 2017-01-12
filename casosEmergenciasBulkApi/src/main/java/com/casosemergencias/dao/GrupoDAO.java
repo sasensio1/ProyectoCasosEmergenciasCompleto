@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -64,21 +65,27 @@ public class GrupoDAO {
 			GroupVO grupoToUpdate = new GroupVO();
 			try{
 				grupoToUpdate=(GroupVO)object;
+				//1.1-Definimos los parámetros que no sean de tipo String	
+				Date createddate= null;
+
+				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE GroupVO SET "
-				+ "name= :name,createddate= :createddate"				
+				+ "name= :name,createddate="+createddate			
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("name", grupoToUpdate.getName());
-				sqlUpdateQuery.setParameter("createddate", grupoToUpdate.getCreateddate());
+					//1.3.1-Seteamos los campos que no filtren la query						
+					sqlUpdateQuery.setParameter("name", grupoToUpdate.getName());
+	
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query								
+					sqlUpdateQuery.setParameter("sfidFiltro", grupoToUpdate.getSfid());
+					
+				//1.4- Seteamos los campos a actualizar distintos de String				
+				createddate=grupoToUpdate.getCreateddate();
 
-				//Seteamos el campo por el que filtramos la actualización
-				
-				sqlUpdateQuery.setParameter("sfidFiltro", grupoToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateGrupo ---" + grupoToUpdate.getSfid());

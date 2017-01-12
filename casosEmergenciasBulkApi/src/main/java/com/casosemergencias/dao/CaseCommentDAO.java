@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -225,30 +226,38 @@ public class CaseCommentDAO {
 			CaseCommentVO comentarioCasoToUpdate = new CaseCommentVO();
 			try{
 				comentarioCasoToUpdate=(CaseCommentVO)object;
+				
+				//1.1-Definimos los parámetros que no sean de tipo String
+				Date createddate= null;
+				Boolean ispublished=null;
+				Date lastmodifieddate=null;
+				
+				//1.2-Construimos la query			
 				Query sqlUpdateQuery =session.createQuery("UPDATE CaseCommentVO SET "
-				+ "createdbyid= :createdbyid,createddate= :createddate,"
-				+ "ispublished= :ispublished,parentid= :parentid,"
-				+ "commentbody= :commentbody,lastmodifieddate= :lastmodifieddate,"
+				+ "createdbyid= :createdbyid,createddate="+createddate+","
+				+ "ispublished="+ispublished+",parentid= :parentid,"
+				+ "commentbody= :commentbody,lastmodifieddate="+lastmodifieddate+","
 				+ "lastmodifiedbyid= :lastmodifiedbyid"			
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("createdbyid", comentarioCasoToUpdate.getCreatedbyid());
-				sqlUpdateQuery.setParameter("createddate", comentarioCasoToUpdate.getCreateddate());
-				sqlUpdateQuery.setParameter("ispublished", comentarioCasoToUpdate.getIspublished());
-				sqlUpdateQuery.setParameter("parentid", comentarioCasoToUpdate.getCaseid());
-				sqlUpdateQuery.setParameter("commentbody", comentarioCasoToUpdate.getComment());
-				sqlUpdateQuery.setParameter("lastmodifieddate", comentarioCasoToUpdate.getLastmodifieddate());
-				sqlUpdateQuery.setParameter("lastmodifiedbyid", comentarioCasoToUpdate.getLastmodifiedbyid());
-
+					//1.3.1-Seteamos el campos que no filtren la query						
+					sqlUpdateQuery.setParameter("createdbyid", comentarioCasoToUpdate.getCreatedbyid());
+					sqlUpdateQuery.setParameter("parentid", comentarioCasoToUpdate.getCaseid());
+					sqlUpdateQuery.setParameter("commentbody", comentarioCasoToUpdate.getComment());
+					sqlUpdateQuery.setParameter("lastmodifiedbyid", comentarioCasoToUpdate.getLastmodifiedbyid());
+					
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
+					sqlUpdateQuery.setParameter("sfidFiltro", comentarioCasoToUpdate.getSfid());
 				
-				//Seteamos el campo por el que filtramos la actualización
+				//1.4- Seteamos los campos a actualizar distintos de String				
+				createddate=comentarioCasoToUpdate.getCreateddate();
+				ispublished=comentarioCasoToUpdate.getIspublished();
+				lastmodifieddate=comentarioCasoToUpdate.getLastmodifieddate();
 				
-				sqlUpdateQuery.setParameter("sfidFiltro", comentarioCasoToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateComentarioCaso ---" + comentarioCasoToUpdate.getSfid());

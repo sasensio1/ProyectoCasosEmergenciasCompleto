@@ -324,4 +324,17 @@ public class SuministroServiceImpl implements SuministroService{
 		logger.debug("--- Fin -- getDatosSuministroWS ---");
 		return datosWS;
 	}
+	
+	@Override
+	public void insertSuministroSfList(List<Object> suministroList) {
+		suministroDao.insertSuministroListSf(suministroList);
+	}
+	@Override
+	public void updateSuministroSfList(List<Object> suministroList) {
+		suministroDao.updateSuministroListSf(suministroList);
+	}
+	@Override
+	public void deleteSuministroSfList(List<Object> suministroList) {
+		suministroDao.deleteSuministroListSf(suministroList);
+	}
 }

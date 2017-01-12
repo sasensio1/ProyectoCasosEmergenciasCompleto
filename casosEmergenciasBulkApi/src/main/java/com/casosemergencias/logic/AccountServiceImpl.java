@@ -92,8 +92,16 @@ public class AccountServiceImpl implements AccountService {
 	
 	
 	@Override
-	public void updateAccountSfList(List<Object> objectList) {
-		accountDao.updateAccountListSf(objectList);
+	public void insertAccountSfList(List<Object> accountList) {
+		accountDao.insertAccountListSf(accountList);
+	}
+	@Override
+	public void updateAccountSfList(List<Object> accountList) {
+		accountDao.updateAccountListSf(accountList);
+	}
+	@Override
+	public void deleteAccountSfList(List<Object> accountList) {
+		accountDao.deleteAccountListSf(accountList);
 	}
 	
 }

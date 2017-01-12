@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -569,8 +570,13 @@ public class DireccionDAO {
 			DireccionVO direccionToUpdate = new DireccionVO();
 			try{
 				direccionToUpdate=(DireccionVO)object;
+				
+				//1.1-Definimos los parámetros que no sean de tipo String				
+				Date createddate= null;
+				
+				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE DireccionVO SET "
-				+ "createddate= :createddate,region__c= :region__c,municipality__c= :municipality__c,"
+				+ "createddate="+createddate+",region__c= :region__c,municipality__c= :municipality__c,"
 				+ "street_type__c= :street_type__c,streetmd__c= :streetmd__c,"
 				+ "number__c= :number__c,department__c= :department__c,"
 				+ "name= :name,concatenatedaddress__c= :concatenatedaddress__c,corner__c= :corner__c"
@@ -578,25 +584,26 @@ public class DireccionDAO {
 				
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("createddate", direccionToUpdate.getCreateddate());
-				sqlUpdateQuery.setParameter("region__c", direccionToUpdate.getRegion());
-				sqlUpdateQuery.setParameter("municipality__c", direccionToUpdate.getComuna());
-				sqlUpdateQuery.setParameter("street_type__c", direccionToUpdate.getTipoCalle());
-				sqlUpdateQuery.setParameter("streetmd__c", direccionToUpdate.getCalle());
-				sqlUpdateQuery.setParameter("number__c", direccionToUpdate.getNumero());
-				sqlUpdateQuery.setParameter("department__c", direccionToUpdate.getDepartamento());
-				sqlUpdateQuery.setParameter("name", direccionToUpdate.getName());
-				sqlUpdateQuery.setParameter("concatenatedaddress__c", direccionToUpdate.getDireccionConcatenada());
-				sqlUpdateQuery.setParameter("corner__c", direccionToUpdate.getEsquina());
-
+				    //1.3.1-Seteamos los campos que no filtren la query						
+					sqlUpdateQuery.setParameter("region__c", direccionToUpdate.getRegion());
+					sqlUpdateQuery.setParameter("municipality__c", direccionToUpdate.getComuna());
+					sqlUpdateQuery.setParameter("street_type__c", direccionToUpdate.getTipoCalle());
+					sqlUpdateQuery.setParameter("streetmd__c", direccionToUpdate.getCalle());
+					sqlUpdateQuery.setParameter("number__c", direccionToUpdate.getNumero());
+					sqlUpdateQuery.setParameter("department__c", direccionToUpdate.getDepartamento());
+					sqlUpdateQuery.setParameter("name", direccionToUpdate.getName());
+					sqlUpdateQuery.setParameter("concatenatedaddress__c", direccionToUpdate.getDireccionConcatenada());
+					sqlUpdateQuery.setParameter("corner__c", direccionToUpdate.getEsquina());
+					
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
+					sqlUpdateQuery.setParameter("sfidFiltro", direccionToUpdate.getSfid());
+					
+				//1.4- Seteamos los campos a actualizar distintos de String				
+				createddate=direccionToUpdate.getCreateddate();
 				
-				//Seteamos el campo por el que filtramos la actualización
-				
-				sqlUpdateQuery.setParameter("sfidFiltro", direccionToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateDireccion ---" + direccionToUpdate.getSfid());

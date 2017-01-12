@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -695,56 +696,66 @@ public class ContactDAO {
 			ContactVO contactoToUpdate = new ContactVO();
 			try{
 				contactoToUpdate=(ContactVO)object;
+				
+				//1.1-Definimos los parámetros que no sean de tipo String
+				Date birthdate=null;
+				Boolean repeatedcases__c=null;
+				Integer sf4twitter__twitter_follower_count__c=null;
+
+				
+				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE ContactVO SET "
-				+ "name= :name,birthdate= :birthdate,preferredchannelcontact__c= :preferredchannelcontact__c,"
+				+ "name= :name,birthdate="+birthdate+",preferredchannelcontact__c= :preferredchannelcontact__c,"
 				+ "associatedaccounttype__c= :associatedaccounttype__c,motherslastname__c= :motherslastname__c,"
 				+ "identitytype__c= :identitytype__c,secondaryphone__c= :secondaryphone__c,secondaryemail__c= :secondaryemail__c,"
-				+ "sf4twitter__fcbk_username__c= :sf4twitter__fcbk_username__c,repeatedcases__c= :repeatedcases__c,email= :email,"
+				+ "sf4twitter__fcbk_username__c= :sf4twitter__fcbk_username__c,repeatedcases__c="+repeatedcases__c+",email= :email,"
 				+ "identitynumber__c= :identitynumber__c,concatenatecontacaddress__c= :concatenatecontacaddress__c,"
 				+ "sf4twitter__twitter_user_id__c= :sf4twitter__twitter_user_id__c,sf4twitter__fcbk_user_id__c= :sf4twitter__fcbk_user_id__c,"		
 				+ "sf4twitter__twitter_username__c= :sf4twitter__twitter_username__c,contacttype__c= :contacttype__c,phone= :phone,"
 				+ "fatherslastname__c= :fatherslastname__c,sf4twitter__influencer__c= :sf4twitter__influencer__c,"
 				+ "sf4twitter__twitter_bio__c= :sf4twitter__twitter_bio__c,sf4twitter__influencer_type__c= :sf4twitter__influencer_type__c,"
-				+ "sf4twitter__twitter_follower_count__c= :sf4twitter__twitter_follower_count__c,accountid= :accountid,firstname= :firstname,"
+				+ "sf4twitter__twitter_follower_count__c="+sf4twitter__twitter_follower_count__c+",accountid= :accountid,firstname= :firstname,"
 				+ "contactaddress__c= :contactaddress__c"
 
 				+	
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("name", contactoToUpdate.getName());
-				sqlUpdateQuery.setParameter("birthdate", contactoToUpdate.getFechaNacimiento());
-				sqlUpdateQuery.setParameter("preferredchannelcontact__c", contactoToUpdate.getCanalPreferenteContacto());
-				sqlUpdateQuery.setParameter("associatedaccounttype__c", contactoToUpdate.getTipoCuentaAsociado());
-				sqlUpdateQuery.setParameter("motherslastname__c", contactoToUpdate.getApellidoMaterno());
-				sqlUpdateQuery.setParameter("identitytype__c", contactoToUpdate.getTipoIdentidad());
-				sqlUpdateQuery.setParameter("secondaryphone__c", contactoToUpdate.getTelefonoSecundario());
-				sqlUpdateQuery.setParameter("secondaryemail__c", contactoToUpdate.getEmailSecundario());
-				sqlUpdateQuery.setParameter("sf4twitter__fcbk_username__c", contactoToUpdate.getSf4twitterFcbkUsername());
-				sqlUpdateQuery.setParameter("repeatedcases__c", contactoToUpdate.getCasosReiterados());
-				sqlUpdateQuery.setParameter("email", contactoToUpdate.getEmail());
-				sqlUpdateQuery.setParameter("identitynumber__c", contactoToUpdate.getRun());
-				sqlUpdateQuery.setParameter("concatenatecontacaddress__c", contactoToUpdate.getDirContacto());
-				sqlUpdateQuery.setParameter("sf4twitter__twitter_user_id__c", contactoToUpdate.getSf4twitterTwitterUserId());
-				sqlUpdateQuery.setParameter("sf4twitter__fcbk_user_id__c", contactoToUpdate.getSf4twitterFcbkUserId());
-				sqlUpdateQuery.setParameter("sf4twitter__twitter_username__c", contactoToUpdate.getSf4twitterTwitterUsername());
-				sqlUpdateQuery.setParameter("contacttype__c", contactoToUpdate.getTipoContacto());
-				sqlUpdateQuery.setParameter("phone", contactoToUpdate.getPhone());
-				sqlUpdateQuery.setParameter("fatherslastname__c", contactoToUpdate.getApellidoPaterno());
-				sqlUpdateQuery.setParameter("sf4twitter__influencer__c", contactoToUpdate.getInfluencer());
-				sqlUpdateQuery.setParameter("sf4twitter__twitter_bio__c", contactoToUpdate.getTwitterBio());
-				sqlUpdateQuery.setParameter("sf4twitter__influencer_type__c", contactoToUpdate.getInfluencerType());
-				sqlUpdateQuery.setParameter("sf4twitter__twitter_follower_count__c", contactoToUpdate.getSeguidoresTwitter());
-				sqlUpdateQuery.setParameter("accountid", contactoToUpdate.getAccountid());
-				sqlUpdateQuery.setParameter("firstname", contactoToUpdate.getFirstname());
-				sqlUpdateQuery.setParameter("contactaddress__c", contactoToUpdate.getIdDirContacto());
-				
-				//Seteamos el campo por el que filtramos la actualización
-				
-				sqlUpdateQuery.setParameter("sfidFiltro", contactoToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+					//1.3.1-Seteamos el campos que no filtren la query						
+					sqlUpdateQuery.setParameter("name", contactoToUpdate.getName());
+					sqlUpdateQuery.setParameter("preferredchannelcontact__c", contactoToUpdate.getCanalPreferenteContacto());
+					sqlUpdateQuery.setParameter("associatedaccounttype__c", contactoToUpdate.getTipoCuentaAsociado());
+					sqlUpdateQuery.setParameter("motherslastname__c", contactoToUpdate.getApellidoMaterno());
+					sqlUpdateQuery.setParameter("identitytype__c", contactoToUpdate.getTipoIdentidad());
+					sqlUpdateQuery.setParameter("secondaryphone__c", contactoToUpdate.getTelefonoSecundario());
+					sqlUpdateQuery.setParameter("secondaryemail__c", contactoToUpdate.getEmailSecundario());
+					sqlUpdateQuery.setParameter("sf4twitter__fcbk_username__c", contactoToUpdate.getSf4twitterFcbkUsername());
+					sqlUpdateQuery.setParameter("email", contactoToUpdate.getEmail());
+					sqlUpdateQuery.setParameter("identitynumber__c", contactoToUpdate.getRun());
+					sqlUpdateQuery.setParameter("concatenatecontacaddress__c", contactoToUpdate.getDirContacto());
+					sqlUpdateQuery.setParameter("sf4twitter__twitter_user_id__c", contactoToUpdate.getSf4twitterTwitterUserId());
+					sqlUpdateQuery.setParameter("sf4twitter__fcbk_user_id__c", contactoToUpdate.getSf4twitterFcbkUserId());
+					sqlUpdateQuery.setParameter("sf4twitter__twitter_username__c", contactoToUpdate.getSf4twitterTwitterUsername());
+					sqlUpdateQuery.setParameter("contacttype__c", contactoToUpdate.getTipoContacto());
+					sqlUpdateQuery.setParameter("phone", contactoToUpdate.getPhone());
+					sqlUpdateQuery.setParameter("fatherslastname__c", contactoToUpdate.getApellidoPaterno());
+					sqlUpdateQuery.setParameter("sf4twitter__influencer__c", contactoToUpdate.getInfluencer());
+					sqlUpdateQuery.setParameter("sf4twitter__twitter_bio__c", contactoToUpdate.getTwitterBio());
+					sqlUpdateQuery.setParameter("sf4twitter__influencer_type__c", contactoToUpdate.getInfluencerType());
+					sqlUpdateQuery.setParameter("accountid", contactoToUpdate.getAccountid());
+					sqlUpdateQuery.setParameter("firstname", contactoToUpdate.getFirstname());
+					sqlUpdateQuery.setParameter("contactaddress__c", contactoToUpdate.getIdDirContacto());
+					
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
+					sqlUpdateQuery.setParameter("sfidFiltro", contactoToUpdate.getSfid());
+					
+				//1.4- Seteamos los campos a actualizar distintos de String		
+				birthdate=contactoToUpdate.getFechaNacimiento();
+				repeatedcases__c=contactoToUpdate.getCasosReiterados();
+				sf4twitter__twitter_follower_count__c=contactoToUpdate.getSeguidoresTwitter();
+							
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateContacto ---" + contactoToUpdate.getSfid());

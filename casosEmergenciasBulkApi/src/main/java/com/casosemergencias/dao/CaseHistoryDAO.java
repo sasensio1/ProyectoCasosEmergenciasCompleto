@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -259,29 +260,35 @@ public class CaseHistoryDAO {
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			CaseHistoryVO historialCasoToUpdate = new CaseHistoryVO();
+			//1.1-Definimos los parámetros que no sean de tipo String				
+			Date createddate=null;
+			
+			//1.2-Construimos la query							
 			try{
 				historialCasoToUpdate=(CaseHistoryVO)object;
 				Query sqlUpdateQuery =session.createQuery("UPDATE CaseHistoryVO SET "
-				+ "createdbyid= :createdbyid,createddate= :createddate,newvalue= :newvalue,"
+				+ "createdbyid= :createdbyid,createddate="+createddate+",newvalue= :newvalue,"
 				+ "oldvalue= :oldvalue,field= :field,caseid= :caseid"
 				+
 				
 				" WHERE sfid = :sfidFiltro");
 				
-				//Seteamos los campos a actualizar
+				//1.3-Seteamos los campos a actualizar de tipo String	
 				
-				sqlUpdateQuery.setParameter("createdbyid", historialCasoToUpdate.getCreatedbyid());
-				sqlUpdateQuery.setParameter("createddate", historialCasoToUpdate.getCreateddate());
-				sqlUpdateQuery.setParameter("newvalue", historialCasoToUpdate.getNewvalue());
-				sqlUpdateQuery.setParameter("oldvalue", historialCasoToUpdate.getOldvalue());
-				sqlUpdateQuery.setParameter("field", historialCasoToUpdate.getField());
-				sqlUpdateQuery.setParameter("caseid", historialCasoToUpdate.getCaseid());
-
-				//Seteamos el campo por el que filtramos la actualización
-				
-				sqlUpdateQuery.setParameter("sfidFiltro", historialCasoToUpdate.getSfid());
-				
-				//Ejecutamos la actualizacion
+					//1.3.1-Seteamos el campos que no filtren la query						
+					sqlUpdateQuery.setParameter("createdbyid", historialCasoToUpdate.getCreatedbyid());
+					sqlUpdateQuery.setParameter("newvalue", historialCasoToUpdate.getNewvalue());
+					sqlUpdateQuery.setParameter("oldvalue", historialCasoToUpdate.getOldvalue());
+					sqlUpdateQuery.setParameter("field", historialCasoToUpdate.getField());
+					sqlUpdateQuery.setParameter("caseid", historialCasoToUpdate.getCaseid());
+					
+					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
+					sqlUpdateQuery.setParameter("sfidFiltro", historialCasoToUpdate.getSfid());
+					
+				//1.4- Seteamos los campos a actualizar distintos de String				
+				createddate=historialCasoToUpdate.getCreateddate();
+								
+				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateHistorialCaso ---" + historialCasoToUpdate.getSfid());

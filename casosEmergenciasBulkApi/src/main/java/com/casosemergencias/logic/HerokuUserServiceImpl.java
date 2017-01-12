@@ -142,5 +142,18 @@ public class HerokuUserServiceImpl implements HerokuUserService{
 	    }
 	
 	}
+	
+	@Override
+	public void insertHerokuUserSfList(List<Object> herokuUserList) {
+		herokuUserDao.insertHerokuUserListSf(herokuUserList);
+	}
+	@Override
+	public void updateHerokuUserSfList(List<Object> herokuUserList) {
+		herokuUserDao.updateHerokuUserListSf(herokuUserList);
+	}
+	@Override
+	public void deleteHerokuUserSfList(List<Object> herokuUserList) {
+		herokuUserDao.deleteHerokuUserListSf(herokuUserList);
+	}
 
 }
