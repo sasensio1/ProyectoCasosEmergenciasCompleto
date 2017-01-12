@@ -104,4 +104,7 @@ public class ConstantesBulkApi {
 	/** Fragmentos WHERE comunes para todas las entidades. */
 	// TODO: RELLENAR CON LA CONDICION QUE DEBEN CUMPLIR LAS CONSULTAS
 	public static final String ALL_ENTITIES_WHERE_CLAUSE = " WHERE ";
+	public static final String OBJECT_CREATED_DATE_WHERE_CLAUSE = "CreatedDate";
+	public static final String OBJECT_LAST_MODIFIED_DATE_WHERE_CLAUSE = "LastModifiedDate";
+	public static final String OBJECT_IS_DELETED_WHERE_CLAUSE = "IsDeleted";
 }
