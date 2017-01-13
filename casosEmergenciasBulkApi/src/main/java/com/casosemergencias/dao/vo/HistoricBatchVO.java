@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="salesforce.HistoricBatch")
+@Table(name="salesforce.historicbatch")
 public class HistoricBatchVO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -21,10 +21,10 @@ public class HistoricBatchVO implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "sfidJob")
+	@Column(name = "sfid_job")
 	private String sfidJob;
 	
-	@Column(name = "sfidRecord")
+	@Column(name = "sfid_record")
 	private String sfidRecord;
 
 	@Column(name="start_date")

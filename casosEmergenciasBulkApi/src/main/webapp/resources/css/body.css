@@ -658,3 +658,13 @@ font-weight: 800;
 opacity: inherit;
 
 }
+
+/*ESTILOS PARA CAMPOS DE TIPO DATE-TIME*/
+
+.dateTimeInputField{
+	width: 100%;
+    color: #006cb5;	
+	autocomplete:on;
+
+	
+}

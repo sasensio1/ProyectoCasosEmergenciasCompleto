@@ -78,55 +78,110 @@ public class HistoricBatchDAO {
 				
 		try {
 			//DESCOMENTAR Y PROBAR, NO ESTA FUNCIONANDO, PERO LA IDEA ES ADAPTARLO PARA USARLO EN EL DIALOG DE ASOCIAR SUMINISTRO
-			StringBuilder query = new StringBuilder("FROM HistoricBatchVO historicBatch ");
+			StringBuilder query = new StringBuilder("FROM HistoricBatchVO historicbatch ");
 			
 			if (dataTableProperties.getColumsInfo() != null && !dataTableProperties.getColumsInfo().isEmpty()) {
 				query.append(" WHERE ");
+				
+				String startDate =new String();
+				String endDate =new String();
+				String startDateFilter =new String();
+				String endDateFilter =new String();
+
 				for (DataTableColumnInfo columnInfo : dataTableProperties.getColumsInfo()) {
 					if ("object".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER(historicBatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
+							query.append("UPPER(historicbatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							query.append(" AND ");
 							searchParamsCounter++;
 						}
 					}					
 					if ("operation".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER(historicBatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
+							query.append("UPPER(historicbatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							query.append(" AND ");
 							searchParamsCounter++;
 						}
 					}					
-					if ("start_date".equals(columnInfo.getData())) {
-						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER(historicBatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
-							query.append(" AND ");
-							searchParamsCounter++;
-						}
-					}
-					
 					if ("sfidRecord".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER(historicBatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
+							query.append("UPPER(historicbatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							query.append(" AND ");
 							searchParamsCounter++;
 						}
 					}							
 					if ("success".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER(historicBatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
+							query.append(columnInfo.getData()+"="+columnInfo.getSearchValue());
 							query.append(" AND ");
 							searchParamsCounter++;
 						}
 					}
-					if ("end_date".equals(columnInfo.getData())) {
+					if ("errorCause".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER(historicBatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
+							query.append("UPPER(historicbatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							query.append(" AND ");
 							searchParamsCounter++;
+						}
+					}
+					if ("startDate".equals(columnInfo.getData())) {
+						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
+							startDate=columnInfo.getSearchValue();
+						}
+					}
+					if ("endDate".equals(columnInfo.getData())) {
+						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
+							endDate=columnInfo.getSearchValue();
+						}
+					}
+					if ("startDateFilter".equals(columnInfo.getData())) {
+						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
+							startDateFilter=columnInfo.getSearchValue();
+						}
+					}
+					if ("endDateFilter".equals(columnInfo.getData())) {
+						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
+							endDateFilter=columnInfo.getSearchValue();
 						}
 					}
 				}
+				
+				//Seteamos filtrados de fechas a la query								
+				if(startDate!= null && !"".equals(startDate)){
+					if(startDateFilter!= null && !"".equals(startDateFilter)){
+						//Conversion de fecha DATETIME a TIMESTAMP
+						startDate=startDate.replace("T", " ");
+						String dateFilter="";
+						switch (startDateFilter) {
+							case "equal":  dateFilter = "=";break;
+							case "greaterOrEqual":  dateFilter = ">=";break;
+							case "lessOrEqual":  dateFilter = "<=";break;
+							case "greater":  dateFilter = ">";break;
+							case "less":  dateFilter = "<";break;
+						}
+						query.append("start_date"+dateFilter+"'"+startDate+"'");
+						query.append(" AND ");
+						searchParamsCounter=searchParamsCounter+1;
+					}					
+				}
+				
+				if(endDate!= null && !"".equals(endDate)){
+					if(endDateFilter!= null && !"".equals(endDateFilter)){
+						//Conversion de fecha DATETIME a TIMESTAMP
+						endDate=endDate.replace("T", " ");
+						String dateFilter="";
+						switch (endDateFilter) {
+							case "equal":  dateFilter = "=";break;
+							case "greaterOrEqual":  dateFilter = ">=";break;
+							case "lessOrEqual":  dateFilter = "<=";break;
+							case "greater":  dateFilter = ">";break;
+							case "less":  dateFilter = "<";break;
+						}
+						query.append("end_date"+dateFilter+"'"+endDate+"'");
+						query.append(" AND ");
+						searchParamsCounter=searchParamsCounter+1;
+					}					
+				}				
 			}
 			
 			if (searchParamsCounter == 0) {
@@ -136,18 +191,20 @@ public class HistoricBatchDAO {
 			}
 			
 			if (order != null && !"".equals(order) && dirOrder != null && !"".equals(dirOrder)) {
-				if("name".equals(order)){
-					query.append(" ORDER BY  object " + dirOrder + ", operation " + dirOrder);
-				}else{
-					query.append(" ORDER BY " + order + " " + dirOrder);
-				}
+				query.append(" ORDER BY historicbatch." + order + " " + dirOrder);
+			}else{
+				query.append(" ORDER BY historicbatch.object desc" );
+
 			}
 			
 			
+			
 			Query result = session.createQuery(query.toString()).setFirstResult(numStart).setMaxResults(numLength);
+			logger.debug("--- Query de Historicos---" + result.list());
+			
 			List<HistoricBatchVO> historicBatchList = result.list();
 
-			logger.debug("--- Fin -- readHistoricBatchDataTable ---");
+			logger.info("--- Fin -- readHistoricBatchDataTable ---");
 			
 			return historicBatchList;
 	    } catch (HibernateException e) {
@@ -164,12 +221,18 @@ public class HistoricBatchDAO {
 		logger.debug("--- Inicio -- getNumHistoricBatchs ---");
 
 		Session session = sessionFactory.openSession();
+		String startDate =new String();
+		String endDate =new String();
+		String startDateFilter =new String();
+		String endDateFilter =new String();
+
 		int searchParamsCounter = 0;
 
 		try {
-			StringBuilder sqlQuery = new StringBuilder("SELECT COUNT(id) FROM HistoricBatchVO  as historicBatch ");
+			StringBuilder sqlQuery = new StringBuilder("SELECT COUNT(id) FROM HistoricBatchVO  as historicbatch ");
 
 			if (dataTableProperties.getColumsInfo() != null && !dataTableProperties.getColumsInfo().isEmpty()) {
+				sqlQuery.append(" WHERE ");
 				for (DataTableColumnInfo columnInfo : dataTableProperties.getColumsInfo()) {
 					if ("object".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
@@ -186,15 +249,7 @@ public class HistoricBatchDAO {
 							searchParamsCounter++;
 						}
 					}
-					
-					if ("start_date".equals(columnInfo.getData())) {
-						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
-							sqlQuery.append(" AND ");
-							searchParamsCounter++;
-						}
-					}
-					
+										
 					if ("sfidRecord".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
 							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
@@ -210,14 +265,76 @@ public class HistoricBatchDAO {
 							searchParamsCounter++;
 						}
 					}
-					if ("end_date".equals(columnInfo.getData())) {
+					if ("errorCause".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
 							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
 					}
+					if ("startDate".equals(columnInfo.getData())) {
+						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
+							startDate=columnInfo.getSearchValue();
+						}
+					}
+					if ("endDate".equals(columnInfo.getData())) {
+						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
+							endDate=columnInfo.getSearchValue();
+						}
+					}
+					if ("startDateFilter".equals(columnInfo.getData())) {
+						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
+							startDateFilter=columnInfo.getSearchValue();
+						}
+					}
+					if ("endDateFilter".equals(columnInfo.getData())) {
+						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
+							endDateFilter=columnInfo.getSearchValue();
+						}
+					}
 				}
+				//Seteamos filtrados de fechas a la query								
+				if(startDate!= null && !"".equals(startDate)){
+					if(startDateFilter!= null && !"".equals(startDateFilter)){
+						//Conversion de fecha DATETIME a TIMESTAMP
+						startDate=startDate.replace("T", " ");
+						String dateFilter="";
+						switch (startDateFilter) {
+							case "equal":  dateFilter = "=";break;
+							case "greaterOrEqual":  dateFilter = ">=";break;
+							case "lessOrEqual":  dateFilter = "<=";break;
+							case "greater":  dateFilter = ">";break;
+							case "less":  dateFilter = "<";break;
+						}
+						sqlQuery.append("start_date"+dateFilter+"'"+startDate+"'");
+						sqlQuery.append(" AND ");
+						searchParamsCounter=searchParamsCounter+1;
+					}					
+				}
+				
+				if(endDate!= null && !"".equals(endDate)){
+					if(endDateFilter!= null && !"".equals(endDateFilter)){
+						//Conversion de fecha DATETIME a TIMESTAMP
+						endDate=endDate.replace("T", " ");
+						String dateFilter="";
+						switch (endDateFilter) {
+							case "equal":  dateFilter = "=";break;
+							case "greaterOrEqual":  dateFilter = ">=";break;
+							case "lessOrEqual":  dateFilter = "<=";break;
+							case "greater":  dateFilter = ">";break;
+							case "less":  dateFilter = "<";break;
+						}
+						sqlQuery.append("end_date"+dateFilter+"'"+endDate+"'");
+						sqlQuery.append(" AND ");
+						searchParamsCounter=searchParamsCounter+1;
+					}					
+				}	
+			}
+			
+			if (searchParamsCounter == 0) {
+				sqlQuery.setLength(sqlQuery.length() - 7);
+			} else {
+				sqlQuery.setLength(sqlQuery.length() - 5);
 			}
 			
 			Query query = session.createQuery(sqlQuery.toString());
