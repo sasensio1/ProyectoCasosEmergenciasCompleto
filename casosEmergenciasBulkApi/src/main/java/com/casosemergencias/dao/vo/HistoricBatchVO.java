@@ -46,7 +46,7 @@ public class HistoricBatchVO implements Serializable {
 	private Integer processedRecords;
 	
 	@Column(name = "success")
-	private String success;
+	private Boolean success;
 	
 	@Column(name = "error_cause")
 	private String errorCause;
@@ -123,11 +123,11 @@ public class HistoricBatchVO implements Serializable {
 		this.processedRecords = processedRecords;
 	}
 	
-	public String getSuccess() {
+	public Boolean getSuccess() {
 		return success;
 	}
 
-	public void setSuccess(String success) {
+	public void setSuccess(Boolean success) {
 		this.success = success;
 	}
 	
