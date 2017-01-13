@@ -23,6 +23,9 @@ public class HistoricBatchVO implements Serializable {
 	
 	@Column(name = "sfidJob")
 	private String sfidJob;
+	
+	@Column(name = "sfidObject")
+	private String sfidObject;
 
 	@Column(name="start_date")
 	private Date startDate;
@@ -36,12 +39,18 @@ public class HistoricBatchVO implements Serializable {
 	@Column(name = "operation")
 	private String operation;
 	
-	@Column(name = "result")
-	private String result;
+	@Column(name = "total_records")
+	private Integer totalRecords;
 	
-	@Column(name = "num_records")
-	private Integer numRecords;
-
+	@Column(name = "processed_records")
+	private Integer processedRecords;
+	
+	@Column(name = "success")
+	private String success;
+	
+	@Column(name = "error_cause")
+	private String errorCause;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -56,6 +65,14 @@ public class HistoricBatchVO implements Serializable {
 
 	public void setSfidJob(String sfidJob) {
 		this.sfidJob = sfidJob;
+	}
+	
+	public String getSfidObject() {
+		return sfidObject;
+	}
+
+	public void setSfidObject(String sfidObject) {
+		this.sfidObject = sfidObject;
 	}
 
 	public Date getStartDate() {
@@ -89,21 +106,39 @@ public class HistoricBatchVO implements Serializable {
 	public void setOperation(String operation) {
 		this.operation = operation;
 	}
-
-	public String getResult() {
-		return result;
+	
+	public Integer getTotalRecords() {
+		return totalRecords;
 	}
 
-	public void setResult(String result) {
-		this.result = result;
+	public void setTotalRecords(Integer totalRecords) {
+		this.totalRecords = totalRecords;
+	}
+	
+	public Integer getProcessedRecords() {
+		return processedRecords;
 	}
 
-	public Integer getNumRecords() {
-		return numRecords;
+	public void setProcessedRecords(Integer processedRecords) {
+		this.processedRecords = processedRecords;
+	}
+	
+	public String getSuccess() {
+		return success;
 	}
 
-	public void setNumRecords(Integer numRecords) {
-		this.numRecords = numRecords;
+	public void setSuccess(String success) {
+		this.success = success;
 	}
+	
+	public String getErrorCause() {
+		return errorCause;
+	}
+
+	public void setErrorCause(String errorCause) {
+		this.errorCause = errorCause;
+	}
+
+	
 
 }
