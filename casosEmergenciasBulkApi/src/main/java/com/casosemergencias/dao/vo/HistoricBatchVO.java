@@ -24,8 +24,8 @@ public class HistoricBatchVO implements Serializable {
 	@Column(name = "sfidJob")
 	private String sfidJob;
 	
-	@Column(name = "sfidObject")
-	private String sfidObject;
+	@Column(name = "sfidRecord")
+	private String sfidRecord;
 
 	@Column(name="start_date")
 	private Date startDate;
@@ -67,12 +67,12 @@ public class HistoricBatchVO implements Serializable {
 		this.sfidJob = sfidJob;
 	}
 	
-	public String getSfidObject() {
-		return sfidObject;
+	public String getSfidRecord() {
+		return sfidRecord;
 	}
 
-	public void setSfidObject(String sfidObject) {
-		this.sfidObject = sfidObject;
+	public void setSfidRecord(String sfidRecord) {
+		this.sfidRecord = sfidRecord;
 	}
 
 	public Date getStartDate() {
