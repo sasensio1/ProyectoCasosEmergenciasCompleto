@@ -8,7 +8,7 @@ CREATE TABLE HistoricBatch (
 		operation			VARCHAR(255),
 		total_records		INTEGER,
 		processed_records 	INTEGER,
-  		success				VARCHAR(255),
+  		success				BOOLEAN,
 		error_cause			VARCHAR(255),
 
 	PRIMARY KEY (id)
