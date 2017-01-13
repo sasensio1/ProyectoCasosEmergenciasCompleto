@@ -697,10 +697,10 @@ public class ContactDAO {
 			try{
 				contactoToUpdate=(ContactVO)object;
 				
-				//1.1-Definimos los parámetros que no sean de tipo String
-				Date birthdate=null;
-				Boolean repeatedcases__c=null;
-				Integer sf4twitter__twitter_follower_count__c=null;
+				//1.- Seteamos los campos a actualizar distintos de String		
+				Date birthdate=contactoToUpdate.getFechaNacimiento();
+				Boolean repeatedcases__c=contactoToUpdate.getCasosReiterados();
+				Integer sf4twitter__twitter_follower_count__c=contactoToUpdate.getSeguidoresTwitter();
 
 				
 				//1.2-Construimos la query							
@@ -749,12 +749,7 @@ public class ContactDAO {
 					
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
 					sqlUpdateQuery.setParameter("sfidFiltro", contactoToUpdate.getSfid());
-					
-				//1.4- Seteamos los campos a actualizar distintos de String		
-				birthdate=contactoToUpdate.getFechaNacimiento();
-				repeatedcases__c=contactoToUpdate.getCasosReiterados();
-				sf4twitter__twitter_follower_count__c=contactoToUpdate.getSeguidoresTwitter();
-							
+											
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							

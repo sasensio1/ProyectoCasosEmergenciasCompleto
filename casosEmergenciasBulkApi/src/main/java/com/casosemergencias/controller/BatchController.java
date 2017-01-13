@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.casosemergencias.logic.BatchService;
 import com.casosemergencias.model.Caso;
+import com.casosemergencias.model.HistoricBatch;
 import com.casosemergencias.util.constants.Constantes;
 import com.casosemergencias.util.datatables.DataTableParser;
 import com.casosemergencias.util.datatables.DataTableProperties;
@@ -58,6 +59,71 @@ public class BatchController {
 				
 		return model;
 	}
+	
+	/**
+	 * M&eacute;todo invocado por la tabla de homeHistoricBatchsPage. Se recoge del body
+	 * las propiedades de la tabla, le recupera la lista con todos los historicBatchs
+	 * utilizando estas propiedades y se envian a la tabla en formato JSON.
+	 * 
+	 * @param body
+	 *            Informaci&oacute;n de la request.
+	 * @return String Información devuelta de los historicBatchs en formato JSON.
+	 */
+	@RequestMapping(value = "/listarHistoricBatchs", method = RequestMethod.POST)
+	public @ResponseBody String listadoHistoricBatchsHome(@RequestBody String body,HttpServletRequest request){
+		
+		logger.info("--- Inicio -- listadoHistoricBatchsHome ---");
+		
+		// Se limpian los ids de las entidades.
+		cleanSessionEntityIds(request);	
+		
+		DataTableProperties dataTableProperties = DataTableParser.parseBodyToDataTable(body);
+		List<HistoricBatch> listHistoricBatchs = new ArrayList<HistoricBatch>();
+		
+		JSONObject jsonResult;
+		JSONArray jsonArray = new JSONArray();
+		
+		listHistoricBatchs = batchService.readAllHistoricBatch(dataTableProperties);
+		
+		for (HistoricBatch historicBatch : listHistoricBatchs) {
+			jsonResult = new JSONObject();
+			jsonResult.put("objeto", historicBatch.getObject());
+			jsonResult.put("operacion", historicBatch.getOperation());
+			jsonResult.put("comienzoOperacion", historicBatch.getStartDate());
+			jsonResult.put("sfidRegistro", historicBatch.getSfidRecord());
+			jsonResult.put("success", historicBatch.getSuccess());
+			jsonResult.put("causaError", historicBatch.getErrorCause());
+			jsonResult.put("finalOperacion", historicBatch.getEndDate());
+			jsonArray.put(jsonResult);
+		}
+		
+		Integer numHistoricBatchs = batchService.getNumHistoricBatchs(dataTableProperties);
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("iTotalRecords", numHistoricBatchs);  //Numero de registros totales en BBDD
+		jsonObject.put("iTotalDisplayRecords", numHistoricBatchs); //numero de registros totales filtrados en BBDD -- este numero lo utiliza el datatable para calcular el numero de paginas
+		jsonObject.put("data", jsonArray);
+		jsonObject.put("draw", dataTableProperties.getDraw());
+		
+		logger.info("--- Fin -- listadoHistoricBatchsHome ---");
+		
+		return jsonObject.toString();
+	}
+	
+	/**
+	 * Limpia los identificadores de las entidades de la sesi&oacute;n.
+	 * @param request Petici&oacute;n donde limpiar los identificadores.
+	 */
+	private void cleanSessionEntityIds(HttpServletRequest request) {
+		//Limpieza de sfid que arrastramos
+		HttpSession session = request.getSession(true);	
+		session.setAttribute(Constantes.SFID_SUMINISTRO, null);	
+		session.setAttribute(Constantes.SFID_CONTACTO, null);	
+		session.setAttribute(Constantes.SFID_CUENTA, null);	
+		session.setAttribute(Constantes.SFID_DIRECCION, null);
+		session.setAttribute(Constantes.FINAL_DETAIL_PAGE, null);
+	}
+
 	
 	
 	

@@ -260,8 +260,8 @@ public class CaseHistoryDAO {
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			CaseHistoryVO historialCasoToUpdate = new CaseHistoryVO();
-			//1.1-Definimos los parámetros que no sean de tipo String				
-			Date createddate=null;
+			//1.1- Seteamos los campos a actualizar distintos de String				
+			Date createddate=historialCasoToUpdate.getCreateddate();
 			
 			//1.2-Construimos la query							
 			try{
@@ -283,10 +283,7 @@ public class CaseHistoryDAO {
 					sqlUpdateQuery.setParameter("caseid", historialCasoToUpdate.getCaseid());
 					
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
-					sqlUpdateQuery.setParameter("sfidFiltro", historialCasoToUpdate.getSfid());
-					
-				//1.4- Seteamos los campos a actualizar distintos de String				
-				createddate=historialCasoToUpdate.getCreateddate();
+					sqlUpdateQuery.setParameter("sfidFiltro", historialCasoToUpdate.getSfid());					
 								
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();

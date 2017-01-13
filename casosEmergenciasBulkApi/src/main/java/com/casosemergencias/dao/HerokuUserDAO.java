@@ -426,9 +426,10 @@ public class HerokuUserDAO {
 			try{
 				usuarioHerokuToUpdate=(HerokuUserVO)object;
 				
-				//1.1-Definimos los parámetros que no sean de tipo String				
-				Boolean sentmail__c=null;
-				Boolean active__c=null;
+				//1.1- Seteamos los campos a actualizar distintos de String				
+				Boolean	sentmail__c	=usuarioHerokuToUpdate.getEnvioMail();
+				Boolean active__c=usuarioHerokuToUpdate.getActivo();
+						
 				
 				//1.2-Construimos la query			
 				Query sqlUpdateQuery =session.createQuery("UPDATE HerokuUserVO SET "
@@ -452,10 +453,6 @@ public class HerokuUserDAO {
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
 					sqlUpdateQuery.setParameter("sfidFiltro", usuarioHerokuToUpdate.getSfid());
 				
-				//1.4- Seteamos los campos a actualizar distintos de String				
-				sentmail__c	=usuarioHerokuToUpdate.getEnvioMail();
-				active__c=usuarioHerokuToUpdate.getActivo();
-						
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							

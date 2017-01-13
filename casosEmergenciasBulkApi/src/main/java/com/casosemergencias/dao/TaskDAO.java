@@ -157,10 +157,10 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 			try{
 				taskToUpdate=(TaskVO)object;
 				
-				//1.1-Definimos los parámetros que no sean de tipo String		
-				 Date activitydate=null;
-				 Date createddate=null;
-				 
+				//1.1- Seteamos los campos a actualizar distintos de String			
+				Date createddate=taskToUpdate.getCreatedDate();
+				Date activitydate=taskToUpdate.getActivityDate();
+
 				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE TaskVO SET "
 				+ "tasktype__c= :tasktype__c,activitydate="+activitydate+","
@@ -188,10 +188,6 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query								
 					sqlUpdateQuery.setParameter("sfidFiltro", taskToUpdate.getSfid());
 					
-				//1.4- Seteamos los campos a actualizar distintos de String			
-				createddate=taskToUpdate.getCreatedDate();
-				activitydate=taskToUpdate.getActivityDate();
-
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							

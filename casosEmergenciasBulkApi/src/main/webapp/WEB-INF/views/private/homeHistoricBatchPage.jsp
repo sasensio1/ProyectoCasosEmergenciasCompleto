@@ -74,7 +74,7 @@
 					</tr>
 					<tr>
 						<td class="tablaBusquedaEtiquetas">
-							<label for="filtroFinalOperacionHistoricBatch"><s:message code="search_form_input_historicBatch_final_Operacion"/></label>
+							<label for="filtroFinalOperacionHistoricBatch"><s:message code="search_form_input_historicBatch_final_operacion"/></label>
 						</td>
 						<td class="tablaBusquedaTextos">
 							<input type="text" id="filtroFinalOperacionHistoricBatch" name="filtroFinalOperacionHistoricBatch" class="column_filter" value=""  maxlength="50">

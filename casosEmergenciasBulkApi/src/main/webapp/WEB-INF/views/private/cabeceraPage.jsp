@@ -38,6 +38,9 @@
 		<div class="menuListado" onclick="javascript:cambiarLabel('<s:message code="cabeceraPage_list_cuentas"/>');window.location.href='homeCuentas'">
 			<a href="homeCuentas" ><s:message code="cabeceraPage_list_cuentas"/></a>
 		</div>
+		<div class="menuListado" onclick="javascript:cambiarLabel('<s:message code="cabeceraPage_list_historicBatch"/>');window.location.href='homeHistoricBatch'">
+			<a href="homeHistoricBatch" ><s:message code="cabeceraPage_list_historicBatch"/></a>
+		</div>
 	</td>
 	<td id="divBotonDesplegable">			
 		<input type="button" id="botonDesplegable" name="botonDesplegable" style="align:right;">

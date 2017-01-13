@@ -954,12 +954,12 @@ public class SuministroDAO {
 			try{
 				suministroToUpdate=(SuministroVO)object;
 				
-				//1.1-Definimos los parámetros que no sean de tipo String	
-				 Boolean opencases__c=null;
-				 Boolean cuttingdebt__c=null;
-				 Date cutoffdate__c=null;
-				 Boolean paymentprocess__c=null;
-				 Double repeatedcases__c=null;
+				//1.1- Seteamos los campos a actualizar distintos de String				
+				Boolean opencases__c=suministroToUpdate.getCasosAbiertos();
+				Boolean cuttingdebt__c=suministroToUpdate.getCortePorDeuda();
+				Date cutoffdate__c=suministroToUpdate.getFechaCorte();
+				Boolean paymentprocess__c=suministroToUpdate.getPagoEnProceso();
+				Double repeatedcases__c=suministroToUpdate.getCasosReiterados();
 
 				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE SuministroVO SET "
@@ -1013,14 +1013,7 @@ public class SuministroDAO {
 					
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
 					sqlUpdateQuery.setParameter("sfidFiltro", suministroToUpdate.getSfid());
-					
-				//1.4- Seteamos los campos a actualizar distintos de String				
-				opencases__c=suministroToUpdate.getCasosAbiertos();
-				cuttingdebt__c=suministroToUpdate.getCortePorDeuda();
-				cutoffdate__c=suministroToUpdate.getFechaCorte();
-				paymentprocess__c=suministroToUpdate.getPagoEnProceso();
-				repeatedcases__c=suministroToUpdate.getCasosReiterados();
-				
+									
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							

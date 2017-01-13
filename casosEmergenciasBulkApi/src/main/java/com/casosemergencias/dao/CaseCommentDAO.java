@@ -227,10 +227,12 @@ public class CaseCommentDAO {
 			try{
 				comentarioCasoToUpdate=(CaseCommentVO)object;
 				
-				//1.1-Definimos los parámetros que no sean de tipo String
-				Date createddate= null;
-				Boolean ispublished=null;
-				Date lastmodifieddate=null;
+				
+				//1.1- Seteamos los campos a actualizar distintos de String				
+				Date createddate=comentarioCasoToUpdate.getCreateddate();
+				Boolean ispublished=comentarioCasoToUpdate.getIspublished();
+				Date lastmodifieddate=comentarioCasoToUpdate.getLastmodifieddate();
+				
 				
 				//1.2-Construimos la query			
 				Query sqlUpdateQuery =session.createQuery("UPDATE CaseCommentVO SET "
@@ -251,12 +253,7 @@ public class CaseCommentDAO {
 					
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
 					sqlUpdateQuery.setParameter("sfidFiltro", comentarioCasoToUpdate.getSfid());
-				
-				//1.4- Seteamos los campos a actualizar distintos de String				
-				createddate=comentarioCasoToUpdate.getCreateddate();
-				ispublished=comentarioCasoToUpdate.getIspublished();
-				lastmodifieddate=comentarioCasoToUpdate.getLastmodifieddate();
-				
+
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							

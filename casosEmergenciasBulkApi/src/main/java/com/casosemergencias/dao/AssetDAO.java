@@ -172,8 +172,8 @@ public class AssetDAO {
 			try{
 				activoToUpdate=(AssetVO)object;
 				
-				//1.1-Definimos los parámetros que no sean de tipo String				
-				Date createddate= null;
+				//1.1- Seteamos los campos a actualizar distintos de String				
+				Date createddate=activoToUpdate.getCreatedDate();
 				
 				//1.2-Construimos la query						
 				Query sqlUpdateQuery =session.createQuery("UPDATE AssetVO SET "
@@ -191,10 +191,7 @@ public class AssetDAO {
 					sqlUpdateQuery.setParameter("pointofdelivery__c", activoToUpdate.getSuministroid());
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
 					sqlUpdateQuery.setParameter("sfidFiltro", activoToUpdate.getSfid());
-					
-				//1.4- Seteamos los campos a actualizar distintos de String				
-				createddate=activoToUpdate.getCreatedDate();
-								
+													
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
