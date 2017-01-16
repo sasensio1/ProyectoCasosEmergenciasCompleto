@@ -17,8 +17,11 @@ import org.xml.sax.SAXException;
 import com.casosemergencias.batch.bean.BulkApiInfoContainerBatch;
 import com.casosemergencias.batch.util.BatchObjectsMapper;
 import com.casosemergencias.batch.util.BatchObjectsParser;
+import com.casosemergencias.dao.HistoricBatchDAO;
+import com.casosemergencias.dao.vo.HistoricBatchVO;
 import com.casosemergencias.logic.BatchService;
 import com.casosemergencias.util.Utils;
+import com.casosemergencias.util.constants.ConstantesBatch;
 import com.casosemergencias.util.constants.ConstantesBulkApi;
 import com.sforce.async.AsyncApiException;
 import com.sforce.async.BatchInfo;
@@ -37,6 +40,9 @@ import com.sforce.ws.ConnectorConfig;
 public class BulkApiQueriesBatch {
 	@Autowired
 	BatchService batchService;
+	
+	@Autowired
+	HistoricBatchDAO historicBatchDAO;
 	
 	static BulkConnection connection;
 	final static BatchObjectsMapper OBJECTS_MAPPER = new BatchObjectsMapper();
@@ -59,6 +65,9 @@ public class BulkApiQueriesBatch {
 	 *            Ending date to search the updated objects.
 	 */
 	public void getAllBulkApiInfo(Date processStartDate, Date processEndDate) {
+		HistoricBatchVO historico = new HistoricBatchVO();
+		historico.setStartDate(new Date());
+		historico.setOperation(ConstantesBatch.BATCH_MAIN_PROCESS);
 		try {
 			List<BulkApiInfoContainerBatch> containerList = null;
 			if (OBJECTS_MAPPER.getObjectSelectsMap() != null && !OBJECTS_MAPPER.getObjectSelectsMap().isEmpty()) {
@@ -84,8 +93,15 @@ public class BulkApiQueriesBatch {
 			} else {
 				LOGGER.error("No hay datos de objetos a cargar. No se realiza ninguna llamada");
 			}
+			historico.setEndDate(new Date());
+			historico.setSuccess(true);
+			historicBatchDAO.insertHistoric(historico);
 		} catch (Exception exception) {
 			LOGGER.error("Error realizando la carga de datos desde Bulk API: ", exception);
+			historico.setEndDate(new Date());
+			historico.setSuccess(false);
+			historico.setErrorCause(ConstantesBatch.ERROR_BULKAPI_LOAD);
+			historicBatchDAO.insertHistoric(historico);
 		}
 	}
 
@@ -125,6 +141,11 @@ public class BulkApiQueriesBatch {
 			Date endDate) throws AsyncApiException, ParserConfigurationException, SAXException, IOException, InterruptedException {
 		LOGGER.trace("Entrando en getSalesforceObjectsToUpdate. Objeto a comprobar: " + entityName);
 		
+		HistoricBatchVO historicoObjectLoading = new HistoricBatchVO();
+		historicoObjectLoading.setStartDate(new Date());
+		historicoObjectLoading.setOperation(ConstantesBatch.OBJECT_LOADING);
+		historicoObjectLoading.setObject(entityName);
+		
 		BatchObjectsParser objectsParser = new BatchObjectsParser();
 		List<BulkApiInfoContainerBatch> bulkApiContainer = null;
 		BatchInfo info = null;
@@ -136,8 +157,15 @@ public class BulkApiQueriesBatch {
 			job.setConcurrencyMode(ConcurrencyMode.Serial);
 			job.setContentType(ContentType.XML);
 			job = connection.createJob(job);
+			
 			if (job.getId() != null) {
 				job = connection.getJobStatus(job.getId());
+
+				HistoricBatchVO historicoQuery = new HistoricBatchVO();
+				historicoQuery.setStartDate(new Date());
+				historicoQuery.setOperation(ConstantesBatch.API_QUERY);
+				historicoQuery.setObject(entityName);
+				historicoQuery.setSfidJob(job.getId());
 				
 				//TODO: Construir la consulta en base a la select, el objeto (from) y la condicion de fechas (where).
 				// --------------------------------------------------------
@@ -176,9 +204,17 @@ public class BulkApiQueriesBatch {
 				}
 			} else {
 				LOGGER.error("No se ha devuelto Id. de Job. No se pueden obtener los datos del objeto " + entityName);
+				historicoObjectLoading.setEndDate(new Date());
+				historicoObjectLoading.setSuccess(false);
+				historicoObjectLoading.setErrorCause(ConstantesBatch.ERROR_CREATE_JOB);
+				historicBatchDAO.insertHistoric(historicoObjectLoading);
 			}
 		} catch (Exception exception) {
 			LOGGER.error("Error obteniendo los datos del objeto " + entityName, exception);
+			historicoObjectLoading.setEndDate(new Date());
+			historicoObjectLoading.setSuccess(false);
+			historicoObjectLoading.setErrorCause(ConstantesBatch.ERROR_OBJECT_LOADING);
+			historicBatchDAO.insertHistoric(historicoObjectLoading);
 		}
 		return bulkApiContainer;
 	}
