@@ -36,11 +36,15 @@ public class BatchObjectsMapper {
 	private Map<String, String> userMap;
 	private Map<String, String> taskMap;
 	private Map<String, String> objectNamesEquivalenceMap;
+	private Map<String, String> objectNamesServicesMap;
+	private Map<String, String> objectNamesServicesMethodsMap;
 	private LinkedHashMap<String, String> objectSelectsMap;
 	
 	public BatchObjectsMapper() {
 		initObjectSelectsMap();
 		initObjectNamesEquivalenceMap();
+		initObjectNamesServicesMap();
+		initObjectNamesServicesMethodsMap();
 		initAccountMap();
 		initContactMap();
 		initAssetMap();
@@ -325,6 +329,42 @@ public class BatchObjectsMapper {
 		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_USER, "UserVO");
 	}
 	
+	private void initObjectNamesServicesMap() {
+		objectNamesServicesMap = new HashMap<String, String>();
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, "AccountServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_ADDRESS, "DireccionServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_ASSET, "AssetServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, "CaseCommentServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, "CaseHistoryServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_CONTACT, "ContactServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_GROUP, "GroupServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, "HerokuUserServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY, "SuministroServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_REPEATED_CASES, "CasosRetiradosServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_SERVICE_PRODUCT, "RelacionActivoContactoServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_STREET, "StreetServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_TASK, "TaskServiceImpl");
+		objectNamesServicesMap.put(ConstantesBulkApi.ENTITY_USER, "UserServiceImpl");
+	}
+	
+	private void initObjectNamesServicesMethodsMap() {
+		objectNamesServicesMethodsMap = new HashMap<String, String>();
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, "Account");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_ADDRESS, "Direccion");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_ASSET, "Asset");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, "CaseComment");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, "CaseHistory");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_CONTACT, "Contact");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_GROUP, "Group");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, "HerokuUser");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY, "Suministro");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_REPEATED_CASES, "CasosReiterados");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_SERVICE_PRODUCT, "RelacionActivoContacto");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_STREET, "Street");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_TASK, "Task");
+		objectNamesServicesMethodsMap.put(ConstantesBulkApi.ENTITY_USER, "User");
+	}
+	
 	public Map<String, String> getAccountMap() {
 		return accountMap;
 	}
@@ -387,6 +427,14 @@ public class BatchObjectsMapper {
 	
 	public Map<String, String> getObjectNamesEquivalenceMap() {
 		return objectNamesEquivalenceMap;
+	}
+	
+	public Map<String, String> getObjectNamesServicesMap() {
+		return objectNamesServicesMap;
+	}
+	
+	public Map<String, String> getObjectNamesServicesMethodsMap() {
+		return objectNamesServicesMethodsMap;
 	}
 	
 	public Map<String, String> getParamsMap(Object object) {
