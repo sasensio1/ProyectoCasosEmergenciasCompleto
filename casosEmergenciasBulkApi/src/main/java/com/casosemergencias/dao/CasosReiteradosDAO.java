@@ -206,10 +206,10 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 			try{
 				casoReiteradoToUpdate=(CasosReiteradosVO)object;
 				
-				//1.1-Definimos los parámetros que no sean de tipo String				
-				Double numbercases__c=null;
-				Double numberdays__c=null;
-				Date createddate=null;
+				//1.1- Seteamos los campos a actualizar distintos de String				
+				Double	numbercases__c=casoReiteradoToUpdate.getNumCasos();
+				Double	numberdays__c=casoReiteradoToUpdate.getNumDias();
+				Date createddate=casoReiteradoToUpdate.getCreatedDate();
 				
 				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE CasosReiteradosVO SET "
@@ -226,11 +226,6 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query							
 					sqlUpdateQuery.setParameter("sfidFiltro", casoReiteradoToUpdate.getSfid());
 				
-				//1.4- Seteamos los campos a actualizar distintos de String				
-				numbercases__c=casoReiteradoToUpdate.getNumCasos();
-				numberdays__c=casoReiteradoToUpdate.getNumDias();
-				createddate=casoReiteradoToUpdate.getCreatedDate();
-
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							

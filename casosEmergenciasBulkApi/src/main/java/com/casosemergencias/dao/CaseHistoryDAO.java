@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.casosemergencias.dao.vo.CaseHistoryVO;
+import com.casosemergencias.dao.vo.HistoricBatchVO;
+import com.casosemergencias.util.constants.ConstantesBatch;
 
 @Repository
 public class CaseHistoryDAO {
@@ -22,6 +24,9 @@ public class CaseHistoryDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	HistoricBatchDAO historicBatchDAO;
 
 	/**
 	 * Devuelve una lista con todas los CaseHistory de un caseId. No se recuperan los registros que en newvalue tiene longitud 18 y no tienen espacios ni puntos (suponemos que 
@@ -225,23 +230,59 @@ public class CaseHistoryDAO {
 	@Transactional
 	public void insertCaseHistoryListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- insert Listado HistorialCasos ---");
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessInsert = new HistoricBatchVO();
+		historicoProcessInsert.setStartDate(new Date());
+		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
+		historicoProcessInsert.setTotalRecords(objectList.size());
+		historicoProcessInsert.setObject("CASEHISTORY");
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
+			historicoInsertRecord.setObject("CASEHISTORY");
+			
 			CaseHistoryVO historialCasoToInsert = new CaseHistoryVO();
 			try{
 				historialCasoToInsert=(CaseHistoryVO)object;
+				
+				historicoInsertRecord.setSfidRecord(historialCasoToInsert.getSfid());
+				
 				session.save(historialCasoToInsert);
 				tx.commit();
 				logger.debug("--- Fin -- insertHistorialCaso ---" + historialCasoToInsert.getSfid());
+				
+				historicoInsertRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoInsertRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			tx.rollback();
 			logger.error("--- Error en insertHistorialCaso: ---" + historialCasoToInsert.getSfid(), e);
+			historicoInsertRecord.setSuccess(false);
+			historicoInsertRecord.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 			}						
 		}
 		logger.debug("--- Fin -- insert Listado HistorialCasos ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(true);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		} else {
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(false);
+			historicoProcessInsert.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		}
 	}
 	
 
@@ -255,16 +296,32 @@ public class CaseHistoryDAO {
 	@Transactional
 	public void updateCaseHistoryListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- update Listado HistorialCasos ---");
-
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessUpdate = new HistoricBatchVO();
+		historicoProcessUpdate.setStartDate(new Date());
+		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
+		historicoProcessUpdate.setTotalRecords(objectList.size());
+		historicoProcessUpdate.setObject("CASEHISTORY");
+		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
+			historicoUpdateRecord.setObject("CASEHISTORY");
+			
 			CaseHistoryVO historialCasoToUpdate = new CaseHistoryVO();
-			//1.1-Definimos los parámetros que no sean de tipo String				
-			Date createddate=null;
+			//1.1- Seteamos los campos a actualizar distintos de String				
+			Date createddate=historialCasoToUpdate.getCreateddate();
 			
 			//1.2-Construimos la query							
 			try{
 				historialCasoToUpdate=(CaseHistoryVO)object;
+				
+				historicoUpdateRecord.setSfidRecord(historialCasoToUpdate.getSfid());
+				
 				Query sqlUpdateQuery =session.createQuery("UPDATE CaseHistoryVO SET "
 				+ "createdbyid= :createdbyid,createddate="+createddate+",newvalue= :newvalue,"
 				+ "oldvalue= :oldvalue,field= :field,caseid= :caseid"
@@ -282,21 +339,38 @@ public class CaseHistoryDAO {
 					sqlUpdateQuery.setParameter("caseid", historialCasoToUpdate.getCaseid());
 					
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
-					sqlUpdateQuery.setParameter("sfidFiltro", historialCasoToUpdate.getSfid());
-					
-				//1.4- Seteamos los campos a actualizar distintos de String				
-				createddate=historialCasoToUpdate.getCreateddate();
+					sqlUpdateQuery.setParameter("sfidFiltro", historialCasoToUpdate.getSfid());					
 								
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateHistorialCaso ---" + historialCasoToUpdate.getSfid());
+				
+				historicoUpdateRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoUpdateRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en updateHistorialCaso: ---" + historialCasoToUpdate.getSfid(), e);
+			historicoUpdateRecord.setSuccess(false);
+			historicoUpdateRecord.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 			} 						
 		}
 		logger.debug("--- Fin -- update Listado HistorialCasos ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(true);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		} else {
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(false);
+			historicoProcessUpdate.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		}
 
 	}
 		
@@ -310,12 +384,28 @@ public class CaseHistoryDAO {
 	@Transactional
 	public void deleteCaseHistoryListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- delete Listado HistorialCasos ---");
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessDelete = new HistoricBatchVO();
+		historicoProcessDelete.setStartDate(new Date());
+		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
+		historicoProcessDelete.setTotalRecords(objectList.size());
+		historicoProcessDelete.setObject("CASEHISTORY");
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
+			historicoDeleteRecord.setObject("CASEHISTORY");
+			
 			CaseHistoryVO historialCasoToDelete = new CaseHistoryVO();
 			try{
 				historialCasoToDelete=(CaseHistoryVO)object;
+				
+				historicoDeleteRecord.setSfidRecord(historialCasoToDelete.getSfid());
+				
 				Query sqlDeleteQuery =session.createQuery("DELETE CaseHistoryVO  WHERE sfid = :sfidFiltro");
 				
 				//Seteamos el campo por el que filtramos el borrado			
@@ -324,12 +414,32 @@ public class CaseHistoryDAO {
 				sqlDeleteQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- deleteHistorialCaso ---" + historialCasoToDelete.getSfid());
+				
+				historicoDeleteRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoDeleteRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en deleteHistorialCaso: ---" + historialCasoToDelete.getSfid(), e);
+			historicoDeleteRecord.setSuccess(false);
+			historicoDeleteRecord.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 			} 					
 		}
 		logger.debug("--- Fin -- delete Listado HistorialCasos ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(true);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		} else {
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(false);
+			historicoProcessDelete.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		}
 
 	}
 	

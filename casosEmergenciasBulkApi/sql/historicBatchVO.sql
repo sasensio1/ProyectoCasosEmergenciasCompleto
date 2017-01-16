@@ -1,12 +1,16 @@
 CREATE TABLE HistoricBatch (
-	id 			INTEGER NOT NULL,
-	sfidJob 	VARCHAR(255),
-	start_date 	TIMESTAMP,
-	end_date 	TIMESTAMP,
-	object 		VARCHAR(255),
-	operation 	VARCHAR(255),
-	result 		VARCHAR(255),
-	num_records	INTEGER,
+	  	id					INTEGER NOT NULL,
+		sfid_job 			VARCHAR(255),
+		sfid_record			VARCHAR(255),
+		start_date			TIMESTAMP,
+		end_date			TIMESTAMP,
+		object				VARCHAR(255),
+		operation			VARCHAR(255),
+		total_records		INTEGER,
+		processed_records 	INTEGER,
+  		success				BOOLEAN,
+		error_cause			VARCHAR(255),
+
 	PRIMARY KEY (id)
 );
 

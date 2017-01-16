@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.HistoricBatchVO;
 import com.casosemergencias.dao.vo.StreetVO;
+import com.casosemergencias.util.constants.ConstantesBatch;
 
 @Repository
 public class CalleDAO {
@@ -21,6 +23,9 @@ public class CalleDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	HistoricBatchDAO historicBatchDAO;
 	
 	/**
 	 * Inserta una calle en BBDD.
@@ -97,23 +102,59 @@ public class CalleDAO {
 	@Transactional
 	public void insertStreetListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- insert Listado Calles ---");
-
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessInsert = new HistoricBatchVO();
+		historicoProcessInsert.setStartDate(new Date());
+		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
+		historicoProcessInsert.setTotalRecords(objectList.size());
+		historicoProcessInsert.setObject("STREET");
+		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
+			historicoInsertRecord.setObject("STREET");
+			
 			StreetVO calleToInsert = new StreetVO();
 			try{
 				calleToInsert=(StreetVO)object;
+				
+				historicoInsertRecord.setSfidRecord(calleToInsert.getSfid());
+				
 				session.save(calleToInsert);
 				tx.commit();
 				logger.debug("--- Fin -- insertCalle ---" + calleToInsert.getSfid());
+				
+				historicoInsertRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoInsertRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			tx.rollback();
 			logger.error("--- Error en insertCalle: ---" + calleToInsert.getSfid(), e);
+			historicoInsertRecord.setSuccess(false);
+			historicoInsertRecord.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 			}						
 		}
 		logger.debug("--- Fin -- insert Listado Calles ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(true);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		} else {
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(false);
+			historicoProcessInsert.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		}
 	}
 	
 
@@ -127,16 +168,31 @@ public class CalleDAO {
 	@Transactional
 	public void updateStreetListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- update Listado Calles ---");
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessUpdate = new HistoricBatchVO();
+		historicoProcessUpdate.setStartDate(new Date());
+		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
+		historicoProcessUpdate.setTotalRecords(objectList.size());
+		historicoProcessUpdate.setObject("STREET");
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
+			historicoUpdateRecord.setObject("STREET");
+			
 			StreetVO calleToUpdate = new StreetVO();
 			try{
 				calleToUpdate=(StreetVO)object;
 				
-				//1.1-Definimos los parámetros que no sean de tipo String				
-				Date createddate=null;
-				Date lastmodifieddate=null;
+				historicoUpdateRecord.setSfidRecord(calleToUpdate.getSfid());
+				
+				//1.1- Seteamos los campos a actualizar distintos de String	
+				Date createddate=calleToUpdate.getCreatedDate();
+				Date lastmodifieddate=calleToUpdate.getLastModifiedDate();
 
 				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE StreetVO SET "
@@ -173,20 +229,35 @@ public class CalleDAO {
 					//1.3.2-Seteamos el sfid,campo por el que filtramos la query		
 					sqlUpdateQuery.setParameter("sfidFiltro", calleToUpdate.getSfid());
 
-				//1.4- Seteamos los campos a actualizar distintos de String	
-				createddate=calleToUpdate.getCreatedDate();
-				lastmodifieddate=calleToUpdate.getLastModifiedDate();
-
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateCalle ---" + calleToUpdate.getSfid());
+				
+				historicoUpdateRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoUpdateRecord);
+				cont++;
 			} catch (HibernateException e) {
 			logger.error("--- Error en updateCalle: ---" + calleToUpdate.getSfid(), e);
+			historicoUpdateRecord.setSuccess(false);
+			historicoUpdateRecord.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 			} 						
 		}
 		logger.debug("--- Fin -- update Listado Calles ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(true);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		} else {
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(false);
+			historicoProcessUpdate.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		}
 
 	}
 		
@@ -200,12 +271,28 @@ public class CalleDAO {
 	@Transactional
 	public void deleteStreetListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- delete Listado Calles ---");
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessDelete = new HistoricBatchVO();
+		historicoProcessDelete.setStartDate(new Date());
+		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
+		historicoProcessDelete.setTotalRecords(objectList.size());
+		historicoProcessDelete.setObject("STREET");
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
+			historicoDeleteRecord.setObject("STREET");
+			
 			StreetVO calleToDelete = new StreetVO();
 			try{
 				calleToDelete=(StreetVO)object;
+				
+				historicoDeleteRecord.setSfidRecord(calleToDelete.getSfid());
+				
 				Query sqlDeleteQuery =session.createQuery("DELETE StreetVO  WHERE sfid = :sfidFiltro");
 				
 				//Seteamos el campo por el que filtramos el borrado			
@@ -214,12 +301,31 @@ public class CalleDAO {
 				sqlDeleteQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- deleteCalle ---" + calleToDelete.getSfid());
+				
+				historicoDeleteRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoDeleteRecord);
+				cont++;
 			} catch (HibernateException e) {
 			logger.error("--- Error en deleteCalle: ---" + calleToDelete.getSfid(), e);
+			historicoDeleteRecord.setSuccess(false);
+			historicoDeleteRecord.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 			} 					
 		}
 		logger.debug("--- Fin -- delete Listado Calles ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(true);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		} else {
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(false);
+			historicoProcessDelete.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		}
 
 	}
 	
