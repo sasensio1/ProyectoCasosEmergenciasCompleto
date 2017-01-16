@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.CaseCommentVO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
 import com.casosemergencias.util.constants.ConstantesBatch;
@@ -202,7 +201,7 @@ public class CaseCommentDAO {
 		historicoProcessInsert.setStartDate(new Date());
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
-		historicoProcessInsert.setObject("CASECOMMENT");
+		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -210,7 +209,7 @@ public class CaseCommentDAO {
 			
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
-			historicoInsertRecord.setObject("CASECOMMENT");
+			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 			
 			CaseCommentVO comentarioCasoToInsert = new CaseCommentVO();
 			try{
@@ -268,14 +267,14 @@ public class CaseCommentDAO {
 		historicoProcessUpdate.setStartDate(new Date());
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
-		historicoProcessUpdate.setObject("CASECOMMENT");
+		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
-			historicoUpdateRecord.setObject("CASECOMMENT");
+			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 			
 			CaseCommentVO comentarioCasoToUpdate = new CaseCommentVO();
 			try{
@@ -360,14 +359,14 @@ public class CaseCommentDAO {
 		historicoProcessDelete.setStartDate(new Date());
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
-		historicoProcessDelete.setObject("CASECOMMENT");
+		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
-			historicoDeleteRecord.setObject("CASECOMMENT");
+			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 			
 			CaseCommentVO comentarioCasoToDelete = new CaseCommentVO();
 			try{

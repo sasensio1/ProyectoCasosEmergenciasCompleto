@@ -109,7 +109,7 @@ public class CalleDAO {
 		historicoProcessInsert.setStartDate(new Date());
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
-		historicoProcessInsert.setObject("STREET");
+		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_STREET);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -117,7 +117,7 @@ public class CalleDAO {
 			
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
-			historicoInsertRecord.setObject("STREET");
+			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_STREET);
 			
 			StreetVO calleToInsert = new StreetVO();
 			try{
@@ -175,14 +175,14 @@ public class CalleDAO {
 		historicoProcessUpdate.setStartDate(new Date());
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
-		historicoProcessUpdate.setObject("STREET");
+		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_STREET);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
-			historicoUpdateRecord.setObject("STREET");
+			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_STREET);
 			
 			StreetVO calleToUpdate = new StreetVO();
 			try{
@@ -278,14 +278,14 @@ public class CalleDAO {
 		historicoProcessDelete.setStartDate(new Date());
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
-		historicoProcessDelete.setObject("STREET");
+		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_STREET);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
-			historicoDeleteRecord.setObject("STREET");
+			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_STREET);
 			
 			StreetVO calleToDelete = new StreetVO();
 			try{

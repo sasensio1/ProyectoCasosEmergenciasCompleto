@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.casosemergencias.dao.vo.HistoricBatchVO;
-import com.casosemergencias.dao.vo.SuministroVO;
 import com.casosemergencias.util.datatables.DataTableColumnInfo;
 import com.casosemergencias.util.datatables.DataTableProperties;
 
