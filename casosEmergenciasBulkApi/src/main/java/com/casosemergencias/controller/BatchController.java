@@ -42,6 +42,7 @@ public class BatchController {
 		batchService.updateHerokuFieldLabelTable();
 	}
 	
+	
 	/**
 	 * Metodo que recupera una lista con todos los historicos que hay creados en BBDD y los muestra en la pantalla homeHistoricBatchPage.jsp
 	 * 
@@ -123,7 +124,6 @@ public class BatchController {
 		session.setAttribute(Constantes.SFID_DIRECCION, null);
 		session.setAttribute(Constantes.FINAL_DETAIL_PAGE, null);
 	}
-
 	
 	
 	

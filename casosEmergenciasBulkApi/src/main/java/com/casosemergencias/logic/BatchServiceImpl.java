@@ -7,15 +7,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.casosemergencias.batch.BulkApiQueriesBatch;
 import com.casosemergencias.batch.FieldLabelTableCreatorBatch;
 import com.casosemergencias.batch.PicklistTableCreatorBatch;
+import com.casosemergencias.batch.SalesforceSoapBulkApiInvokerBatch;
 import com.casosemergencias.batch.bean.BulkApiInfoContainerBatch;
-import com.casosemergencias.dao.CaseCommentDAO;
 import com.casosemergencias.dao.HistoricBatchDAO;
-import com.casosemergencias.dao.vo.CaseVO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
-import com.casosemergencias.model.Caso;
 import com.casosemergencias.model.HistoricBatch;
 import com.casosemergencias.util.ParserModelVO;
 import com.casosemergencias.util.datatables.DataTableProperties;
@@ -32,12 +29,11 @@ public class BatchServiceImpl implements BatchService {
 	PicklistTableCreatorBatch picklistTableCreatorBatch;
 	
 	@Autowired
-	BulkApiQueriesBatch bulkApiQueriesBatch;
+	SalesforceSoapBulkApiInvokerBatch soapBulkApiInvokerBatch;
 	
 	@Autowired
 	private HistoricBatchDAO historicBatchDao;
-	
-	
+
 	@Override
 	public void updateHerokuPickListTable() {
 		picklistTableCreatorBatch.fillHerokuPicklistTable();
@@ -50,12 +46,13 @@ public class BatchServiceImpl implements BatchService {
 	
 	@Override
 	public void getInfoToUpdateFromBulkApi(Date processStartDate, Date processEndDate) {
-		bulkApiQueriesBatch.getAllBulkApiInfo(processStartDate, processEndDate);
+		soapBulkApiInvokerBatch.getAllBulkApiInfo(processStartDate, processEndDate);
 	}
 
 	@Override
-	public void updateHerokuObjectsFromBulkApi(String objectName, List<BulkApiInfoContainerBatch> bulkApiInfoContainer) {
+	public void updateHerokuObjectsFromBulkApi(String objectName, BulkApiInfoContainerBatch bulkApiInfoContainer) {
 		//TODO: COMPLETAR CON LLAMADAS A LOS DAOS SEGUN EL OBJETO. HABRÁ QUE INYECTAR LOS DAOS QUE SEAN NECESARIOS
+		//TODO: DEVOLVER BOOLEAN CON ESTADO DE PROCESO.
 	}
 	
 	/**
