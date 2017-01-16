@@ -1,34 +1,46 @@
 package com.casosemergencias.batch.bean;
 
 import java.util.List;
+import java.util.Map;
 
 public class BulkApiInfoContainerBatch {
-	/** Paremeters. */
-	public enum OperationType { INSERT, UPDATE, DELETE };
+	/** Parameters. */
 	private OperationType operation;
-	private List<Object> objectList;
-	
-	/** Constructors. */
-	public BulkApiInfoContainerBatch(OperationType operationType, List<Object> objectList) {
-		this.operation = operationType;
-		this.objectList = objectList;
-	}
-	
+	private Map<OperationType, List<Object>> objectsMap;
+	private String entityName;
+	private int totalObjects;
+
 	/** Getters. */
 	public OperationType getOperation() {
 		return operation;
 	}
-	
-	public List<Object> getObjectList() {
-		return objectList;
+
+	public Map<OperationType, List<Object>> getObjectsMap() {
+		return objectsMap;
 	}
-		
+
+	public int getTotalObjects() {
+		return totalObjects;
+	}
+
+	public String getEntityName() {
+		return entityName;
+	}
+
 	/** Setters. */
 	public void setOperation(OperationType operation) {
 		this.operation = operation;
 	}
-	
-	public void setObjectList(List<Object> objectList) {
-		this.objectList = objectList;
+
+	public void setObjectsMap(Map<OperationType, List<Object>> objectsMap) {
+		this.objectsMap = objectsMap;
+	}
+
+	public void setTotalObjects(int totalObjects) {
+		this.totalObjects = totalObjects;
+	}
+
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
 	}
 }

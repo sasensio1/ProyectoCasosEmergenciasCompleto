@@ -22,4 +22,9 @@ public class BatchController {
 	public void fieldLabelHome() {
 		batchService.updateHerokuFieldLabelTable();
 	}
+	
+	/* TODO: Añadir llamadas de quartz. 
+	 * - TODOS LOS OBJETOS CADA DIA, EXCEPTO CASECOMMENT
+	 * - CASECOMMENT CADA 2 HORAS
+	 */
 }

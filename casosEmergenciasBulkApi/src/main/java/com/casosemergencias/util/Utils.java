@@ -2,6 +2,7 @@ package com.casosemergencias.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,6 +40,15 @@ public class Utils {
 		}
 		logger.info("Fecha modificada: " + javaDate);
 		return javaDate;
+	}
+	
+	public static String parseDateToString (Date javaDate) {
+		logger.info("Fecha a modificar: " + javaDate);
+		String dateValue = null;
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss\'Z\'");
+		dateValue = dateFormat.format(javaDate);
+		logger.info("Fecha modificada: " + dateValue);
+		return dateValue;
 	}
 	
 	/**

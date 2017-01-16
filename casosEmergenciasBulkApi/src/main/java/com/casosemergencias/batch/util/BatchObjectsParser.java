@@ -5,20 +5,26 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.casosemergencias.batch.bean.BulkApiInfoContainerBatch;
+import com.casosemergencias.batch.bean.OperationType;
 import com.casosemergencias.util.Utils;
 import com.casosemergencias.util.constants.ConstantesBulkApi;
 
 public class BatchObjectsParser {
 	final static Logger LOGGER = Logger.getLogger(BatchObjectsParser.class);
+	private final static String QUERY_RESULT_NODE = "queryResult";
+	private final static String RECORDS_NODE = "records";
+	private final static String OBJECT_NAME_NODE = "type";
 	private BatchObjectsMapper objectsMapper = null;
 	private Map<String, String> classParamsMap = null;
 	private Object entityObject = null;
@@ -38,103 +44,118 @@ public class BatchObjectsParser {
 	 * @param mapper
 	 *            All the class and parameter names maps from Salesforce Objects
 	 *            to Heroku Objects.
-	 * @return List<BulkApiInfoContainerBatch> Organized objects list.
+	 * @return BulkApiInfoContainerBatch Organized objects.
 	 * @throws Exception
 	 *             Exception thrown if there has been any problem during the
 	 *             populating process.
 	 */
-	public List<BulkApiInfoContainerBatch> populateObjectListFromXmlStream(InputStream batchInputStream, BatchObjectsMapper mapper) throws Exception {
+	public BulkApiInfoContainerBatch populateObjectListFromXmlStream(InputStream batchInputStream, BatchObjectsMapper mapper) throws Exception {
 		LOGGER.trace("Entrando en populateObjectListFromXmlStream para obtener los ");
 		//0. Se inicializan los objetos a utilizar
 		Document xmlDocument = null;
 		paramStringClass[0] = String.class;
 		objectsMapper = mapper;
-		List<BulkApiInfoContainerBatch> objectsContainerList = null;
+		BulkApiInfoContainerBatch containerList = null;
+		Map<OperationType, List<Object>> containerMap = new HashMap<OperationType, List<Object>>();
 		String createdDateString = null;
 		String modifyDateString = null;
 		boolean isDeleted = false;
-				
+		
 		//1. Se transforman los bytes en un objeto DOM
 		LOGGER.info("Se convierten los bytes de la respuesta en un documento XML para su posterior parseo");
 		xmlDocument = Utils.convertInputStreamToXmlDocument(batchInputStream);
 		if (xmlDocument != null) {
-			//2. Se obtiene el objeto a rellenar
-			getNewEntityObjectInfo(xmlDocument);
-			LOGGER.info("Entidad a tratar: " + objectClass.getName());
-		} else {
-			LOGGER.error("No se ha podido obtener la informacion de los objetos porque el documento es nulo");
-		}
-		//3. Se parsea el documento y se rellenan los parametros del objeto
-		NodeList records = xmlDocument.getElementsByTagName("records");
-		if (records != null && records.getLength() > 0) {
-			System.out.println("Encontrados " + records.getLength() + " objetos");
-			//3.1. Se recorren todos los objetos encontrados
-			for (int i = 0; i < records.getLength(); i++) {
-				Node record = records.item(i);
-				if (record.getNodeType() == Node.ELEMENT_NODE) {
-					NodeList recordData = records.item(i).getChildNodes();
-					if (recordData != null && recordData.getLength() > 0) {
-						for (int j = 0; j < recordData.getLength(); j++) {
-							Node recordDataNode = recordData.item(j);
-							String nodeValue = null;
-							String nodeName = recordDataNode.getNodeName();
-							LOGGER.info("Nombre del parametro: " + nodeName);
-							//3.2. Se recupera y se rellena cada parametro del objeto
-							if (!ConstantesBulkApi.OBJECT_CREATED_DATE_WHERE_CLAUSE.equals(nodeName) 
-									&& !ConstantesBulkApi.OBJECT_CREATED_DATE_WHERE_CLAUSE.equals(nodeName) 
-									&& !ConstantesBulkApi.OBJECT_CREATED_DATE_WHERE_CLAUSE.equals(nodeName)) {
-								nodeValue = getParamValue(recordDataNode);
-								setClassParameter(nodeName, nodeValue);
-							} else {
-								switch (nodeName) {
-									/* CreatedDate esta en los beans de VO: Address, CaseComment, CaseHistory, Group, RepeatedCases y Task. */
-									case ConstantesBulkApi.OBJECT_CREATED_DATE_WHERE_CLAUSE:
-										createdDateString = getParamValue(recordDataNode);
-										if (ConstantesBulkApi.ENTITY_ADDRESS.equals(objectName)
-												|| ConstantesBulkApi.ENTITY_CASE_COMMENT.equals(objectName)
-												|| ConstantesBulkApi.ENTITY_CASE_HISTORY.equals(objectName)
-												|| ConstantesBulkApi.ENTITY_GROUP.equals(objectName)
-												|| ConstantesBulkApi.ENTITY_REPEATED_CASES.equals(objectName)
-												|| ConstantesBulkApi.ENTITY_TASK.equals(objectName)) {
-											setClassParameter(nodeName, createdDateString);
+			NodeList queryResult = xmlDocument.getElementsByTagName(QUERY_RESULT_NODE);
+			if (queryResult != null && queryResult.getLength() > 0) {
+				if (queryResult.item(0).hasChildNodes()) {
+					//2. Se obtiene el objeto a rellenar
+					getNewEntityObjectInfo(xmlDocument);
+					LOGGER.info("Entidad a tratar: " + objectClass.getName());
+					//3. Se parsea el documento y se rellenan los parametros del objeto
+					NodeList records = xmlDocument.getElementsByTagName(RECORDS_NODE);
+					if (records != null && records.getLength() > 0) {
+						System.out.println("Encontrados " + records.getLength() + " objetos");
+						//3.1. Se recorren todos los objetos encontrados
+						for (int i = 0; i < records.getLength(); i++) {
+							Node record = records.item(i);
+							if (record.getNodeType() == Node.ELEMENT_NODE) {
+								NodeList recordData = records.item(i).getChildNodes();
+								if (recordData != null && recordData.getLength() > 0) {
+									for (int j = 0; j < recordData.getLength(); j++) {
+										Node recordDataNode = recordData.item(j);
+										String nodeValue = null;
+										String nodeName = recordDataNode.getNodeName();
+										LOGGER.info("Nombre del parametro: " + nodeName);
+										//3.2. Se recupera y se rellena cada parametro del objeto
+										if (!ConstantesBulkApi.OBJECT_CREATED_DATE_WHERE_CLAUSE.equals(nodeName) 
+												&& !ConstantesBulkApi.OBJECT_LAST_MODIFIED_DATE_WHERE_CLAUSE.equals(nodeName) 
+												&& !ConstantesBulkApi.OBJECT_IS_DELETED_WHERE_CLAUSE.equals(nodeName)) {
+											nodeValue = getParamValue(recordDataNode);
+											setClassParameter(nodeName, nodeValue);
+										} else {
+											switch (nodeName) {
+												/* CreatedDate esta en los beans de VO: Address, CaseComment, CaseHistory, Group, RepeatedCases y Task. */
+												case ConstantesBulkApi.OBJECT_CREATED_DATE_WHERE_CLAUSE:
+													createdDateString = getParamValue(recordDataNode);
+													if (ConstantesBulkApi.ENTITY_ADDRESS.equals(objectName)
+															|| ConstantesBulkApi.ENTITY_CASE_COMMENT.equals(objectName)
+															|| ConstantesBulkApi.ENTITY_CASE_HISTORY.equals(objectName)
+															|| ConstantesBulkApi.ENTITY_GROUP.equals(objectName)
+															|| ConstantesBulkApi.ENTITY_REPEATED_CASES.equals(objectName)
+															|| ConstantesBulkApi.ENTITY_TASK.equals(objectName)) {
+														setClassParameter(nodeName, createdDateString);
+													}
+													break;
+												/* LastModifiedDate esta en los beans de VO: CaseComment. */
+												case ConstantesBulkApi.OBJECT_LAST_MODIFIED_DATE_WHERE_CLAUSE:
+													modifyDateString = getParamValue(recordDataNode);
+													if (ConstantesBulkApi.ENTITY_CASE_COMMENT.equals(objectName)) {
+														setClassParameter(nodeName, modifyDateString);
+													}
+													break;
+												/* IsDeleted no esta en ningun bean de VO. */ 
+												case ConstantesBulkApi.OBJECT_IS_DELETED_WHERE_CLAUSE:
+													isDeleted = Boolean.parseBoolean(getParamValue(recordDataNode));
+													break;
+											}
 										}
-										break;
-									/* LastModifiedDate esta en los beans de VO: CaseComment. */
-									case ConstantesBulkApi.OBJECT_LAST_MODIFIED_DATE_WHERE_CLAUSE:
-										modifyDateString = getParamValue(recordDataNode);
-										if (ConstantesBulkApi.ENTITY_CASE_COMMENT.equals(objectName)) {
-											setClassParameter(nodeName, modifyDateString);
-										}
-										break;
-									/* IsDeleted no esta en ningun bean de VO. */ 
-									case ConstantesBulkApi.OBJECT_IS_DELETED_WHERE_CLAUSE:
-										isDeleted = Boolean.parseBoolean(getParamValue(recordDataNode));
-										break;
+									}
+								}
+								/* 
+								 * 3.3. Se guarda el objeto en la lista de acciones que corresponda
+								 * 3.3.1. INSERT: Aquellos registros en los que las fechas de creacion y modificacion coincidan en día y no se hayan marcado como borrados.
+								 * 3.3.2. UPDATE: Aquellos registros en los que la fecha de modificacion sea mayor que la fecha de creacion y no se hayan marcado como borrados
+								 * 3.3.3. DELETE: Aquellos registros en los que la fecha de modificacion sea mayor que la fecha de creacion y se hayan marcado como borrados
+								 */
+								Date createdDate = Utils.parseStringToDate(createdDateString);
+								Date modifyDate = Utils.parseStringToDate(modifyDateString);
+								if (isDeleted) {
+									objectsToDelete.add(entityObject);
+								} else {
+									if (createdDate.equals(modifyDate) || DateUtils.isSameDay(modifyDate, createdDate)) {
+										objectsToInsert.add(entityObject);
+									} else if (modifyDate.after(createdDate)) {
+										objectsToUpdate.add(entityObject);
+									}
 								}
 							}
 						}
 					}
-					/* 
-					 * 3.3. Se guarda el objeto en la lista de acciones que corresponda
-					 * 3.3.1. INSERT: Aquellos registros en los que las fechas de creacion y modificacion coincidan y no se hayan marcado como borrados
-					 * 3.3.2. UPDATE: Aquellos registros en los que la fecha de modificacion sea mayor que la fecha de creacion y no se hayan marcado como borrados
-					 * 3.3.3. DELETE: Aquellos registros en los que la fecha de modificacion sea mayor que la fecha de creacion y se hayan marcado como borrados
-					 */
-					Date createdDate = Utils.parseStringToDate(createdDateString);
-					Date modifyDate = Utils.parseStringToDate(modifyDateString);
-					if (isDeleted) {
-						objectsToDelete.add(entityObject);
-					} else {
-						if (createdDate.equals(modifyDate)) {
-							objectsToInsert.add(entityObject);
-						} else if (modifyDate.after(createdDate)) {
-							objectsToUpdate.add(entityObject);
-						}
-					}
+				} else {
+					LOGGER.info("No se han devuelto registros para el objeto " + objectName);
 				}
+			} else {
+				LOGGER.error("No se ha podido obtener la informacion de los registros porque el documento es nulo");
 			}
+		} else {
+			LOGGER.error("No se ha podido obtener la informacion de los objetos porque el documento es nulo");
 		}
-		return objectsContainerList;
+		containerList = new BulkApiInfoContainerBatch();
+		containerMap.put(OperationType.INSERT, objectsToInsert);
+		containerMap.put(OperationType.UPDATE, objectsToUpdate);
+		containerMap.put(OperationType.DELETE, objectsToDelete);
+		containerList.setObjectsMap(containerMap);
+		return containerList;
 	}
 
 	/**
@@ -150,11 +171,11 @@ public class BatchObjectsParser {
 	 *             Exception thrown if the class cannot be accessed.
 	 */
 	private void getNewEntityObjectInfo(Document xmlDocument) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		if (xmlDocument.getElementsByTagName("type") != null && xmlDocument.getElementsByTagName("type").getLength() > 0) {
+		if (xmlDocument.getElementsByTagName(OBJECT_NAME_NODE) != null && xmlDocument.getElementsByTagName(OBJECT_NAME_NODE).getLength() > 0) {
 			classParamsMap = null;
 			entityObject = null;
 			objectClass = null;
-			Node objectType = xmlDocument.getElementsByTagName("type").item(0);
+			Node objectType = xmlDocument.getElementsByTagName(OBJECT_NAME_NODE).item(0);
 			NodeList objectTypeTextNodes = objectType.getChildNodes();
 			if (objectTypeTextNodes != null && objectTypeTextNodes.getLength() > 0) {
 				for (int nodeCount = 0; nodeCount < objectTypeTextNodes.getLength(); nodeCount++) {
