@@ -87,13 +87,13 @@ public class BatchController {
 		
 		for (HistoricBatch historicBatch : listHistoricBatchs) {
 			jsonResult = new JSONObject();
-			jsonResult.put("objeto", historicBatch.getObject());
-			jsonResult.put("operacion", historicBatch.getOperation());
-			jsonResult.put("comienzoOperacion", historicBatch.getStartDate());
-			jsonResult.put("sfidRegistro", historicBatch.getSfidRecord());
+			jsonResult.put("object", historicBatch.getObject());
+			jsonResult.put("operation", historicBatch.getOperation());
+			jsonResult.put("startDate", historicBatch.getStartDate());
+			jsonResult.put("sfidRecord", historicBatch.getSfidRecord());
 			jsonResult.put("success", historicBatch.getSuccess());
-			jsonResult.put("causaError", historicBatch.getErrorCause());
-			jsonResult.put("finalOperacion", historicBatch.getEndDate());
+			jsonResult.put("errorCause", historicBatch.getErrorCause());
+			jsonResult.put("endDate", historicBatch.getEndDate());
 			jsonArray.put(jsonResult);
 		}
 		

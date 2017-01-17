@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.casosemergencias.dao.vo.CasosReiteradosVO;
+import com.casosemergencias.dao.vo.HistoricBatchVO;
+import com.casosemergencias.util.constants.ConstantesBatch;
 
 @Repository
 public class CasosReiteradosDAO {
@@ -22,6 +24,9 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	HistoricBatchDAO historicBatchDAO;
 	
 	/**
 	 * Devuelve una lista con todas los CaseHistory de BBDD
@@ -170,22 +175,58 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	public void insertCasosReiteradosListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- insert Listado CasoReiterados ---");
 
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessInsert = new HistoricBatchVO();
+		historicoProcessInsert.setStartDate(new Date());
+		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
+		historicoProcessInsert.setTotalRecords(objectList.size());
+		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
+			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+			
 			CasosReiteradosVO casoReiteradoToInsert = new CasosReiteradosVO();
 			try{
 				casoReiteradoToInsert=(CasosReiteradosVO)object;
+				
+				historicoInsertRecord.setSfidRecord(casoReiteradoToInsert.getSfid());
+				
 				session.save(casoReiteradoToInsert);
 				tx.commit();
 				logger.debug("--- Fin -- insertCasoReiterado ---" + casoReiteradoToInsert.getSfid());
+				
+				historicoInsertRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoInsertRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			tx.rollback();
 			logger.error("--- Error en insertCasoReiterado: ---" + casoReiteradoToInsert.getSfid(), e);
+			historicoInsertRecord.setSuccess(false);
+			historicoInsertRecord.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 			}						
 		}
 		logger.debug("--- Fin -- insert Listado CasoReiterados ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(true);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		} else {
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(false);
+			historicoProcessInsert.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		}
 	}
 	
 
@@ -199,12 +240,27 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	@Transactional
 	public void updateCasosReiteradosListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- update Listado CasoReiterados ---");
-
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessUpdate = new HistoricBatchVO();
+		historicoProcessUpdate.setStartDate(new Date());
+		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
+		historicoProcessUpdate.setTotalRecords(objectList.size());
+		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
+			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+			
 			CasosReiteradosVO casoReiteradoToUpdate = new CasosReiteradosVO();
 			try{
 				casoReiteradoToUpdate=(CasosReiteradosVO)object;
+				
+				historicoUpdateRecord.setSfidRecord(casoReiteradoToUpdate.getSfid());
 				
 				//1.1- Seteamos los campos a actualizar distintos de String				
 				Double	numbercases__c=casoReiteradoToUpdate.getNumCasos();
@@ -230,12 +286,32 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateCasoReiterado ---" + casoReiteradoToUpdate.getSfid());
+				
+				historicoUpdateRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoUpdateRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en updateCasoReiterado: ---" + casoReiteradoToUpdate.getSfid(), e);
+			historicoUpdateRecord.setSuccess(false);
+			historicoUpdateRecord.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 			} 						
 		}
 		logger.debug("--- Fin -- update Listado CasoReiterados ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(true);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		} else {
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(false);
+			historicoProcessUpdate.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		}
 
 	}
 		
@@ -249,12 +325,28 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	@Transactional
 	public void deleteCasosReiteradosListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- delete Listado CasoReiterados ---");
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessDelete = new HistoricBatchVO();
+		historicoProcessDelete.setStartDate(new Date());
+		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
+		historicoProcessDelete.setTotalRecords(objectList.size());
+		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
+			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+			
 			CasosReiteradosVO casoReiteradoToDelete = new CasosReiteradosVO();
 			try{
 				casoReiteradoToDelete=(CasosReiteradosVO)object;
+				
+				historicoDeleteRecord.setSfidRecord(casoReiteradoToDelete.getSfid());
+				
 				Query sqlDeleteQuery =session.createQuery("DELETE CasosReiteradosVO  WHERE sfid = :sfidFiltro");
 				
 				//Seteamos el campo por el que filtramos el borrado			
@@ -263,12 +355,32 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 				sqlDeleteQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- deleteCasoReiterado ---" + casoReiteradoToDelete.getSfid());
+				
+				historicoDeleteRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoDeleteRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en deleteCasoReiterado: ---" + casoReiteradoToDelete.getSfid(), e);
+			historicoDeleteRecord.setSuccess(false);
+			historicoDeleteRecord.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 			} 					
 		}
 		logger.debug("--- Fin -- delete Listado CasoReiterados ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(true);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		} else {
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(false);
+			historicoProcessDelete.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		}
 
 	}
 	

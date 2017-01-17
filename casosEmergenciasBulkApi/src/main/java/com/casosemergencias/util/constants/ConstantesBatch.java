@@ -58,4 +58,20 @@ public class ConstantesBatch {
 	public static final String ERROR_INSERT_RECORD = "ERROR_INSERT_RECORD";
 	public static final String ERROR_UPDATE_RECORD = "ERROR_UPDATE_RECORD";
 	public static final String ERROR_DELETE_RECORD = "ERROR_DELETE_RECORD";
+	
+	/** Valores de tipos de OBJETOS para HistoricBatch. */
+	public static final String OBJECT_ACCOUNT = "ACCOUNT";
+	public static final String OBJECT_ASSET = "ASSET";
+	public static final String OBJECT_STREET = "STREET";
+	public static final String OBJECT_CASE_COMMENT = "CASE_COMMENT";
+	public static final String OBJECT_CASE_HISTORY = "CASE_HISTORY";
+	public static final String OBJECT_REPEATED_CASES = "REPEATED_CASES";
+	public static final String OBJECT_CONTACT = "CONTACT";
+	public static final String OBJECT_ADDRESS = "ADDRESS";
+	public static final String OBJECT_GROUP = "GROUP";
+	public static final String OBJECT_HEROKU_USER = "HEROKU_USER";
+	public static final String OBJECT_SERVICE_PRODUCT = "SERVICE_PRODUCT";
+	public static final String OBJECT_POINT_OF_DELIVERY = "POINT_OF_DELIVERY";
+	public static final String OBJECT_TASK = "TASK";
+	public static final String OBJECT_USER = "USER";
 }

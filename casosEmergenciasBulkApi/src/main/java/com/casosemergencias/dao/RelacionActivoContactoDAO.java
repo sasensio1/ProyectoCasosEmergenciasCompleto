@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.HistoricBatchVO;
 import com.casosemergencias.dao.vo.RelacionActivoContactoVO;
+import com.casosemergencias.util.constants.ConstantesBatch;
 
 @Repository
 public class RelacionActivoContactoDAO {
@@ -22,6 +24,9 @@ public class RelacionActivoContactoDAO {
 		
 	@Autowired
 	private  SessionFactory sessionFactory;
+	
+	@Autowired
+	HistoricBatchDAO historicBatchDAO;
 	
 	/**
 	 * Devuelve una lista con todos las RelacionesActivoContacto de BBDD
@@ -155,22 +160,58 @@ public class RelacionActivoContactoDAO {
 	public void insertRelacionActivoContactoListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- insert Listado RelacionActivoContactos ---");
 
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessInsert = new HistoricBatchVO();
+		historicoProcessInsert.setStartDate(new Date());
+		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
+		historicoProcessInsert.setTotalRecords(objectList.size());
+		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_SERVICE_PRODUCT);
+		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
+			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_SERVICE_PRODUCT);
+			
 			RelacionActivoContactoVO relacionActivoContactoToInsert = new RelacionActivoContactoVO();
 			try{
 				relacionActivoContactoToInsert=(RelacionActivoContactoVO)object;
+				
+				historicoInsertRecord.setSfidRecord(relacionActivoContactoToInsert.getSfid());
+				
 				session.save(relacionActivoContactoToInsert);
 				tx.commit();
 				logger.debug("--- Fin -- insertRelacionActivoContacto ---" + relacionActivoContactoToInsert.getSfid());
+				
+				historicoInsertRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoInsertRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			tx.rollback();
 			logger.error("--- Error en insertRelacionActivoContacto: ---" + relacionActivoContactoToInsert.getSfid(), e);
+			historicoInsertRecord.setSuccess(false);
+			historicoInsertRecord.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 			}						
 		}
 		logger.debug("--- Fin -- insert Listado RelacionActivoContactos ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(true);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		} else {
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(false);
+			historicoProcessInsert.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		}
 	}
 	
 
@@ -185,11 +226,26 @@ public class RelacionActivoContactoDAO {
 	public void updateRelacionActivoContactoListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- update Listado RelacionActivoContactos ---");
 
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessUpdate = new HistoricBatchVO();
+		historicoProcessUpdate.setStartDate(new Date());
+		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
+		historicoProcessUpdate.setTotalRecords(objectList.size());
+		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_SERVICE_PRODUCT);
+		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
+			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_SERVICE_PRODUCT);
+			
 			RelacionActivoContactoVO relacionActivoContactoToUpdate = new RelacionActivoContactoVO();
 			try{
 				relacionActivoContactoToUpdate=(RelacionActivoContactoVO)object;
+				
+				historicoUpdateRecord.setSfidRecord(relacionActivoContactoToUpdate.getSfid());
 				
 				//1.1- Seteamos los campos a actualizar distintos de String				
 				Date createddate=relacionActivoContactoToUpdate.getCreatedDate();
@@ -218,12 +274,32 @@ public class RelacionActivoContactoDAO {
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateRelacionActivoContacto ---" + relacionActivoContactoToUpdate.getSfid());
+				
+				historicoUpdateRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoUpdateRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en updateRelacionActivoContacto: ---" + relacionActivoContactoToUpdate.getSfid(), e);
+			historicoUpdateRecord.setSuccess(false);
+			historicoUpdateRecord.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 			} 						
 		}
 		logger.debug("--- Fin -- update Listado RelacionActivoContactos ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(true);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		} else {
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(false);
+			historicoProcessUpdate.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		}
 
 	}
 		
@@ -238,11 +314,27 @@ public class RelacionActivoContactoDAO {
 	public void deleteRelacionActivoContactoListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- delete Listado RelacionActivoContactos ---");
 
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessDelete = new HistoricBatchVO();
+		historicoProcessDelete.setStartDate(new Date());
+		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
+		historicoProcessDelete.setTotalRecords(objectList.size());
+		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_SERVICE_PRODUCT);
+		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
+			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_SERVICE_PRODUCT);
+			
 			RelacionActivoContactoVO relacionActivoContactoToDelete = new RelacionActivoContactoVO();
 			try{
 				relacionActivoContactoToDelete=(RelacionActivoContactoVO)object;
+				
+				historicoDeleteRecord.setSfidRecord(relacionActivoContactoToDelete.getSfid());
+				
 				Query sqlDeleteQuery =session.createQuery("DELETE RelacionActivoContactoVO  WHERE sfid = :sfidFiltro");
 				
 				//Seteamos el campo por el que filtramos el borrado			
@@ -251,12 +343,32 @@ public class RelacionActivoContactoDAO {
 				sqlDeleteQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- deleteRelacionActivoContacto ---" + relacionActivoContactoToDelete.getSfid());
+				
+				historicoDeleteRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoDeleteRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en deleteRelacionActivoContacto: ---" + relacionActivoContactoToDelete.getSfid(), e);
+			historicoDeleteRecord.setSuccess(false);
+			historicoDeleteRecord.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 			} 					
 		}
 		logger.debug("--- Fin -- delete Listado RelacionActivoContactos ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(true);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		} else {
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(false);
+			historicoProcessDelete.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		}
 
 	}
 	

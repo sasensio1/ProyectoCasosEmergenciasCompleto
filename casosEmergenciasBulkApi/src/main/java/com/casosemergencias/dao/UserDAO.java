@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.HistoricBatchVO;
 import com.casosemergencias.dao.vo.UserVO;
+import com.casosemergencias.util.constants.ConstantesBatch;
 
 @Repository
 public class UserDAO {
@@ -21,6 +24,9 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	HistoricBatchDAO historicBatchDAO;
 
 	/**
 	 * Devuelve una lista con todas los User de BBDD
@@ -127,22 +133,58 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 	public void insertUserListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- insert Listado Usuarios ---");
 
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessInsert = new HistoricBatchVO();
+		historicoProcessInsert.setStartDate(new Date());
+		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
+		historicoProcessInsert.setTotalRecords(objectList.size());
+		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_USER);
+		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
+			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_USER);
+			
 			UserVO usuarioToInsert = new UserVO();
 			try{
 				usuarioToInsert=(UserVO)object;
+				
+				historicoInsertRecord.setSfidRecord(usuarioToInsert.getSfid());
+				
 				session.save(usuarioToInsert);
 				tx.commit();
 				logger.debug("--- Fin -- insertUsuario ---" + usuarioToInsert.getSfid());
+				
+				historicoInsertRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoInsertRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			tx.rollback();
 			logger.error("--- Error en insertUsuario: ---" + usuarioToInsert.getSfid(), e);
+			historicoInsertRecord.setSuccess(false);
+			historicoInsertRecord.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 			}						
 		}
 		logger.debug("--- Fin -- insert Listado Usuarios ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(true);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		} else {
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(false);
+			historicoProcessInsert.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		}
 	}
 	
 
@@ -157,11 +199,27 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 	public void updateUserListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- update Listado Usuarios ---");
 
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessUpdate = new HistoricBatchVO();
+		historicoProcessUpdate.setStartDate(new Date());
+		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
+		historicoProcessUpdate.setTotalRecords(objectList.size());
+		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_USER);
+		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
+			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_USER);
+			
 			UserVO usuarioToUpdate = new UserVO();
 			try{
 				usuarioToUpdate=(UserVO)object;
+				
+				historicoUpdateRecord.setSfidRecord(usuarioToUpdate.getSfid());
+				
 				//1.1-Definimos los parámetros que no sean de tipo String				
 				
 				//1.2-Construimos la query							
@@ -185,12 +243,32 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateUsuario ---" + usuarioToUpdate.getSfid());
+				
+				historicoUpdateRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoUpdateRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en updateUsuario: ---" + usuarioToUpdate.getSfid(), e);
+			historicoUpdateRecord.setSuccess(false);
+			historicoUpdateRecord.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 			} 						
 		}
 		logger.debug("--- Fin -- update Listado Usuarios ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(true);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		} else {
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(false);
+			historicoProcessUpdate.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		}
 
 	}
 		
@@ -204,12 +282,28 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 	@Transactional
 	public void deleteUserListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- delete Listado Usuarios ---");
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessDelete = new HistoricBatchVO();
+		historicoProcessDelete.setStartDate(new Date());
+		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
+		historicoProcessDelete.setTotalRecords(objectList.size());
+		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_USER);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
+			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_USER);
+			
 			UserVO usuarioToDelete = new UserVO();
 			try{
 				usuarioToDelete=(UserVO)object;
+				
+				historicoDeleteRecord.setSfidRecord(usuarioToDelete.getSfid());
+				
 				Query sqlDeleteQuery =session.createQuery("DELETE UserVO  WHERE sfid = :sfidFiltro");
 				
 				//Seteamos el campo por el que filtramos el borrado			
@@ -218,12 +312,32 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 				sqlDeleteQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- deleteUsuario ---" + usuarioToDelete.getSfid());
+				
+				historicoDeleteRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoDeleteRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en deleteUsuario: ---" + usuarioToDelete.getSfid(), e);
+			historicoDeleteRecord.setSuccess(false);
+			historicoDeleteRecord.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 			} 					
 		}
 		logger.debug("--- Fin -- delete Listado Usuarios ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(true);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		} else {
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(false);
+			historicoProcessDelete.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		}
 
 	}
 	

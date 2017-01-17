@@ -146,7 +146,7 @@ public class AssetDAO {
 		historicoProcessInsert.setStartDate(new Date());
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
-		historicoProcessInsert.setObject("ASSET");
+		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_ASSET);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -154,7 +154,7 @@ public class AssetDAO {
 			
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
-			historicoInsertRecord.setObject("ASSET");
+			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_ASSET);
 			
 			AssetVO activoToInsert = new AssetVO();
 			try{
@@ -214,14 +214,14 @@ public class AssetDAO {
 		historicoProcessUpdate.setStartDate(new Date());
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
-		historicoProcessUpdate.setObject("ASSET");
+		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_ASSET);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
-			historicoUpdateRecord.setObject("ASSET");
+			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_ASSET);
 			
 			AssetVO activoToUpdate = new AssetVO();
 			try{
@@ -299,14 +299,14 @@ Integer cont = 0;
 		historicoProcessDelete.setStartDate(new Date());
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
-		historicoProcessDelete.setObject("ASSET");
+		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_ASSET);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
-			historicoDeleteRecord.setObject("ASSET");
+			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_ASSET);
 			
 			AssetVO activoToDelete = new AssetVO();
 			try{

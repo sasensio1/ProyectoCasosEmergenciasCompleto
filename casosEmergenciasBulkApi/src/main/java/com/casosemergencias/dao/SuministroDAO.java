@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.casosemergencias.dao.vo.HistoricBatchVO;
 import com.casosemergencias.dao.vo.SuministroVO;
+import com.casosemergencias.util.constants.ConstantesBatch;
 import com.casosemergencias.util.datatables.DataTableColumnInfo;
 import com.casosemergencias.util.datatables.DataTableProperties;
 
@@ -23,6 +25,9 @@ public class SuministroDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	HistoricBatchDAO historicBatchDAO;
 	
 	/**
 	 * Devuelve una lista con todos los Suministro de BBDD
@@ -917,22 +922,58 @@ public class SuministroDAO {
 	public void insertSuministroListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- insert Listado Suministros ---");
 
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessInsert = new HistoricBatchVO();
+		historicoProcessInsert.setStartDate(new Date());
+		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
+		historicoProcessInsert.setTotalRecords(objectList.size());
+		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
+			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+			
 			SuministroVO suministroToInsert = new SuministroVO();
 			try{
 				suministroToInsert=(SuministroVO)object;
+				
+				historicoInsertRecord.setSfidRecord(suministroToInsert.getSfid());
+				
 				session.save(suministroToInsert);
 				tx.commit();
 				logger.debug("--- Fin -- insertSuministro ---" + suministroToInsert.getSfid());
+				
+				historicoInsertRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoInsertRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			tx.rollback();
 			logger.error("--- Error en insertSuministro: ---" + suministroToInsert.getSfid(), e);
+			historicoInsertRecord.setSuccess(false);
+			historicoInsertRecord.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 			}						
 		}
 		logger.debug("--- Fin -- insert Listado Suministros ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(true);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		} else {
+			historicoProcessInsert.setEndDate(new Date());
+			historicoProcessInsert.setSuccess(false);
+			historicoProcessInsert.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+			historicoProcessInsert.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessInsert);
+		}
 	}
 	
 
@@ -946,12 +987,27 @@ public class SuministroDAO {
 	@Transactional
 	public void updateSuministroListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- update Listado Suministros ---");
+		
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessUpdate = new HistoricBatchVO();
+		historicoProcessUpdate.setStartDate(new Date());
+		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
+		historicoProcessUpdate.setTotalRecords(objectList.size());
+		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
+			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+			
 			SuministroVO suministroToUpdate = new SuministroVO();
 			try{
 				suministroToUpdate=(SuministroVO)object;
+				
+				historicoUpdateRecord.setSfidRecord(suministroToUpdate.getSfid());
 				
 				//1.1- Seteamos los campos a actualizar distintos de String				
 				Boolean opencases__c=suministroToUpdate.getCasosAbiertos();
@@ -1017,12 +1073,32 @@ public class SuministroDAO {
 				sqlUpdateQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- updateSuministro ---" + suministroToUpdate.getSfid());
+				
+				historicoUpdateRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoUpdateRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en updateSuministro: ---" + suministroToUpdate.getSfid(), e);
+			historicoUpdateRecord.setSuccess(false);
+			historicoUpdateRecord.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 			} 						
 		}
 		logger.debug("--- Fin -- update Listado Suministros ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(true);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		} else {
+			historicoProcessUpdate.setEndDate(new Date());
+			historicoProcessUpdate.setSuccess(false);
+			historicoProcessUpdate.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicoProcessUpdate.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessUpdate);
+		}
 
 	}
 		
@@ -1037,11 +1113,27 @@ public class SuministroDAO {
 	public void deleteSuministroListSf(List<Object> objectList) {
 		logger.debug("--- Inicio -- delete Listado Suministros ---");
 
+		Integer cont = 0;
+		
+		HistoricBatchVO historicoProcessDelete = new HistoricBatchVO();
+		historicoProcessDelete.setStartDate(new Date());
+		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
+		historicoProcessDelete.setTotalRecords(objectList.size());
+		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
+			
+			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
+			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+			
 			SuministroVO suministroToDelete = new SuministroVO();
 			try{
 				suministroToDelete=(SuministroVO)object;
+				
+				historicoDeleteRecord.setSfidRecord(suministroToDelete.getSfid());
+				
 				Query sqlDeleteQuery =session.createQuery("DELETE SuministroVO  WHERE sfid = :sfidFiltro");
 				
 				//Seteamos el campo por el que filtramos el borrado			
@@ -1050,12 +1142,32 @@ public class SuministroDAO {
 				sqlDeleteQuery.executeUpdate();
 							
 				logger.debug("--- Fin -- deleteSuministro ---" + suministroToDelete.getSfid());
+				
+				historicoDeleteRecord.setSuccess(true);
+				historicBatchDAO.insertHistoric(historicoDeleteRecord);
+				cont++;
+				
 			} catch (HibernateException e) {
 			logger.error("--- Error en deleteSuministro: ---" + suministroToDelete.getSfid(), e);
+			historicoDeleteRecord.setSuccess(false);
+			historicoDeleteRecord.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 			} 					
 		}
 		logger.debug("--- Fin -- delete Listado Suministros ---");
 		session.close();
+		if(cont == objectList.size()){
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(true);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		} else {
+			historicoProcessDelete.setEndDate(new Date());
+			historicoProcessDelete.setSuccess(false);
+			historicoProcessDelete.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+			historicoProcessDelete.setProcessedRecords(cont);
+			historicBatchDAO.insertHistoric(historicoProcessDelete);
+		}
 
 	}
 	

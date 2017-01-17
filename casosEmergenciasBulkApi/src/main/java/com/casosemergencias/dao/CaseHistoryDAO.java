@@ -237,7 +237,7 @@ public class CaseHistoryDAO {
 		historicoProcessInsert.setStartDate(new Date());
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
-		historicoProcessInsert.setObject("CASEHISTORY");
+		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -245,7 +245,7 @@ public class CaseHistoryDAO {
 			
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
-			historicoInsertRecord.setObject("CASEHISTORY");
+			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
 			
 			CaseHistoryVO historialCasoToInsert = new CaseHistoryVO();
 			try{
@@ -303,14 +303,14 @@ public class CaseHistoryDAO {
 		historicoProcessUpdate.setStartDate(new Date());
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
-		historicoProcessUpdate.setObject("CASEHISTORY");
+		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
-			historicoUpdateRecord.setObject("CASEHISTORY");
+			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
 			
 			CaseHistoryVO historialCasoToUpdate = new CaseHistoryVO();
 			//1.1- Seteamos los campos a actualizar distintos de String				
@@ -391,14 +391,14 @@ public class CaseHistoryDAO {
 		historicoProcessDelete.setStartDate(new Date());
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
-		historicoProcessDelete.setObject("CASEHISTORY");
+		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
-			historicoDeleteRecord.setObject("CASEHISTORY");
+			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
 			
 			CaseHistoryVO historialCasoToDelete = new CaseHistoryVO();
 			try{

@@ -24,13 +24,26 @@ $(document).ready(function() {
         	}
        	},
        	"columns": [
-       	            {"data": "objeto", 				"width": "20%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true}, 
-       	            {"data": "operacion", 			"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
-       	            {"data": "comienzoOperacion", 	"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
-       	            {"data": "sfidRegistro", 		"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
-       	            {"data": "success", 			"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
-       	            {"data": "causaError", 			"width": "16%", "defaultContent": "", "searchable": false, 	"orderable": true,	"visible": true},
-       	            {"data": "finalOperacion", 		"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": false,	"visible": true}
+       	            {"data": "object", 				"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true}, 
+       	            {"data": "operation", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
+       	            {"data": "startDate", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
+       	            {"data": "sfidRecord", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
+       	            {"data": "success", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true,     	            
+       	             "render": function (data){
+	       	              if(data){
+	       	            	  return '<input type="checkbox" checked="checked" disabled="true"' + $('<div/>').text(data).html() + '">';
+	       	              }
+	       	              else{
+	       	            	  return '<input type="checkbox" disabled="true"' + $('<div/>').text(data).html() + '">';	
+	       	              }
+       	             }
+       	            },       	            
+       	            {"data": "errorCause", 			"width": "15%", "defaultContent": "", "searchable": false, 	"orderable": true,	"visible": true},
+       	            {"data": "endDate", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
+       	            {"data": "endDateFilter", 		"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": false,	"visible": false},
+       	            {"data": "startDateFilter", 	"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": false,	"visible": false}
+
+
 		],
 		/*"columnDefs": [
                     {"targets": 0,
@@ -52,6 +65,7 @@ $(document).ready(function() {
 	});
 	
 	$('#search').on('click', function() {
+				
 		table
 			.columns(0).search($('#filtroObjetoHistoricBatch').val())
 			.columns(1).search($('#filtroOperacionHistoricBatch').val())
@@ -59,6 +73,8 @@ $(document).ready(function() {
 			.columns(3).search($('#filtroSfidRegistroHistoricBatch').val())
 			.columns(4).search($('#filtroSuccessHistoricBatch').val())
 			.columns(6).search($('#filtroFinalOperacionHistoricBatch').val())
+			.columns(7).search($('#filtroFinalOperacionHistoricBatchPickListFilter').val())
+			.columns(8).search($('#filtroComienzoOperacionHistoricBatchPickListFilter').val())
 			.draw();
 	});
 	
@@ -93,6 +109,16 @@ $(document).ready(function() {
 	        $("#search").get(0).click();
 	    }
 	});
+	$("#filtroFinalOperacionHistoricBatchPickListFilter").on("keyup", function (event) {
+	    if (event.keyCode==13) {
+	        $("#search").get(0).click();
+	    }
+	});
+	$("#filtroComienzoOperacionHistoricBatchPickListFilter").on("keyup", function (event) {
+	    if (event.keyCode==13) {
+	        $("#search").get(0).click();
+	    }
+	});
 });
 
 //Limpieza campos del buscador.
@@ -114,6 +140,12 @@ function limpiarCamposBuscadorHistoricBatchs() {
 	}
 	if (document.getElementById('filtroFinalOperacionHistoricBatch').value != '') {
 		document.getElementById('filtroFinalOperacionHistoricBatch').value = '';
+	}
+	if (document.getElementById('filtroFinalOperacionHistoricBatchPickListFilter').value != '') {
+		document.getElementById('filtroFinalOperacionHistoricBatchPickListFilter').value = '';
+	}
+	if (document.getElementById('filtroComienzoOperacionHistoricBatchPickListFilter').value != '') {
+		document.getElementById('filtroComienzoOperacionHistoricBatchPickListFilter').value = '';
 	}
 }
 
