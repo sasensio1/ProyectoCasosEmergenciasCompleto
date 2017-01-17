@@ -163,6 +163,8 @@
 	<bean id="picklistTableCreatorJob" class="com.casosemergencias.batch.PicklistTableCreatorJob"/>
 	<bean id="soapBulkApiInvokerBatch" class="com.casosemergencias.batch.SalesforceSoapBulkApiInvokerBatch"/>
 	<bean id="restApiInvokerBatch" class="com.casosemergencias.batch.SalesforceRestApiInvokerBatch"/>
+	<bean id="objectsParser" class="com.casosemergencias.batch.util.BatchObjectsParser"/> 
+	<bean id="objectsMapper" class="com.casosemergencias.batch.util.BatchObjectsMapper"/> 
 
 	<mvc:resources mapping="/resources/**" location="/resources/"/> 
 	

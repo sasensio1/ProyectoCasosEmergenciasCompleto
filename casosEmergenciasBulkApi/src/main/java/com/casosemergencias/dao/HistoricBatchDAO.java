@@ -259,7 +259,7 @@ public class HistoricBatchDAO {
 					
 					if ("success".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append(columnInfo.getData()+"="+columnInfo.getSearchValue());
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}

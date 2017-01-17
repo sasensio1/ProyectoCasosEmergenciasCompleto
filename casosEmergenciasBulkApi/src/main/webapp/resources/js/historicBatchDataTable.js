@@ -24,15 +24,24 @@ $(document).ready(function() {
         	}
        	},
        	"columns": [
-       	            {"data": "object", 				"width": "20%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true}, 
-       	            {"data": "operation", 			"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
-       	            {"data": "startDate", 			"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
-       	            {"data": "sfidRecord", 			"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
-       	            {"data": "success", 			"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
-       	            {"data": "errorCause", 			"width": "16%", "defaultContent": "", "searchable": false, 	"orderable": true,	"visible": true},
-       	            {"data": "endDate", 			"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": false,	"visible": true},
-       	            {"data": "endDateFilter", 		"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": false,	"visible": false},
-       	            {"data": "startDateFilter", 	"width": "16%", "defaultContent": "", "searchable": true, 	"orderable": false,	"visible": false}
+       	            {"data": "object", 				"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true}, 
+       	            {"data": "operation", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
+       	            {"data": "startDate", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
+       	            {"data": "sfidRecord", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
+       	            {"data": "success", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true,     	            
+       	             "render": function (data){
+	       	              if(data){
+	       	            	  return '<input type="checkbox" checked="checked" disabled="true"' + $('<div/>').text(data).html() + '">';
+	       	              }
+	       	              else{
+	       	            	  return '<input type="checkbox" disabled="true"' + $('<div/>').text(data).html() + '">';	
+	       	              }
+       	             }
+       	            },       	            
+       	            {"data": "errorCause", 			"width": "15%", "defaultContent": "", "searchable": false, 	"orderable": true,	"visible": true},
+       	            {"data": "endDate", 			"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": true,	"visible": true},
+       	            {"data": "endDateFilter", 		"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": false,	"visible": false},
+       	            {"data": "startDateFilter", 	"width": "15%", "defaultContent": "", "searchable": true, 	"orderable": false,	"visible": false}
 
 
 		],
