@@ -8,6 +8,7 @@ public class ConstantesBulkApi {
 	public static final String BULK_API_AUTH_ENDPOINT_URL = "https://test.salesforce.com/services/Soap/u/";
 	public static final String REST_API_QUERY_ALL_URL = "/services/data/v37.0/queryAll/";
 	public static final String API_VERSION = "37.0";
+	public static final int MAX_SEARCHING_DAYS = 30;
 	
 	/** Constantes de entidades a obtener. */
 	public static final String ENTITY_ACCOUNT = "Account";
@@ -115,6 +116,7 @@ public class ConstantesBulkApi {
 	public static final String ADDRESS_ENTITY_WHERE_CLAUSE = " WHERE StreetMD__r.Country__c = 'CHILE' ";
 	public static final String CASE_COMMENT_ENTITY_WHERE_CLAUSE = " WHERE Parent.Country__c = 'CHILE' ";
 	public static final String CASE_HISTORY_ENTITY_WHERE_CLAUSE = " WHERE Case.Country__c = 'CHILE' ";
+	public static final String TASK_ENTITY_WHERE_CLAUSE = " WHERE What.RecordType.DeveloperName = 'Emergency' ";
 	public static final String WITHOUT_COUNTRY_ENTITIES_WHERE_CLAUSE = " WHERE ";
 	public static final String OBJECT_CREATED_DATE_WHERE_CLAUSE = "CreatedDate";
 	public static final String OBJECT_LAST_MODIFIED_DATE_WHERE_CLAUSE = "LastModifiedDate";

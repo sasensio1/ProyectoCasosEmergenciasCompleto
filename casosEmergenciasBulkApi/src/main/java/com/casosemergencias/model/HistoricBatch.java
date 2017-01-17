@@ -2,9 +2,7 @@ package com.casosemergencias.model;
 
 import java.util.Date;
 
-import com.casosemergencias.controller.views.CaseView;
 import com.casosemergencias.controller.views.HistoricBatchView;
-import com.casosemergencias.dao.vo.CaseVO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
 
 /**

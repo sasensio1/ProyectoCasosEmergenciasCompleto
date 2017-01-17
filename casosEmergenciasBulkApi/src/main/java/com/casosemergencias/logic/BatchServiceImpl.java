@@ -1,6 +1,5 @@
 package com.casosemergencias.logic;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +22,7 @@ import com.casosemergencias.util.datatables.DataTableProperties;
 
 public class BatchServiceImpl implements BatchService {
 	
-	final static Logger logger = Logger.getLogger(CaseService.class);
+	final static Logger LOGGER = Logger.getLogger(CaseService.class);
 
 	@Autowired
 	FieldLabelTableCreatorBatch fieldLabelTableCreatorBatch;
@@ -56,65 +55,65 @@ public class BatchServiceImpl implements BatchService {
 	}
 	
 	@Override
-	public void updateHerokuObjectsFromBulkApi(String objectName, BulkApiInfoContainerBatch bulkApiInfoContainer) {
-		
-		String objectService = batchObjectsMapper.getObjectNamesServicesMap().get(objectName);
-		String objectNameServicesMethods = batchObjectsMapper.getObjectNamesServicesMethodsMap().get(objectName);
-		 
-		if(bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT) != null && !bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT).isEmpty()){
-			Class<?> service;
-			try {
-				service = Class.forName(objectService);
-				String methodName = "insert" + objectNameServicesMethods + "SfList";
-				Method metodo = service.getDeclaredMethod(methodName);
-				
-				metodo.invoke(bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT));
-			
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				logger.error("ERROR updateHerokuObjectsFromBulkApi INSERT");
-			} catch (NoSuchMethodException | SecurityException e) {
-				logger.error("ERROR updateHerokuObjectsFromBulkApi INSERT");
-			} catch (ClassNotFoundException e) {
-				logger.error("ERROR updateHerokuObjectsFromBulkApi INSERT");
+	public void updateHerokuObjectsFromBulkApi(BulkApiInfoContainerBatch bulkApiInfoContainer) {
+		LOGGER.trace("Entrando en updateHerokuObjectsFromBulkApi para actualizar registros");
+		try {
+			if (bulkApiInfoContainer != null && bulkApiInfoContainer.getRecordsMap() != null) {
+				if (bulkApiInfoContainer.getTotalRecords() > 0) {
+					LOGGER.info("Registros a tratar: " + bulkApiInfoContainer.getTotalRecords());
+					String objectService = batchObjectsMapper.getObjectNamesServicesMap().get(bulkApiInfoContainer.getEntityName());
+					String objectNameServicesMethods = batchObjectsMapper.getObjectNamesServicesMethodsMap().get(bulkApiInfoContainer.getEntityName());
+					//Registros a insertar
+					if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.INSERT)
+							&& bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT) != null
+							&& !bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT).isEmpty()) {
+						callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.INSERT, bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT));
+					}
+					//Registros a actualizar
+					if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.UPDATE)
+							&& bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE) != null
+							&& !bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE).isEmpty()) {
+						callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.UPDATE, bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE));
+					}
+					//Registros a eliminar
+					if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.DELETE)
+							&& bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE) != null
+							&& !bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE).isEmpty()) {
+						callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.DELETE, bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE));
+					}
+				} else {
+					LOGGER.error("No hay registros a actualizar");
+				}
+			} else {
+				LOGGER.error("Los datos a actualizar son nulos");
 			}
-			 
+		} catch (Exception exception) {
+			LOGGER.error("Error tratando los registros", exception);
 		}
-		if(bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE) != null && !bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE).isEmpty()){
-			Class<?> service;
-			try {
-				service = Class.forName(objectService);
-				String methodName = "update" + objectNameServicesMethods + "SfList";
-				Method metodo = service.getDeclaredMethod(methodName);
-				
-				metodo.invoke(bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE));
-			
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				logger.error("ERROR updateHerokuObjectsFromBulkApi UPDATE");
-			} catch (NoSuchMethodException | SecurityException e) {
-				logger.error("ERROR updateHerokuObjectsFromBulkApi UPDATE");
-			} catch (ClassNotFoundException e) {
-				logger.error("ERROR updateHerokuObjectsFromBulkApi UPDATE");
-			}
-			 
+	}
+
+	/**
+	 * @param bulkApiInfoContainer
+	 */
+	private void callSpecificServiceByReflection(String objectService, String objectNameServicesMethods, OperationType operation, List<Object> records) throws Exception {
+		LOGGER.trace("Se lanza callSpecificServiceByReflection con operacion --> " + operation);
+		LOGGER.trace("Registros a tratar: " + records.size());
+		Class<?> service = Class.forName(objectService);
+		String insertMethodStartName = "insert";
+		String updateMethodStartName = "update";
+		String deleteMethodStartName = "delete";
+		String methodEndName = "SfList";
+		String methodName = null;
+		switch (operation) {
+			case INSERT:
+				methodName = insertMethodStartName + objectNameServicesMethods + methodEndName;
+			case UPDATE:
+				methodName = updateMethodStartName + objectNameServicesMethods + methodEndName;
+			case DELETE:
+				methodName = deleteMethodStartName + objectNameServicesMethods + methodEndName;
 		}
-		if(bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE) != null && !bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE).isEmpty()){
-			Class<?> service;
-			try {
-				service = Class.forName(objectService);
-				String methodName = "delete" + objectNameServicesMethods + "SfList";
-				Method metodo = service.getDeclaredMethod(methodName);
-				
-				metodo.invoke(bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE));
-			
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				logger.error("ERROR updateHerokuObjectsFromBulkApi DELETE");
-			} catch (NoSuchMethodException | SecurityException e) {
-				logger.error("ERROR updateHerokuObjectsFromBulkApi DELETE");
-			} catch (ClassNotFoundException e) {
-				logger.error("ERROR updateHerokuObjectsFromBulkApi DELETE");
-			}
-			 
-		}
+		Method metodo = service.getDeclaredMethod(methodName);
+		metodo.invoke(records);
 	}
 	
 	/**
@@ -125,12 +124,12 @@ public class BatchServiceImpl implements BatchService {
 	@Override
 	public List<HistoricBatch> readAllHistoricBatch(DataTableProperties propDatatable) {
 		
-		logger.debug("--- Inicio -- readAllHistoricBatch ---");
+		LOGGER.debug("--- Inicio -- readAllHistoricBatch ---");
 		
 		List<HistoricBatch> listHistoricBatch = new ArrayList<>();
 		List<HistoricBatchVO> listHistoricBatchsVO = historicBatchDao.readHistoricBatchDataTable(propDatatable);
 
-		logger.debug("--- Inicio -- readAllHistoricBatch historicBatchs en la lista: " + listHistoricBatchsVO.size() + " ---");
+		LOGGER.debug("--- Inicio -- readAllHistoricBatch historicBatchs en la lista: " + listHistoricBatchsVO.size() + " ---");
 		
 		for (HistoricBatchVO historicBatchVO : listHistoricBatchsVO) {
 			HistoricBatch historicBatch = new HistoricBatch();
@@ -138,12 +137,12 @@ public class BatchServiceImpl implements BatchService {
 			listHistoricBatch.add(historicBatch);
 		}
 		
-		logger.debug("--- Fin -- readAllHistoricBatch ---");
+		LOGGER.debug("--- Fin -- readAllHistoricBatch ---");
 		return listHistoricBatch;
 	}
 	
 	public Integer getNumHistoricBatchs(DataTableProperties propDatatable){
-		logger.debug("--- getNumCasos ---");
+		LOGGER.debug("--- getNumCasos ---");
 		return historicBatchDao.getNumHistoricBatchs(propDatatable);
 	}
 	

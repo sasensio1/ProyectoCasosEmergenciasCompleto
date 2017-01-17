@@ -77,7 +77,7 @@ public class SalesforceSoapBulkApiInvokerBatch {
 					//4. Se envia el objeto al DAO para tratar la lista
 					if (containerList != null) {
 						if (containerList.getTotalRecords() > 0) {
-							batchService.updateHerokuObjectsFromBulkApi(object.getKey(), containerList);
+							batchService.updateHerokuObjectsFromBulkApi(containerList);
 						} else {
 							LOGGER.info("No hay registros que actualizar para el objeto '" + object.getKey() + "'");
 						}

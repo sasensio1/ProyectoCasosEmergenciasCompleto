@@ -157,15 +157,20 @@
 	
 	<!-- Batches y utilidades de SalesForce -->
 	<bean id="salesforceLoginChecker" class="com.casosemergencias.logic.sf.util.SalesforceLoginChecker"/>
-	<bean id="fieldLabelTableCreatorBatch" class="com.casosemergencias.batch.FieldLabelTableCreatorBatch"/>
-	<bean id="picklistTableCreatorBatch" class="com.casosemergencias.batch.PicklistTableCreatorBatch"/>
-	<bean id="fieldLabelTableCreatorJob" class="com.casosemergencias.batch.FieldLabelTableCreatorJob"/>
-	<bean id="picklistTableCreatorJob" class="com.casosemergencias.batch.PicklistTableCreatorJob"/>
-	<bean id="soapBulkApiInvokerBatch" class="com.casosemergencias.batch.SalesforceSoapBulkApiInvokerBatch"/>
-	<bean id="restApiInvokerBatch" class="com.casosemergencias.batch.SalesforceRestApiInvokerBatch"/>
 	<bean id="objectsParser" class="com.casosemergencias.batch.util.BatchObjectsParser"/> 
 	<bean id="objectsMapper" class="com.casosemergencias.batch.util.BatchObjectsMapper"/> 
-
+	
+	<bean id="fieldLabelTableCreatorBatch" class="com.casosemergencias.batch.FieldLabelTableCreatorBatch"/>
+	<bean id="picklistTableCreatorBatch" class="com.casosemergencias.batch.PicklistTableCreatorBatch"/>
+	<bean id="soapBulkApiInvokerBatch" class="com.casosemergencias.batch.SalesforceSoapBulkApiInvokerBatch"/>
+	<bean id="restApiInvokerBatch" class="com.casosemergencias.batch.SalesforceRestApiInvokerBatch"/>
+	<bean id="caseCommentUpdaterBatch" class="com.casosemergencias.batch.CaseCommentUpdaterBatch"/>
+	
+	<bean id="fieldLabelTableCreatorJob" class="com.casosemergencias.batch.FieldLabelTableCreatorJob"/>
+	<bean id="picklistTableCreatorJob" class="com.casosemergencias.batch.PicklistTableCreatorJob"/>
+	<bean id="salesforceApiInvokerJob" class="com.casosemergencias.batch.SalesforceApiInvokerJob"/>
+	<bean id="caseCommentUpdaterJob" class="com.casosemergencias.batch.CaseCommentUpdaterJob"/>
+	
 	<mvc:resources mapping="/resources/**" location="/resources/"/> 
 	
 	<!-- >>>>>>>>>>>>>>>>>> CONFIGURACIÓN DE TAREAS QUARTZ >>>>>>>>>>>>>>>>>> -->
@@ -180,6 +185,18 @@
         <property name="targetObject" ref="fieldLabelTableCreatorBatch" />
         <property name="targetMethod" value="fillHerokuFieldLabelTable" />
     </bean>
+    
+    <!-- Job de Quartz para la actualizacion de registros desde el API de Salesforce -->
+    <bean id="apiInvokerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="restApiInvokerBatch" />
+        <property name="targetMethod" value="getBulkApiRecordsInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de comentarios de casos -->
+    <bean id="caseCommentJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="caseCommentUpdaterBatch" />
+        <property name="targetMethod" value="getCaseCommentRecordsInfo" />
+    </bean>
  
     <!-- Trigger de Quartz para el rellenado de la tabla Picklists -->
     <bean id="picklistsTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -192,6 +209,18 @@
         <property name="jobDetail" ref="fieldlabelJob" />
         <property name="cronExpression" value="0 0 12 ? * *" />
     </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de registros desde el API de Salesforce -->
+    <bean id="apiInvokerTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="apiInvokerJob" />
+        <property name="cronExpression" value="0 0 12 ? * *" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de comentarios de casos -->
+    <bean id="caseCommentTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="caseCommentJob" />
+        <property name="cronExpression" value="0 */2 * * *" />
+    </bean>
   
     <!-- Scheduler de Quartz para rellenar las tablas de picklists y fieldLabels -->
     <bean id="batchProcessesCreatorScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -199,12 +228,16 @@
             <list>
                 <ref bean="picklistsJob" />
                 <ref bean="fieldlabelJob" />
+                <ref bean="apiInvokerJob" />
+                <ref bean="caseCommentJob" />
             </list>
         </property>
         <property name="triggers">
             <list>
                 <ref bean="picklistsTrigger" />
                 <ref bean="fieldlabelTrigger" />
+                <ref bean="apiInvokerTrigger" />
+                <ref bean="caseCommentTrigger" />
             </list>
         </property>
     </bean>
