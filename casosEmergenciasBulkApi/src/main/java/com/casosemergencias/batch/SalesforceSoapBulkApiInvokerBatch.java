@@ -39,6 +39,9 @@ public class SalesforceSoapBulkApiInvokerBatch {
 	@Autowired
 	HistoricBatchDAO historicBatchDao;
 	
+	@Autowired
+	BatchObjectsParser objectsParser;
+	
 	static BulkConnection connection;
 	final static BatchObjectsMapper OBJECTS_MAPPER = new BatchObjectsMapper();
 	final static Logger LOGGER = Logger.getLogger(SalesforceSoapBulkApiInvokerBatch.class);
@@ -73,7 +76,7 @@ public class SalesforceSoapBulkApiInvokerBatch {
 					
 					//4. Se envia el objeto al DAO para tratar la lista
 					if (containerList != null) {
-						if (containerList.getTotalObjects() > 0) {
+						if (containerList.getTotalRecords() > 0) {
 							batchService.updateHerokuObjectsFromBulkApi(object.getKey(), containerList);
 						} else {
 							LOGGER.info("No hay registros que actualizar para el objeto '" + object.getKey() + "'");
@@ -98,7 +101,7 @@ public class SalesforceSoapBulkApiInvokerBatch {
 	 * @throws AsyncApiException
 	 *             If there is any problem with the API synchronization.
 	 */
-	private void salesforceBulkApiLogin() throws ConnectionException, AsyncApiException {
+	private void salesforceBulkApiLogin() throws Exception {
 		LOGGER.trace("Entrando en salesforceBulkApiLogin para realizar la conexion con Bulk API");
 		ConnectorConfig partnerConfig = new ConnectorConfig();
 		partnerConfig.setUsername(ConstantesBulkApi.BULK_API_LOGIN_USER);
@@ -141,18 +144,13 @@ public class SalesforceSoapBulkApiInvokerBatch {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public BulkApiInfoContainerBatch getSalesforceObjectsToUpdate(String entityName, String selectQueryFragment, Date startDate, Date endDate, JobInfo job) 
-			throws AsyncApiException, ParserConfigurationException, SAXException, IOException, InterruptedException {
+	public BulkApiInfoContainerBatch getSalesforceObjectsToUpdate(String entityName, String selectQueryFragment, Date startDate, Date endDate, JobInfo job) throws Exception {
 		LOGGER.trace("Entrando en getSalesforceObjectsToUpdate. Objeto a tratar: " + entityName);
-		
-		BatchObjectsParser objectsParser = new BatchObjectsParser();
 		BulkApiInfoContainerBatch bulkApiContainer = null;
 		BatchInfo info = null;
 		String[] queryResults = null;
-		
 		try {
 			job.setObject(entityName);
-			
 			job = connection.createJob(job);
 			if (job.getId() != null) {
 				job = connection.getJobStatus(job.getId());

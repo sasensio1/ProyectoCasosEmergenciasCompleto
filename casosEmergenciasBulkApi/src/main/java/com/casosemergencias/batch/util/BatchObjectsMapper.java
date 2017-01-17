@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import com.casosemergencias.dao.vo.AccountVO;
 import com.casosemergencias.dao.vo.AssetVO;
 import com.casosemergencias.dao.vo.CaseCommentVO;
@@ -20,6 +22,7 @@ import com.casosemergencias.dao.vo.TaskVO;
 import com.casosemergencias.dao.vo.UserVO;
 import com.casosemergencias.util.constants.ConstantesBulkApi;
 
+@Resource
 public class BatchObjectsMapper {
 	private Map<String, String> accountMap;
 	private Map<String, String> contactMap;
@@ -144,7 +147,7 @@ public class BatchObjectsMapper {
 		caseCommentMap.put("IsPublished", "IspublishedString");
 		caseCommentMap.put("ParentId", "Caseid");
 		caseCommentMap.put("CommentBody", "Comment");
-		caseCommentMap.put("LastModifiedDate", "Lastmodifieddate");
+		caseCommentMap.put("LastModifiedDate", "LastmodifieddateString");
 		caseCommentMap.put("LastModifiedById", "Lastmodifiedbyid");
 		/* ---- NO EXISTEN EN SALESFORCE ---- */
 		//caseCommentMap.put("Name", "Name");
@@ -271,7 +274,7 @@ public class BatchObjectsMapper {
 	
 	private void initTaskMap() {
 		taskMap = new HashMap<String, String>();
-		taskMap.put("id", "Sfid");
+		taskMap.put("Id", "Sfid");
 		taskMap.put("TaskType__c", "TaskType");
 		taskMap.put("ActivityDate", "ActivityDateString");
 		taskMap.put("CallDisposition", "CallDisposition");

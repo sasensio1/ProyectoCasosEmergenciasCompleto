@@ -5,42 +5,33 @@ import java.util.Map;
 
 public class BulkApiInfoContainerBatch {
 	/** Parameters. */
-	private OperationType operation;
-	private Map<OperationType, List<Object>> objectsMap;
 	private String entityName;
-	private int totalObjects;
+	private int totalRecords;
+	private Map<OperationType, List<Object>> recordsMap;
 
 	/** Getters. */
-	public OperationType getOperation() {
-		return operation;
-	}
-
-	public Map<OperationType, List<Object>> getObjectsMap() {
-		return objectsMap;
-	}
-
-	public int getTotalObjects() {
-		return totalObjects;
-	}
-
 	public String getEntityName() {
 		return entityName;
 	}
 
+	public int getTotalRecords() {
+		return totalRecords;
+	}
+
+	public Map<OperationType, List<Object>> getRecordsMap() {
+		return recordsMap;
+	}
+
 	/** Setters. */
-	public void setOperation(OperationType operation) {
-		this.operation = operation;
-	}
-
-	public void setObjectsMap(Map<OperationType, List<Object>> objectsMap) {
-		this.objectsMap = objectsMap;
-	}
-
-	public void setTotalObjects(int totalObjects) {
-		this.totalObjects = totalObjects;
-	}
-
 	public void setEntityName(String entityName) {
 		this.entityName = entityName;
+	}
+
+	public void setTotalRecords(int totalRecords) {
+		this.totalRecords = totalRecords;
+	}
+
+	public void setRecordsMap(Map<OperationType, List<Object>> recordsMap) {
+		this.recordsMap = recordsMap;
 	}
 }

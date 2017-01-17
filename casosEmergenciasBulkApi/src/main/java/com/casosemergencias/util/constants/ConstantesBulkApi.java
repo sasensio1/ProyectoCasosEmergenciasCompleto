@@ -6,6 +6,7 @@ public class ConstantesBulkApi {
 	public static final String BULK_API_LOGIN_PASS = "Del*Alvaro17";
 	public static final String BULK_API_LOGIN_TOKEN = "cXAEzrNLD2ZCoOqTfWpez0oP";
 	public static final String BULK_API_AUTH_ENDPOINT_URL = "https://test.salesforce.com/services/Soap/u/";
+	public static final String REST_API_QUERY_ALL_URL = "/services/data/v37.0/queryAll/";
 	public static final String API_VERSION = "37.0";
 	
 	/** Constantes de entidades a obtener. */
@@ -23,6 +24,14 @@ public class ConstantesBulkApi {
 	public static final String ENTITY_STREET = "Street__c";
 	public static final String ENTITY_TASK = "Task";
 	public static final String ENTITY_USER = "User";
+	
+	/** Constantes de nodos de respuestas XML y JSON. */
+	public final static String QUERY_RESULT_NODE = "queryResult";
+	public final static String RECORDS_NODE = "records";
+	public final static String OBJECT_NAME_NODE = "type";
+	public final static String RECORD_ATTRIBUTES_NAME_NODE = "attributes";
+	public final static String TOTAL_SIZE_NODE = "totalSize";
+	public final static String RESULT_STATUS_NODE = "done";
 	
 	/** Constantes para la construccion de consultas de cada entidad. */
 	/** Fragmentos SELECT de cada entidad. */
@@ -44,7 +53,7 @@ public class ConstantesBulkApi {
 															   + ", CreatedDate, LastModifiedDate, IsDeleted";
 	
 	public static final String ENTITY_CASE_HISTORY_SELECT = "SELECT Id, CreatedById, NewValue, OldValue, Field, CaseId"
-															   + ", CreatedDate, LastModifiedDate, IsDeleted";
+															   + ", CreatedDate, IsDeleted";
 	
 	public static final String ENTITY_CONTACT_SELECT = "SELECT Id, Name, Birthdate, PreferredChannelContact__c"
 														  + ", AssociatedAccountType__c, MothersLastName__c, IdentityType__c, SecondaryPhone__c"
@@ -57,7 +66,7 @@ public class ConstantesBulkApi {
 														  + ", CreatedDate, LastModifiedDate, IsDeleted";
 	
 	public static final String ENTITY_GROUP_SELECT = "SELECT Id, Name"
-														+ ", CreatedDate, LastModifiedDate, IsDeleted";
+														+ ", CreatedDate, LastModifiedDate";
 	
 	public static final String ENTITY_HEROKU_USER_SELECT = "SELECT Id, Name, Username__c, Password__c"
 															  + ", Mail__c, SentMail__c, Active__c, Country__c, Unity__c"
@@ -90,19 +99,23 @@ public class ConstantesBulkApi {
 														 + ", OwnerId, Country__c, Company__c"
 														 + ", CreatedDate, LastModifiedDate, IsDeleted";
 	
-	public static final String ENTITY_TASK_SELECT = "SELECT Id, name, TaskType__c, ActivityDate, CallDisposition"
+	public static final String ENTITY_TASK_SELECT = "SELECT Id, TaskType__c, ActivityDate, CallDisposition"
 													   + ", CasePhone__c, Status, Description, Subject, Priority"
 													   + ", WhoId, AccountId, OwnerId, TaskSubtype"
 													   + ", CreatedDate, LastModifiedDate, IsDeleted";
 	
 	public static final String ENTITY_USER_SELECT = "SELECT Id, Name"
-													   + ", CreatedDate, LastModifiedDate, IsDeleted";
+													   + ", CreatedDate, LastModifiedDate";
 
 	/** Fragmento FROM, comun para todas las entidades. */
 	public static final String ALL_ENTITIES_FROM_CLAUSE = " FROM ";
 	
-	/** Fragmentos WHERE comunes para todas las entidades. */
+	/** Fragmentos WHERE para todas las entidades. */
 	public static final String ALL_ENTITIES_BASIC_WHERE_CLAUSE = " WHERE Country__c = 'CHILE' ";
+	public static final String ADDRESS_ENTITY_WHERE_CLAUSE = " WHERE StreetMD__r.Country__c = 'CHILE' ";
+	public static final String CASE_COMMENT_ENTITY_WHERE_CLAUSE = " WHERE Parent.Country__c = 'CHILE' ";
+	public static final String CASE_HISTORY_ENTITY_WHERE_CLAUSE = " WHERE Case.Country__c = 'CHILE' ";
+	public static final String WITHOUT_COUNTRY_ENTITIES_WHERE_CLAUSE = " WHERE ";
 	public static final String OBJECT_CREATED_DATE_WHERE_CLAUSE = "CreatedDate";
 	public static final String OBJECT_LAST_MODIFIED_DATE_WHERE_CLAUSE = "LastModifiedDate";
 	public static final String OBJECT_IS_DELETED_WHERE_CLAUSE = "IsDeleted";

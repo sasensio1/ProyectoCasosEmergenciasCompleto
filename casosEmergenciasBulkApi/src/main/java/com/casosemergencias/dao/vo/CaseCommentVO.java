@@ -202,6 +202,13 @@ public class CaseCommentVO extends ObjectVO implements Serializable {
 	public void setLastmodifieddate(Date lastmodifieddate) {
 		this.lastmodifieddate = lastmodifieddate;
 	}
+	
+	public void setLastmodifieddateString(String fechaModificacionString) {
+		Date fechaModificacionDate = Utils.parseStringToDate(fechaModificacionString);
+		if (fechaModificacionDate != null) {
+			setLastmodifieddate(fechaModificacionDate);
+		}
+	}
 
 	public String getLastmodifiedbyid() {
 		return lastmodifiedbyid;

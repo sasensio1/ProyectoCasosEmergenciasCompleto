@@ -7,6 +7,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,8 +19,11 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.casosemergencias.model.UserSessionInfo;
+
+//TODO: Quitar logs
 public class Utils {
-	final static Logger logger = Logger.getLogger(Utils.class);
+	final static Logger LOGGER = Logger.getLogger(Utils.class);
 	
 	/**
 	 * Parses a date in String to a Java Date object.
@@ -29,25 +34,25 @@ public class Utils {
 	 */
 	public static Date parseStringToDate (String dateValue) {
 		Date javaDate = null;
-		if (!isNullOrEmptyString(dateValue)) {
-			String[] dateFormats = {"yyyy-MM-dd\'T\'HH:mm:ss", "yyyy-MM-dd"};
-			logger.info("Fecha a modificar: " + dateValue);
+		DateFormat gmtFormat = null;
+	    if (!isNullOrEmptyString(dateValue)) {
+			String[] dateFormats = {"yyyy-MM-dd\'T\'HH:mm:ss.SSSZ", "yyyy-MM-dd"};
 			for (String format : dateFormats) {
 				try {
-					javaDate = new SimpleDateFormat(format).parse(dateValue);
+					gmtFormat = new SimpleDateFormat(format);
+					gmtFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+					javaDate = gmtFormat.parse(dateValue);
+					break;
 				} catch (ParseException e) {}
 			}
-		}
-		logger.info("Fecha modificada: " + javaDate);
+	    }
 		return javaDate;
 	}
 	
 	public static String parseDateToString (Date javaDate) {
-		logger.info("Fecha a modificar: " + javaDate);
 		String dateValue = null;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss\'Z\'");
 		dateValue = dateFormat.format(javaDate);
-		logger.info("Fecha modificada: " + dateValue);
 		return dateValue;
 	}
 	
@@ -66,7 +71,6 @@ public class Utils {
 				javaBoolean = new Boolean(booleanStringLowerCase);
 			}
 		}
-		logger.info("Valor del boolean: " + javaBoolean);
 		return javaBoolean;
 	}
 	
@@ -84,7 +88,6 @@ public class Utils {
 				javaInteger = Integer.valueOf(integerValue);
 			} catch (NumberFormatException e) {}
 		}
-		logger.info("Valor del integer: " + javaInteger.intValue());
 		return javaInteger;
 	}
 	
@@ -102,7 +105,6 @@ public class Utils {
 				javaDouble = Double.valueOf(doubleValue);
 			} catch (NumberFormatException e) {}
 		}
-		logger.info("Valor del double: " + javaDouble.doubleValue());
 		return javaDouble;
 	}
 	
@@ -142,7 +144,6 @@ public class Utils {
 		if (stringValue == null || "".equals(stringValue.trim())) {
 			isNullOrEmptyString = true;
 		}
-		logger.info("String nulo o vacio: " + isNullOrEmptyString);
 		return isNullOrEmptyString;
 	}
 	
@@ -160,5 +161,58 @@ public class Utils {
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, -(daysToSubstract));
 		return calendar.getTime();
+	}
+	
+	/**
+	 * Reads one properties file and builds the UserSessionInfo object with the
+	 * user information to login with Salesforce.
+	 * 
+	 * @return UserSessionInfo User information to login with Salesforce.
+	 * @throws IOException
+	 *             If it has occurred any problem reading the properties file.
+	 */
+	public static UserSessionInfo getUserSessionInfoFromProperties() throws IOException {
+		Properties properties = new Properties();
+		String username = null;
+		String password = null;
+		String token = null;
+		UserSessionInfo userInfoFromProperties = null;
+		
+		InputStream propsInputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("/environment/dev/config.properties");
+		properties.load(propsInputStream);
+		username = properties.getProperty("heroku.user");
+		password = properties.getProperty("heroku.pass");
+		token = properties.getProperty("heroku.token");
+		propsInputStream.close();	
+		
+		if (username != null && !"".equals(username) && password != null && !"".equals(password) && token != null && !"".equals(token)) {
+			userInfoFromProperties = new UserSessionInfo();
+			userInfoFromProperties.setUsername(username);
+			userInfoFromProperties.setPassword(password);
+			userInfoFromProperties.setAccessToken(token);
+		}
+		return userInfoFromProperties;
+	}
+	
+	/**
+	 * Parse one query in String and replace all spaces for '+' symbols to make
+	 * a Salesforce Rest API calling.
+	 * 
+	 * @param stringQuery
+	 *            Query in String format.
+	 * @return String Query in URL format.
+	 */
+	public static String parseSqlQueryToUrlQuery(String stringQuery) {
+		String urlQuery = null;
+		String spaceChar = " ";
+		String plusChar = "+";
+		urlQuery = stringQuery.replaceAll(spaceChar, plusChar);
+		urlQuery = urlQuery.replaceAll("<", "%3C");
+		urlQuery = urlQuery.replaceAll(">", "%3E");
+		urlQuery = urlQuery.replaceAll("=", "%3D");
+		urlQuery = urlQuery.replaceAll("'", "%27");
+		urlQuery = urlQuery.replaceAll("-", "%2D");
+		urlQuery = urlQuery.replaceAll(":", "%3A");
+		return urlQuery;
 	}
 }
