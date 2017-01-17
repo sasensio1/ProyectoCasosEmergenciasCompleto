@@ -22,10 +22,7 @@ public class UserFilter implements Filter {
 	final static Logger logger = Logger.getLogger(UserFilter.class);
 	
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
-		
-	}
+	public void init(FilterConfig filterConfig) throws ServletException { }
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -56,8 +53,5 @@ public class UserFilter implements Filter {
 	}
 
 	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void destroy() { }
 }

@@ -1,5 +1,7 @@
 package com.casosemergencias.logic;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,15 +9,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.casosemergencias.batch.BulkApiQueriesBatch;
 import com.casosemergencias.batch.FieldLabelTableCreatorBatch;
 import com.casosemergencias.batch.PicklistTableCreatorBatch;
+import com.casosemergencias.batch.SalesforceSoapBulkApiInvokerBatch;
 import com.casosemergencias.batch.bean.BulkApiInfoContainerBatch;
-import com.casosemergencias.dao.CaseCommentDAO;
+import com.casosemergencias.batch.bean.OperationType;
+import com.casosemergencias.batch.util.BatchObjectsMapper;
 import com.casosemergencias.dao.HistoricBatchDAO;
-import com.casosemergencias.dao.vo.CaseVO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
-import com.casosemergencias.model.Caso;
 import com.casosemergencias.model.HistoricBatch;
 import com.casosemergencias.util.ParserModelVO;
 import com.casosemergencias.util.datatables.DataTableProperties;
@@ -32,11 +33,13 @@ public class BatchServiceImpl implements BatchService {
 	PicklistTableCreatorBatch picklistTableCreatorBatch;
 	
 	@Autowired
-	BulkApiQueriesBatch bulkApiQueriesBatch;
+	SalesforceSoapBulkApiInvokerBatch soapBulkApiInvokerBatch;
 	
 	@Autowired
 	private HistoricBatchDAO historicBatchDao;
 	
+	@Autowired
+	private BatchObjectsMapper batchObjectsMapper;
 	
 	@Override
 	public void updateHerokuPickListTable() {
@@ -50,12 +53,72 @@ public class BatchServiceImpl implements BatchService {
 	
 	@Override
 	public void getInfoToUpdateFromBulkApi(Date processStartDate, Date processEndDate) {
-		bulkApiQueriesBatch.getAllBulkApiInfo(processStartDate, processEndDate);
+		soapBulkApiInvokerBatch.getAllBulkApiInfo(processStartDate, processEndDate);
 	}
-
+	
 	@Override
-	public void updateHerokuObjectsFromBulkApi(String objectName, List<BulkApiInfoContainerBatch> bulkApiInfoContainer) {
+	public void updateHerokuObjectsFromBulkApi(String objectName, BulkApiInfoContainerBatch bulkApiInfoContainer) {
+		
+		String objectService = batchObjectsMapper.getObjectNamesServicesMap().get(objectName);
+		String objectNameServicesMethods = batchObjectsMapper.getObjectNamesServicesMethodsMap().get(objectName);
+		 
+		if(bulkApiInfoContainer.getObjectsMap().get(OperationType.INSERT) != null && !bulkApiInfoContainer.getObjectsMap().get(OperationType.INSERT).isEmpty()){
+			Class<?> service;
+			try {
+				service = Class.forName(objectService);
+				String methodName = "insert" + objectNameServicesMethods + "SfList";
+				Method metodo = service.getDeclaredMethod(methodName);
+				
+				metodo.invoke(bulkApiInfoContainer.getObjectsMap().get(OperationType.INSERT));
+			
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				logger.error("ERROR updateHerokuObjectsFromBulkApi INSERT");
+			} catch (NoSuchMethodException | SecurityException e) {
+				logger.error("ERROR updateHerokuObjectsFromBulkApi INSERT");
+			} catch (ClassNotFoundException e) {
+				logger.error("ERROR updateHerokuObjectsFromBulkApi INSERT");
+			}
+			 
+		}
+		if(bulkApiInfoContainer.getObjectsMap().get(OperationType.UPDATE) != null && !bulkApiInfoContainer.getObjectsMap().get(OperationType.UPDATE).isEmpty()){
+			Class<?> service;
+			try {
+				service = Class.forName(objectService);
+				String methodName = "update" + objectNameServicesMethods + "SfList";
+				Method metodo = service.getDeclaredMethod(methodName);
+				
+				metodo.invoke(bulkApiInfoContainer.getObjectsMap().get(OperationType.UPDATE));
+			
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				logger.error("ERROR updateHerokuObjectsFromBulkApi UPDATE");
+			} catch (NoSuchMethodException | SecurityException e) {
+				logger.error("ERROR updateHerokuObjectsFromBulkApi UPDATE");
+			} catch (ClassNotFoundException e) {
+				logger.error("ERROR updateHerokuObjectsFromBulkApi UPDATE");
+			}
+			 
+		}
+		if(bulkApiInfoContainer.getObjectsMap().get(OperationType.DELETE) != null && !bulkApiInfoContainer.getObjectsMap().get(OperationType.DELETE).isEmpty()){
+			Class<?> service;
+			try {
+				service = Class.forName(objectService);
+				String methodName = "delete" + objectNameServicesMethods + "SfList";
+				Method metodo = service.getDeclaredMethod(methodName);
+				
+				metodo.invoke(bulkApiInfoContainer.getObjectsMap().get(OperationType.DELETE));
+			
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				logger.error("ERROR updateHerokuObjectsFromBulkApi DELETE");
+			} catch (NoSuchMethodException | SecurityException e) {
+				logger.error("ERROR updateHerokuObjectsFromBulkApi DELETE");
+			} catch (ClassNotFoundException e) {
+				logger.error("ERROR updateHerokuObjectsFromBulkApi DELETE");
+			}
+			 
+		}
+		
 		//TODO: COMPLETAR CON LLAMADAS A LOS DAOS SEGUN EL OBJETO. HABRÁ QUE INYECTAR LOS DAOS QUE SEAN NECESARIOS
+		//TODO: DEVOLVER BOOLEAN CON ESTADO DE PROCESO.
 	}
 	
 	/**

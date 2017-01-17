@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.casosemergencias.dao.AccountDAO;
 import com.casosemergencias.dao.CaseHistoryDAO;
 
 public class CaseHistoryServiceImpl implements CaseHistoryService {

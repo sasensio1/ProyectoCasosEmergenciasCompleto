@@ -1,7 +1,7 @@
 CREATE TABLE HistoricBatch (
 	  	id					INTEGER NOT NULL,
-		sfidJob 			VARCHAR(255),
-		sfidRecord			VARCHAR(255),
+		sfid_job 			VARCHAR(255),
+		sfid_record			VARCHAR(255),
 		start_date			TIMESTAMP,
 		end_date			TIMESTAMP,
 		object				VARCHAR(255),
