@@ -66,7 +66,7 @@ public class SalesforceRestApiInvokerBatch {
 				LocalDateTime localStartDateTime = LocalDateTime.ofInstant(processStartDate.toInstant(), ZoneId.of("UTC"));
 				LocalDateTime localEndDateTime = LocalDateTime.ofInstant(processEndDate.toInstant(), ZoneId.of("UTC"));
 				dateSearchingRange = (int) ChronoUnit.DAYS.between(localStartDateTime, localEndDateTime);
-				if (dateSearchingRange > 0 && ConstantesBulkApi.MAX_SEARCHING_DAYS > 0 && dateSearchingRange <= ConstantesBulkApi.MAX_SEARCHING_DAYS) {
+				if (dateSearchingRange <= ConstantesBulkApi.MAX_SEARCHING_DAYS) {
 					getBulkApiRecordsInfo(processStartDate, processEndDate, objectName);
 				} else {
 					LOGGER.error("Error al obtener el rango de fechas. Compruebe que el rango es mayor a 0 o que no supera el maximo");

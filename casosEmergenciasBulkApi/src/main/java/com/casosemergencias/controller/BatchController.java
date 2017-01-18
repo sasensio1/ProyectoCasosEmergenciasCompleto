@@ -1,7 +1,6 @@
 package com.casosemergencias.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,14 +41,21 @@ public class BatchController {
 		batchService.updateHerokuFieldLabelTable();
 	}
 	
-	@RequestMapping(value = "/updateCaseCommentTable", method = RequestMethod.GET)
-	public void updateCaseCommentsHome() {
+	@RequestMapping(value = "/updateHerokuCaseCommentTable", method = RequestMethod.GET)
+	public void updateHerokuCaseCommentsHome() {
 		batchService.updateCaseCommentTable();	
 	}
 	
+	@RequestMapping(value = "/updateHerokuUserTable", method = RequestMethod.GET)
+	public void updateHerokuUserHome() {
+		batchService.updateHerokuUserTable();	
+	}
+	
 	@RequestMapping(value = "/updateObjectTablesFromSalesforceApi", method = RequestMethod.GET)
-	public void updateObjectTablesFromSalesforceApi(@RequestParam Date processStartDate, @RequestParam Date processEndDate) {
-		batchService.updateObjectsInfoTables(processStartDate, processEndDate);
+//	public void updateObjectTablesFromSalesforceApi(@RequestParam Date processStartDate, @RequestParam Date processEndDate) {
+//		batchService.updateObjectsInfoTables(processStartDate, processEndDate);
+	public void updateObjectTablesFromSalesforceApi() {
+		batchService.updateObjectsInfoTables(null, null);
 	}
 	
 	/**
