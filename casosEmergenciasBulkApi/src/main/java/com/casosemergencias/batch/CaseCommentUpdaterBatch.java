@@ -17,12 +17,21 @@ public class CaseCommentUpdaterBatch {
 	@Autowired
 	SalesforceRestApiInvokerBatch restApiInvokerBatch;
 	
-	public void getCaseCommentRecordsInfo() {
-		Date processStartDate = new Date();
+	public void updateCaseCommentInfo() {
+		LOGGER.trace("Comienzo del proceso de actualizacion de los comentarios de los casos de SalesForce a la base de datos de Heroku");
+		Date processEndDate = new Date();
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(processStartDate);
+		cal.setTime(processEndDate);
 		cal.add(Calendar.HOUR, -2);
-		Date processEndDate = cal.getTime();
-		restApiInvokerBatch.getBulkApiRecordsInfo(processStartDate, processEndDate, ConstantesBulkApi.ENTITY_CASE_COMMENT, ConstantesBulkApi.ENTITY_CASE_COMMENT_SELECT);
+		Date processStartDate = cal.getTime();
+		LOGGER.info("Hora inicial: " + processStartDate);
+		LOGGER.info("Hora final: " + processEndDate);
+		//FIXME: Comprobar zona horaria.
+		restApiInvokerBatch.setProcessStartDate(processStartDate);
+		restApiInvokerBatch.setProcessEndDate(processEndDate);
+		restApiInvokerBatch.setObjectName(ConstantesBulkApi.ENTITY_CASE_COMMENT);
+		restApiInvokerBatch.setObjectSelect(ConstantesBulkApi.ENTITY_CASE_COMMENT_SELECT);
+		restApiInvokerBatch.updateObjectsWithRestApiInfo();
+		LOGGER.trace("Proceso de actualizacion de los comentarios de los casos de SalesForce a la base de datos de Heroku completado");
 	}
 }

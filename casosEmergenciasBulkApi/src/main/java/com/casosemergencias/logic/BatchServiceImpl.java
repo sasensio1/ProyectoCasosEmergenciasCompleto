@@ -8,9 +8,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.casosemergencias.batch.CaseCommentUpdaterBatch;
 import com.casosemergencias.batch.FieldLabelTableCreatorBatch;
 import com.casosemergencias.batch.PicklistTableCreatorBatch;
-import com.casosemergencias.batch.SalesforceSoapBulkApiInvokerBatch;
+import com.casosemergencias.batch.SalesforceRestApiInvokerBatch;
 import com.casosemergencias.batch.bean.BulkApiInfoContainerBatch;
 import com.casosemergencias.batch.bean.OperationType;
 import com.casosemergencias.batch.util.BatchObjectsMapper;
@@ -31,7 +32,10 @@ public class BatchServiceImpl implements BatchService {
 	PicklistTableCreatorBatch picklistTableCreatorBatch;
 	
 	@Autowired
-	SalesforceSoapBulkApiInvokerBatch soapBulkApiInvokerBatch;
+	SalesforceRestApiInvokerBatch restApiInvokerBatch;
+	
+	@Autowired
+	CaseCommentUpdaterBatch caseCommentUpdaterBatch;
 	
 	@Autowired
 	private HistoricBatchDAO historicBatchDao;
@@ -50,8 +54,15 @@ public class BatchServiceImpl implements BatchService {
 	}
 	
 	@Override
-	public void getInfoToUpdateFromBulkApi(Date processStartDate, Date processEndDate) {
-		soapBulkApiInvokerBatch.getAllBulkApiInfo(processStartDate, processEndDate);
+	public void updateCaseCommentTable() {
+		caseCommentUpdaterBatch.updateCaseCommentInfo();
+	}
+	
+	@Override
+	public void updateObjectsInfoTables(Date processStartDate, Date processEndDate) {
+		restApiInvokerBatch.setProcessStartDate(processStartDate);
+		restApiInvokerBatch.setProcessEndDate(processEndDate);
+		restApiInvokerBatch.updateObjectsWithRestApiInfo();
 	}
 	
 	@Override

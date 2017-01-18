@@ -54,8 +54,10 @@ public class SalesforceRestApiInvokerBatch {
 	static PartnerConnection connection;
 	private Date processStartDate;
 	private Date processEndDate;
+	private String objectName;
+	private String objectSelect;
 
-	public void getRestApiRecordsInfo() {
+	public void updateObjectsWithRestApiInfo() {
 		int dateSearchingRange = 0;
 		if (processStartDate != null && processEndDate != null) {
 			if (processEndDate.before(processStartDate)) {
@@ -66,7 +68,7 @@ public class SalesforceRestApiInvokerBatch {
 				LocalDateTime localEndDateTime = LocalDateTime.ofInstant(processEndDate.toInstant(), ZoneId.of("UTC"));
 				dateSearchingRange = (int) ChronoUnit.DAYS.between(localStartDateTime, localEndDateTime);
 				if (dateSearchingRange > 0 && ConstantesBulkApi.MAX_SEARCHING_DAYS > 0 && dateSearchingRange <= ConstantesBulkApi.MAX_SEARCHING_DAYS) {
-					getBulkApiRecordsInfo(processStartDate, processEndDate, null, null);
+					getBulkApiRecordsInfo(processStartDate, processEndDate, objectName, objectSelect);
 				} else {
 					LOGGER.error("Error al obtener el rango de fechas. Compruebe que el rango es mayor a 0 o que no supera el maximo");
 				}
@@ -76,10 +78,8 @@ public class SalesforceRestApiInvokerBatch {
 			processStartDate = Utils.setHourInDate(yesterday, 0, 0, 0, 0);
 			processEndDate = Utils.setHourInDate(yesterday, 23, 59, 59, 999);
 			LOGGER.info("No se han indicado fechas de búsqueda. Se establece el día anterior como fecha por defecto");
-			getBulkApiRecordsInfo(processStartDate, processEndDate, null, null);
+			getBulkApiRecordsInfo(processStartDate, processEndDate, objectName, objectSelect);
 		}
-		
-		getBulkApiRecordsInfo(processStartDate, processEndDate, null, null);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ public class SalesforceRestApiInvokerBatch {
 	 *            Object select query fragment to update, if it's only necessary
 	 *            to update one object.
 	 */
-	public void getBulkApiRecordsInfo(Date processStartDate, Date processEndDate, String objectName, String objectSelect) {
+	private void getBulkApiRecordsInfo(Date processStartDate, Date processEndDate, String objectName, String objectSelect) {
 		LOGGER.trace("Entrando en getAllBulkApiInfo para obtener los registros actualizados en Salesforce");
 		LOGGER.info("Búsqueda desde " + processStartDate);
 		LOGGER.info("Búsqueda hasta " + processEndDate);
@@ -206,6 +206,7 @@ public class SalesforceRestApiInvokerBatch {
 			} else {
 				LOGGER.info("Error en la peticion. Status: " + response.getStatusLine());
 			}
+			get.releaseConnection();
 		}
 		return bulkApiContainer;
 	}
@@ -281,5 +282,21 @@ public class SalesforceRestApiInvokerBatch {
 
 	public void setProcessEndDate(Date processEndDate) {
 		this.processEndDate = processEndDate;
+	}
+
+	public String getObjectName() {
+		return objectName;
+	}
+
+	public void setObjectName(String objectName) {
+		this.objectName = objectName;
+	}
+
+	public String getObjectSelect() {
+		return objectSelect;
+	}
+
+	public void setObjectSelect(String objectSelect) {
+		this.objectSelect = objectSelect;
 	}
 }

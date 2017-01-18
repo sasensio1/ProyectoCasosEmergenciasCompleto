@@ -1,6 +1,7 @@
 package com.casosemergencias.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,15 +34,24 @@ public class BatchController {
 	private BatchService batchService;
 	
 	@RequestMapping(value = "/updateHerokuPickListTable", method = RequestMethod.GET)
-	public void listadoCasosHome() {
+	public void updateHerokuPickListHome() {
 		batchService.updateHerokuPickListTable();
 	}
 	
 	@RequestMapping(value = "/updateHerokuFieldLabelTable", method = RequestMethod.GET)
-	public void fieldLabelHome() {
+	public void updateHerokuFieldLabelHome() {
 		batchService.updateHerokuFieldLabelTable();
 	}
 	
+	@RequestMapping(value = "/updateCaseCommentTable", method = RequestMethod.GET)
+	public void updateCaseCommentsHome() {
+		batchService.updateCaseCommentTable();	
+	}
+	
+	@RequestMapping(value = "/updateObjectTablesFromSalesforceApi", method = RequestMethod.GET)
+	public void updateObjectTablesFromSalesforceApi(@RequestParam Date processStartDate, @RequestParam Date processEndDate) {
+		batchService.updateObjectsInfoTables(processStartDate, processEndDate);
+	}
 	
 	/**
 	 * Metodo que recupera una lista con todos los historicos que hay creados en BBDD y los muestra en la pantalla homeHistoricBatchPage.jsp

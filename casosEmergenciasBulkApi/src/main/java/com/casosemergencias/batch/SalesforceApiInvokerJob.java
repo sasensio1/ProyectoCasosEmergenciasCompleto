@@ -17,7 +17,7 @@ public class SalesforceApiInvokerJob extends QuartzJobBean  {
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		LOGGER.info("Actualizacion de objetos desde Salesforce iniciada con fecha " + new Date());
-		restApiInvokerBatch.getRestApiRecordsInfo();
+		restApiInvokerBatch.updateObjectsWithRestApiInfo();
 		LOGGER.info("Actualizacion de objetos desde Salesforce completada con fecha " + new Date());
 	}
 }

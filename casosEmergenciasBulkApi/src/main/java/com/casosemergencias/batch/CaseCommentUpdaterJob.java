@@ -17,7 +17,7 @@ public class CaseCommentUpdaterJob extends QuartzJobBean {
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		LOGGER.info("Actualizacion de comentarios de casos iniciada con fecha " + new Date());
-		caseCommentUpdaterBatch.getCaseCommentRecordsInfo();
+		caseCommentUpdaterBatch.updateCaseCommentInfo();
 		LOGGER.info("Actualizacion de comentarios de casos completada con fecha " + new Date());		
 	}
 }
