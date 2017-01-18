@@ -189,7 +189,7 @@
     <!-- Job de Quartz para la actualizacion de registros desde el API de Salesforce -->
     <bean id="apiInvokerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="restApiInvokerBatch" />
-        <property name="targetMethod" value="getBulkApiRecordsInfo" />
+        <property name="targetMethod" value="getRestApiRecordsInfo" />
     </bean>
     
     <!-- Job de Quartz para la actualizacion de comentarios de casos -->
@@ -201,25 +201,25 @@
     <!-- Trigger de Quartz para el rellenado de la tabla Picklists -->
     <bean id="picklistsTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="picklistsJob" />
-        <property name="cronExpression" value="0 0 12 ? * *" />
+        <property name="cronExpression" value="0 0 * * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para el rellenado de la tabla FieldLabel -->
     <bean id="fieldlabelTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="fieldlabelJob" />
-        <property name="cronExpression" value="0 0 12 ? * *" />
+        <property name="cronExpression" value="0 0 * * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de registros desde el API de Salesforce -->
     <bean id="apiInvokerTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="apiInvokerJob" />
-        <property name="cronExpression" value="0 0 12 ? * *" />
+        <property name="cronExpression" value="0 0 * * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de comentarios de casos -->
     <bean id="caseCommentTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="caseCommentJob" />
-        <property name="cronExpression" value="0 */2 * * *" />
+        <property name="cronExpression" value="0 0/2 * * * ?" />
     </bean>
   
     <!-- Scheduler de Quartz para rellenar las tablas de picklists y fieldLabels -->

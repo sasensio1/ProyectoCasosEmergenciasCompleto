@@ -1,6 +1,9 @@
 package com.casosemergencias.batch;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -31,6 +34,8 @@ import com.sforce.soap.partner.PartnerConnection;
 
 @Resource
 public class SalesforceRestApiInvokerBatch {
+	final static Logger LOGGER = Logger.getLogger(SalesforceRestApiInvokerBatch.class);
+	
 	@Autowired
 	BatchService batchService;
 
@@ -47,8 +52,36 @@ public class SalesforceRestApiInvokerBatch {
 	BatchObjectsMapper objectsMapper;
 	
 	static PartnerConnection connection;
-	final static Logger LOGGER = Logger.getLogger(SalesforceRestApiInvokerBatch.class);
+	private Date processStartDate;
+	private Date processEndDate;
 
+	public void getRestApiRecordsInfo() {
+		int dateSearchingRange = 0;
+		if (processStartDate != null && processEndDate != null) {
+			if (processEndDate.before(processStartDate)) {
+				LOGGER.error("Fechas incorrectas. La fecha de fin debe ser mayor que la de inicio");
+			} else {
+				//int dateSearchingRange = (int) ((processEndDate.getTime() - processStartDate.getTime()) / (1000 * 60 * 60 * 24));
+				LocalDateTime localStartDateTime = LocalDateTime.ofInstant(processStartDate.toInstant(), ZoneId.of("UTC"));
+				LocalDateTime localEndDateTime = LocalDateTime.ofInstant(processEndDate.toInstant(), ZoneId.of("UTC"));
+				dateSearchingRange = (int) ChronoUnit.DAYS.between(localStartDateTime, localEndDateTime);
+				if (dateSearchingRange > 0 && ConstantesBulkApi.MAX_SEARCHING_DAYS > 0 && dateSearchingRange <= ConstantesBulkApi.MAX_SEARCHING_DAYS) {
+					getBulkApiRecordsInfo(processStartDate, processEndDate, null, null);
+				} else {
+					LOGGER.error("Error al obtener el rango de fechas. Compruebe que el rango es mayor a 0 o que no supera el maximo");
+				}
+			}
+		} else {
+			Date yesterday = Utils.substractDaysToDate(new Date(), 1);
+			processStartDate = Utils.setHourInDate(yesterday, 0, 0, 0, 0);
+			processEndDate = Utils.setHourInDate(yesterday, 23, 59, 59, 999);
+			LOGGER.info("No se han indicado fechas de búsqueda. Se establece el día anterior como fecha por defecto");
+			getBulkApiRecordsInfo(processStartDate, processEndDate, null, null);
+		}
+		
+		getBulkApiRecordsInfo(processStartDate, processEndDate, null, null);
+	}
+	
 	/**
 	 * Gets all r to update in Heroku from the Salesforce Bulk API, between the
 	 * given starting and ending dates.
@@ -232,5 +265,21 @@ public class SalesforceRestApiInvokerBatch {
 		completeQuery.append(" <= ").append(Utils.parseDateToString(endDate)).append(")");
 		LOGGER.debug("Consulta a realizar: " + completeQuery);
 		return completeQuery.toString();
+	}
+	
+	public Date getProcessStartDate() {
+		return processStartDate;
+	}
+
+	public void setProcessStartDate(Date processStartDate) {
+		this.processStartDate = processStartDate;
+	}
+
+	public Date getProcessEndDate() {
+		return processEndDate;
+	}
+
+	public void setProcessEndDate(Date processEndDate) {
+		this.processEndDate = processEndDate;
 	}
 }
