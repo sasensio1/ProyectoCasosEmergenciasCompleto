@@ -21,7 +21,6 @@ import org.xml.sax.SAXException;
 
 import com.casosemergencias.model.UserSessionInfo;
 
-//TODO: Quitar logs
 public class Utils {
 	final static Logger LOGGER = Logger.getLogger(Utils.class);
 	
@@ -49,11 +48,43 @@ public class Utils {
 		return javaDate;
 	}
 	
+	/**
+	 * Parses a Java Date object to a String object.
+	 * 
+	 * @param javaDate
+	 *            Date object.
+	 * @return String Date in String format.
+	 */
 	public static String parseDateToString (Date javaDate) {
 		String dateValue = null;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss\'Z\'");
 		dateValue = dateFormat.format(javaDate);
 		return dateValue;
+	}
+	
+	/**
+	 * Sets the hour into a Date.
+	 * 
+	 * @param javaDate
+	 *            Date to set the new hour.
+	 * @param hours
+	 *            Hours to set (0-23).
+	 * @param minutes
+	 *            Minutes to set (0-59).
+	 * @param seconds
+	 *            Seconds to set (0-59).
+	 * @param milliseconds
+	 *            Milliseconds to set (0-999).
+	 * @return Date New Date with the new hour setted.
+	 */
+	public static Date setHourInDate(Date javaDate, int hours, int minutes, int seconds, int milliseconds) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(javaDate);
+		calendar.set(Calendar.MILLISECOND, milliseconds);
+		calendar.set(Calendar.SECOND, seconds);
+		calendar.set(Calendar.MINUTE, minutes);
+		calendar.set(Calendar.HOUR_OF_DAY, hours);
+		return calendar.getTime();
 	}
 	
 	/**

@@ -46,11 +46,11 @@
 						<td >						
 							<select name="filtroComienzoOperacionHistoricBatchPickListFilter"  id="filtroComienzoOperacionHistoricBatchPickListFilter">
 								<option value="" ></option>
-							    <option value="equal">=</option>
-							    <option value="greaterOrEqual">≥</option>
-							    <option value="lessOrEqual">≤</option>
-							    <option value="greater">></option>
-							    <option value="less"><</option>
+							    <option value="equal">&#61;</option>
+							    <option value="greaterOrEqual">&ge;</option>
+							    <option value="lessOrEqual">&le;</option>
+							    <option value="greater">&gt;</option>
+							    <option value="less">&lt;</option>
 							</select>
 						</td>												
 						<td >
@@ -70,11 +70,11 @@
 						<td>
 							<select name="filtroFinalOperacionHistoricBatchPickListFilter" id="filtroFinalOperacionHistoricBatchPickListFilter">
 								<option value="" ></option>
-							    <option value="equal">=</option>
-							    <option value="greaterOrEqual">≥</option>
-							    <option value="lessOrEqual">≤</option>
-							    <option value="greater">></option>
-							    <option value="less"><</option>
+							    <option value="equal">&#61;</option>
+							    <option value="greaterOrEqual">&ge;</option>
+							    <option value="lessOrEqual">&le;</option>
+							    <option value="greater">&gt;</option>
+							    <option value="less">&lt;</option>
 							</select>	
 						</td>
 						<td >
@@ -86,7 +86,7 @@
 							<label for="filtroSfidRegistroHistoricBatch"><s:message code="search_form_input_historicBatch_sfid_registro"/></label>
 						</td>
 						<td class="tablaBusquedaTextos">
-							<input type="text" id="filtroSfidRegistroHistoricBatch" name="filtroSfidRegistroHistoricBatch" class="column_filter" value=""  >
+							<input type="text" id="filtroSfidRegistroHistoricBatch" name="filtroSfidRegistroHistoricBatch" class="column_filter" value="">
 						</td>
 						<td class="tablaBusquedaEtiquetas">
 							<label for="filtroSuccessHistoricBatch"><s:message code="search_form_input_historicBatch_success"/></label>
@@ -94,8 +94,8 @@
 						<td >
 							<select name="filtroSuccessHistoricBatch"  id="filtroSuccessHistoricBatch">
 							    <option></option>
-							    <option value="true" >TRUE</option>
-							    <option value="false" >FALSE</option>
+							    <option value="true">TRUE</option>
+							    <option value="false">FALSE</option>
 							</select>	
 						</td>
 					</tr>		

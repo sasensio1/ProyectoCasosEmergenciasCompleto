@@ -80,6 +80,7 @@ public class BatchObjectsParser {
 					if (records != null && records.getLength() > 0) {
 						containerList = new BulkApiInfoContainerBatch();
 						containerList.setTotalRecords(records.getLength());
+						containerList.setEntityName(objectClass.getName());
 						System.out.println("Encontrados " + records.getLength() + " objetos");
 						//3.1. Se recorren todos los objetos encontrados
 						for (int i = 0; i < records.getLength(); i++) {
@@ -193,6 +194,7 @@ public class BatchObjectsParser {
 					containerList.setTotalRecords(jsonResponse.getInt(ConstantesBulkApi.TOTAL_SIZE_NODE));
 					//2. Se obtiene el objeto a rellenar
 					getNewEntityObjectInfoFromJsonDocument(recordsArray.getJSONObject(0));
+					containerList.setEntityName(objectClass.getName());
 					for (int i = 0; i < recordsArray.length(); i++) {
 						//3. Se parsea el documento y se rellenan los parametros del objeto
 						JSONObject record = recordsArray.getJSONObject(i);

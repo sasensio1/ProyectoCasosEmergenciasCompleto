@@ -812,7 +812,7 @@ public class CaseController {
 		 Properties propiedades = new Properties();
 		 InputStream entrada = null;
 		 try{			 
-			 //TODO: ADAPTAR SI AÑADIMOS MULTILENGUAJE
+			 //ADAPTAR SI AÑADIMOS MULTILENGUAJE
 			 entrada = Thread.currentThread().getContextClassLoader().getResourceAsStream("text_page_es.properties");
 			 if(entrada != null){
 				 propiedades.load(entrada);
