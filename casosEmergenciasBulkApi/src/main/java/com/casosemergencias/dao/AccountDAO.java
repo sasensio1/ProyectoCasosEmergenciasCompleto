@@ -481,7 +481,7 @@ public class AccountDAO {
 		int numModif = 0;
 
 		session.save(Account);
-
+		session.close();
 		return numModif;
 	}
 	
