@@ -165,11 +165,13 @@
 	<bean id="soapBulkApiInvokerBatch" class="com.casosemergencias.batch.SalesforceSoapBulkApiInvokerBatch"/>
 	<bean id="restApiInvokerBatch" class="com.casosemergencias.batch.SalesforceRestApiInvokerBatch"/>
 	<bean id="caseCommentUpdaterBatch" class="com.casosemergencias.batch.CaseCommentUpdaterBatch"/>
+	<bean id="herokuUserUpdaterBatch" class="com.casosemergencias.batch.HerokuUserUpdaterBatch"/>
 	
 	<bean id="fieldLabelTableCreatorJob" class="com.casosemergencias.batch.FieldLabelTableCreatorJob"/>
 	<bean id="picklistTableCreatorJob" class="com.casosemergencias.batch.PicklistTableCreatorJob"/>
 	<bean id="salesforceApiInvokerJob" class="com.casosemergencias.batch.SalesforceApiInvokerJob"/>
 	<bean id="caseCommentUpdaterJob" class="com.casosemergencias.batch.CaseCommentUpdaterJob"/>
+	<bean id="herokuUserUpdaterJob" class="com.casosemergencias.batch.HerokuUserUpdaterJob"/>
 	
 	<mvc:resources mapping="/resources/**" location="/resources/"/> 
 	
@@ -197,6 +199,12 @@
         <property name="targetObject" ref="caseCommentUpdaterBatch" />
         <property name="targetMethod" value="updateCaseCommentInfo" />
     </bean>
+    
+     <!-- Job de Quartz para la actualizacion de los usuarios de Heroku -->
+    <bean id="herokuUserJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="herokuUserUpdaterBatch" />
+        <property name="targetMethod" value="updateHerokuUserInfo" />
+    </bean>
  
     <!-- Trigger de Quartz para el rellenado de la tabla Picklists -->
     <bean id="picklistsTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -219,7 +227,13 @@
     <!-- Trigger de Quartz para la actualizacion de comentarios de casos -->
     <bean id="caseCommentTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="caseCommentJob" />
-        <property name="cronExpression" value="* * 0/2 * * ?" />
+        <property name="cronExpression" value="0 0 0/2 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los usuarios de Heroku -->
+    <bean id="herokuUserTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="caseCommentJob" />
+        <property name="cronExpression" value="0 0/30 * * * ?" />
     </bean>
   
     <!-- Scheduler de Quartz para rellenar las tablas de picklists y fieldLabels -->
@@ -230,6 +244,7 @@
                 <ref bean="fieldlabelJob" />
                 <ref bean="apiInvokerJob" />
                 <ref bean="caseCommentJob" />
+                <ref bean="herokuUserJob" />
             </list>
         </property>
         <property name="triggers">
@@ -238,6 +253,7 @@
                 <ref bean="fieldlabelTrigger" />
                 <ref bean="apiInvokerTrigger" />
                 <ref bean="caseCommentTrigger" />
+                <ref bean="herokuUserTrigger" />
             </list>
         </property>
     </bean>

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.casosemergencias.batch.CaseCommentUpdaterBatch;
 import com.casosemergencias.batch.FieldLabelTableCreatorBatch;
+import com.casosemergencias.batch.HerokuUserUpdaterBatch;
 import com.casosemergencias.batch.PicklistTableCreatorBatch;
 import com.casosemergencias.batch.SalesforceRestApiInvokerBatch;
 import com.casosemergencias.batch.bean.BulkApiInfoContainerBatch;
@@ -38,6 +39,9 @@ public class BatchServiceImpl implements BatchService {
 	CaseCommentUpdaterBatch caseCommentUpdaterBatch;
 	
 	@Autowired
+	HerokuUserUpdaterBatch herokuUserUpdaterBatch;
+	
+	@Autowired
 	private HistoricBatchDAO historicBatchDao;
 	
 	@Autowired
@@ -56,6 +60,11 @@ public class BatchServiceImpl implements BatchService {
 	@Override
 	public void updateCaseCommentTable() {
 		caseCommentUpdaterBatch.updateCaseCommentInfo();
+	}
+	
+	@Override
+	public void updateHerokuUserTable() {
+		herokuUserUpdaterBatch.updateHerokuUserInfo();
 	}
 	
 	@Override

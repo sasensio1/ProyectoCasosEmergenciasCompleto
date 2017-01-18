@@ -11,6 +11,7 @@ public interface BatchService {
 	public void updateHerokuPickListTable();
 	public void updateHerokuFieldLabelTable();
 	public void updateCaseCommentTable();
+	public void updateHerokuUserTable();
 	public void updateObjectsInfoTables(Date processStartDate, Date processEndDate);
 	public void updateHerokuObjectsFromBulkApi(BulkApiInfoContainerBatch bulkApiInfoContainer);
 	public List<HistoricBatch> readAllHistoricBatch(DataTableProperties propDatatable);
