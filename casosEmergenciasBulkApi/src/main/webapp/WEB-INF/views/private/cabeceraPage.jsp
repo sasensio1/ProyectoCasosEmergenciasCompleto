@@ -41,6 +41,9 @@
 		<div class="menuListado" onclick="javascript:cambiarLabel('<s:message code="cabeceraPage_list_historicBatch"/>');window.location.href='homeHistoricBatch'">
 			<a href="homeHistoricBatch" ><s:message code="cabeceraPage_list_historicBatch"/></a>
 		</div>
+		<div class="menuListado" onclick="javascript:cambiarLabel('<s:message code="cabeceraPage_list_menuBatch"/>');window.location.href='homeExecutionBatchMenu'">
+			<a href="homeHistoricBatch" ><s:message code="cabeceraPage_list_menuBatch"/></a>
+		</div>
 	</td>
 	<td id="divBotonDesplegable">			
 		<input type="button" id="botonDesplegable" name="botonDesplegable" style="align:right;">

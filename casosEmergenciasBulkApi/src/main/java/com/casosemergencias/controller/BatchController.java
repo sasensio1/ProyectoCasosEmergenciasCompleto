@@ -136,5 +136,24 @@ public class BatchController {
 	}
 	
 	
+	/**
+	 * Metodo que te redirige a la página batchExecutionMenu
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/private/homeExecutionBatchMenu", method = RequestMethod.GET)
+	public ModelAndView goHomeCasos() {
+		
+		logger.info("--- Inicio -- BatchMenu ---");
+		
+		ModelAndView model = new ModelAndView();
+		model.setViewName("private/batchExecutionMenuPage");
+	
+		logger.info("--- Fin -- BatchMenu ---");
+				
+		return model;
+	}
+	
+	
 	
 }
