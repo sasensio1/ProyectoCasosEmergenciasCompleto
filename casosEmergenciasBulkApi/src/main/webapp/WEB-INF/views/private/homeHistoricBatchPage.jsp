@@ -12,6 +12,7 @@
 		<link href="../resources/css/cabecera.css" rel="stylesheet" />
 		<link href="../resources/css/body.css" rel="stylesheet" />
 		<link href="../resources/css/jQueryDatatable.css" rel="stylesheet" />	
+		
 
 		<script src="../resources/js/jquery-1.12.3.js" lang=""></script>
 		<script src="../resources/js/jQueryDatatables.js"></script>
@@ -106,7 +107,7 @@
 						
 					</tr>
 				</table>
-			</div>
+			</div>			
 			<div>
 				<table id="tablaHistoricBatchs" class="display" style="width: 100%;"> 
 					<thead>
@@ -122,6 +123,10 @@
 		        	</thead>
 				</table>
 			</div>
+			<div>			
+				<iframe id="txtArea1" style="display:none"></iframe>
+				<button type="button" id="btnExport" > Export to Excel </button>
+			</div>	
 		</form>
 	</body>
 </html>

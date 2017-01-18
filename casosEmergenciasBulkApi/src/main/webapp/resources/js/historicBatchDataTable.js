@@ -1,4 +1,5 @@
 var table;
+var exportTable;
 var urlTable = createUrl();
 
 $(document).ready(function() {
@@ -63,7 +64,7 @@ $(document).ready(function() {
 		"order": [[0, 'asc']],
         "deferRender": true
 	});
-	
+		
 	$('#search').on('click', function() {
 				
 		table
@@ -77,6 +78,7 @@ $(document).ready(function() {
 			.columns(8).search($('#filtroComienzoOperacionHistoricBatchPickListFilter').val())
 			.draw();
 	});
+	
 	
 	//Añadir opcion de buscar pulsando enter
 	$("#filtroObjetoHistoricBatch").on("keyup", function (event) {
@@ -147,5 +149,13 @@ function limpiarCamposBuscadorHistoricBatchs() {
 	if (document.getElementById('filtroComienzoOperacionHistoricBatchPickListFilter').value != '') {
 		document.getElementById('filtroComienzoOperacionHistoricBatchPickListFilter').value = '';
 	}
+	
+	
+	//Exportar Datatable en formato excel	
+	$('#btnExport').on('click', function() {
+		
+		exportTable = document.getElementById('tablaHistoricBatchs');
+		fnExcelReport(exportTable);
+	});
 }
 
