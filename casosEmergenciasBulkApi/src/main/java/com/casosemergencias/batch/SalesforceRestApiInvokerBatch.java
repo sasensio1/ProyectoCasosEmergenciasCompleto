@@ -55,7 +55,6 @@ public class SalesforceRestApiInvokerBatch {
 	private Date processStartDate;
 	private Date processEndDate;
 	private String objectName;
-	private String objectSelect;
 
 	public void updateObjectsWithRestApiInfo() {
 		int dateSearchingRange = 0;
@@ -68,7 +67,7 @@ public class SalesforceRestApiInvokerBatch {
 				LocalDateTime localEndDateTime = LocalDateTime.ofInstant(processEndDate.toInstant(), ZoneId.of("UTC"));
 				dateSearchingRange = (int) ChronoUnit.DAYS.between(localStartDateTime, localEndDateTime);
 				if (dateSearchingRange > 0 && ConstantesBulkApi.MAX_SEARCHING_DAYS > 0 && dateSearchingRange <= ConstantesBulkApi.MAX_SEARCHING_DAYS) {
-					getBulkApiRecordsInfo(processStartDate, processEndDate, objectName, objectSelect);
+					getBulkApiRecordsInfo(processStartDate, processEndDate, objectName);
 				} else {
 					LOGGER.error("Error al obtener el rango de fechas. Compruebe que el rango es mayor a 0 o que no supera el maximo");
 				}
@@ -78,7 +77,7 @@ public class SalesforceRestApiInvokerBatch {
 			processStartDate = Utils.setHourInDate(yesterday, 0, 0, 0, 0);
 			processEndDate = Utils.setHourInDate(yesterday, 23, 59, 59, 999);
 			LOGGER.info("No se han indicado fechas de búsqueda. Se establece el día anterior como fecha por defecto");
-			getBulkApiRecordsInfo(processStartDate, processEndDate, objectName, objectSelect);
+			getBulkApiRecordsInfo(processStartDate, processEndDate, objectName);
 		}
 	}
 	
@@ -93,22 +92,19 @@ public class SalesforceRestApiInvokerBatch {
 	 * @param objectName
 	 *            Object name to update, if it's only necessary to update one
 	 *            object.
-	 * @param objectSelect
-	 *            Object select query fragment to update, if it's only necessary
-	 *            to update one object.
 	 */
-	private void getBulkApiRecordsInfo(Date processStartDate, Date processEndDate, String objectName, String objectSelect) {
+	private void getBulkApiRecordsInfo(Date processStartDate, Date processEndDate, String objectName) {
 		LOGGER.trace("Entrando en getAllBulkApiInfo para obtener los registros actualizados en Salesforce");
 		LOGGER.info("Búsqueda desde " + processStartDate);
 		LOGGER.info("Búsqueda hasta " + processEndDate);
 		try {
  			BulkApiInfoContainerBatch containerList = null;
  			UserSessionInfo userInfo = Utils.getUserSessionInfoFromProperties();
-			if (Utils.isNullOrEmptyString(objectName) && Utils.isNullOrEmptyString(objectSelect)) {
+			if (Utils.isNullOrEmptyString(objectName)) {
 				//1. Se realiza el login contra Salesforce REST API.
 				userInfo = salesforceLoginChecker.getUserSessionInfo(userInfo);
 				//2. Se recorre el mapa de objetos para realizar las llamadas al API.
-				containerList = getAllRecordsFromRestApi(objectName, objectSelect, processStartDate, processEndDate, userInfo);
+				containerList = getAllRecordsFromRestApi(objectName, objectsMapper.getObjectSelectsMap().get(objectName), processStartDate, processEndDate, userInfo);
 				
 				//4. Se envia el objeto al DAO para tratar la lista
 				insertRecordsInfo(containerList);
@@ -290,13 +286,5 @@ public class SalesforceRestApiInvokerBatch {
 
 	public void setObjectName(String objectName) {
 		this.objectName = objectName;
-	}
-
-	public String getObjectSelect() {
-		return objectSelect;
-	}
-
-	public void setObjectSelect(String objectSelect) {
-		this.objectSelect = objectSelect;
 	}
 }

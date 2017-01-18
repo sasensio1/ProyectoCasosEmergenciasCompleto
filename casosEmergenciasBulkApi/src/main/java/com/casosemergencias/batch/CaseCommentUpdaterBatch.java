@@ -30,7 +30,6 @@ public class CaseCommentUpdaterBatch {
 		restApiInvokerBatch.setProcessStartDate(processStartDate);
 		restApiInvokerBatch.setProcessEndDate(processEndDate);
 		restApiInvokerBatch.setObjectName(ConstantesBulkApi.ENTITY_CASE_COMMENT);
-		restApiInvokerBatch.setObjectSelect(ConstantesBulkApi.ENTITY_CASE_COMMENT_SELECT);
 		restApiInvokerBatch.updateObjectsWithRestApiInfo();
 		LOGGER.trace("Proceso de actualizacion de los comentarios de los casos de SalesForce a la base de datos de Heroku completado");
 	}
