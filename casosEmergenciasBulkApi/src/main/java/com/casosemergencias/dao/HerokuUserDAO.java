@@ -376,8 +376,7 @@ public class HerokuUserDAO {
 
 		int numModif = 0;
 		session.save(herokuUser);
-		session.flush();
-
+		session.close(); 
 		return numModif;
 	}
 	

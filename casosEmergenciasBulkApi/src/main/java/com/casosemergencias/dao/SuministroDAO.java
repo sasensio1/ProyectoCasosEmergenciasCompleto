@@ -739,6 +739,7 @@ public class SuministroDAO {
 		logger.debug("updateSuministro -- inicio");
 		int numModif = 0;
 		session.save(Suministro);
+		session.close();
 		return numModif;
 	}
 	
