@@ -31,9 +31,10 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 	final static Logger logger = Logger.getLogger(CaseCommentService.class);
 	
 	@Autowired
-	public CaseCommentDAO caseCommentDAO;
+	CaseCommentDAO caseCommentDAO;
 	
-	@Autowired CaseDAO caseDAO;
+	@Autowired 
+	CaseDAO caseDAO;
 	
 	@Autowired
 	private SalesforceLoginChecker salesforceLoginChecker;

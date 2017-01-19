@@ -310,6 +310,7 @@ public class BatchObjectsMapper {
 		objectSelectsMap.put(ConstantesBulkApi.ENTITY_USER, ConstantesBulkApi.ENTITY_USER_SELECT);
 		objectSelectsMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, ConstantesBulkApi.ENTITY_HEROKU_USER_SELECT);
 		objectSelectsMap.put(ConstantesBulkApi.ENTITY_TASK, ConstantesBulkApi.ENTITY_TASK_SELECT);
+		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, ConstantesBulkApi.ENTITY_CASE_COMMENT_SELECT);
 		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, ConstantesBulkApi.ENTITY_CASE_HISTORY_SELECT);
 	}
 	

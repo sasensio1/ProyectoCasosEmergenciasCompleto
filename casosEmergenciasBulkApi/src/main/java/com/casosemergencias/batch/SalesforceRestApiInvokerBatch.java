@@ -100,7 +100,7 @@ public class SalesforceRestApiInvokerBatch {
 		try {
  			BulkApiInfoContainerBatch containerList = null;
  			UserSessionInfo userInfo = Utils.getUserSessionInfoFromProperties();
-			if (Utils.isNullOrEmptyString(objectName)) {
+			if (!Utils.isNullOrEmptyString(objectName)) {
 				//1. Se realiza el login contra Salesforce REST API.
 				userInfo = salesforceLoginChecker.getUserSessionInfo(userInfo);
 				//2. Se recorre el mapa de objetos para realizar las llamadas al API.
@@ -117,10 +117,13 @@ public class SalesforceRestApiInvokerBatch {
 				while (objectsIterator.hasNext()) {
 					Entry<String, String> object = objectsIterator.next();
 					//3. Para cada objeto, deben obtenerse los que se deben actualizar desde Salesforce a Heroku
-					containerList = getAllRecordsFromRestApi(object.getKey(), object.getValue(), processStartDate, processEndDate, userInfo);
-					
-					//4. Se envia el objeto al DAO para tratar la lista
-					insertRecordsInfo(containerList);
+					if (!ConstantesBulkApi.ENTITY_HEROKU_USER.equals(object.getKey()) && !ConstantesBulkApi.ENTITY_CASE_COMMENT.equals(object.getKey())) {
+						//3.1. No se recorren los objetos CaseComment y HerokuUser porque tienen su propio Job programado
+						containerList = getAllRecordsFromRestApi(object.getKey(), object.getValue(), processStartDate, processEndDate, userInfo);
+						
+						//4. Se envia el objeto al DAO para tratar la lista
+						insertRecordsInfo(containerList);
+					}
 				}
 			} else {
 				LOGGER.error("No hay datos de registros a cargar. No se realiza ninguna llamada");
@@ -195,7 +198,7 @@ public class SalesforceRestApiInvokerBatch {
 				HttpEntity entity = response.getEntity();
 				String entityResponse = EntityUtils.toString(entity);
 				if (!Utils.isNullOrEmptyString(entityResponse)) {
-					bulkApiContainer = objectsParser.populateObjectListFromJsonObject(entityResponse, objectsMapper);
+					bulkApiContainer = objectsParser.populateObjectListFromJsonObject(entityName, entityResponse, objectsMapper);
 				} else {
 					LOGGER.error("Datos de la respuesta vacios. No es posible actualizar el objeto");
 				}

@@ -163,6 +163,8 @@ public class BatchObjectsParser {
 	 * Populates the list of objects to be inserted, updated and deleted from
 	 * Salesforce to Heroku.
 	 * 
+	 * @param entityName
+	 * 			  Name of the entity.
 	 * @param entityResponse
 	 *            Info of objects from the Bulk API Salesforce response.
 	 * @param mapper
@@ -173,11 +175,12 @@ public class BatchObjectsParser {
 	 *             Exception thrown if there has been any problem during the
 	 *             populating process.
 	 */
-	public BulkApiInfoContainerBatch populateObjectListFromJsonObject(String entityResponse, BatchObjectsMapper mapper) throws Exception {
+	public BulkApiInfoContainerBatch populateObjectListFromJsonObject(String entityName, String entityResponse, BatchObjectsMapper mapper) throws Exception {
 		LOGGER.trace("Entrando en populateObjectListFromJsonObject para obtener los registros actualizados");
 		//0. Se inicializan los objetos a utilizar
 		objectsMapper = mapper;
 		BulkApiInfoContainerBatch containerList = new BulkApiInfoContainerBatch();
+		containerList.setEntityName(entityName);
 		Map<OperationType, List<Object>> containerMap = new HashMap<OperationType, List<Object>>();
 		objectsToInsert = new ArrayList<Object>();
 		objectsToUpdate = new ArrayList<Object>();
@@ -194,7 +197,6 @@ public class BatchObjectsParser {
 					containerList.setTotalRecords(jsonResponse.getInt(ConstantesBulkApi.TOTAL_SIZE_NODE));
 					//2. Se obtiene el objeto a rellenar
 					getNewEntityObjectInfoFromJsonDocument(recordsArray.getJSONObject(0));
-					containerList.setEntityName(objectClass.getName());
 					for (int i = 0; i < recordsArray.length(); i++) {
 						//3. Se parsea el documento y se rellenan los parametros del objeto
 						JSONObject record = recordsArray.getJSONObject(i);
@@ -330,7 +332,7 @@ public class BatchObjectsParser {
 			JSONObject recordAttributes = record.getJSONObject(ConstantesBulkApi.RECORD_ATTRIBUTES_NAME_NODE);
 			objectName = recordAttributes.getString(ConstantesBulkApi.OBJECT_NAME_NODE);
 			if (!Utils.isNullOrEmptyString(objectName)) {
-				objectClass = Class.forName("com.casosemergencias.dao.vo." + objectsMapper.getObjectNamesEquivalenceMap().get(objectName));
+				objectClass = Class.forName(ConstantesBulkApi.REFLECTION_DAO_BEAN_OBJECTS_PACKAGE + objectsMapper.getObjectNamesEquivalenceMap().get(objectName));
 			}
 			entityObject = objectClass.newInstance();
 			classParamsMap = objectsMapper.getParamsMap(entityObject);

@@ -19,7 +19,9 @@ import com.casosemergencias.batch.util.BatchObjectsMapper;
 import com.casosemergencias.dao.HistoricBatchDAO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
 import com.casosemergencias.model.HistoricBatch;
+import com.casosemergencias.util.ApplicationContextProvider;
 import com.casosemergencias.util.ParserModelVO;
+import com.casosemergencias.util.constants.ConstantesBulkApi;
 import com.casosemergencias.util.datatables.DataTableProperties;
 
 public class BatchServiceImpl implements BatchService {
@@ -46,6 +48,9 @@ public class BatchServiceImpl implements BatchService {
 	
 	@Autowired
 	private BatchObjectsMapper batchObjectsMapper;
+	
+	@Autowired
+	private ApplicationContextProvider applicationContextProvider;
 	
 	@Override
 	public void updateHerokuPickListTable() {
@@ -118,7 +123,6 @@ public class BatchServiceImpl implements BatchService {
 	private void callSpecificServiceByReflection(String objectService, String objectNameServicesMethods, OperationType operation, List<Object> records) throws Exception {
 		LOGGER.trace("Se lanza callSpecificServiceByReflection con operacion --> " + operation);
 		LOGGER.trace("Registros a tratar: " + records.size());
-		Class<?> service = Class.forName(objectService);
 		String insertMethodStartName = "insert";
 		String updateMethodStartName = "update";
 		String deleteMethodStartName = "delete";
@@ -127,13 +131,26 @@ public class BatchServiceImpl implements BatchService {
 		switch (operation) {
 			case INSERT:
 				methodName = insertMethodStartName + objectNameServicesMethods + methodEndName;
+				break;
 			case UPDATE:
 				methodName = updateMethodStartName + objectNameServicesMethods + methodEndName;
+				break;
 			case DELETE:
 				methodName = deleteMethodStartName + objectNameServicesMethods + methodEndName;
+				break;
 		}
-		Method metodo = service.getDeclaredMethod(methodName);
-		metodo.invoke(records);
+		Class<?> serviceClass = Class.forName(ConstantesBulkApi.REFLECTION_LOGIC_SERVICES_OBJECTS_PACKAGE + objectService);
+		Class<?>[] paramListClass = {List.class};
+		StringBuilder sb = new StringBuilder(objectService);
+		int implIndex = sb.indexOf("Impl");
+		sb.setCharAt(0, Character.toLowerCase(sb.charAt(0)));
+		sb.delete(implIndex, implIndex + sb.length());
+		String springClassBeanName = sb.toString();
+		Object serviceObject = applicationContextProvider.getApplicationContext().getBean(springClassBeanName, serviceClass);
+		LOGGER.info("Clase a invocar: " + serviceClass.getName());
+		Method metodo = serviceClass.getDeclaredMethod(methodName, paramListClass);
+		LOGGER.info("Metodo a invocar: " + metodo.getName());
+		metodo.invoke(serviceObject, records);
 	}
 	
 	/**

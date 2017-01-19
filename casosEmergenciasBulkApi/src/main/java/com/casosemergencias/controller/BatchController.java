@@ -31,27 +31,27 @@ public class BatchController {
 	@Autowired
 	private BatchService batchService;
 	
-	@RequestMapping(value = "/updateHerokuPickListTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateHerokuPickListTable", method = RequestMethod.GET)
 	public void updateHerokuPickListHome() {
 		batchService.updateHerokuPickListTable();
 	}
 	
-	@RequestMapping(value = "/updateHerokuFieldLabelTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateHerokuFieldLabelTable", method = RequestMethod.GET)
 	public void updateHerokuFieldLabelHome() {
 		batchService.updateHerokuFieldLabelTable();
 	}
 	
-	@RequestMapping(value = "/updateHerokuCaseCommentTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateHerokuCaseCommentTable", method = RequestMethod.GET)
 	public void updateHerokuCaseCommentsHome() {
 		batchService.updateCaseCommentTable();	
 	}
 	
-	@RequestMapping(value = "/updateHerokuUserTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateHerokuUserTable", method = RequestMethod.GET)
 	public void updateHerokuUserHome() {
 		batchService.updateHerokuUserTable();	
 	}
 	
-	@RequestMapping(value = "/updateObjectTablesFromSalesforceApi", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateObjectTablesFromSalesforceApi", method = RequestMethod.GET)
 //	public void updateObjectTablesFromSalesforceApi(@RequestParam Date processStartDate, @RequestParam Date processEndDate) {
 //		batchService.updateObjectsInfoTables(processStartDate, processEndDate);
 	public void updateObjectTablesFromSalesforceApi() {

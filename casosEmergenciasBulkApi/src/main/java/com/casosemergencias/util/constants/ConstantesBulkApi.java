@@ -10,6 +10,10 @@ public class ConstantesBulkApi {
 	public static final String API_VERSION = "37.0";
 	public static final int MAX_SEARCHING_DAYS = 30;
 	
+	/** Constantes de paquetes de clases que se necesitan para llamar por reflexion. */
+	public static final String REFLECTION_DAO_BEAN_OBJECTS_PACKAGE = "com.casosemergencias.dao.vo.";
+	public static final String REFLECTION_LOGIC_SERVICES_OBJECTS_PACKAGE = "com.casosemergencias.logic.";
+	
 	/** Constantes de entidades a obtener. */
 	public static final String ENTITY_ACCOUNT = "Account";
 	public static final String ENTITY_ADDRESS = "Address__c";

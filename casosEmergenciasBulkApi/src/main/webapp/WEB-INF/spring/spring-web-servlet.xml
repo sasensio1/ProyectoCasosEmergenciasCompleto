@@ -156,6 +156,8 @@
 	<bean id="batchService" class="com.casosemergencias.logic.BatchServiceImpl"/>
 	
 	<!-- Batches y utilidades de SalesForce -->
+	<bean id="applicationContextProvider" class="com.casosemergencias.util.ApplicationContextProvider"/>
+	
 	<bean id="salesforceLoginChecker" class="com.casosemergencias.logic.sf.util.SalesforceLoginChecker"/>
 	<bean id="objectsParser" class="com.casosemergencias.batch.util.BatchObjectsParser"/> 
 	<bean id="objectsMapper" class="com.casosemergencias.batch.util.BatchObjectsMapper"/> 
