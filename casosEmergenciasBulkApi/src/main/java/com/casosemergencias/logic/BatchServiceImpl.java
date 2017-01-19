@@ -73,9 +73,10 @@ public class BatchServiceImpl implements BatchService {
 	}
 	
 	@Override
-	public void updateObjectsInfoTables(Date processStartDate, Date processEndDate) {
+	public void updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName) {
 		restApiInvokerBatch.setProcessStartDate(processStartDate);
 		restApiInvokerBatch.setProcessEndDate(processEndDate);
+		restApiInvokerBatch.setObjectName(objectName);		
 		restApiInvokerBatch.updateObjectsWithRestApiInfo();
 	}
 	

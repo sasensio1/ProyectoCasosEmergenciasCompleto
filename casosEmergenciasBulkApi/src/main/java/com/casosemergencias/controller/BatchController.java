@@ -1,5 +1,6 @@
 package com.casosemergencias.controller;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +15,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.casosemergencias.logic.BatchService;
 import com.casosemergencias.model.HistoricBatch;
 import com.casosemergencias.util.constants.Constantes;
+import com.casosemergencias.util.constants.ConstantesBulkApi;
 import com.casosemergencias.util.datatables.DataTableParser;
 import com.casosemergencias.util.datatables.DataTableProperties;
+import com.casosemergencias.util.Utils;
+
 
 @Controller
 public class BatchController {
@@ -31,31 +36,32 @@ public class BatchController {
 	@Autowired
 	private BatchService batchService;
 	
-	@RequestMapping(value = "/private/updateHerokuPickListTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateHerokuPickListTable", method = RequestMethod.GET)
 	public void updateHerokuPickListHome() {
 		batchService.updateHerokuPickListTable();
 	}
 	
-	@RequestMapping(value = "/private/updateHerokuFieldLabelTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateHerokuFieldLabelTable", method = RequestMethod.GET)
 	public void updateHerokuFieldLabelHome() {
 		batchService.updateHerokuFieldLabelTable();
 	}
 	
-	@RequestMapping(value = "/private/updateHerokuCaseCommentTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateHerokuCaseCommentTable", method = RequestMethod.GET)
 	public void updateHerokuCaseCommentsHome() {
 		batchService.updateCaseCommentTable();	
 	}
 	
-	@RequestMapping(value = "/private/updateHerokuUserTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateHerokuUserTable", method = RequestMethod.GET)
 	public void updateHerokuUserHome() {
 		batchService.updateHerokuUserTable();	
-	}
-	
-	@RequestMapping(value = "/private/updateObjectTablesFromSalesforceApi", method = RequestMethod.GET)
-//	public void updateObjectTablesFromSalesforceApi(@RequestParam Date processStartDate, @RequestParam Date processEndDate) {
-//		batchService.updateObjectsInfoTables(processStartDate, processEndDate);
-	public void updateObjectTablesFromSalesforceApi() {
-		batchService.updateObjectsInfoTables(null, null);
+	}	
+	@RequestMapping(value = "/updateObjectTablesFromSalesforceApi", method = RequestMethod.GET)
+	public void updateObjectTablesFromSalesforceApi(@RequestParam String processStartDateString, @RequestParam String processEndDateString,@RequestParam String objectName) {
+		
+		
+		Date processStartDate=Utils.parseStringToDate(processStartDateString);
+		Date processEndDate=Utils.parseStringToDate(processEndDateString);
+		batchService.updateObjectsInfoTables(processStartDate, processEndDate,objectName);
 	}
 	
 	/**
@@ -138,6 +144,27 @@ public class BatchController {
 		session.setAttribute(Constantes.SFID_CUENTA, null);	
 		session.setAttribute(Constantes.SFID_DIRECCION, null);
 		session.setAttribute(Constantes.FINAL_DETAIL_PAGE, null);
+	}
+	
+	
+	/**
+	 * Metodo que te redirige a la página batchExecutionMenu
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/private/homeExecutionBatchMenu", method = RequestMethod.GET)
+	public ModelAndView goHomeCasos() {
+		
+		logger.info("--- Inicio -- BatchMenu ---");
+		
+		ModelAndView model = new ModelAndView();
+		int maxProcessedDays= ConstantesBulkApi.MAX_SEARCHING_DAYS;
+		model.addObject("maxProcessedDays", maxProcessedDays);
+		model.setViewName("private/batchExecutionMenuPage");
+	
+		logger.info("--- Fin -- BatchMenu ---");
+				
+		return model;
 	}
 	
 	

@@ -171,5 +171,21 @@ function fnExcelReport(tab)
     return (sa);
 }
 
+//Función para calcular los días transcurridos entre dos fechas
+function restarFechas(f1,f2)
+ {
+ var aFecha1 = f1.split('-'); 
+ var aFecha2 = f2.split('-'); 
+ var asubFecha1 = aFecha1[2].split('T'); 
+ var asubFecha2 = aFecha2[2].split('T'); 
+
+
+ var fFecha1 = new Date(aFecha1[0],aFecha1[1],asubFecha1[0]); 
+ var fFecha2 = new Date(aFecha2[0],aFecha2[1],asubFecha2[0]); 
+ var dif = fFecha2 - fFecha1;
+ var dias = Math.round(dif / (1000 * 60 * 60 * 24)); 
+ return dias;
+ }
+
 
 
