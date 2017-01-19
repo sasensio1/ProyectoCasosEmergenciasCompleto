@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface AssetService {
 	
-	public boolean insertAssetSfList(List<Object> assetList, String processId);
+	public int insertAssetSfList(List<Object> assetList, String processId);
 	
-	public boolean updateAssetSfList(List<Object> assetList, String processId);
+	public int updateAssetSfList(List<Object> assetList, String processId);
 	
-	public boolean deleteAssetSfList(List<Object> assetList, String processId);
+	public int deleteAssetSfList(List<Object> assetList, String processId);
 
 }

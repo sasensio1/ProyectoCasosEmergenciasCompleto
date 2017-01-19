@@ -75,7 +75,6 @@ public class ConstantesBatch {
 	public static final String ERROR_RESPONSE_EMPTY = "SALESFORCE_API_RESPONSE_EMPTY";
 	public static final String ERROR_PROCESS_OBJECT = "ERROR_PROCESS_OBJECT";
 	public static final String ERROR_PROCESS_OBJECT_NULL_RECORDS = "ERROR_PROCESS_OBJECT_NULL_RECORDS";
-	
 	/** Valores de tipos de OBJETOS para HistoricBatch. */
 	public static final String OBJECT_ACCOUNT = "ACCOUNT";
 	public static final String OBJECT_ASSET = "ASSET";

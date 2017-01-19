@@ -210,6 +210,7 @@ public class CaseCommentDAO {
 				historicoInsertRecord.setSfidRecord(comentarioCasoToInsert.getSfid());
 				session.save(comentarioCasoToInsert);
 				tx.commit();
+				
 				logger.debug("--- Insertado comentario de caso con id: " + comentarioCasoToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
@@ -219,11 +220,11 @@ public class CaseCommentDAO {
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
-			
+
 			historicoInsertRecord.setSuccess(processOk);
-			historicoInsertRecord.setErrorCause(processOk ? null : processErrorCause);
 			historicoInsertRecord.setEndDate(new Date());
-			historicBatchDAO.insertHistoric(historicoInsertRecord);
+			historicoInsertRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);					
 		}
 		logger.debug("--- Fin -- insert Listado ComentarioCasos ---");
 		session.close();
@@ -294,18 +295,17 @@ public class CaseCommentDAO {
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
-			
+
 			historicoUpdateRecord.setSuccess(processOk);
-			historicoUpdateRecord.setErrorCause(processOk ? null : processErrorCause);
 			historicoUpdateRecord.setEndDate(new Date());
-			historicBatchDAO.insertHistoric(historicoUpdateRecord);
+			historicoUpdateRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);						
 		}
 		logger.debug("--- Fin -- update Listado ComentarioCasos ---");
 		session.close();
 		return processedRecords;
-
 	}
-		
+	
 	/**
 	 * Borra un listado de comentarioCasos venidos de Salesforce en BBDD de Heroku.
 	 * 
@@ -315,7 +315,6 @@ public class CaseCommentDAO {
 	@Transactional
 	public int deleteCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado ComentarioCasos ---");
-		
 		int processedRecords = 0;
 		boolean processOk = false;
 		String processErrorCause = null;
@@ -355,7 +354,7 @@ public class CaseCommentDAO {
 			}
 			
 			historicoDeleteRecord.setSuccess(processOk);
-			historicoDeleteRecord.setErrorCause(processOk ? null : processErrorCause);
+			historicoDeleteRecord.setErrorCause(processErrorCause);
 			historicoDeleteRecord.setEndDate(new Date());
 			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 		}
