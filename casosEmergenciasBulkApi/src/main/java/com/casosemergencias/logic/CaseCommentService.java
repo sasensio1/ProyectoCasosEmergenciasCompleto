@@ -16,9 +16,9 @@ public interface CaseCommentService {
 	
 	public CaseComment insertSalesforceCaseComment(CaseComment caseComment)throws EmergenciasException;
 	
-	public void insertCaseCommentSfList(List<Object> caseCommentList);
+	public boolean insertCaseCommentSfList(List<Object> caseCommentList, String processId);
 	
-	public void updateCaseCommentSfList(List<Object> caseCommentList);
+	public boolean updateCaseCommentSfList(List<Object> caseCommentList, String processId);
 	
-	public void deleteCaseCommentSfList(List<Object> caseCommentList);
+	public boolean deleteCaseCommentSfList(List<Object> caseCommentList, String processId);
 }

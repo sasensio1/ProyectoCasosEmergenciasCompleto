@@ -13,15 +13,18 @@ public class CasosRetiradosServiceImpl implements CasosRetiradosService {
 
 	
 	@Override
-	public void insertCasosReiteradosSfList(List<Object> casoReiteradoList) {
-		casoReiteradoDao.insertCasosReiteradosListSf(casoReiteradoList);
+	public boolean insertCasosReiteradosSfList(List<Object> casoReiteradoList, String processId) {
+		boolean resultOk = casoReiteradoDao.insertCasosReiteradosListSf(casoReiteradoList, processId);
+		return resultOk;
 	}
 	@Override
-	public void updateCasosReiteradosSfList(List<Object> casoReiteradoList) {
-		casoReiteradoDao.updateCasosReiteradosListSf(casoReiteradoList);
+	public boolean updateCasosReiteradosSfList(List<Object> casoReiteradoList, String processId) {
+		boolean resultOk = casoReiteradoDao.updateCasosReiteradosListSf(casoReiteradoList, processId);
+		return resultOk;
 	}
 	@Override
-	public void deleteCasosReiteradosSfList(List<Object> casoReiteradoList) {
-		casoReiteradoDao.deleteCasosReiteradosListSf(casoReiteradoList);
+	public boolean deleteCasosReiteradosSfList(List<Object> casoReiteradoList, String processId) {
+		boolean resultOk = casoReiteradoDao.deleteCasosReiteradosListSf(casoReiteradoList, processId);
+		return resultOk;
 	}
 }

@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface UserService {
 	
-	public void insertUserSfList(List<Object> userList);
+	public boolean insertUserSfList(List<Object> userList, String processId);
 
-	public void updateUserSfList(List<Object> userList);
+	public boolean updateUserSfList(List<Object> userList, String processId);
 	
-	public void deleteUserSfList(List<Object> userList);
+	public boolean deleteUserSfList(List<Object> userList, String processId);
 
 }

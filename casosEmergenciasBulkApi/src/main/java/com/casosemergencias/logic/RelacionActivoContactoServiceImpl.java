@@ -13,16 +13,19 @@ public class RelacionActivoContactoServiceImpl implements RelacionActivoContacto
 	private RelacionActivoContactoDAO relacionActivoContactoDao;
 	
 	@Override
-	public void insertRelacionActivoContactoSfList(List<Object> relacionActivoContactoList) {
-		relacionActivoContactoDao.insertRelacionActivoContactoListSf(relacionActivoContactoList);
+	public boolean insertRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId) {
+		boolean resultOk = relacionActivoContactoDao.insertRelacionActivoContactoListSf(relacionActivoContactoList, processId);
+		return resultOk;
 	}
 	@Override
-	public void updateRelacionActivoContactoSfList(List<Object> relacionActivoContactoList) {
-		relacionActivoContactoDao.updateRelacionActivoContactoListSf(relacionActivoContactoList);
+	public boolean updateRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId) {
+		boolean resultOk = relacionActivoContactoDao.updateRelacionActivoContactoListSf(relacionActivoContactoList, processId);
+		return resultOk;
 	}
 	@Override
-	public void deleteRelacionActivoContactoSfList(List<Object> relacionActivoContactoList) {
-		relacionActivoContactoDao.deleteRelacionActivoContactoListSf(relacionActivoContactoList);
+	public boolean deleteRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId) {
+		boolean resultOk = relacionActivoContactoDao.deleteRelacionActivoContactoListSf(relacionActivoContactoList, processId);
+		return resultOk;
 	}
 
 }

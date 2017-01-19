@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface StreetService {
 	
-	public void insertCalleSfList(List<Object> streetList);
+	public boolean insertCalleSfList(List<Object> streetList, String processId);
 	
-	public void updateCalleSfList(List<Object> streetList);
+	public boolean updateCalleSfList(List<Object> streetList, String processId);
 	
-	public void deleteCalleSfList(List<Object> streetList);
+	public boolean deleteCalleSfList(List<Object> streetList, String processId);
 
 }

@@ -21,9 +21,6 @@ public class HistoricBatchVO implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "sfid_job")
-	private String sfidJob;
-	
 	@Column(name = "sfid_record")
 	private String sfidRecord;
 
@@ -51,6 +48,9 @@ public class HistoricBatchVO implements Serializable {
 	@Column(name = "error_cause")
 	private String errorCause;
 	
+	@Column(name = "process_id")
+	private String processId;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -59,12 +59,12 @@ public class HistoricBatchVO implements Serializable {
 		this.id = id;
 	}
 
-	public String getSfidJob() {
-		return sfidJob;
+	public String getProcessId() {
+		return processId;
 	}
 
-	public void setSfidJob(String sfidJob) {
-		this.sfidJob = sfidJob;
+	public void setProcessId(String processId) {
+		this.processId = processId;
 	}
 	
 	public String getSfidRecord() {

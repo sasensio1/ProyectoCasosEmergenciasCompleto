@@ -15,10 +15,10 @@ public interface AccountService {
 	
 	public Integer getNumCuentas(DataTableProperties propDatatable);
 	
-	public void insertAccountSfList(List<Object> accountList);
+	public boolean insertAccountSfList(List<Object> accountList, String processId);
 	
-	public void updateAccountSfList(List<Object> accountList);
+	public boolean updateAccountSfList(List<Object> accountList, String processId);
 	
-	public void deleteAccountSfList(List<Object> accountList);
+	public boolean deleteAccountSfList(List<Object> accountList, String processId);
 
 }

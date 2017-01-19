@@ -130,16 +130,19 @@ public class DireccionServiceImpl implements DireccionService{
 	}
 	
 	@Override
-	public void insertAddressSfList(List<Object> addressList){
-		direccionDao.insertDireccionListSf(addressList);
+	public boolean insertAddressSfList(List<Object> addressList, String processId){
+		boolean resultOk = direccionDao.insertDireccionListSf(addressList, processId);
+		return resultOk;
 	}
 	@Override
-	public void updateAddressSfList(List<Object> addressList){
-		direccionDao.updateDireccionListSf(addressList);
+	public boolean updateAddressSfList(List<Object> addressList, String processId){
+		boolean resultOk = direccionDao.updateDireccionListSf(addressList, processId);
+		return resultOk;
 	}
 	@Override
-	public void deleteAddressSfList(List<Object> addressList){
-		direccionDao.deleteDireccionListSf(addressList);
+	public boolean deleteAddressSfList(List<Object> addressList, String processId){
+		boolean resultOk = direccionDao.deleteDireccionListSf(addressList, processId);
+		return resultOk;
 	}
 
 }

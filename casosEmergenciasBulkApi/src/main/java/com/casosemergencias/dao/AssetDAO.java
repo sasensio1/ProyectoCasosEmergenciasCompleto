@@ -137,7 +137,7 @@ public class AssetDAO {
 	 */
 		
 	@Transactional
-	public void insertAssetListSf(List<Object> objectList) {
+	public boolean insertAssetListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Activos ---");
 		
 		Integer cont = 0;
@@ -147,6 +147,7 @@ public class AssetDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_ASSET);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -155,6 +156,7 @@ public class AssetDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_ASSET);
+			historicoInsertRecord.setProcessId(processId);
 			
 			AssetVO activoToInsert = new AssetVO();
 			try{
@@ -193,7 +195,8 @@ public class AssetDAO {
 			historicoProcessInsert.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
-		}		
+		}
+		return historicoProcessInsert.getSuccess();		
 	}
 	
 
@@ -205,7 +208,7 @@ public class AssetDAO {
 	 */
 		
 	@Transactional
-	public void updateAssetListSf(List<Object> objectList) {
+	public boolean updateAssetListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Activos ---");
 		
 		Integer cont = 0;
@@ -215,6 +218,7 @@ public class AssetDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_ASSET);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -222,6 +226,7 @@ public class AssetDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_ASSET);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			AssetVO activoToUpdate = new AssetVO();
 			try{
@@ -279,6 +284,7 @@ public class AssetDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -290,7 +296,7 @@ public class AssetDAO {
 	 */
 		
 	@Transactional
-	public void deleteAssetListSf(List<Object> objectList) {
+	public boolean deleteAssetListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Activos ---");
 		
 Integer cont = 0;
@@ -300,6 +306,7 @@ Integer cont = 0;
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_ASSET);
+		historicoProcessDelete.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -307,6 +314,7 @@ Integer cont = 0;
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_ASSET);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			AssetVO activoToDelete = new AssetVO();
 			try{
@@ -348,6 +356,7 @@ Integer cont = 0;
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

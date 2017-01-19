@@ -648,7 +648,7 @@ public class AccountDAO {
 	 */
 		
 	@Transactional
-	public void insertAccountListSf(List<Object> objectList) {
+	public boolean insertAccountListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Cuentas ---");
 		
 		Integer cont = 0;
@@ -658,6 +658,7 @@ public class AccountDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_ACCOUNT);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -666,6 +667,7 @@ public class AccountDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_ACCOUNT);
+			historicoInsertRecord.setProcessId(processId);
 			
 			AccountVO cuentaToInsert = new AccountVO();
 			try{
@@ -703,6 +705,7 @@ public class AccountDAO {
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 		
 	}
 	
@@ -715,7 +718,7 @@ public class AccountDAO {
 	 */
 		
 	@Transactional
-	public void updateAccountListSf(List<Object> objectList) {
+	public boolean updateAccountListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Cuentas ---");
 		
 		Integer cont = 0;
@@ -725,6 +728,7 @@ public class AccountDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_ACCOUNT);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -732,6 +736,7 @@ public class AccountDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_ACCOUNT);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			AccountVO cuentaToUpdate = new AccountVO();
 			try{
@@ -808,6 +813,7 @@ public class AccountDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -819,7 +825,7 @@ public class AccountDAO {
 	 */
 		
 	@Transactional
-	public void deleteAccountListSf(List<Object> objectList) {
+	public boolean deleteAccountListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Cuentas ---");
 		
 		Integer cont = 0;
@@ -829,6 +835,7 @@ public class AccountDAO {
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_ACCOUNT);
+		historicoProcessDelete.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -836,6 +843,7 @@ public class AccountDAO {
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_ACCOUNT);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			AccountVO cuentaToDelete = new AccountVO();
 			try{
@@ -879,6 +887,7 @@ public class AccountDAO {
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

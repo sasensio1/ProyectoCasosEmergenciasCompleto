@@ -32,7 +32,7 @@ public class GrupoDAO {
 	 */
 		
 	@Transactional
-	public void insertGroupListSf(List<Object> objectList) {
+	public boolean insertGroupListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Grupos ---");
 
 		Integer cont = 0;
@@ -42,6 +42,7 @@ public class GrupoDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_GROUP);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -49,6 +50,7 @@ public class GrupoDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_GROUP);
+			historicoInsertRecord.setProcessId(processId);
 			GroupVO grupoToInsert = new GroupVO();
 			try{
 				grupoToInsert=(GroupVO)object;
@@ -83,6 +85,7 @@ public class GrupoDAO {
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -94,7 +97,7 @@ public class GrupoDAO {
 	 */
 		
 	@Transactional
-	public void updateGroupListSf(List<Object> objectList) {
+	public boolean updateGroupListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Grupos ---");
 
 		Integer cont = 0;
@@ -104,6 +107,7 @@ public class GrupoDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_GROUP);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -111,6 +115,7 @@ public class GrupoDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_GROUP);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			GroupVO grupoToUpdate = new GroupVO();
 			try{
@@ -163,6 +168,7 @@ public class GrupoDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -174,7 +180,7 @@ public class GrupoDAO {
 	 */
 		
 	@Transactional
-	public void deleteGroupListSf(List<Object> objectList) {
+	public boolean deleteGroupListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Grupos ---");
 		
 		Integer cont = 0;
@@ -184,6 +190,7 @@ public class GrupoDAO {
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_GROUP);
+		historicoProcessDelete.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -191,6 +198,7 @@ public class GrupoDAO {
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_GROUP);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			GroupVO grupoToDelete = new GroupVO();
 			try{
@@ -232,6 +240,7 @@ public class GrupoDAO {
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

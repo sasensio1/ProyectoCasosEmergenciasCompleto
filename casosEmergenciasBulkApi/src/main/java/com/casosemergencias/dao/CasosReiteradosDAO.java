@@ -172,7 +172,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	 */
 		
 	@Transactional
-	public void insertCasosReiteradosListSf(List<Object> objectList) {
+	public boolean insertCasosReiteradosListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado CasoReiterados ---");
 
 		Integer cont = 0;
@@ -182,6 +182,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -190,6 +191,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+			historicoInsertRecord.setProcessId(processId);
 			
 			CasosReiteradosVO casoReiteradoToInsert = new CasosReiteradosVO();
 			try{
@@ -227,6 +229,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -238,7 +241,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	 */
 		
 	@Transactional
-	public void updateCasosReiteradosListSf(List<Object> objectList) {
+	public boolean updateCasosReiteradosListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado CasoReiterados ---");
 		
 		Integer cont = 0;
@@ -248,6 +251,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -255,6 +259,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			CasosReiteradosVO casoReiteradoToUpdate = new CasosReiteradosVO();
 			try{
@@ -312,6 +317,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -323,7 +329,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	 */
 		
 	@Transactional
-	public void deleteCasosReiteradosListSf(List<Object> objectList) {
+	public boolean deleteCasosReiteradosListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado CasoReiterados ---");
 		
 		Integer cont = 0;
@@ -333,6 +339,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+		historicoProcessDelete.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -340,6 +347,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			CasosReiteradosVO casoReiteradoToDelete = new CasosReiteradosVO();
 			try{
@@ -381,6 +389,7 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

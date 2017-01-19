@@ -144,16 +144,19 @@ public class HerokuUserServiceImpl implements HerokuUserService{
 	}
 	
 	@Override
-	public void insertHerokuUserSfList(List<Object> herokuUserList) {
-		herokuUserDao.insertHerokuUserListSf(herokuUserList);
+	public boolean insertHerokuUserSfList(List<Object> herokuUserList, String processId) {
+		boolean resultOk = herokuUserDao.insertHerokuUserListSf(herokuUserList, processId);
+		return resultOk;
 	}
 	@Override
-	public void updateHerokuUserSfList(List<Object> herokuUserList) {
-		herokuUserDao.updateHerokuUserListSf(herokuUserList);
+	public boolean updateHerokuUserSfList(List<Object> herokuUserList, String processId) {
+		boolean resultOk = herokuUserDao.updateHerokuUserListSf(herokuUserList, processId);
+		return resultOk;
 	}
 	@Override
-	public void deleteHerokuUserSfList(List<Object> herokuUserList) {
-		herokuUserDao.deleteHerokuUserListSf(herokuUserList);
+	public boolean deleteHerokuUserSfList(List<Object> herokuUserList, String processId) {
+		boolean resultOk = herokuUserDao.deleteHerokuUserListSf(herokuUserList, processId);
+		return resultOk;
 	}
 
 }

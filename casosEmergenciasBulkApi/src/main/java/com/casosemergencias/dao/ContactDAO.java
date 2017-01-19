@@ -662,7 +662,7 @@ public class ContactDAO {
 	 */
 		
 	@Transactional
-	public void insertContactListSf(List<Object> objectList) {
+	public boolean insertContactListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Contactos ---");
 		
 		Integer cont = 0;
@@ -672,6 +672,7 @@ public class ContactDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_CONTACT);
+		historicoProcessInsert.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -680,6 +681,7 @@ public class ContactDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_CONTACT);
+			historicoInsertRecord.setProcessId(processId);
 			
 			ContactVO contactoToInsert = new ContactVO();
 			try{
@@ -717,6 +719,7 @@ public class ContactDAO {
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -728,7 +731,7 @@ public class ContactDAO {
 	 */
 		
 	@Transactional
-	public void updateContactListSf(List<Object> objectList) {
+	public boolean updateContactListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Contactos ---");
 		
 		Integer cont = 0;
@@ -738,6 +741,7 @@ public class ContactDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_CONTACT);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -745,6 +749,7 @@ public class ContactDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_CONTACT);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			ContactVO contactoToUpdate = new ContactVO();
 			try{
@@ -835,6 +840,7 @@ public class ContactDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -846,7 +852,7 @@ public class ContactDAO {
 	 */
 		
 	@Transactional
-	public void deleteContactListSf(List<Object> objectList) {
+	public boolean deleteContactListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Contactos ---");
 
 		Integer cont = 0;
@@ -856,6 +862,7 @@ public class ContactDAO {
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_CONTACT);
+		historicoProcessDelete.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -863,6 +870,7 @@ public class ContactDAO {
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_CONTACT);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			ContactVO contactoToDelete = new ContactVO();
 			try{
@@ -904,6 +912,7 @@ public class ContactDAO {
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

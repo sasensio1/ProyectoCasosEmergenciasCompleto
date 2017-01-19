@@ -17,11 +17,11 @@ public interface DireccionService {
 	
 	public Map<String, Object> getDatosCalleWS(String idComuna, String nombreCalle);
 	
-	public void insertAddressSfList(List<Object> addressList);
+	public boolean insertAddressSfList(List<Object> addressList, String processId);
 	
-	public void updateAddressSfList(List<Object> addressList);
+	public boolean updateAddressSfList(List<Object> addressList, String processId);
 
-	public void deleteAddressSfList(List<Object> addressList);
+	public boolean deleteAddressSfList(List<Object> addressList, String processId);
 	
 	/*public void sendDirectionToSF(Direccion direccion);*/
 }

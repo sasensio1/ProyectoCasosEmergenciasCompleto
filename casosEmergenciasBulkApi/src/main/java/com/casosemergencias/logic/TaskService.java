@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface TaskService {
 	
-	public void insertTaskSfList(List<Object> taskList);
+	public boolean insertTaskSfList(List<Object> taskList, String processId);
 	
-	public void updateTaskSfList(List<Object> taskList);
+	public boolean updateTaskSfList(List<Object> taskList, String processId);
 	
-	public void deleteTaskSfList(List<Object> taskList);
+	public boolean deleteTaskSfList(List<Object> taskList, String processId);
 
 }

@@ -125,7 +125,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	 * @return
 	 */
 	@Transactional
-	public void insertTaskListSf(List<Object> objectList) {
+	public boolean insertTaskListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Tareas ---");
 
 		Integer cont = 0;
@@ -135,6 +135,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_TASK);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -143,6 +144,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_TASK);
+			historicoInsertRecord.setProcessId(processId);
 			
 			TaskVO taskToInsert = new TaskVO();
 			try{
@@ -180,6 +182,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 
 	/**
@@ -189,7 +192,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	 * @return
 	 */
 	@Transactional
-	public void updateTaskListSf(List<Object> objectList) {
+	public boolean updateTaskListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Tasks ---");
 
 		Integer cont = 0;
@@ -199,6 +202,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_TASK);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -206,6 +210,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_TASK);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			TaskVO taskToUpdate = new TaskVO();
 			try{
@@ -274,6 +279,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 	}
 		
 	/**
@@ -283,7 +289,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	 * @return
 	 */
 	@Transactional
-	public void deleteTaskListSf(List<Object> objectList) {
+	public boolean deleteTaskListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Tareas ---");
 		
 		Integer cont = 0;
@@ -293,6 +299,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_TASK);
+		historicoProcessDelete.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -300,6 +307,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_TASK);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			TaskVO taskToDelete = new TaskVO();
 			try{
@@ -341,6 +349,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 }

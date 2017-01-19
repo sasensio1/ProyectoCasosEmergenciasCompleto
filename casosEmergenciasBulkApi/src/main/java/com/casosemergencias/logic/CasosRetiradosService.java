@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface CasosRetiradosService {
 	
-	public void insertCasosReiteradosSfList(List<Object> casoReiteradoList);
+	public boolean insertCasosReiteradosSfList(List<Object> casoReiteradoList, String processId);
 	
-	public void updateCasosReiteradosSfList(List<Object> casoReiteradoList);
+	public boolean updateCasosReiteradosSfList(List<Object> casoReiteradoList, String processId);
 	
-	public void deleteCasosReiteradosSfList(List<Object> casoReiteradoList);
+	public boolean deleteCasosReiteradosSfList(List<Object> casoReiteradoList, String processId);
 
 }

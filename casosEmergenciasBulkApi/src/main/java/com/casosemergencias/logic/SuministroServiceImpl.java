@@ -326,15 +326,18 @@ public class SuministroServiceImpl implements SuministroService{
 	}
 	
 	@Override
-	public void insertSuministroSfList(List<Object> suministroList) {
-		suministroDao.insertSuministroListSf(suministroList);
+	public boolean insertSuministroSfList(List<Object> suministroList, String processId) {
+		boolean resultOk = suministroDao.insertSuministroListSf(suministroList, processId);
+		return resultOk;
 	}
 	@Override
-	public void updateSuministroSfList(List<Object> suministroList) {
-		suministroDao.updateSuministroListSf(suministroList);
+	public boolean updateSuministroSfList(List<Object> suministroList, String processId) {
+		boolean resultOk = suministroDao.updateSuministroListSf(suministroList, processId);
+		return resultOk;
 	}
 	@Override
-	public void deleteSuministroSfList(List<Object> suministroList) {
-		suministroDao.deleteSuministroListSf(suministroList);
+	public boolean deleteSuministroSfList(List<Object> suministroList, String processId) {
+		boolean resultOk = suministroDao.deleteSuministroListSf(suministroList, processId);
+		return resultOk;
 	}
 }

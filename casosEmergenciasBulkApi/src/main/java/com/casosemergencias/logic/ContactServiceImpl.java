@@ -379,15 +379,18 @@ public class ContactServiceImpl implements ContactService{
 	}*/
 	
 	@Override
-	public void insertContactSfList(List<Object> contactList) {
-		contactDao.insertContactListSf(contactList);
+	public boolean insertContactSfList(List<Object> contactList, String processId) {
+		boolean resultOk = contactDao.insertContactListSf(contactList, processId);
+		return resultOk;
 	}
 	@Override
-	public void updateContactSfList(List<Object> contactList) {
-		contactDao.updateContactListSf(contactList);
+	public boolean updateContactSfList(List<Object> contactList, String processId) {
+		boolean resultOk = contactDao.updateContactListSf(contactList, processId);
+		return resultOk;
 	}
 	@Override
-	public void deleteContactSfList(List<Object> contactList) {
-		contactDao.deleteContactListSf(contactList);
+	public boolean deleteContactSfList(List<Object> contactList, String processId) {
+		boolean resultOk = contactDao.deleteContactListSf(contactList, processId);
+		return resultOk;
 	}
 }

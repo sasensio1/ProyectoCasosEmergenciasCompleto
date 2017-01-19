@@ -10,16 +10,19 @@ public class GroupServiceImpl implements GroupService {
 	private GrupoDAO groupDao;
 	
 	@Override
-	public void insertGroupSfList(List<Object> groupList) {
-		groupDao.insertGroupListSf(groupList);
+	public boolean insertGroupSfList(List<Object> groupList, String processId) {
+		boolean resultOk = groupDao.insertGroupListSf(groupList, processId);
+		return resultOk;
 	}
 	@Override
-	public void updateGroupSfList(List<Object> groupList) {
-		groupDao.updateGroupListSf(groupList);
+	public boolean updateGroupSfList(List<Object> groupList, String processId) {
+		boolean resultOk = groupDao.updateGroupListSf(groupList, processId);
+		return resultOk;
 	}
 	@Override
-	public void deleteGroupSfList(List<Object> groupList) {
-		groupDao.deleteGroupListSf(groupList);
+	public boolean deleteGroupSfList(List<Object> groupList, String processId) {
+		boolean resultOk = groupDao.deleteGroupListSf(groupList, processId);
+		return resultOk;
 	}
 
 }

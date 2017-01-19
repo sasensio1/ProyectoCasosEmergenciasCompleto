@@ -100,7 +100,7 @@ public class CalleDAO {
 	 */
 		
 	@Transactional
-	public void insertStreetListSf(List<Object> objectList) {
+	public boolean insertStreetListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Calles ---");
 		
 		Integer cont = 0;
@@ -110,6 +110,7 @@ public class CalleDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_STREET);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -118,6 +119,7 @@ public class CalleDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_STREET);
+			historicoInsertRecord.setProcessId(processId);
 			
 			StreetVO calleToInsert = new StreetVO();
 			try{
@@ -155,6 +157,7 @@ public class CalleDAO {
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -166,7 +169,7 @@ public class CalleDAO {
 	 */
 		
 	@Transactional
-	public void updateStreetListSf(List<Object> objectList) {
+	public boolean updateStreetListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Calles ---");
 		
 		Integer cont = 0;
@@ -176,6 +179,7 @@ public class CalleDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_STREET);
+		historicoProcessUpdate.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -183,6 +187,7 @@ public class CalleDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_STREET);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			StreetVO calleToUpdate = new StreetVO();
 			try{
@@ -258,6 +263,7 @@ public class CalleDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -269,7 +275,7 @@ public class CalleDAO {
 	 */
 		
 	@Transactional
-	public void deleteStreetListSf(List<Object> objectList) {
+	public boolean deleteStreetListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Calles ---");
 		
 		Integer cont = 0;
@@ -279,6 +285,7 @@ public class CalleDAO {
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_STREET);
+		historicoProcessDelete.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -286,6 +293,7 @@ public class CalleDAO {
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_STREET);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			StreetVO calleToDelete = new StreetVO();
 			try{
@@ -326,6 +334,7 @@ public class CalleDAO {
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

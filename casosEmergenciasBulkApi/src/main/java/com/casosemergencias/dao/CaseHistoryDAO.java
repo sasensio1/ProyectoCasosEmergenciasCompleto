@@ -228,7 +228,7 @@ public class CaseHistoryDAO {
 	 */
 		
 	@Transactional
-	public void insertCaseHistoryListSf(List<Object> objectList) {
+	public boolean insertCaseHistoryListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado HistorialCasos ---");
 		
 		Integer cont = 0;
@@ -238,6 +238,7 @@ public class CaseHistoryDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
+		historicoProcessInsert.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -246,6 +247,7 @@ public class CaseHistoryDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
+			historicoInsertRecord.setProcessId(processId);
 			
 			CaseHistoryVO historialCasoToInsert = new CaseHistoryVO();
 			try{
@@ -283,6 +285,7 @@ public class CaseHistoryDAO {
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -294,7 +297,7 @@ public class CaseHistoryDAO {
 	 */
 		
 	@Transactional
-	public void updateCaseHistoryListSf(List<Object> objectList) {
+	public boolean updateCaseHistoryListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado HistorialCasos ---");
 		
 		Integer cont = 0;
@@ -304,6 +307,7 @@ public class CaseHistoryDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -311,6 +315,7 @@ public class CaseHistoryDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			CaseHistoryVO historialCasoToUpdate = new CaseHistoryVO();
 			//1.1- Seteamos los campos a actualizar distintos de String				
@@ -371,6 +376,7 @@ public class CaseHistoryDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -382,7 +388,7 @@ public class CaseHistoryDAO {
 	 */
 		
 	@Transactional
-	public void deleteCaseHistoryListSf(List<Object> objectList) {
+	public boolean deleteCaseHistoryListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado HistorialCasos ---");
 		
 		Integer cont = 0;
@@ -392,6 +398,7 @@ public class CaseHistoryDAO {
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
+		historicoProcessDelete.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -399,6 +406,7 @@ public class CaseHistoryDAO {
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			CaseHistoryVO historialCasoToDelete = new CaseHistoryVO();
 			try{
@@ -440,6 +448,7 @@ public class CaseHistoryDAO {
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

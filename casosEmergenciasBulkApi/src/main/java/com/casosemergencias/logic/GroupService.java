@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface GroupService {
 	
-	public void insertGroupSfList(List<Object> groupList);
+	public boolean insertGroupSfList(List<Object> groupList, String processId);
 	
-	public void updateGroupSfList(List<Object> groupList);
+	public boolean updateGroupSfList(List<Object> groupList, String processId);
 	
-	public void deleteGroupSfList(List<Object> groupList);
+	public boolean deleteGroupSfList(List<Object> groupList, String processId);
 
 }

@@ -192,7 +192,7 @@ public class CaseCommentDAO {
 	 */
 		
 	@Transactional
-	public void insertCaseCommentListSf(List<Object> objectList) {
+	public boolean insertCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado ComentarioCasos ---");
 		
 		Integer cont = 0;
@@ -202,6 +202,7 @@ public class CaseCommentDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
+		historicoProcessInsert.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -210,6 +211,7 @@ public class CaseCommentDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
+			historicoInsertRecord.setProcessId(processId);
 			
 			CaseCommentVO comentarioCasoToInsert = new CaseCommentVO();
 			try{
@@ -247,6 +249,7 @@ public class CaseCommentDAO {
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -258,7 +261,7 @@ public class CaseCommentDAO {
 	 */
 		
 	@Transactional
-	public void updateCaseCommentListSf(List<Object> objectList) {
+	public boolean updateCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado ComentarioCasos ---");
 		
 		Integer cont = 0;
@@ -268,6 +271,7 @@ public class CaseCommentDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
+		historicoProcessUpdate.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -275,6 +279,7 @@ public class CaseCommentDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			CaseCommentVO comentarioCasoToUpdate = new CaseCommentVO();
 			try{
@@ -339,6 +344,7 @@ public class CaseCommentDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -350,7 +356,7 @@ public class CaseCommentDAO {
 	 */
 		
 	@Transactional
-	public void deleteCaseCommentListSf(List<Object> objectList) {
+	public boolean deleteCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado ComentarioCasos ---");
 		
 		Integer cont = 0;
@@ -360,6 +366,7 @@ public class CaseCommentDAO {
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
+		historicoProcessDelete.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -367,6 +374,7 @@ public class CaseCommentDAO {
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			CaseCommentVO comentarioCasoToDelete = new CaseCommentVO();
 			try{
@@ -408,6 +416,7 @@ public class CaseCommentDAO {
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

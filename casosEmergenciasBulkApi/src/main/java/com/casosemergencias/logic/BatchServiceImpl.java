@@ -80,8 +80,12 @@ public class BatchServiceImpl implements BatchService {
 	}
 	
 	@Override
-	public void updateHerokuObjectsFromBulkApi(BulkApiInfoContainerBatch bulkApiInfoContainer) {
+	public boolean updateHerokuObjectsFromBulkApi(BulkApiInfoContainerBatch bulkApiInfoContainer, String processId) {
 		LOGGER.trace("Entrando en updateHerokuObjectsFromBulkApi para actualizar registros");
+		boolean resultOk = true;
+		boolean insertOk = true;
+		boolean updateOk = true;
+		boolean deleteOk = true;
 		try {
 			if (bulkApiInfoContainer != null && bulkApiInfoContainer.getRecordsMap() != null) {
 				if (bulkApiInfoContainer.getTotalRecords() > 0) {
@@ -92,19 +96,22 @@ public class BatchServiceImpl implements BatchService {
 					if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.INSERT)
 							&& bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT) != null
 							&& !bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT).isEmpty()) {
-						callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.INSERT, bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT));
+						insertOk = callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.INSERT, bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT), processId);
 					}
 					//Registros a actualizar
 					if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.UPDATE)
 							&& bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE) != null
 							&& !bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE).isEmpty()) {
-						callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.UPDATE, bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE));
+						updateOk = callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.UPDATE, bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE), processId);
 					}
 					//Registros a eliminar
 					if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.DELETE)
 							&& bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE) != null
 							&& !bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE).isEmpty()) {
-						callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.DELETE, bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE));
+						deleteOk = callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.DELETE, bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE), processId);
+					}
+					if(insertOk == false || updateOk == false || deleteOk == false){
+						resultOk = false;
 					}
 				} else {
 					LOGGER.error("No hay registros a actualizar");
@@ -115,12 +122,13 @@ public class BatchServiceImpl implements BatchService {
 		} catch (Exception exception) {
 			LOGGER.error("Error tratando los registros", exception);
 		}
+		return resultOk;
 	}
 
 	/**
 	 * @param bulkApiInfoContainer
 	 */
-	private void callSpecificServiceByReflection(String objectService, String objectNameServicesMethods, OperationType operation, List<Object> records) throws Exception {
+	private boolean callSpecificServiceByReflection(String objectService, String objectNameServicesMethods, OperationType operation, List<Object> records, String processId) throws Exception {
 		LOGGER.trace("Se lanza callSpecificServiceByReflection con operacion --> " + operation);
 		LOGGER.trace("Registros a tratar: " + records.size());
 		String insertMethodStartName = "insert";
@@ -140,7 +148,7 @@ public class BatchServiceImpl implements BatchService {
 				break;
 		}
 		Class<?> serviceClass = Class.forName(ConstantesBulkApi.REFLECTION_LOGIC_SERVICES_OBJECTS_PACKAGE + objectService);
-		Class<?>[] paramListClass = {List.class};
+		Class<?>[] paramListClass = {List.class, String.class};
 		StringBuilder sb = new StringBuilder(objectService);
 		int implIndex = sb.indexOf("Impl");
 		sb.setCharAt(0, Character.toLowerCase(sb.charAt(0)));
@@ -150,7 +158,8 @@ public class BatchServiceImpl implements BatchService {
 		LOGGER.info("Clase a invocar: " + serviceClass.getName());
 		Method metodo = serviceClass.getDeclaredMethod(methodName, paramListClass);
 		LOGGER.info("Metodo a invocar: " + metodo.getName());
-		metodo.invoke(serviceObject, records);
+		boolean resultOk = (boolean)metodo.invoke(serviceObject, records, processId);
+		return resultOk;
 	}
 	
 	/**

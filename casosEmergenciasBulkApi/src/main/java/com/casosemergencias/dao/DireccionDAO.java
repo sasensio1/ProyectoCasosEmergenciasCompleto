@@ -536,7 +536,7 @@ public class DireccionDAO {
 	 */
 		
 	@Transactional
-	public void insertDireccionListSf(List<Object> objectList) {
+	public boolean insertDireccionListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Direcciones ---");
 
 		Integer cont = 0;
@@ -546,6 +546,7 @@ public class DireccionDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_ADDRESS);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -554,6 +555,7 @@ public class DireccionDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_ADDRESS);
+			historicoInsertRecord.setProcessId(processId);
 			
 			DireccionVO direccionToInsert = new DireccionVO();
 			try{
@@ -591,6 +593,7 @@ public class DireccionDAO {
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -602,7 +605,7 @@ public class DireccionDAO {
 	 */
 		
 	@Transactional
-	public void updateDireccionListSf(List<Object> objectList) {
+	public boolean updateDireccionListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Direcciones ---");
 
 		Integer cont = 0;
@@ -612,6 +615,7 @@ public class DireccionDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_ADDRESS);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -619,6 +623,7 @@ public class DireccionDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_ADDRESS);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			DireccionVO direccionToUpdate = new DireccionVO();
 			try{
@@ -685,6 +690,7 @@ public class DireccionDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -696,7 +702,7 @@ public class DireccionDAO {
 	 */
 		
 	@Transactional
-	public void deleteDireccionListSf(List<Object> objectList) {
+	public boolean deleteDireccionListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Direcciones ---");
 
 		Integer cont = 0;
@@ -706,6 +712,7 @@ public class DireccionDAO {
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_ADDRESS);
+		historicoProcessDelete.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -713,6 +720,7 @@ public class DireccionDAO {
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_ADDRESS);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			DireccionVO direccionToDelete = new DireccionVO();
 			try{
@@ -754,6 +762,7 @@ public class DireccionDAO {
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

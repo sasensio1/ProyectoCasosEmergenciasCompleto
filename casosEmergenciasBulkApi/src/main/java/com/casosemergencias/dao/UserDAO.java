@@ -130,7 +130,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 	 */
 		
 	@Transactional
-	public void insertUserListSf(List<Object> objectList) {
+	public boolean insertUserListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Usuarios ---");
 
 		Integer cont = 0;
@@ -140,6 +140,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_USER);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -148,6 +149,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_USER);
+			historicoInsertRecord.setProcessId(processId);
 			
 			UserVO usuarioToInsert = new UserVO();
 			try{
@@ -185,6 +187,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -196,7 +199,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 	 */
 		
 	@Transactional
-	public void updateUserListSf(List<Object> objectList) {
+	public boolean updateUserListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Usuarios ---");
 
 		Integer cont = 0;
@@ -206,6 +209,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_USER);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -213,6 +217,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_USER);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			UserVO usuarioToUpdate = new UserVO();
 			try{
@@ -269,6 +274,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -280,7 +286,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 	 */
 		
 	@Transactional
-	public void deleteUserListSf(List<Object> objectList) {
+	public boolean deleteUserListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Usuarios ---");
 		
 		Integer cont = 0;
@@ -290,6 +296,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_USER);
+		historicoProcessDelete.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -297,6 +304,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_USER);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			UserVO usuarioToDelete = new UserVO();
 			try{
@@ -338,6 +346,7 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

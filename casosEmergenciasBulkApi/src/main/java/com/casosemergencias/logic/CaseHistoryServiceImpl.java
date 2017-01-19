@@ -12,16 +12,19 @@ public class CaseHistoryServiceImpl implements CaseHistoryService {
 	private CaseHistoryDAO caseHistoryDAO;
 	
 	@Override
-	public void updateCaseHistorySfList(List<Object> caseHistoryList) {
-		caseHistoryDAO.updateCaseHistoryListSf(caseHistoryList);
+	public boolean insertCaseHistorySfList(List<Object> caseHistoryList, String processId) {
+		boolean resultOk = caseHistoryDAO.updateCaseHistoryListSf(caseHistoryList, processId);
+		return resultOk;
 	}
 	@Override
-	public void deleteCaseHistorySfList(List<Object> caseHistoryList) {
-		caseHistoryDAO.deleteCaseHistoryListSf(caseHistoryList);
+	public boolean updateCaseHistorySfList(List<Object> caseHistoryList, String processId) {
+		boolean resultOk = caseHistoryDAO.deleteCaseHistoryListSf(caseHistoryList, processId);
+		return resultOk;
 	}
 	@Override
-	public void insertCaseHistorySfList(List<Object> caseHistoryList) {
-		caseHistoryDAO.insertCaseHistoryListSf(caseHistoryList);
+	public boolean deleteCaseHistorySfList(List<Object> caseHistoryList, String processId) {
+		boolean resultOk = caseHistoryDAO.insertCaseHistoryListSf(caseHistoryList, processId);
+		return resultOk;
 		
 	}
 

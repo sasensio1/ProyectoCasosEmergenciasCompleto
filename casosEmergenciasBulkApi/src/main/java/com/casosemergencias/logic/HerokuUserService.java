@@ -12,11 +12,11 @@ public interface HerokuUserService {
 	
 	public HerokuUser readUser(String userName);
 	
-	public void insertHerokuUserSfList(List<Object> herokuUserList);
+	public boolean insertHerokuUserSfList(List<Object> herokuUserList, String processId);
 	
-	public void updateHerokuUserSfList(List<Object> herokuUserList);
+	public boolean updateHerokuUserSfList(List<Object> herokuUserList, String processId);
 	
-	public void deleteHerokuUserSfList(List<Object> herokuUserList);
+	public boolean deleteHerokuUserSfList(List<Object> herokuUserList, String processId);
 
 	
 }

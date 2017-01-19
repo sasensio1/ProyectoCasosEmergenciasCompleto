@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface RelacionActivoContactoService {
 
-	public void insertRelacionActivoContactoSfList(List<Object> relacionActivoContactoList);
+	public boolean insertRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId);
 	
-	public void updateRelacionActivoContactoSfList(List<Object> relacionActivoContactoList);
+	public boolean updateRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId);
 	
-	public void deleteRelacionActivoContactoSfList(List<Object> relacionActivoContactoList);
+	public boolean deleteRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId);
 }

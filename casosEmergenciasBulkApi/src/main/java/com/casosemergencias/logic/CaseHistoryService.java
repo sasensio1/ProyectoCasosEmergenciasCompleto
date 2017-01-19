@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface CaseHistoryService {
 	
-	public void insertCaseHistorySfList(List<Object> caseHistoryList);
+	public boolean insertCaseHistorySfList(List<Object> caseHistoryList, String processId);
 	
-	public void updateCaseHistorySfList(List<Object> caseHistoryList);
+	public boolean updateCaseHistorySfList(List<Object> caseHistoryList, String processId);
 	
-	public void deleteCaseHistorySfList(List<Object> caseHistoryList);
+	public boolean deleteCaseHistorySfList(List<Object> caseHistoryList, String processId);
 
 
 }

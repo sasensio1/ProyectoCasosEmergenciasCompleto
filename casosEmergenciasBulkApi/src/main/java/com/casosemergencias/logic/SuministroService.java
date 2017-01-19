@@ -22,10 +22,10 @@ public interface SuministroService {
 	
 	public List<Suministro> readSuministrosCuenta(String sfidCuenta, Integer numeroSuministros);
 	
-	public void insertSuministroSfList(List<Object> suministroList);
+	public boolean insertSuministroSfList(List<Object> suministroList, String processId);
 	
-	public void updateSuministroSfList(List<Object> suministroList);
+	public boolean updateSuministroSfList(List<Object> suministroList, String processId);
 	
-	public void deleteSuministroSfList(List<Object> suministroList);
+	public boolean deleteSuministroSfList(List<Object> suministroList, String processId);
 	
 }

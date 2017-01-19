@@ -391,7 +391,7 @@ public class HerokuUserDAO {
 	 */
 		
 	@Transactional
-	public void insertHerokuUserListSf(List<Object> objectList) {
+	public boolean insertHerokuUserListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado UsuarioHerokus ---");
 
 		Integer cont = 0;
@@ -401,6 +401,7 @@ public class HerokuUserDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_HEROKU_USER);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -409,6 +410,7 @@ public class HerokuUserDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_HEROKU_USER);
+			historicoInsertRecord.setProcessId(processId);
 			
 			HerokuUserVO usuarioHerokuToInsert = new HerokuUserVO();
 			try{
@@ -444,6 +446,7 @@ public class HerokuUserDAO {
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -455,7 +458,7 @@ public class HerokuUserDAO {
 	 */
 		
 	@Transactional
-	public void updateHerokuUserListSf(List<Object> objectList) {
+	public boolean updateHerokuUserListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado UsuarioHerokus ---");
 
 		Integer cont = 0;
@@ -465,6 +468,7 @@ public class HerokuUserDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_HEROKU_USER);
+		historicoProcessUpdate.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -472,6 +476,7 @@ public class HerokuUserDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_HEROKU_USER);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			HerokuUserVO usuarioHerokuToUpdate = new HerokuUserVO();
 			try{
@@ -536,6 +541,7 @@ public class HerokuUserDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -547,7 +553,7 @@ public class HerokuUserDAO {
 	 */
 		
 	@Transactional
-	public void deleteHerokuUserListSf(List<Object> objectList) {
+	public boolean deleteHerokuUserListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado UsuarioHerokus ---");
 
 		Integer cont = 0;
@@ -557,6 +563,7 @@ public class HerokuUserDAO {
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_HEROKU_USER);
+		historicoProcessDelete.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -564,6 +571,7 @@ public class HerokuUserDAO {
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_HEROKU_USER);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			HerokuUserVO usuarioHerokuToDelete = new HerokuUserVO();
 			try{
@@ -605,6 +613,7 @@ public class HerokuUserDAO {
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	

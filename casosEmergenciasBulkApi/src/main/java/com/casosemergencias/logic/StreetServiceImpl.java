@@ -13,16 +13,19 @@ public class StreetServiceImpl implements StreetService{
 	private CalleDAO calleDao;
 	
 	@Override
-	public void insertCalleSfList(List<Object> calleList) {
-		calleDao.insertStreetListSf(calleList);
+	public boolean insertCalleSfList(List<Object> calleList, String processId) {
+		boolean resultOk = calleDao.insertStreetListSf(calleList, processId);
+		return resultOk;
 	}
 	@Override
-	public void updateCalleSfList(List<Object> calleList) {
-		calleDao.deleteStreetListSf(calleList);
+	public boolean updateCalleSfList(List<Object> calleList, String processId) {
+		boolean resultOk = calleDao.deleteStreetListSf(calleList, processId);
+		return resultOk;
 	}
 	@Override
-	public void deleteCalleSfList(List<Object> calleList) {
-		calleDao.updateStreetListSf(calleList);
+	public boolean deleteCalleSfList(List<Object> calleList, String processId) {
+		boolean resultOk = calleDao.updateStreetListSf(calleList, processId);
+		return resultOk;
 	}
 
 }

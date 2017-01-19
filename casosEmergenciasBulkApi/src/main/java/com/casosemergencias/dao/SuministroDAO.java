@@ -920,7 +920,7 @@ public class SuministroDAO {
 	 */
 		
 	@Transactional
-	public void insertSuministroListSf(List<Object> objectList) {
+	public boolean insertSuministroListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Suministros ---");
 
 		Integer cont = 0;
@@ -930,6 +930,7 @@ public class SuministroDAO {
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setTotalRecords(objectList.size());
 		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+		historicoProcessInsert.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
@@ -938,6 +939,7 @@ public class SuministroDAO {
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+			historicoInsertRecord.setProcessId(processId);
 			
 			SuministroVO suministroToInsert = new SuministroVO();
 			try{
@@ -975,6 +977,7 @@ public class SuministroDAO {
 			historicoProcessInsert.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessInsert);
 		}
+		return historicoProcessInsert.getSuccess();
 	}
 	
 
@@ -986,7 +989,7 @@ public class SuministroDAO {
 	 */
 		
 	@Transactional
-	public void updateSuministroListSf(List<Object> objectList) {
+	public boolean updateSuministroListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Suministros ---");
 		
 		Integer cont = 0;
@@ -996,6 +999,7 @@ public class SuministroDAO {
 		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setTotalRecords(objectList.size());
 		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+		historicoProcessUpdate.setProcessId(processId);
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -1003,6 +1007,7 @@ public class SuministroDAO {
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+			historicoUpdateRecord.setProcessId(processId);
 			
 			SuministroVO suministroToUpdate = new SuministroVO();
 			try{
@@ -1100,6 +1105,7 @@ public class SuministroDAO {
 			historicoProcessUpdate.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessUpdate);
 		}
+		return historicoProcessUpdate.getSuccess();
 
 	}
 		
@@ -1111,7 +1117,7 @@ public class SuministroDAO {
 	 */
 		
 	@Transactional
-	public void deleteSuministroListSf(List<Object> objectList) {
+	public boolean deleteSuministroListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Suministros ---");
 
 		Integer cont = 0;
@@ -1121,6 +1127,7 @@ public class SuministroDAO {
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setTotalRecords(objectList.size());
 		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+		historicoProcessDelete.setProcessId(processId);
 		
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
@@ -1128,6 +1135,7 @@ public class SuministroDAO {
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+			historicoDeleteRecord.setProcessId(processId);
 			
 			SuministroVO suministroToDelete = new SuministroVO();
 			try{
@@ -1169,6 +1177,7 @@ public class SuministroDAO {
 			historicoProcessDelete.setProcessedRecords(cont);
 			historicBatchDAO.insertHistoric(historicoProcessDelete);
 		}
+		return historicoProcessDelete.getSuccess();
 
 	}
 	
