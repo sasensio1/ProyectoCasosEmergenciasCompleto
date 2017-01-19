@@ -27,6 +27,7 @@ import com.casosemergencias.batch.util.BatchObjectsMapper;
 import com.casosemergencias.batch.util.BatchObjectsParser;
 import com.casosemergencias.dao.HistoricBatchDAO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
+import com.casosemergencias.exception.EmergenciasException;
 import com.casosemergencias.logic.BatchService;
 import com.casosemergencias.logic.sf.util.SalesforceLoginChecker;
 import com.casosemergencias.model.UserSessionInfo;
@@ -61,8 +62,9 @@ public class SalesforceRestApiInvokerBatch {
 	private String objectName;
 	private boolean manualProcess = false;
 
-	public void updateObjectsWithRestApiInfo() {
+	public String updateObjectsWithRestApiInfo()  {
 		int dateSearchingRange = 0;
+		String processResult= new String();
 		if (processStartDate != null && processEndDate != null) {
 			if (processEndDate.before(processStartDate)) {
 				LOGGER.error("Fechas incorrectas. La fecha de fin debe ser mayor que la de inicio");
@@ -71,7 +73,7 @@ public class SalesforceRestApiInvokerBatch {
 				LocalDateTime localEndDateTime = LocalDateTime.ofInstant(processEndDate.toInstant(), ZoneId.of("UTC"));
 				dateSearchingRange = (int) ChronoUnit.DAYS.between(localStartDateTime, localEndDateTime);
 				if (dateSearchingRange <= ConstantesBulkApi.MAX_SEARCHING_DAYS) {
-					getBulkApiRecordsInfo(processStartDate, processEndDate, objectName, manualProcess);
+					processResult=getBulkApiRecordsInfo(processStartDate, processEndDate, objectName, manualProcess);
 				} else {
 					LOGGER.error("Error al obtener el rango de fechas. Compruebe que el rango es mayor a 0 o que no supera el maximo");
 				}
@@ -83,6 +85,7 @@ public class SalesforceRestApiInvokerBatch {
 			LOGGER.info("No se han indicado fechas de búsqueda. Se establece el día anterior como fecha por defecto");
 			getBulkApiRecordsInfo(processStartDate, processEndDate, objectName, manualProcess);
 		}
+		return processResult;
 	}
 	
 	/**
@@ -99,12 +102,14 @@ public class SalesforceRestApiInvokerBatch {
 	 * @param isManualProcess
 	 * 			  Indicates if the process is called by a scheduler or by another manual process.
 	 */
-	private void getBulkApiRecordsInfo(Date processStartDate, Date processEndDate, String objectName, boolean isManualProcess) {
+	private String getBulkApiRecordsInfo(Date processStartDate, Date processEndDate, String objectName, boolean isManualProcess){
 		LOGGER.trace("Entrando en getAllBulkApiInfo para obtener los registros actualizados en Salesforce");
 		LOGGER.info("Búsqueda desde " + processStartDate + ", hasta " + processEndDate);
 		BulkApiInfoContainerBatch containerList = null;
 		boolean processOk = false;
 		String processErrorCause = "";
+		String processResult= new String();
+
 		HistoricBatchVO mainHistoricProcessInfo = new HistoricBatchVO();
 		try {
 			StringBuilder historicMainProcessId = Utils.generateDateId();
@@ -130,14 +135,18 @@ public class SalesforceRestApiInvokerBatch {
 					if (containerList.getTotalRecords() > 0) {
 						LOGGER.info("Recuperados " + containerList.getTotalRecords() + " registros del objeto " + containerList.getEntityName());
 						processOk = batchService.updateHerokuObjectsFromBulkApi(containerList, historicMainProcessId.toString());
+						processResult=ConstantesBatch.HEROKU_BULK_API_BATCH_OK;
 					} else {
-						LOGGER.info("No hay registros que actualizar para el objeto '" + containerList.getEntityName() + "'");
+						LOGGER.info("No hay registros que actualizar para el objeto '" + containerList.getEntityName() + "'");						
 						processOk = true;
+						processResult=ConstantesBatch.HEROKU_BULK_API_BATCH_NO_RECORDS;
+
 					}
 				} else {
 					LOGGER.error("No hay datos de registros a cargar. No se realiza ninguna accion en base de datos");
 					processOk = false;
 					processErrorCause = ConstantesBatch.ERROR_OBJECT_RECORDS_NULL;
+					processResult=ConstantesBatch.HEROKU_BULK_API_BATCH_EMPTY_CONTAINER_ERROR;
 				}
 				mainHistoricProcessInfo.setSuccess(processOk);
 				mainHistoricProcessInfo.setErrorCause(processOk ? null : processErrorCause);
@@ -174,14 +183,20 @@ public class SalesforceRestApiInvokerBatch {
 						if (containerList.getTotalRecords() > 0) {
 							LOGGER.info("Recuperados " + containerList.getTotalRecords() + " registros del objeto " + containerList.getEntityName());
 							processOk = batchService.updateHerokuObjectsFromBulkApi(containerList, historicMainProcessId.toString());
+							processResult=ConstantesBatch.HEROKU_BULK_API_BATCH_OK;
+
 						} else {
 							LOGGER.info("No hay registros que actualizar para el objeto '" + containerList.getEntityName() + "'");
 							processOk = true;
+							processErrorCause = ConstantesBatch.ERROR_OBJECT_RECORDS_NULL;
+
 						}
 					} else {
 						LOGGER.error("No hay datos de registros a cargar. No se realiza ninguna accion en base de datos");
 						processOk = false;
 						processErrorCause = ConstantesBatch.ERROR_OBJECT_RECORDS_NULL;
+						processResult=ConstantesBatch.HEROKU_BULK_API_BATCH_EMPTY_CONTAINER_ERROR;
+
 					}
 					objectLoadingHistoricProcessInfo.setSuccess(processOk);
 					objectLoadingHistoricProcessInfo.setErrorCause(processOk ? null : processErrorCause);
@@ -191,16 +206,21 @@ public class SalesforceRestApiInvokerBatch {
 			} else {
 				LOGGER.error("No hay datos de registros a cargar. No se realiza ninguna llamada");
 				processOk = true;
+				processResult=ConstantesBatch.HEROKU_BULK_API_BATCH_EMPTY_CONTAINER_ERROR;
+
 			}
 		} catch (Exception exception) {
 			LOGGER.error("Error realizando la carga de registros desde REST API: ", exception);
 			processOk = false;
 			processErrorCause = ConstantesBatch.ERROR_MAIN_PROCESS;
+			processResult=ConstantesBatch.HEROKU_BULK_API_BATCH_EMPTY_CONTAINER_ERROR;
+
 		}
 		mainHistoricProcessInfo.setSuccess(processOk);
 		mainHistoricProcessInfo.setErrorCause(processOk ? null : processErrorCause);
 		mainHistoricProcessInfo.setEndDate(new Date());
 		historicBatchDao.insertHistoric(mainHistoricProcessInfo);
+		return processResult;
 	}
 		
 	/**

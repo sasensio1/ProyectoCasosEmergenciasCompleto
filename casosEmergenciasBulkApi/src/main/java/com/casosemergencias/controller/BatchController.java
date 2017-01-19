@@ -23,6 +23,7 @@ import com.casosemergencias.logic.BatchService;
 import com.casosemergencias.model.HistoricBatch;
 import com.casosemergencias.util.constants.Constantes;
 import com.casosemergencias.util.constants.ConstantesBulkApi;
+import com.casosemergencias.util.constants.ConstantesError;
 import com.casosemergencias.util.datatables.DataTableParser;
 import com.casosemergencias.util.datatables.DataTableProperties;
 import com.casosemergencias.util.Utils;
@@ -56,12 +57,27 @@ public class BatchController {
 		batchService.updateHerokuUserTable();	
 	}	
 	@RequestMapping(value = "/updateObjectTablesFromSalesforceApi", method = RequestMethod.GET)
-	public void updateObjectTablesFromSalesforceApi(@RequestParam String processStartDateString, @RequestParam String processEndDateString,@RequestParam String objectName) {
+	public ModelAndView updateObjectTablesFromSalesforceApi(@RequestParam String processStartDateString, @RequestParam String processEndDateString,@RequestParam String objectName) {
+		String processResult= new String();
+		ModelAndView model = new ModelAndView();
 		
-		
+		//Parseamos las fechas de ejecucion		
 		Date processStartDate=Utils.parseStringToDate(processStartDateString);
 		Date processEndDate=Utils.parseStringToDate(processEndDateString);
-		batchService.updateObjectsInfoTables(processStartDate, processEndDate,objectName);
+		//Seteamos valor null para  la carga de todos los objetos
+		if(objectName.equals("")){
+			objectName=null;
+		}
+		//Ejecutamos proceso batch
+		processResult=batchService.updateObjectsInfoTables(processStartDate, processEndDate,objectName);
+		model.setViewName("redirect:private/homeExecutionBatchMenu");
+
+		
+		if(processResult!=null && processResult!=""){
+			model.addObject("mensajeResultado", processResult);
+		}
+
+		return model;
 	}
 	
 	/**

@@ -8,6 +8,8 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import com.casosemergencias.exception.EmergenciasException;
+
 public class CaseCommentUpdaterJob extends QuartzJobBean {
 	final static Logger LOGGER = Logger.getLogger(CaseCommentUpdaterJob.class);
 	
@@ -17,7 +19,7 @@ public class CaseCommentUpdaterJob extends QuartzJobBean {
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		LOGGER.info("Actualizacion de comentarios de casos iniciada con fecha " + new Date());
-		caseCommentUpdaterBatch.updateCaseCommentInfo();
+			caseCommentUpdaterBatch.updateCaseCommentInfo();
 		LOGGER.info("Actualizacion de comentarios de casos completada con fecha " + new Date());		
 	}
 }

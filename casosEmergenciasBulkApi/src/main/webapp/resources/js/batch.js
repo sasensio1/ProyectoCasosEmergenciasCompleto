@@ -44,6 +44,7 @@ function processBatchControllerMethodRedirection() {
 			   break;		   
 		   case "apiRestElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=";
 		   	   }
 			   break;
 		   case "accountElection" : 
@@ -53,67 +54,67 @@ function processBatchControllerMethodRedirection() {
 			   break;
 		   case "addressElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=Address__c";
 		   	   }
 			   break;
 		   case "assetElection"  : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=Asset";
 		   	   }
 			   break;
 		   case "caseHistoryElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=CaseHistory";
 		   	   }
 			   break;
 		   case "contactElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=Contact";
 		   	   }
 			   break;
 		   case "groupElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=Group";
 		   	   }
 			   break;
 		   case "pointOfDeliveryElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=PointofDelivery__c";
 		   	   }
 			   break;
 		   case "repeatedCasesElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=RepeatedCases__c";
 		   	   }
 			   break;
 		   case "caseCommentElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=CaseComment";
 		   	   }
 			   break;
 		   case "herokuUserElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=HerokuUser__c";
 		   	   }
 			   break;
 		   case "serviceProductElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=ServiceProduct__c";
 		   	   }
 			   break;
 		   case "streetElection" : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=Street__c";
 		   	   }
 			   break;
 		   case "taskElection"  : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=Task";
 		   	   }
 			   break;
 		   case "userElection"  : 
 		   	   if(checkBatchDatesExecution(startProcess,endProcess)){
-		   		   
+		   		   window.location="../updateObjectTablesFromSalesforceApi?processStartDateString="+startProcess+"&processEndDateString="+endProcess+"&objectName=User";
 		   	   }
 			   break;
 			   		

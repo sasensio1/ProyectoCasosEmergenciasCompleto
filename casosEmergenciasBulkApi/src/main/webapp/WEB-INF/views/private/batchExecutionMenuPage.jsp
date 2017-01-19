@@ -23,6 +23,17 @@
 	<body onload="initHeader();">
 		<script type="text/javascript">var objetoSeleccionado='<s:message code="cabeceraPage_list_menuBatch"/>';</script>
 		<jsp:include page="cabeceraPage.jsp"/>
+		<!-- Mensajes de estado de procesos Batch -->		
+		<c:if test="${not empty param.mensajeResultado}">
+			<div>
+				<div id="divInsertError" >
+					<label class="labelDivAdvertencia"><s:message code="notificaciones_label_batch_process"/>&nbsp;${param.mensajeResultado}</label>
+				</div>
+			</div>
+			<br>			
+		</c:if>
+		<!-- Mensajes de estado de procesos Batch -->
+		
 		<!-- Mensajes de estado de operación -->
 		<div id="divErrorComienzoEjecucionSuperior" class="divError" style="display:none;margin-top:2%;">
 			<label><s:message code="batchMenu_error_comienzo_ejecucion_superior"/></label>
@@ -88,16 +99,16 @@
 		            <INPUT TYPE="radio" id="groupButton" name="radios" value="groupElection" onclick="setProcessSelected('groupButton')">
 			        <label ><s:message code="search_form_input_batchMenu_field_group"/></label>
 		            <BR>
-		            <INPUT TYPE="radio" id="pointOfDeliveryButton" name="radios" value="PointofDelivery__c" onclick="setProcessSelected('pointOfDeliveryButton')">
+		            <INPUT TYPE="radio" id="pointOfDeliveryButton" name="radios" value="pointOfDeliveryElection" onclick="setProcessSelected('pointOfDeliveryButton')">
 			        <label ><s:message code="search_form_input_batchMenu_point_Of_Delivery"/></label>
 		            <BR>
 		            <INPUT TYPE="radio" id="repeatedCasesButton"name="radios" value="repeatedCasesElection" onclick="setProcessSelected('repeatedCasesButton')">
 			        <label ><s:message code="search_form_input_batchMenu_repeated_Cases"/></label>
 		            <BR>
-		            <INPUT TYPE="radio" id="caseCommentButton "name="radios" value="caseCommentElection" onclick="setProcessSelected('caseCommentButton')">
+		            <INPUT TYPE="radio" id="caseCommentButton"name="radios" value="caseCommentElection" onclick="setProcessSelected('caseCommentButton')">
 			        <label ><s:message code="search_form_input_batchMenu_field_case_Comment"/></label>
 		            <BR>
-		            <INPUT TYPE="radio" id="herokuUserButton "name="radios" value="herokuUserElection" onclick="setProcessSelected('herokuUserButton')">
+		            <INPUT TYPE="radio" id="herokuUserButton"name="radios" value="herokuUserElection" onclick="setProcessSelected('herokuUserButton')">
 			        <label ><s:message code="search_form_input_batchMenu_field_heroku_User"/></label>
 		            <BR>
 		            <INPUT TYPE="radio" id="serviceProductButton" name="radios" value="serviceProductElection" onclick="setProcessSelected('serviceProductButton')">

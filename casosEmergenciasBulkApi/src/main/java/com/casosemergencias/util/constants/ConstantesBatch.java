@@ -76,4 +76,11 @@ public class ConstantesBatch {
 	public static final String OBJECT_POINT_OF_DELIVERY = "POINT_OF_DELIVERY";
 	public static final String OBJECT_TASK = "TASK";
 	public static final String OBJECT_USER = "USER";
+		
+	/**Mensaje de cargas batch Bulk Api*/	
+	public static final String HEROKU_BULK_API_BATCH_OK = "Carga realizada correctamente";
+	public static final String HEROKU_BULK_API_BATCH_NO_RECORDS = "No se han encontrado resgistros a cargar";
+	public static final String HEROKU_BULK_API_BATCH_EMPTY_CONTAINER_ERROR = "Ha habido un problema en la recuperacion de objetos a cargar";
+	public static final String HEROKU_BULK_REST_API_CALL_ERROR = "Error realizando la carga de registros desde REST API:";
+
 }

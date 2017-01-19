@@ -18,6 +18,7 @@ import com.casosemergencias.batch.bean.OperationType;
 import com.casosemergencias.batch.util.BatchObjectsMapper;
 import com.casosemergencias.dao.HistoricBatchDAO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
+import com.casosemergencias.exception.EmergenciasException;
 import com.casosemergencias.model.HistoricBatch;
 import com.casosemergencias.util.ApplicationContextProvider;
 import com.casosemergencias.util.ParserModelVO;
@@ -73,11 +74,16 @@ public class BatchServiceImpl implements BatchService {
 	}
 	
 	@Override
-	public void updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName) {
+	public String updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName) {
+		String processResult= new String();
+		
 		restApiInvokerBatch.setProcessStartDate(processStartDate);
 		restApiInvokerBatch.setProcessEndDate(processEndDate);
-		restApiInvokerBatch.setObjectName(objectName);		
-		restApiInvokerBatch.updateObjectsWithRestApiInfo();
+		restApiInvokerBatch.setObjectName(objectName);	
+		restApiInvokerBatch.setManualProcess(true);
+
+		processResult=restApiInvokerBatch.updateObjectsWithRestApiInfo();
+		return processResult;
 	}
 	
 	@Override

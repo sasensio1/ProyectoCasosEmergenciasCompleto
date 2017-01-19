@@ -37,7 +37,7 @@ public class Utils {
 		Date javaDate = null;
 		DateFormat gmtFormat = null;
 	    if (!isNullOrEmptyString(dateValue)) {
-			String[] dateFormats = {"yyyy-MM-dd\'T\'HH:mm:ss.SSSZ", "yyyy-MM-dd"};
+			String[] dateFormats = {"yyyy-MM-dd\'T\'HH:mm:ss.SSSZ","yyyy-MM-dd\'T\'HH:mm:ss","yyyy-MM-dd"};
 			for (String format : dateFormats) {
 				try {
 					gmtFormat = new SimpleDateFormat(format);

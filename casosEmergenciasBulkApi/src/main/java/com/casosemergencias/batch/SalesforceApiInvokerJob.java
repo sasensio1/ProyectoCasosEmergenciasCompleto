@@ -8,6 +8,8 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import com.casosemergencias.exception.EmergenciasException;
+
 public class SalesforceApiInvokerJob extends QuartzJobBean  {
 	final static Logger LOGGER = Logger.getLogger(PicklistTableCreatorJob.class);
 	
@@ -17,7 +19,7 @@ public class SalesforceApiInvokerJob extends QuartzJobBean  {
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		LOGGER.info("Actualizacion de objetos desde Salesforce iniciada con fecha " + new Date());
-		restApiInvokerBatch.updateObjectsWithRestApiInfo();
+			restApiInvokerBatch.updateObjectsWithRestApiInfo();
 		LOGGER.info("Actualizacion de objetos desde Salesforce completada con fecha " + new Date());
 	}
 }
