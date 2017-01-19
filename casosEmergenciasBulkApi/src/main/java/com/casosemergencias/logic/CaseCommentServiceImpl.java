@@ -184,19 +184,19 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 	}
 	
 	@Override
-	public boolean insertCaseCommentSfList(List<Object> caseCommentList, String processId) {
-		boolean resultOk = caseCommentDAO.insertCaseCommentListSf(caseCommentList, processId);
+	public int insertCaseCommentSfList(List<Object> caseCommentList, String processId) {
+		int resultOk = caseCommentDAO.insertCaseCommentListSf(caseCommentList, processId);
 		return resultOk;
 	}
 	
 	@Override
-	public boolean updateCaseCommentSfList(List<Object> caseCommentList, String processId) {
-		boolean resultOk = caseCommentDAO.updateCaseCommentListSf(caseCommentList, processId);
+	public int updateCaseCommentSfList(List<Object> caseCommentList, String processId) {
+		int resultOk = caseCommentDAO.updateCaseCommentListSf(caseCommentList, processId);
 		return resultOk;
 	}
 	@Override
-	public boolean deleteCaseCommentSfList(List<Object> caseCommentList, String processId) {
-		boolean resultOk = caseCommentDAO.deleteCaseCommentListSf(caseCommentList, processId);
+	public int deleteCaseCommentSfList(List<Object> caseCommentList, String processId) {
+		int resultOk = caseCommentDAO.deleteCaseCommentListSf(caseCommentList, processId);
 		return resultOk;
 	}
 

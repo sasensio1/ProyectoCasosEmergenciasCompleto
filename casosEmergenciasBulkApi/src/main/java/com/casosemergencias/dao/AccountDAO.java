@@ -714,6 +714,7 @@ public class AccountDAO {
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_ACCOUNT);
 			historicoUpdateRecord.setProcessId(processId);
@@ -806,6 +807,7 @@ public class AccountDAO {
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_ACCOUNT);
 			historicoDeleteRecord.setProcessId(processId);

@@ -192,23 +192,18 @@ public class CaseCommentDAO {
 	 */
 		
 	@Transactional
-	public boolean insertCaseCommentListSf(List<Object> objectList, String processId) {
+	public int insertCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado ComentarioCasos ---");
 		
-		Integer cont = 0;
+		int cont = 0;
+		boolean processOk;
 		
-		HistoricBatchVO historicoProcessInsert = new HistoricBatchVO();
-		historicoProcessInsert.setStartDate(new Date());
-		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
-		historicoProcessInsert.setTotalRecords(objectList.size());
-		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
-		historicoProcessInsert.setProcessId(processId);
-
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();		
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 			historicoInsertRecord.setProcessId(processId);
@@ -223,33 +218,23 @@ public class CaseCommentDAO {
 				tx.commit();
 				logger.debug("--- Fin -- insertComentarioCaso ---" + comentarioCasoToInsert.getSfid());
 				
-				historicoInsertRecord.setSuccess(true);
-				historicBatchDAO.insertHistoric(historicoInsertRecord);
+				processOk = true;
 				cont++;
 				
 			} catch (HibernateException e) {
 			tx.rollback();
 			logger.error("--- Error en insertComentarioCaso: ---" + comentarioCasoToInsert.getSfid(), e);
-			historicoInsertRecord.setSuccess(false);
-			historicoInsertRecord.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
-			historicBatchDAO.insertHistoric(historicoInsertRecord);
-			}						
+			processOk = false;
+			}
+			historicoInsertRecord.setSuccess(processOk);
+			historicoInsertRecord.setEndDate(new Date());
+			historicoInsertRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_INSERT_RECORD);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);					
 		}
 		logger.debug("--- Fin -- insert Listado ComentarioCasos ---");
 		session.close();
-		if(cont == objectList.size()){
-			historicoProcessInsert.setEndDate(new Date());
-			historicoProcessInsert.setSuccess(true);
-			historicoProcessInsert.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessInsert);
-		} else {
-			historicoProcessInsert.setEndDate(new Date());
-			historicoProcessInsert.setSuccess(false);
-			historicoProcessInsert.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
-			historicoProcessInsert.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessInsert);
-		}
-		return historicoProcessInsert.getSuccess();
+
+		return cont;
 	}
 	
 
@@ -261,22 +246,17 @@ public class CaseCommentDAO {
 	 */
 		
 	@Transactional
-	public boolean updateCaseCommentListSf(List<Object> objectList, String processId) {
+	public int updateCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado ComentarioCasos ---");
 		
-		Integer cont = 0;
-		
-		HistoricBatchVO historicoProcessUpdate = new HistoricBatchVO();
-		historicoProcessUpdate.setStartDate(new Date());
-		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
-		historicoProcessUpdate.setTotalRecords(objectList.size());
-		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
-		historicoProcessUpdate.setProcessId(processId);
+		int cont = 0;
+		boolean processOk;
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 			historicoUpdateRecord.setProcessId(processId);
@@ -319,32 +299,21 @@ public class CaseCommentDAO {
 							
 				logger.debug("--- Fin -- updateComentarioCaso ---" + comentarioCasoToUpdate.getSfid());
 				
-				historicoUpdateRecord.setSuccess(true);
-				historicBatchDAO.insertHistoric(historicoUpdateRecord);
+				processOk = true;
 				cont++;
 				
 			} catch (HibernateException e) {
 			logger.error("--- Error en updateComentarioCaso: ---" + comentarioCasoToUpdate.getSfid(), e);
-			historicoUpdateRecord.setSuccess(false);
-			historicoUpdateRecord.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicBatchDAO.insertHistoric(historicoUpdateRecord);
-			} 						
+			processOk = false;
+			} 
+			historicoUpdateRecord.setSuccess(processOk);
+			historicoUpdateRecord.setEndDate(new Date());
+			historicoUpdateRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);						
 		}
 		logger.debug("--- Fin -- update Listado ComentarioCasos ---");
 		session.close();
-		if(cont == objectList.size()){
-			historicoProcessUpdate.setEndDate(new Date());
-			historicoProcessUpdate.setSuccess(true);
-			historicoProcessUpdate.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessUpdate);
-		} else {
-			historicoProcessUpdate.setEndDate(new Date());
-			historicoProcessUpdate.setSuccess(false);
-			historicoProcessUpdate.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicoProcessUpdate.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessUpdate);
-		}
-		return historicoProcessUpdate.getSuccess();
+		return cont;
 
 	}
 		
@@ -356,22 +325,17 @@ public class CaseCommentDAO {
 	 */
 		
 	@Transactional
-	public boolean deleteCaseCommentListSf(List<Object> objectList, String processId) {
+	public int deleteCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado ComentarioCasos ---");
 		
-		Integer cont = 0;
-		
-		HistoricBatchVO historicoProcessDelete = new HistoricBatchVO();
-		historicoProcessDelete.setStartDate(new Date());
-		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
-		historicoProcessDelete.setTotalRecords(objectList.size());
-		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
-		historicoProcessDelete.setProcessId(processId);
+		int cont = 0;
+		boolean processOk;
 
 		Session session = sessionFactory.openSession();
 		for(Object object:objectList){
 			
 			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 			historicoDeleteRecord.setProcessId(processId);
@@ -391,32 +355,21 @@ public class CaseCommentDAO {
 							
 				logger.debug("--- Fin -- deleteComentarioCaso ---" + comentarioCasoToDelete.getSfid());
 				
-				historicoDeleteRecord.setSuccess(true);
-				historicBatchDAO.insertHistoric(historicoDeleteRecord);
+				processOk = true;
 				cont++;
 				
 			} catch (HibernateException e) {
 			logger.error("--- Error en deleteComentarioCaso: ---" + comentarioCasoToDelete.getSfid(), e);
-			historicoDeleteRecord.setSuccess(false);
-			historicoDeleteRecord.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
-			historicBatchDAO.insertHistoric(historicoDeleteRecord);
-			} 					
+			processOk = false;
+			} 
+			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setEndDate(new Date());
+			historicoDeleteRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_DELETE_RECORD);
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);						
 		}
 		logger.debug("--- Fin -- delete Listado ComentarioCasos ---");
 		session.close();
-		if(cont == objectList.size()){
-			historicoProcessDelete.setEndDate(new Date());
-			historicoProcessDelete.setSuccess(true);
-			historicoProcessDelete.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessDelete);
-		} else {
-			historicoProcessDelete.setEndDate(new Date());
-			historicoProcessDelete.setSuccess(false);
-			historicoProcessDelete.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
-			historicoProcessDelete.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessDelete);
-		}
-		return historicoProcessDelete.getSuccess();
+		return cont;
 
 	}
 	

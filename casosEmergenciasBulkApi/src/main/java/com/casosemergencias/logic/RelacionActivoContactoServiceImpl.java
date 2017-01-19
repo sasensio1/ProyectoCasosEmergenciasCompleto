@@ -13,18 +13,18 @@ public class RelacionActivoContactoServiceImpl implements RelacionActivoContacto
 	private RelacionActivoContactoDAO relacionActivoContactoDao;
 	
 	@Override
-	public boolean insertRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId) {
-		boolean resultOk = relacionActivoContactoDao.insertRelacionActivoContactoListSf(relacionActivoContactoList, processId);
+	public int insertRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId) {
+		int resultOk = relacionActivoContactoDao.insertRelacionActivoContactoListSf(relacionActivoContactoList, processId);
 		return resultOk;
 	}
 	@Override
-	public boolean updateRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId) {
-		boolean resultOk = relacionActivoContactoDao.updateRelacionActivoContactoListSf(relacionActivoContactoList, processId);
+	public int updateRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId) {
+		int resultOk = relacionActivoContactoDao.updateRelacionActivoContactoListSf(relacionActivoContactoList, processId);
 		return resultOk;
 	}
 	@Override
-	public boolean deleteRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId) {
-		boolean resultOk = relacionActivoContactoDao.deleteRelacionActivoContactoListSf(relacionActivoContactoList, processId);
+	public int deleteRelacionActivoContactoSfList(List<Object> relacionActivoContactoList, String processId) {
+		int resultOk = relacionActivoContactoDao.deleteRelacionActivoContactoListSf(relacionActivoContactoList, processId);
 		return resultOk;
 	}
 
