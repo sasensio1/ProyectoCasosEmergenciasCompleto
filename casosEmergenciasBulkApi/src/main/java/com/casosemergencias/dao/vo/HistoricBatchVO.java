@@ -138,7 +138,4 @@ public class HistoricBatchVO implements Serializable {
 	public void setErrorCause(String errorCause) {
 		this.errorCause = errorCause;
 	}
-
-	
-
 }

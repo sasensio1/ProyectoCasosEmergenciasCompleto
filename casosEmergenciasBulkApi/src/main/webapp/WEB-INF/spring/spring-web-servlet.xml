@@ -164,7 +164,6 @@
 	
 	<bean id="fieldLabelTableCreatorBatch" class="com.casosemergencias.batch.FieldLabelTableCreatorBatch"/>
 	<bean id="picklistTableCreatorBatch" class="com.casosemergencias.batch.PicklistTableCreatorBatch"/>
-	<bean id="soapBulkApiInvokerBatch" class="com.casosemergencias.batch.SalesforceSoapBulkApiInvokerBatch"/>
 	<bean id="restApiInvokerBatch" class="com.casosemergencias.batch.SalesforceRestApiInvokerBatch"/>
 	<bean id="caseCommentUpdaterBatch" class="com.casosemergencias.batch.CaseCommentUpdaterBatch"/>
 	<bean id="herokuUserUpdaterBatch" class="com.casosemergencias.batch.HerokuUserUpdaterBatch"/>

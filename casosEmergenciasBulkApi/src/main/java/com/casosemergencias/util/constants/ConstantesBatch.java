@@ -42,22 +42,24 @@ public class ConstantesBatch {
 	
 	/** Valores de tipos de operaciones para HistoricBatch. */
 	public static final String BATCH_MAIN_PROCESS = "BATCH_MAIN_PROCESS";
-	public static final String OBJECT_LOADING = "OBJECT_LOADING";
-	public static final String API_QUERY = "API_QUERY";
-	public static final String INSERT_PROCESS = "INSERT_PROCESS";
-	public static final String INSERT_RECORD = "INSERT_RECORD";
-	public static final String UPDATE_PROCESS = "UPDATE_PROCESS";
-	public static final String UPDATE_RECORD = "UPDATE_RECORD";
+	public static final String OBJECT_LOADING = "OBJECT_LOADING_PROCESS";
+	public static final String API_QUERY_AND_PARSE_PROCESS = "API_QUERY_AND_PARSE_PROCESS";
+	public static final String INSERT_PROCESS = "INSERT_ALL_RECORDS_PROCESS";
+	public static final String INSERT_RECORD = "INSERT_RECORD_PROCESS";
+	public static final String UPDATE_PROCESS = "UPDATE_ALL_RECORDS_PROCESS";
+	public static final String UPDATE_RECORD = "UPDATE_RECORD_PROCESS";
 	public static final String DELETE_PROCESS = "DELETE_PROCESS";
-	public static final String DELETE_RECORD = "DELETE_RECORD";
+	public static final String DELETE_RECORD = "DELETE_ALL_RECORDS_RECORD_PROCESS";
 	
 	/** Valores de tipos de ERROR para HistoricBatch. */
-	public static final String ERROR_BULKAPI_LOAD = "ERROR_BULKAPI_LOAD";
-	public static final String ERROR_OBJECT_LOADING = "ERROR_OBJECT_LOADING";
-	public static final String ERROR_CREATE_JOB = "ERROR_CREATE_JOB";
 	public static final String ERROR_INSERT_RECORD = "ERROR_INSERT_RECORD";
 	public static final String ERROR_UPDATE_RECORD = "ERROR_UPDATE_RECORD";
 	public static final String ERROR_DELETE_RECORD = "ERROR_DELETE_RECORD";
+	public static final String ERROR_OBJECT_RECORDS_NULL = "OBJECT_RECORDS_LIST_NULL";
+	public static final String ERROR_MAIN_PROCESS = "BATCH_MAIN_PROCESS_INTERNAL_ERROR";
+	public static final String ERROR_SALESFORCE_NULL_RESPONSE = "SALESFORCE_NULL_RESPONSE";
+	public static final String ERROR_SALESFORCE_RESPONSE_STATUS_NO_OK = "SALESFORCE_RESPONSE_STATUS_CODE_";
+	public static final String ERROR_SALESFORCE_NULL_USER_SESSION_ID = "SALESFORCE_NULL_USER_SESSION_ID";
 	
 	/** Valores de tipos de OBJETOS para HistoricBatch. */
 	public static final String OBJECT_ACCOUNT = "ACCOUNT";

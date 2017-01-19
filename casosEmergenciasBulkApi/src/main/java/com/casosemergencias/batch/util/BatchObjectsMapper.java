@@ -41,6 +41,7 @@ public class BatchObjectsMapper {
 	private Map<String, String> objectNamesEquivalenceMap;
 	private Map<String, String> objectNamesServicesMap;
 	private Map<String, String> objectNamesServicesMethodsMap;
+	private Map<String, String> objectNamesAbbreviationsMap;
 	private LinkedHashMap<String, String> objectSelectsMap;
 	
 	public BatchObjectsMapper() {
@@ -48,6 +49,7 @@ public class BatchObjectsMapper {
 		initObjectNamesEquivalenceMap();
 		initObjectNamesServicesMap();
 		initObjectNamesServicesMethodsMap();
+		initObjectNamesAbbreviationsMap();
 		initAccountMap();
 		initContactMap();
 		initAssetMap();
@@ -314,6 +316,24 @@ public class BatchObjectsMapper {
 		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, ConstantesBulkApi.ENTITY_CASE_HISTORY_SELECT);
 	}
 	
+	private void initObjectNamesAbbreviationsMap() {
+		objectNamesAbbreviationsMap = new HashMap<String, String>();
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_STREET, "STR");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_ADDRESS, "ADS");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY, "POD");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, "ACN");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_CONTACT, "CNT");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_ASSET, "AST");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_SERVICE_PRODUCT, "SPR");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_REPEATED_CASES, "RCS");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_GROUP, "GRP");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_USER, "USR");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, "HKU");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_TASK, "TSK");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, "CSC");
+		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, "CSH");
+	}
+	
 	private void initObjectNamesEquivalenceMap() {
 		objectNamesEquivalenceMap = new HashMap<String, String>();
 		objectNamesEquivalenceMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, "AccountVO");
@@ -438,6 +458,10 @@ public class BatchObjectsMapper {
 	
 	public Map<String, String> getObjectNamesServicesMethodsMap() {
 		return objectNamesServicesMethodsMap;
+	}
+	
+	public Map<String, String> getObjectNamesAbbreviationsMap() {
+		return objectNamesAbbreviationsMap;
 	}
 	
 	public Map<String, String> getParamsMap(Object object) {
