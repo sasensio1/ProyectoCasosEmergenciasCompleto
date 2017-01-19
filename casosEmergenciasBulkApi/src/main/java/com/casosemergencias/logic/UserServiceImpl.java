@@ -13,18 +13,18 @@ public class UserServiceImpl implements UserService {
 	private UserDAO userDao;
 	
 	@Override
-	public boolean insertUserSfList(List<Object> userList, String processId) {
-		boolean resultOk = userDao.insertUserListSf(userList, processId);
+	public int insertUserSfList(List<Object> userList, String processId) {
+		int resultOk = userDao.insertUserListSf(userList, processId);
 		return resultOk;
 	}
 	@Override
-	public boolean updateUserSfList(List<Object> userList, String processId) {
-		boolean resultOk = userDao.updateUserListSf(userList, processId);
+	public int updateUserSfList(List<Object> userList, String processId) {
+		int resultOk = userDao.updateUserListSf(userList, processId);
 		return resultOk;
 	}
 	@Override
-	public boolean deleteUserSfList(List<Object> userList, String processId) {
-		boolean resultOk = userDao.deleteUserListSf(userList, processId);
+	public int deleteUserSfList(List<Object> userList, String processId) {
+		int resultOk = userDao.deleteUserListSf(userList, processId);
 		return resultOk;
 	}
 

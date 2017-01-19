@@ -27,10 +27,10 @@ public interface ContactService {
 	
 	public RelacionActivoContacto insertSalesforceRelacionActivo(String suministroSfid,String contactoSfid)throws EmergenciasException;
 	
-	public boolean insertContactSfList(List<Object> contactList, String processId);
+	public int insertContactSfList(List<Object> contactList, String processId);
 	
-	public boolean updateContactSfList(List<Object> contactList, String processId);
+	public int updateContactSfList(List<Object> contactList, String processId);
 	
-	public boolean deleteContactSfList(List<Object> contactList, String processId);
+	public int deleteContactSfList(List<Object> contactList, String processId);
 
 }

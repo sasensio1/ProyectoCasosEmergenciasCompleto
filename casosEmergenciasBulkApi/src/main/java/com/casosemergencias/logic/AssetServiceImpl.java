@@ -10,19 +10,19 @@ public class AssetServiceImpl implements AssetService  {
 	private AssetDAO assetDao;
 	
 	@Override
-	public boolean insertAssetSfList(List<Object> assetList, String processId) {
-		boolean resultOk = assetDao.insertAssetListSf(assetList, processId);
+	public int insertAssetSfList(List<Object> assetList, String processId) {
+		int resultOk = assetDao.insertAssetListSf(assetList, processId);
 		return resultOk;
 	}
 	
 	@Override
-	public boolean updateAssetSfList(List<Object> assetList, String processId) {
-		boolean resultOk = assetDao.updateAssetListSf(assetList, processId);
+	public int updateAssetSfList(List<Object> assetList, String processId) {
+		int resultOk = assetDao.updateAssetListSf(assetList, processId);
 		return resultOk;
 	}
 	@Override
-	public boolean deleteAssetSfList(List<Object> assetList, String processId) {
-		boolean resultOk = assetDao.deleteAssetListSf(assetList, processId);
+	public int deleteAssetSfList(List<Object> assetList, String processId) {
+		int resultOk = assetDao.deleteAssetListSf(assetList, processId);
 		return resultOk;
 	}
 	

@@ -89,7 +89,7 @@ public class SalesforceRestApiInvokerBatch {
 	}
 	
 	/**
-	 * Gets all r to update in Heroku from the Salesforce Bulk API, between the
+	 * Gets all records to update in Heroku from the Salesforce Bulk API, between the
 	 * given starting and ending dates.
 	 * 
 	 * @param processStartDate
@@ -125,7 +125,7 @@ public class SalesforceRestApiInvokerBatch {
 				objectLoadingHistoricProcessInfo.setProcessId(historicMainProcessId.toString());
 				objectLoadingHistoricProcessInfo.setStartDate(new Date());
 				objectLoadingHistoricProcessInfo.setOperation(ConstantesBatch.OBJECT_LOADING);
-				objectLoadingHistoricProcessInfo.setObject(objectsMapper.getObjectSelectsMap().get(objectName));
+				objectLoadingHistoricProcessInfo.setObject(objectsMapper.getObjectHistoricNamesMap().get(objectName));
  				//1. Se realiza el login contra Salesforce REST API.
 				userInfo = salesforceLoginChecker.getUserSessionInfo(userInfo);
 				//2. Se recorre el mapa de objetos para realizar las llamadas al API.
@@ -148,9 +148,9 @@ public class SalesforceRestApiInvokerBatch {
 					processErrorCause = ConstantesBatch.ERROR_OBJECT_RECORDS_NULL;
 					processResult=ConstantesBatch.HEROKU_BULK_API_BATCH_EMPTY_CONTAINER_ERROR;
 				}
-				mainHistoricProcessInfo.setSuccess(processOk);
-				mainHistoricProcessInfo.setErrorCause(processOk ? null : processErrorCause);
-				mainHistoricProcessInfo.setEndDate(new Date());
+				objectLoadingHistoricProcessInfo.setSuccess(processOk);
+				objectLoadingHistoricProcessInfo.setErrorCause(processOk ? null : processErrorCause);
+				objectLoadingHistoricProcessInfo.setEndDate(new Date());
 				historicBatchDao.insertHistoric(objectLoadingHistoricProcessInfo);
 			} else if (objectsMapper.getObjectSelectsMap() != null && !objectsMapper.getObjectSelectsMap().isEmpty()) {
 				//0. Se rellenan los datos del proceso para la tabla de historico
@@ -175,7 +175,7 @@ public class SalesforceRestApiInvokerBatch {
 					objectLoadingHistoricProcessInfo.setProcessId(historicMainProcessId.toString());
 					objectLoadingHistoricProcessInfo.setStartDate(new Date());
 					objectLoadingHistoricProcessInfo.setOperation(ConstantesBatch.OBJECT_LOADING);
-					objectLoadingHistoricProcessInfo.setObject(objectsMapper.getObjectSelectsMap().get(object.getKey()));
+					objectLoadingHistoricProcessInfo.setObject(objectsMapper.getObjectHistoricNamesMap().get(object.getKey()));
 					//3.1. No se recorren los objetos CaseComment y HerokuUser porque tienen su propio Job programado
 					containerList = getAllRecordsFromRestApi(object.getKey(), object.getValue(), processStartDate, processEndDate, userInfo.getSessionId(), historicMainProcessId.toString());
 					//4. Se envia el objeto al DAO para tratar la lista
@@ -234,8 +234,10 @@ public class SalesforceRestApiInvokerBatch {
 	 *            Query start date.
 	 * @param endDate
 	 *            Query end date.
-	 * @param userInfo
-	 *            Logged user info.
+	 * @param userSessionId
+	 *            Logged user session id.
+	 * @param historicProcessId
+	 * 			  Id of the historic info process.
 	 * @return BulkApiInfoContainerBatch All the modified object records to
 	 *         update.
 	 * @throws Exception
@@ -248,8 +250,8 @@ public class SalesforceRestApiInvokerBatch {
 		HistoricBatchVO apiSearchingHistoricProcessInfo = new HistoricBatchVO();
 		apiSearchingHistoricProcessInfo.setStartDate(new Date());
 		apiSearchingHistoricProcessInfo.setProcessId(historicProcessId);
-		apiSearchingHistoricProcessInfo.setOperation(ConstantesBatch.API_QUERY_AND_PARSE_PROCESS);
-		apiSearchingHistoricProcessInfo.setObject(entityName);
+		apiSearchingHistoricProcessInfo.setOperation(ConstantesBatch.API_QUERY_PROCESS);
+		apiSearchingHistoricProcessInfo.setObject(objectsMapper.getObjectHistoricNamesMap().get(entityName));
 				
 		boolean processOk = false;
 		String processErrorCause = "";
@@ -278,7 +280,7 @@ public class SalesforceRestApiInvokerBatch {
 				HttpEntity entity = response.getEntity();
 				String entityResponse = EntityUtils.toString(entity);
 				if (!Utils.isNullOrEmptyString(entityResponse)) {
-					bulkApiContainer = objectsParser.populateObjectListFromJsonObject(entityName, entityResponse, objectsMapper);
+					bulkApiContainer = objectsParser.populateObjectListFromJsonObject(entityName, entityResponse, objectsMapper, historicProcessId);
 					apiSearchingHistoricProcessInfo.setTotalRecords(bulkApiContainer.getTotalRecords());
 					processOk = true;
 				} else {

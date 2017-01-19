@@ -43,7 +43,9 @@ public class ConstantesBatch {
 	/** Valores de tipos de operaciones para HistoricBatch. */
 	public static final String BATCH_MAIN_PROCESS = "BATCH_MAIN_PROCESS";
 	public static final String OBJECT_LOADING = "OBJECT_LOADING_PROCESS";
-	public static final String API_QUERY_AND_PARSE_PROCESS = "API_QUERY_AND_PARSE_PROCESS";
+	public static final String API_QUERY_PROCESS = "API_QUERY_PROCESS";
+	public static final String API_RESPONSE_PARSE_PROCESS = "API_RESPONSE_PARSE_PROCESS";
+	public static final String OBJECT_PROCESS = "ALL_RECORDS_PROCESS";
 	public static final String INSERT_PROCESS = "INSERT_ALL_RECORDS_PROCESS";
 	public static final String INSERT_RECORD = "INSERT_RECORD_PROCESS";
 	public static final String UPDATE_PROCESS = "UPDATE_ALL_RECORDS_PROCESS";
@@ -52,6 +54,15 @@ public class ConstantesBatch {
 	public static final String DELETE_RECORD = "DELETE_ALL_RECORDS_RECORD_PROCESS";
 	
 	/** Valores de tipos de ERROR para HistoricBatch. */
+	public static final String ERROR_INSERT_PROCESS = "ERROR_INSERT_PROCESS";
+	public static final String ERROR_UPDATE_PROCESS = "ERROR_UPDATE_PROCESS";
+	public static final String ERROR_DELETE_PROCESS = "ERROR_DELETE_PROCESS";
+	public static final String ERROR_INSERT_PROCESS_EXCEPTION_REFLECTION = "ERROR_INSERT_PROCESS_EXCEPTION_REFLECTION";
+	public static final String ERROR_UPDATE_PROCESS_EXCEPTION_REFLECTION = "ERROR_UPDATE_PROCESS_EXCEPTION_REFLECTION";
+	public static final String ERROR_DELETE_PROCESS_EXCEPTION_REFLECTION = "ERROR_DELETE_PROCESS_EXCEPTION_REFLECTION";
+	public static final String ERROR_INSERT_PROCESS_LIST_NULL = "ERROR_INSERT_PROCESS_LIST_NULL";
+	public static final String ERROR_UPDATE_PROCESS_LIST_NULL = "ERROR_UPDATE_PROCESS_LIST_NULL";
+	public static final String ERROR_DELETE_PROCESS_LIST_NULL = "ERROR_DELETE_PROCESS_LIST_NULL";
 	public static final String ERROR_INSERT_RECORD = "ERROR_INSERT_RECORD";
 	public static final String ERROR_UPDATE_RECORD = "ERROR_UPDATE_RECORD";
 	public static final String ERROR_DELETE_RECORD = "ERROR_DELETE_RECORD";
@@ -60,7 +71,10 @@ public class ConstantesBatch {
 	public static final String ERROR_SALESFORCE_NULL_RESPONSE = "SALESFORCE_NULL_RESPONSE";
 	public static final String ERROR_SALESFORCE_RESPONSE_STATUS_NO_OK = "SALESFORCE_RESPONSE_STATUS_CODE_";
 	public static final String ERROR_SALESFORCE_NULL_USER_SESSION_ID = "SALESFORCE_NULL_USER_SESSION_ID";
-	
+	public static final String ERROR_RESPONSE_UNDONE = "SALESFORCE_API_RESPONSE_WITH_RESULT_UNDONE";
+	public static final String ERROR_RESPONSE_EMPTY = "SALESFORCE_API_RESPONSE_EMPTY";
+	public static final String ERROR_PROCESS_OBJECT = "ERROR_PROCESS_OBJECT";
+	public static final String ERROR_PROCESS_OBJECT_NULL_RECORDS = "ERROR_PROCESS_OBJECT_NULL_RECORDS";
 	/** Valores de tipos de OBJETOS para HistoricBatch. */
 	public static final String OBJECT_ACCOUNT = "ACCOUNT";
 	public static final String OBJECT_ASSET = "ASSET";

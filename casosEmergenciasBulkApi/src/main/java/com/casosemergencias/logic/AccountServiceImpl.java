@@ -93,18 +93,18 @@ public class AccountServiceImpl implements AccountService {
 	
 	
 	@Override
-	public boolean insertAccountSfList(List<Object> accountList, String processId) {
-		boolean resultOk = accountDao.insertAccountListSf(accountList, processId);
+	public int insertAccountSfList(List<Object> accountList, String processId) {
+		int resultOk = accountDao.insertAccountListSf(accountList, processId);
 		return resultOk;
 	}
 	@Override
-	public boolean updateAccountSfList(List<Object> accountList, String processId) {
-		boolean resultOk = accountDao.updateAccountListSf(accountList, processId);
+	public int updateAccountSfList(List<Object> accountList, String processId) {
+		int resultOk = accountDao.updateAccountListSf(accountList, processId);
 		return resultOk;
 	}
 	@Override
-	public boolean deleteAccountSfList(List<Object> accountList, String processId) {
-		boolean resultOk = accountDao.deleteAccountListSf(accountList, processId);
+	public int deleteAccountSfList(List<Object> accountList, String processId) {
+		int resultOk = accountDao.deleteAccountListSf(accountList, processId);
 		return resultOk;
 	}
 	
