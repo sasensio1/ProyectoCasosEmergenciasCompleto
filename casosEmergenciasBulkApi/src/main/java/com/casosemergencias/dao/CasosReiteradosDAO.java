@@ -159,63 +159,60 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	      return null;
 	}
 	
-	
-	
-	
-	
-	
 	/**
 	 * Inserta un listado de CasoReiterados venidos de Salesforce en BBDD de Heroku.
 	 * 
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int insertCasosReiteradosListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado CasoReiterados ---");
-
-		int cont = 0;
-		boolean processOk;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoInsertRecord = null;
+		CasosReiteradosVO casoReiteradoToInsert = null;
 		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();		
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
 			historicoInsertRecord.setProcessId(processId);
+			casoReiteradoToInsert = new CasosReiteradosVO();
 			
-			CasosReiteradosVO casoReiteradoToInsert = new CasosReiteradosVO();
-			try{
-				casoReiteradoToInsert=(CasosReiteradosVO)object;
-				
+			try {
+				casoReiteradoToInsert = (CasosReiteradosVO) object;
 				historicoInsertRecord.setSfidRecord(casoReiteradoToInsert.getSfid());
-				
 				session.save(casoReiteradoToInsert);
 				tx.commit();
+
 				logger.debug("--- Fin -- insertCasoReiterado ---" + casoReiteradoToInsert.getSfid());
 				
 				processOk = true;
-				cont++;
-				
+				processOk = true;
+				processedRecords++;
 			} catch (HibernateException e) {
-			tx.rollback();
-			logger.error("--- Error en insertCasoReiterado: ---" + casoReiteradoToInsert.getSfid(), e);
-			processOk = false;
+				tx.rollback();
+				logger.error("--- Error en insertCasoReiterado: ---" + casoReiteradoToInsert.getSfid(), e);
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
+			
 			historicoInsertRecord.setSuccess(processOk);
 			historicoInsertRecord.setEndDate(new Date());
-			historicoInsertRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_INSERT_RECORD);
-			historicBatchDAO.insertHistoric(historicoInsertRecord);						
+			historicoInsertRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 		}
 		logger.debug("--- Fin -- insert Listado CasoReiterados ---");
 		session.close();
-		return cont;
+		return processedRecords;
 	}
-	
 
 	/**
 	 * Actualiza un listado de casoReiterados venidos de Salesforce en BBDD de Heroku.
@@ -223,70 +220,66 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int updateCasosReiteradosListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado CasoReiterados ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoUpdateRecord = null;
+		CasosReiteradosVO casoReiteradoToUpdate = null;
 		
-		int cont = 0;
-		boolean processOk;
-		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+				
+		for (Object object : objectList) {
+			historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
 			historicoUpdateRecord.setProcessId(processId);
+			casoReiteradoToUpdate = new CasosReiteradosVO();
 			
-			CasosReiteradosVO casoReiteradoToUpdate = new CasosReiteradosVO();
-			try{
+			try {
 				casoReiteradoToUpdate=(CasosReiteradosVO)object;
-				
 				historicoUpdateRecord.setSfidRecord(casoReiteradoToUpdate.getSfid());
+				//1.1-Construimos la query							
+				Query sqlUpdateQuery =session.createQuery("UPDATE CasosReiteradosVO "
+													   + "	  SET name = :name"
+													   + "		, numbercases__c = :numbercases__c"
+													   + "		, numberdays__c = :numberdays__c"
+													   + "		, createddate = :createddate"				
+													   + "  WHERE sfid = :sfidFiltro");
 				
-				//1.1- Seteamos los campos a actualizar distintos de String				
-				Double	numbercases__c=casoReiteradoToUpdate.getNumCasos();
-				Double	numberdays__c=casoReiteradoToUpdate.getNumDias();
-				Date createddate=casoReiteradoToUpdate.getCreatedDate();
-				
-				//1.2-Construimos la query							
-				Query sqlUpdateQuery =session.createQuery("UPDATE CasosReiteradosVO SET "
-				+ "name= :name,numbercases__c="+numbercases__c+",numberdays__c="+numberdays__c+","
-				+ "createddate="+createddate				
-				+	
-				" WHERE sfid = :sfidFiltro");
-				
-				//1.3-Seteamos los campos a actualizar de tipo String	
-				
-				    //1.3.1-Seteamos los campos que no filtren la query						
-					sqlUpdateQuery.setParameter("name", casoReiteradoToUpdate.getName());
-	
-					//1.3.2-Seteamos el sfid,campo por el que filtramos la query							
-					sqlUpdateQuery.setParameter("sfidFiltro", casoReiteradoToUpdate.getSfid());
+				//1.2-Seteamos los campos
+				sqlUpdateQuery.setString("name", casoReiteradoToUpdate.getName());
+				sqlUpdateQuery.setDouble("numbercases__c", casoReiteradoToUpdate.getNumCasos());
+				sqlUpdateQuery.setDouble("numberdays__c", casoReiteradoToUpdate.getNumDias());
+				sqlUpdateQuery.setTimestamp("createddate", casoReiteradoToUpdate.getCreatedDate());
+				sqlUpdateQuery.setString("sfidFiltro", casoReiteradoToUpdate.getSfid());
 				
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-							
+				tx.commit();		
 				logger.debug("--- Fin -- updateCasoReiterado ---" + casoReiteradoToUpdate.getSfid());
-				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en updateCasoReiterado: ---" + casoReiteradoToUpdate.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en updateCasoReiterado: ---" + casoReiteradoToUpdate.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
+
 			historicoUpdateRecord.setSuccess(processOk);
 			historicoUpdateRecord.setEndDate(new Date());
-			historicoUpdateRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicBatchDAO.insertHistoric(historicoUpdateRecord);					
+			historicoUpdateRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 		}
 		logger.debug("--- Fin -- update Listado CasoReiterados ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
 		
 	/**
@@ -295,60 +288,54 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int deleteCasosReiteradosListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado CasoReiterados ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoDeleteRecord = null;
+		CasosReiteradosVO casoReiteradoToDelete = null;
 		
-		int cont = 0;
-		boolean processOk;
-		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_REPEATED_CASES);
 			historicoDeleteRecord.setProcessId(processId);
-			
-			CasosReiteradosVO casoReiteradoToDelete = new CasosReiteradosVO();
-			try{
-				casoReiteradoToDelete=(CasosReiteradosVO)object;
-				
+			casoReiteradoToDelete = new CasosReiteradosVO();
+
+			try {
+				casoReiteradoToDelete = (CasosReiteradosVO) object;
 				historicoDeleteRecord.setSfidRecord(casoReiteradoToDelete.getSfid());
-				
-				Query sqlDeleteQuery =session.createQuery("DELETE CasosReiteradosVO  WHERE sfid = :sfidFiltro");
-				
+				Query sqlDeleteQuery = session.createQuery("DELETE CasosReiteradosVO  WHERE sfid = :sfidFiltro");
 				//Seteamos el campo por el que filtramos el borrado			
-				sqlDeleteQuery.setParameter("sfidFiltro", casoReiteradoToDelete.getSfid());				
+				sqlDeleteQuery.setString("sfidFiltro", casoReiteradoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-							
+				tx.commit();
+				
 				logger.debug("--- Fin -- deleteCasoReiterado ---" + casoReiteradoToDelete.getSfid());
-				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteCasoReiterado: ---" + casoReiteradoToDelete.getSfid(), e);
-			processOk = false;
-			} 
+				logger.error("--- Error en deleteCasoReiterado: ---" + casoReiteradoToDelete.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
+			}
+			
 			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setErrorCause(processErrorCause);
 			historicoDeleteRecord.setEndDate(new Date());
-			historicoDeleteRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_DELETE_RECORD);
-			historicBatchDAO.insertHistoric(historicoDeleteRecord);					
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 		}
 		logger.debug("--- Fin -- delete Listado CasoReiterados ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
-	
-	
-	
-	
-	
-	
-	
 }

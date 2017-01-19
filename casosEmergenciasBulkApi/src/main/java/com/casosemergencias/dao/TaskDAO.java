@@ -127,47 +127,48 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	@Transactional
 	public int insertTaskListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Tareas ---");
-
-		int cont = 0;
-		boolean processOk;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoInsertRecord = null;
+		TaskVO taskToInsert = null;
 		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();		
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_TASK);
 			historicoInsertRecord.setProcessId(processId);
+			taskToInsert = new TaskVO();
 			
-			TaskVO taskToInsert = new TaskVO();
-			try{
-				taskToInsert=(TaskVO)object;
-				
+			try {
+				taskToInsert = (TaskVO) object;
 				historicoInsertRecord.setSfidRecord(taskToInsert.getSfid());
-				
 				session.save(taskToInsert);
 				tx.commit();
+
 				logger.debug("--- Fin -- insertTaskListSf ---" + taskToInsert.getSfid());
-				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
 				tx.rollback();
 				logger.error("--- Error en insertTaskListSf: ---" + taskToInsert.getSfid(), e);
 				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
+			
 			historicoInsertRecord.setSuccess(processOk);
 			historicoInsertRecord.setEndDate(new Date());
-			historicoInsertRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_INSERT_RECORD);
-			historicBatchDAO.insertHistoric(historicoInsertRecord);		
-						
+			historicoInsertRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 		}
 		logger.debug("--- Fin -- insertTaskListSf ---");
 		session.close();
-		return cont;	
+		return processedRecords;
 	}
 
 	/**
@@ -179,76 +180,82 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	@Transactional
 	public int updateTaskListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Tasks ---");
-
-		int cont = 0;
-		boolean processOk;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoUpdateRecord = null;
+		TaskVO taskToUpdate = null;
 		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+				
+		for (Object object : objectList) {
+			historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_TASK);
 			historicoUpdateRecord.setProcessId(processId);
+			taskToUpdate = new TaskVO();
 			
-			TaskVO taskToUpdate = new TaskVO();
-			try{
-				taskToUpdate=(TaskVO)object;
-				
+			try {
+				taskToUpdate = (TaskVO) object;
 				historicoUpdateRecord.setSfidRecord(taskToUpdate.getSfid());
-				
-				//1.1- Seteamos los campos a actualizar distintos de String			
-				Date createddate=taskToUpdate.getCreatedDate();
-				Date activitydate=taskToUpdate.getActivityDate();
-
-				//1.2-Construimos la query							
-				Query sqlUpdateQuery =session.createQuery("UPDATE TaskVO SET "
-				+ "tasktype__c= :tasktype__c,activitydate="+activitydate+","
-				+ "calldisposition= :calldisposition,casephone__c= :casephone__c,"
-				+ "status= :status,description= :description,"
-				+ "createddate="+createddate+",subject= :subject,priority= :priority,whoid= :whoid,"
-				+ "accountid= :accountid,ownerid= :ownerid,tasksubtype= :tasksubtype,"					
-				+ " WHERE sfid = :sfidFiltro");
+				//1.1-Construimos la query							
+				Query sqlUpdateQuery =session.createQuery("UPDATE TaskVO "
+													   + "    SET tasktype__c = :tasktype__c"
+													   + "		, activitydate = :activitydate"
+													   + "		, calldisposition = :calldisposition"
+													   + "		, casephone__c = :casephone__c"
+													   + "		, status = :status"
+													   + "		, description = :description"
+													   + "		, createddate = :createddate"
+													   + "		, subject = :subject"
+													   + "		, priority = :priority"
+													   + "		, whoid = :whoid"
+													   + "		, accountid = :accountid"
+													   + "		, ownerid = :ownerid"
+													   + "		, tasksubtype = :tasksubtype,"					
+													   + "  WHERE sfid = :sfidFiltro");
 							
-				//1.3-Seteamos los campos a actualizar de tipo String	
+				//1.2-Seteamos los campos
+				sqlUpdateQuery.setParameter("tasktype__c", taskToUpdate.getTaskType());
+				sqlUpdateQuery.setTimestamp("activitydate", taskToUpdate.getActivityDate());
+				sqlUpdateQuery.setParameter("calldisposition", taskToUpdate.getCallDisposition());
+				sqlUpdateQuery.setParameter("casephone__c", taskToUpdate.getCasePhone());
+				sqlUpdateQuery.setParameter("status", taskToUpdate.getStatus());
+				sqlUpdateQuery.setParameter("description", taskToUpdate.getDescription());
+				sqlUpdateQuery.setTimestamp("createddate", taskToUpdate.getCreatedDate());
+				sqlUpdateQuery.setParameter("subject", taskToUpdate.getSubject());
+				sqlUpdateQuery.setParameter("priority", taskToUpdate.getPriority());
+				sqlUpdateQuery.setParameter("whoid", taskToUpdate.getWhoId());
+				sqlUpdateQuery.setParameter("accountid", taskToUpdate.getAccountId());
+				sqlUpdateQuery.setParameter("ownerid", taskToUpdate.getOwnerId());
+				sqlUpdateQuery.setParameter("tasksubtype", taskToUpdate.getTaskSubtype());
+				sqlUpdateQuery.setParameter("sfidFiltro", taskToUpdate.getSfid());
 				
-				    //1.3.1-Seteamos los campos que no filtren la query						
-					sqlUpdateQuery.setParameter("tasktype__c", taskToUpdate.getTaskType());
-					sqlUpdateQuery.setParameter("calldisposition", taskToUpdate.getCallDisposition());
-					sqlUpdateQuery.setParameter("casephone__c", taskToUpdate.getCasePhone());
-					sqlUpdateQuery.setParameter("status", taskToUpdate.getStatus());
-					sqlUpdateQuery.setParameter("description", taskToUpdate.getDescription());
-					sqlUpdateQuery.setParameter("subject", taskToUpdate.getSubject());
-					sqlUpdateQuery.setParameter("priority", taskToUpdate.getPriority());
-					sqlUpdateQuery.setParameter("whoid", taskToUpdate.getWhoId());
-					sqlUpdateQuery.setParameter("accountid", taskToUpdate.getAccountId());
-					sqlUpdateQuery.setParameter("ownerid", taskToUpdate.getOwnerId());
-					sqlUpdateQuery.setParameter("tasksubtype", taskToUpdate.getTaskSubtype());
-					
-					//1.3.2-Seteamos el sfid,campo por el que filtramos la query								
-					sqlUpdateQuery.setParameter("sfidFiltro", taskToUpdate.getSfid());
-					
-				//1.5-Ejecutamos la actualizacion
+				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-							
+				tx.commit();	
 				logger.debug("--- Fin -- updateTaskListSf ---" + taskToUpdate.getSfid());
 				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateTaskListSf: ---" + taskToUpdate.getSfid(), e);
+				tx.rollback();
 				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
+
 			historicoUpdateRecord.setSuccess(processOk);
 			historicoUpdateRecord.setEndDate(new Date());
-			historicoUpdateRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicBatchDAO.insertHistoric(historicoUpdateRecord);					
+			historicoUpdateRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 		}
 		logger.debug("--- Fin -- update Listado Tasks ---");
 		session.close();
-		return cont;
+		return processedRecords;
 	}
 		
 	/**
@@ -260,50 +267,51 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 	@Transactional
 	public int deleteTaskListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Tareas ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoDeleteRecord = null;
+		TaskVO taskToDelete = null;
 		
-
-		int cont = 0;
-		boolean processOk;
-
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_TASK);
 			historicoDeleteRecord.setProcessId(processId);
+			taskToDelete = new TaskVO();
 			
-			TaskVO taskToDelete = new TaskVO();
-			try{
-				taskToDelete=(TaskVO)object;
-				
+			try {
+				taskToDelete = (TaskVO) object;
 				historicoDeleteRecord.setSfidRecord(taskToDelete.getSfid());
-				
-				Query sqlDeleteQuery =session.createQuery("DELETE TaskVO WHERE sfid = :sfidFiltro");
-				
+				Query sqlDeleteQuery = session.createQuery("DELETE TaskVO WHERE sfid = :sfidFiltro");
 				//Seteamos el campo por el que filtramos el borrado			
-				sqlDeleteQuery.setParameter("sfidFiltro", taskToDelete.getSfid());				
+				sqlDeleteQuery.setString("sfidFiltro", taskToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-							
+				tx.commit();
+				
 				logger.debug("--- Fin -- deleteTaskListSf ---" + taskToDelete.getSfid());
-				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteTaskListSf: ---" + taskToDelete.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en deleteTaskListSf: ---" + taskToDelete.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 
+
 			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setErrorCause(processErrorCause);
 			historicoDeleteRecord.setEndDate(new Date());
-			historicoDeleteRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_DELETE_RECORD);
-			historicBatchDAO.insertHistoric(historicoDeleteRecord);					
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 		}
 		logger.debug("--- Fin -- delete Listado Tasks ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
 }

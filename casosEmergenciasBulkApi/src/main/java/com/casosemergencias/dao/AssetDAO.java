@@ -126,63 +126,58 @@ public class AssetDAO {
 	    return null;
 	}
 	
-	
-	
-	
 	/**
 	 * Inserta un listado de Activos venidos de Salesforce en BBDD de Heroku.
 	 * 
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int insertAssetListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Activos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoInsertRecord = null;
+		AssetVO activoToInsert = null;
 		
-		int cont = 0;
-		boolean processOk;
-		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();		
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_ASSET);
 			historicoInsertRecord.setProcessId(processId);
+			activoToInsert = new AssetVO();
 			
-			AssetVO activoToInsert = new AssetVO();
-			try{
-				activoToInsert=(AssetVO)object;
-				
+			try {
+				activoToInsert = (AssetVO) object;
 				historicoInsertRecord.setSfidRecord(activoToInsert.getSfid());
-				
 				session.save(activoToInsert);
 				tx.commit();
+
 				logger.debug("--- Fin -- insertActivo ---" + activoToInsert.getSfid());
-				
 				processOk = true;
-				
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			tx.rollback();
-			logger.error("--- Error en insertActivo: ---" + activoToInsert.getSfid(), e);
-			processOk = false;
+				tx.rollback();
+				logger.error("--- Error en insertActivo: ---" + activoToInsert.getSfid(), e);
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
+
 			historicoInsertRecord.setSuccess(processOk);
 			historicoInsertRecord.setEndDate(new Date());
-			historicoInsertRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_INSERT_RECORD);
-			historicBatchDAO.insertHistoric(historicoInsertRecord);				
+			historicoInsertRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 		}
 		logger.debug("--- Fin -- insert Listado Activos ---");
 		session.close();
-		
-		return cont;		
+		return processedRecords;
 	}
-	
 
 	/**
 	 * Actualiza un listado de activos venidos de Salesforce en BBDD de Heroku.
@@ -190,72 +185,68 @@ public class AssetDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int updateAssetListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Activos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoUpdateRecord = null;
+		AssetVO activoToUpdate = null;
 		
-		int cont = 0;
-		boolean processOk;
-		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_ASSET);
 			historicoUpdateRecord.setProcessId(processId);
+			activoToUpdate = new AssetVO();
 			
-			AssetVO activoToUpdate = new AssetVO();
-			try{
-				activoToUpdate=(AssetVO)object;
-				
+			try {
+				activoToUpdate = (AssetVO) object;
 				historicoUpdateRecord.setSfidRecord(activoToUpdate.getSfid());
+				//1.1-Construimos la query						
+				Query sqlUpdateQuery =session.createQuery("UPDATE AssetVO "
+													   + "    SET name = :name"
+													   + "	    , contactid = :contactid"
+													   + "	    , accountid = :accountid"
+													   + "		, pointofdelivery__c = :pointofdelivery__c"
+													   + "		, createdDate = :createddate"				
+													   + "  WHERE sfid = :sfidFiltro");
 				
-				//1.1- Seteamos los campos a actualizar distintos de String				
-				Date createddate=activoToUpdate.getCreatedDate();
-				
-				//1.2-Construimos la query						
-				Query sqlUpdateQuery =session.createQuery("UPDATE AssetVO SET "
-				+ "name= :name,contactid= :contactid,accountid= :accountid,"
-				+ "pointofdelivery__c= :pointofdelivery__c,createdDate="+createddate				
-				+	
-				" WHERE sfid = :sfidFiltro");
-				
-				//1.3-Seteamos los campos a actualizar de tipo String	
-				
-					//1.3.1-Seteamos el campos que no filtren la query						
-					sqlUpdateQuery.setParameter("name", activoToUpdate.getName());
-					sqlUpdateQuery.setParameter("contactid", activoToUpdate.getContactid());
-					sqlUpdateQuery.setParameter("accountid", activoToUpdate.getAccountid());
-					sqlUpdateQuery.setParameter("pointofdelivery__c", activoToUpdate.getSuministroid());
-					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
-					sqlUpdateQuery.setParameter("sfidFiltro", activoToUpdate.getSfid());
+				//1.2-Seteamos los campos de la query
+				sqlUpdateQuery.setString("name", activoToUpdate.getName());
+				sqlUpdateQuery.setString("contactid", activoToUpdate.getContactid());
+				sqlUpdateQuery.setString("accountid", activoToUpdate.getAccountid());
+				sqlUpdateQuery.setString("pointofdelivery__c", activoToUpdate.getSuministroid());
+				sqlUpdateQuery.setString("sfidFiltro", activoToUpdate.getSfid());
 													
-				//1.5-Ejecutamos la actualizacion
+				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-							
+				tx.commit();		
 				logger.debug("--- Fin -- updateActivo ---" + activoToUpdate.getSfid());
 				
 				processOk = true;
-				
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en updateActivo: ---" + activoToUpdate.getSfid(), e);
-			processOk = false;
-			} 
+				logger.error("--- Error en updateActivo: ---" + activoToUpdate.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
+			}
+
 			historicoUpdateRecord.setSuccess(processOk);
 			historicoUpdateRecord.setEndDate(new Date());
-			historicoUpdateRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicBatchDAO.insertHistoric(historicoUpdateRecord);				
+			historicoUpdateRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 		}
 		logger.debug("--- Fin -- update Listado Activos ---");
 		session.close();
-
-		return cont;
-
+		return processedRecords;
 	}
 		
 	/**
@@ -264,57 +255,54 @@ public class AssetDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int deleteAssetListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Activos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoDeleteRecord = null;
+		AssetVO activoToDelete = null;
 		
-		int cont = 0;
-		boolean processOk;
-
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_ASSET);
 			historicoDeleteRecord.setProcessId(processId);
+			activoToDelete = new AssetVO();
 			
-			AssetVO activoToDelete = new AssetVO();
-			try{
-				activoToDelete=(AssetVO)object;
-				
+			try {
+				activoToDelete = (AssetVO) object;
 				historicoDeleteRecord.setSfidRecord(activoToDelete.getSfid());
-				
-				Query sqlDeleteQuery =session.createQuery("DELETE AssetVO  WHERE sfid = :sfidFiltro");
-				
+				Query sqlDeleteQuery = session.createQuery("DELETE AssetVO  WHERE sfid = :sfidFiltro");
 				//Seteamos el campo por el que filtramos el borrado			
-				sqlDeleteQuery.setParameter("sfidFiltro", activoToDelete.getSfid());				
+				sqlDeleteQuery.setString("sfidFiltro", activoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-							
+				tx.commit();
+				
 				logger.debug("--- Fin -- deleteActivo ---" + activoToDelete.getSfid());
-
 				processOk = true;
-				
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteActivo: ---" + activoToDelete.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en deleteActivo: ---" + activoToDelete.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 
+
 			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setErrorCause(processErrorCause);
 			historicoDeleteRecord.setEndDate(new Date());
-			historicoDeleteRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_DELETE_RECORD);
-			historicBatchDAO.insertHistoric(historicoDeleteRecord);			
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 		}
 		logger.debug("--- Fin -- delete Listado Activos ---");
 		session.close();
-
-		return cont;
+		return processedRecords;
 	}
-	
-	
-
 }

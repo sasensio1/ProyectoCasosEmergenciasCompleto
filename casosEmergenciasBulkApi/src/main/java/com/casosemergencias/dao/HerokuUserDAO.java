@@ -380,59 +380,58 @@ public class HerokuUserDAO {
 		return numModif;
 	}
 	
-	
-	
-	
 	/**
 	 * Inserta un listado de UsuarioHerokus venidos de Salesforce en BBDD de Heroku.
 	 * 
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int insertHerokuUserListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado UsuarioHerokus ---");
-
-		int cont = 0;
-		boolean processOk;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoInsertRecord = null;
+		HerokuUserVO usuarioHerokuToInsert = null;
 		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();		
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_HEROKU_USER);
 			historicoInsertRecord.setProcessId(processId);
+			usuarioHerokuToInsert = new HerokuUserVO();
 			
-			HerokuUserVO usuarioHerokuToInsert = new HerokuUserVO();
-			try{
-				usuarioHerokuToInsert=(HerokuUserVO)object;
-				
+			try {
+				usuarioHerokuToInsert = (HerokuUserVO) object;
 				historicoInsertRecord.setSfidRecord(usuarioHerokuToInsert.getSfid());
-				
 				session.save(usuarioHerokuToInsert);
 				tx.commit();
+				
 				logger.debug("--- Fin -- insertUsuarioHeroku ---" + usuarioHerokuToInsert.getSfid());
 				processOk = true;
-				cont++;
+				processedRecords++;
 			} catch (HibernateException e) {
-			tx.rollback();
-			logger.error("--- Error en insertUsuarioHeroku: ---" + usuarioHerokuToInsert.getSfid(), e);
-			processOk = false;
+				tx.rollback();
+				logger.error("--- Error en insertUsuarioHeroku: ---" + usuarioHerokuToInsert.getSfid(), e);
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
+			
 			historicoInsertRecord.setSuccess(processOk);
 			historicoInsertRecord.setEndDate(new Date());
-			historicoInsertRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_INSERT_RECORD);
-			historicBatchDAO.insertHistoric(historicoInsertRecord);						
+			historicoInsertRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 		}
 		logger.debug("--- Fin -- insert Listado UsuarioHerokus ---");
 		session.close();
-		return cont;
+		return processedRecords;
 	}
-	
 
 	/**
 	 * Actualiza un listado de usuarioHerokus venidos de Salesforce en BBDD de Heroku.
@@ -440,77 +439,75 @@ public class HerokuUserDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int updateHerokuUserListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado UsuarioHerokus ---");
-
-		int cont = 0;
-		boolean processOk;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoUpdateRecord = null;
+		HerokuUserVO usuarioHerokuToUpdate = null;
 		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+				
+		for (Object object : objectList) {
+			historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_HEROKU_USER);
 			historicoUpdateRecord.setProcessId(processId);
+			usuarioHerokuToUpdate = new HerokuUserVO();
 			
-			HerokuUserVO usuarioHerokuToUpdate = new HerokuUserVO();
-			try{
-				usuarioHerokuToUpdate=(HerokuUserVO)object;
-				
+			try {
+				usuarioHerokuToUpdate = (HerokuUserVO) object;
 				historicoUpdateRecord.setSfidRecord(usuarioHerokuToUpdate.getSfid());
-				
-				//1.1- Seteamos los campos a actualizar distintos de String				
-				Boolean	sentmail__c	=usuarioHerokuToUpdate.getEnvioMail();
-				Boolean active__c=usuarioHerokuToUpdate.getActivo();
-						
-				
 				//1.2-Construimos la query			
-				Query sqlUpdateQuery =session.createQuery("UPDATE HerokuUserVO SET "
-				+ "name= :name,username__c= :username__c,password__c= :password__c,"
-				+ "mail__c= :mail__c,sentmail__c="+sentmail__c+","
-				+ "active__c="+active__c+",country__c= :country__c,"
-				+ "unity__c= :unity__c"				
-				+	
-				" WHERE sfid = :sfidFiltro");
+				Query sqlUpdateQuery = session.createQuery("UPDATE HerokuUserVO "
+														+ "	   SET name = :name"
+														+ "		 , username__c = :username__c"
+														+ "		 , password__c = :password__c"
+														+ "		 , mail__c = :mail__c"
+														+ "		 , sentmail__c = :sentmail__c"
+														+ "		 , active__c = :active__c"
+														+ "		 , country__c = :country__c"
+														+ "		 , unity__c = :unity__c"				
+														+ "  WHERE sfid = :sfidFiltro");
 				
-				//1.3-Seteamos los campos a actualizar de tipo String	
+				//1.2-Seteamos los campos
+				sqlUpdateQuery.setParameter("name", usuarioHerokuToUpdate.getName());
+				sqlUpdateQuery.setParameter("username__c", usuarioHerokuToUpdate.getUsername());
+				sqlUpdateQuery.setParameter("password__c", usuarioHerokuToUpdate.getPassword());
+				sqlUpdateQuery.setParameter("mail__c", usuarioHerokuToUpdate.getEmail());
+				sqlUpdateQuery.setBoolean("sentmail__c", usuarioHerokuToUpdate.getEnvioMail());
+				sqlUpdateQuery.setBoolean("active__c", usuarioHerokuToUpdate.getActivo());
+				sqlUpdateQuery.setParameter("country__c", usuarioHerokuToUpdate.getCountry());
+				sqlUpdateQuery.setParameter("unity__c", usuarioHerokuToUpdate.getUnidad());
+				sqlUpdateQuery.setParameter("sfidFiltro", usuarioHerokuToUpdate.getSfid());
 				
-				    //1.3.1-Seteamos los campos que no filtren la query						
-					sqlUpdateQuery.setParameter("name", usuarioHerokuToUpdate.getName());
-					sqlUpdateQuery.setParameter("username__c", usuarioHerokuToUpdate.getUsername());
-					sqlUpdateQuery.setParameter("password__c", usuarioHerokuToUpdate.getPassword());
-					sqlUpdateQuery.setParameter("mail__c", usuarioHerokuToUpdate.getEmail());
-					sqlUpdateQuery.setParameter("country__c", usuarioHerokuToUpdate.getCountry());
-					sqlUpdateQuery.setParameter("unity__c", usuarioHerokuToUpdate.getUnidad());
-					
-					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
-					sqlUpdateQuery.setParameter("sfidFiltro", usuarioHerokuToUpdate.getSfid());
-				
-				//1.5-Ejecutamos la actualizacion
+				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-							
+				tx.commit();
 				logger.debug("--- Fin -- updateUsuarioHeroku ---" + usuarioHerokuToUpdate.getSfid());
 				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en updateUsuarioHeroku: ---" + usuarioHerokuToUpdate.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en updateUsuarioHeroku: ---" + usuarioHerokuToUpdate.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
+
 			historicoUpdateRecord.setSuccess(processOk);
 			historicoUpdateRecord.setEndDate(new Date());
-			historicoUpdateRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicBatchDAO.insertHistoric(historicoUpdateRecord);						
+			historicoUpdateRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 		}
 		logger.debug("--- Fin -- update Listado UsuarioHerokus ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
 		
 	/**
@@ -519,62 +516,54 @@ public class HerokuUserDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int deleteHerokuUserListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado UsuarioHerokus ---");
-
-		int cont = 0;
-		boolean processOk;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoDeleteRecord = null;
+		HerokuUserVO usuarioHerokuToDelete = null;
 		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_HEROKU_USER);
 			historicoDeleteRecord.setProcessId(processId);
+			usuarioHerokuToDelete = new HerokuUserVO();
 			
-			HerokuUserVO usuarioHerokuToDelete = new HerokuUserVO();
-			try{
-				usuarioHerokuToDelete=(HerokuUserVO)object;
-				
+			try {
+				usuarioHerokuToDelete = (HerokuUserVO) object;
 				historicoDeleteRecord.setSfidRecord(usuarioHerokuToDelete.getSfid());
-				
-				Query sqlDeleteQuery =session.createQuery("DELETE HerokuUserVO  WHERE sfid = :sfidFiltro");
-				
+				Query sqlDeleteQuery = session.createQuery("DELETE HerokuUserVO WHERE sfid = :sfidFiltro");
 				//Seteamos el campo por el que filtramos el borrado			
-				sqlDeleteQuery.setParameter("sfidFiltro", usuarioHerokuToDelete.getSfid());				
+				sqlDeleteQuery.setString("sfidFiltro", usuarioHerokuToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-							
+				tx.commit();
+				
 				logger.debug("--- Fin -- deleteUsuarioHeroku ---" + usuarioHerokuToDelete.getSfid());
-				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteUsuarioHeroku: ---" + usuarioHerokuToDelete.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en deleteUsuarioHeroku: ---" + usuarioHerokuToDelete.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 
+
 			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setErrorCause(processErrorCause);
 			historicoDeleteRecord.setEndDate(new Date());
-			historicoDeleteRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_DELETE_RECORD);
-			historicBatchDAO.insertHistoric(historicoDeleteRecord);	
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 		}
 		logger.debug("--- Fin -- delete Listado UsuarioHerokus ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

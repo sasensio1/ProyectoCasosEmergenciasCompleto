@@ -90,22 +90,19 @@ public class AccountServiceImpl implements AccountService {
 		return accountDao.countCuentas(propDatatable);
 	}
 	
-	
-	
 	@Override
 	public int insertAccountSfList(List<Object> accountList, String processId) {
-		int resultOk = accountDao.insertAccountListSf(accountList, processId);
-		return resultOk;
+		int processedRecords = accountDao.insertAccountListSf(accountList, processId);
+		return processedRecords;
 	}
 	@Override
 	public int updateAccountSfList(List<Object> accountList, String processId) {
-		int resultOk = accountDao.updateAccountListSf(accountList, processId);
-		return resultOk;
+		int processedRecords = accountDao.updateAccountListSf(accountList, processId);
+		return processedRecords;
 	}
 	@Override
 	public int deleteAccountSfList(List<Object> accountList, String processId) {
-		int resultOk = accountDao.deleteAccountListSf(accountList, processId);
-		return resultOk;
+		int processedRecords = accountDao.deleteAccountListSf(accountList, processId);
+		return processedRecords;
 	}
-	
 }

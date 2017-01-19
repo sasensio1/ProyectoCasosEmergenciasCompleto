@@ -293,13 +293,13 @@ public class CaseCommentDAO {
 				logger.error("--- Error en updateComentarioCaso: ---" + comentarioCasoToUpdate.getSfid(), e);
 				tx.rollback();
 				processOk = false;
-				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
+				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			}
 
 			historicoUpdateRecord.setSuccess(processOk);
 			historicoUpdateRecord.setEndDate(new Date());
 			historicoUpdateRecord.setErrorCause(processErrorCause);
-			historicBatchDAO.insertHistoric(historicoUpdateRecord);						
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 		}
 		logger.debug("--- Fin -- update Listado ComentarioCasos ---");
 		session.close();
@@ -336,7 +336,7 @@ public class CaseCommentDAO {
 			try {
 				comentarioCasoToDelete = (CaseCommentVO) object;
 				historicoDeleteRecord.setSfidRecord(comentarioCasoToDelete.getSfid());
-				Query sqlDeleteQuery =session.createQuery("DELETE CaseCommentVO  WHERE sfid = :sfidFiltro");
+				Query sqlDeleteQuery = session.createQuery("DELETE CaseCommentVO  WHERE sfid = :sfidFiltro");
 				//Seteamos el campo por el que filtramos el borrado			
 				sqlDeleteQuery.setString("sfidFiltro", comentarioCasoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				

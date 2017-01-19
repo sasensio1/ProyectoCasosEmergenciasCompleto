@@ -160,30 +160,6 @@ public class ContactServiceImpl implements ContactService{
 		}
 		return null;
 	}
-
-	/*@Override
-	public Boolean asociarSuministro(String sfid, String contactSfid) {
-		List<AssetVO> listAssetVO= assetDAO.readAssetBySuministroid(sfid);
-		if(listAssetVO!=null && !listAssetVO.isEmpty()){
-			AssetVO assetVO=listAssetVO.get(0);
-			String activoId=assetVO.getSfid();
-			List<RelacionActivoContactoVO> listRelActiContactoVO= relacionDAO.readRelacionActivoContactoByActivoIdAndContact(activoId,contactSfid);
-				if(listRelActiContactoVO!=null && !listRelActiContactoVO.isEmpty()){
-					return false;				
-				}
-				else{
-					RelacionActivoContactoVO relActiContactoVO= new RelacionActivoContactoVO();
-					relActiContactoVO.setTipoRelacionActivoClave(Constantes.PICKLIST_RELACIONACTIVO_REPORTADOR);
-					relActiContactoVO.setActivoId(activoId);
-					relActiContactoVO.setContactoId(contactSfid);
-					relacionDAO.insertRelacionActivoContacto(relActiContactoVO);
-					return true;
-				}
-		}
-		return null;
-	}*/
-	
-	
 	
 	@Override
 	public Direccion getSalesforceAddress(Calle street,Direccion direccion) throws EmergenciasException {
@@ -343,54 +319,19 @@ public class ContactServiceImpl implements ContactService{
 				
 	}
 	
-	/*@Override
-	public Caso populateCaseInfoToInsert(String direccionSf, String contactSfid,String herokuCaseOwner) {
-		logger.debug("Rellenamos los datos del caso para insertarlo por direccion");
-		Caso casoToInsert = new Caso();
-		ContactVO contacto = contactDao.readContactBySfid(contactSfid);
-		DireccionVO direccion = direccionDAO.readDireccionBySfid(direccionSf);
-		String canalNotificacion = null;
-		if (contacto != null) {
-			logger.debug("El contacto no es nulo, se rellenan sus datos");
-			if (contacto.getCanalPreferenteContacto() != null && !"".equals(contacto.getCanalPreferenteContacto())) {
-				canalNotificacion = contacto.getCanalPreferenteContacto();
-			}
-			if(contacto.getAccountid()!=null){
-				casoToInsert.setNombreCuenta(contacto.getAccountid());
-			
-			}
-			casoToInsert.setNombreContacto(contacto.getSfid());
-			casoToInsert.setEmailNotificacion(contacto.getEmail());
-			casoToInsert.setTelefonoContacto(contacto.getPhone());
-		}
-		if(direccion!=null){
-			if(direccion.getName()!=null){
-				casoToInsert.setDireccionSuministro(direccion.getName());
-			}
-		}
-		casoToInsert.setHerokuUsername(herokuCaseOwner);
-		casoToInsert.setDireccion(direccionSf);
-		casoToInsert.setPeticion(Constantes.COD_CASO_MOTIVO_EMERGENCIA);
-		casoToInsert.setCanalOrigen(Constantes.COD_CASO_ORIGEN_CALL_CENTER);
-		casoToInsert.setType(Constantes.COD_CASO_TYPE_RECLAMO);
-		casoToInsert.setEstado(Constantes.COD_CASO_STATUS_PREINGRESADO);
-		casoToInsert.setCanalNotificacion((canalNotificacion != null && !"".equals(canalNotificacion) ? canalNotificacion : Constantes.COD_CONTACTO_CANAL_PREF_CONTACT_003));
-		return casoToInsert;
-	}*/
-	
 	@Override
 	public int insertContactSfList(List<Object> contactList, String processId) {
-		int resultOk = contactDao.insertContactListSf(contactList, processId);
-		return resultOk;
+		int processedRecords = contactDao.insertContactListSf(contactList, processId);
+		return processedRecords;
 	}
 	@Override
 	public int updateContactSfList(List<Object> contactList, String processId) {
-		int resultOk = contactDao.updateContactListSf(contactList, processId);
-		return resultOk;
+		int processedRecords = contactDao.updateContactListSf(contactList, processId);
+		return processedRecords;
 	}
 	@Override
 	public int deleteContactSfList(List<Object> contactList, String processId) {
-		int resultOk = contactDao.deleteContactListSf(contactList, processId);
-		return resultOk;
+		int processedRecords = contactDao.deleteContactListSf(contactList, processId);
+		return processedRecords;
 	}
 }

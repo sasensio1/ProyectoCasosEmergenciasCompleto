@@ -215,63 +215,58 @@ public class CaseHistoryDAO {
 		return null;
 	}
 	
-	
-	
-	
-	
-	
 	/**
 	 * Inserta un listado de HistorialCasos venidos de Salesforce en BBDD de Heroku.
 	 * 
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int insertCaseHistoryListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado HistorialCasos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoInsertRecord = null;
+		CaseHistoryVO historialCasoToInsert = null;
 		
-		int cont = 0;
-		boolean processOk;
-
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();		
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
 			historicoInsertRecord.setProcessId(processId);
-			
-			CaseHistoryVO historialCasoToInsert = new CaseHistoryVO();
-			try{
-				historialCasoToInsert=(CaseHistoryVO)object;
-				
+			historialCasoToInsert = new CaseHistoryVO();
+			 
+			try {
+				historialCasoToInsert = (CaseHistoryVO) object;
 				historicoInsertRecord.setSfidRecord(historialCasoToInsert.getSfid());
-				
 				session.save(historialCasoToInsert);
 				tx.commit();
+
 				logger.debug("--- Fin -- insertHistorialCaso ---" + historialCasoToInsert.getSfid());
-				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			tx.rollback();
-			logger.error("--- Error en insertHistorialCaso: ---" + historialCasoToInsert.getSfid(), e);
-			processOk = false;
+				tx.rollback();
+				logger.error("--- Error en insertHistorialCaso: ---" + historialCasoToInsert.getSfid(), e);
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
+
 			historicoInsertRecord.setSuccess(processOk);
 			historicoInsertRecord.setEndDate(new Date());
-			historicoInsertRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_INSERT_RECORD);
-			historicBatchDAO.insertHistoric(historicoInsertRecord);		
+			historicoInsertRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 		}
 		logger.debug("--- Fin -- insert Listado HistorialCasos ---");
 		session.close();
-		return cont;		
+		return processedRecords;
 	}
-	
 
 	/**
 	 * Actualiza un listado de historialCasos venidos de Salesforce en BBDD de Heroku.
@@ -279,73 +274,71 @@ public class CaseHistoryDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int updateCaseHistoryListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado HistorialCasos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoUpdateRecord = null;
+		CaseHistoryVO historialCasoToUpdate = null;
 		
-		int cont = 0;
-		boolean processOk;
-		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+				
+		for (Object object : objectList) {
+			historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
 			historicoUpdateRecord.setProcessId(processId);
+			historialCasoToUpdate = new CaseHistoryVO();
 			
-			CaseHistoryVO historialCasoToUpdate = new CaseHistoryVO();
-			//1.1- Seteamos los campos a actualizar distintos de String				
-			Date createddate=historialCasoToUpdate.getCreateddate();
-			
-			//1.2-Construimos la query							
-			try{
-				historialCasoToUpdate=(CaseHistoryVO)object;
-				
+			try {
+				historialCasoToUpdate = (CaseHistoryVO) object;
 				historicoUpdateRecord.setSfidRecord(historialCasoToUpdate.getSfid());
+				//1.1-Construimos la query							
+				Query sqlUpdateQuery = session.createQuery("UPDATE CaseHistoryVO "
+														+ "    SET createdbyid = :createdbyid"
+														+ "		 , createddate = :createddate"
+														+ "		 , newvalue = :newvalue"
+														+ "		 , oldvalue = :oldvalue"
+														+ "		 , field = :field"
+														+ "		 , caseid = :caseid"
+														+ "  WHERE sfid = :sfidFiltro");
 				
-				Query sqlUpdateQuery =session.createQuery("UPDATE CaseHistoryVO SET "
-				+ "createdbyid= :createdbyid,createddate="+createddate+",newvalue= :newvalue,"
-				+ "oldvalue= :oldvalue,field= :field,caseid= :caseid"
-				+
+				//1.2-Seteamos los campos
+				sqlUpdateQuery.setParameter("createdbyid", historialCasoToUpdate.getCreatedbyid());
+				sqlUpdateQuery.setTimestamp("createddate", historialCasoToUpdate.getCreateddate());
+				sqlUpdateQuery.setParameter("newvalue", historialCasoToUpdate.getNewvalue());
+				sqlUpdateQuery.setParameter("oldvalue", historialCasoToUpdate.getOldvalue());
+				sqlUpdateQuery.setParameter("field", historialCasoToUpdate.getField());
+				sqlUpdateQuery.setParameter("caseid", historialCasoToUpdate.getCaseid());
+				sqlUpdateQuery.setParameter("sfidFiltro", historialCasoToUpdate.getSfid());					
 				
-				" WHERE sfid = :sfidFiltro");
-				
-				//1.3-Seteamos los campos a actualizar de tipo String	
-				
-					//1.3.1-Seteamos el campos que no filtren la query						
-					sqlUpdateQuery.setParameter("createdbyid", historialCasoToUpdate.getCreatedbyid());
-					sqlUpdateQuery.setParameter("newvalue", historialCasoToUpdate.getNewvalue());
-					sqlUpdateQuery.setParameter("oldvalue", historialCasoToUpdate.getOldvalue());
-					sqlUpdateQuery.setParameter("field", historialCasoToUpdate.getField());
-					sqlUpdateQuery.setParameter("caseid", historialCasoToUpdate.getCaseid());
-					
-					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
-					sqlUpdateQuery.setParameter("sfidFiltro", historialCasoToUpdate.getSfid());					
-								
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-							
+				tx.commit();		
 				logger.debug("--- Fin -- updateHistorialCaso ---" + historialCasoToUpdate.getSfid());
 				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en updateHistorialCaso: ---" + historialCasoToUpdate.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en updateHistorialCaso: ---" + historialCasoToUpdate.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
+
 			historicoUpdateRecord.setSuccess(processOk);
 			historicoUpdateRecord.setEndDate(new Date());
-			historicoUpdateRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicBatchDAO.insertHistoric(historicoUpdateRecord);						
+			historicoUpdateRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 		}
 		logger.debug("--- Fin -- update Listado HistorialCasos ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
 		
 	/**
@@ -354,64 +347,56 @@ public class CaseHistoryDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int deleteCaseHistoryListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado HistorialCasos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoDeleteRecord = null;
+		CaseHistoryVO historialCasoToDelete = null;
 		
-		int cont = 0;
-		boolean processOk;
-
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_CASE_HISTORY);
 			historicoDeleteRecord.setProcessId(processId);
+			historialCasoToDelete = new CaseHistoryVO();
 			
-			CaseHistoryVO historialCasoToDelete = new CaseHistoryVO();
-			try{
-				historialCasoToDelete=(CaseHistoryVO)object;
-				
+			try {
+				historialCasoToDelete = (CaseHistoryVO) object;
 				historicoDeleteRecord.setSfidRecord(historialCasoToDelete.getSfid());
-				
-				Query sqlDeleteQuery =session.createQuery("DELETE CaseHistoryVO  WHERE sfid = :sfidFiltro");
-				
+				Query sqlDeleteQuery = session.createQuery("DELETE CaseHistoryVO  WHERE sfid = :sfidFiltro");
 				//Seteamos el campo por el que filtramos el borrado			
 				sqlDeleteQuery.setParameter("sfidFiltro", historialCasoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-							
+				tx.commit();
+				
 				logger.debug("--- Fin -- deleteHistorialCaso ---" + historialCasoToDelete.getSfid());
 				
 				processOk = true;
-				cont++;
-				
+				processOk = true;
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteHistorialCaso: ---" + historialCasoToDelete.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en deleteHistorialCaso: ---" + historialCasoToDelete.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 
+
 			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setErrorCause(processErrorCause);
 			historicoDeleteRecord.setEndDate(new Date());
-			historicoDeleteRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_DELETE_RECORD);
-			historicBatchDAO.insertHistoric(historicoDeleteRecord);				
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 		}
 		logger.debug("--- Fin -- delete Listado HistorialCasos ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

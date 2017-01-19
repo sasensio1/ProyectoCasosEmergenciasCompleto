@@ -650,62 +650,58 @@ public class ContactDAO {
 		return null;
 	}
 	
-	
-	
-	
-	
 	/**
 	 * Inserta un listado de Contactos venidos de Salesforce en BBDD de Heroku.
 	 * 
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int insertContactListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Contactos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoInsertRecord = null;
+		ContactVO contactoToInsert = null;
 		
-		int cont = 0;
-		boolean processOk;
-
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();		
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_CONTACT);
 			historicoInsertRecord.setProcessId(processId);
+			contactoToInsert = new ContactVO();
 			
-			ContactVO contactoToInsert = new ContactVO();
-			try{
-				contactoToInsert=(ContactVO)object;
-				
+			try {
+				contactoToInsert = (ContactVO) object;
 				historicoInsertRecord.setSfidRecord(contactoToInsert.getSfid());
-				
 				session.save(contactoToInsert);
 				tx.commit();
+			
 				logger.debug("--- Fin -- insertContacto ---" + contactoToInsert.getSfid());
-				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			tx.rollback();
-			logger.error("--- Error en insertContacto: ---" + contactoToInsert.getSfid(), e);
-			processOk = false;
+				tx.rollback();
+				logger.error("--- Error en insertContacto: ---" + contactoToInsert.getSfid(), e);
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
+			
 			historicoInsertRecord.setSuccess(processOk);
 			historicoInsertRecord.setEndDate(new Date());
-			historicoInsertRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_INSERT_RECORD);
-			historicBatchDAO.insertHistoric(historicoInsertRecord);			
+			historicoInsertRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 		}
 		logger.debug("--- Fin -- insert Listado Contactos ---");
 		session.close();
-		return cont;	
+		return processedRecords;
 	}
-	
 
 	/**
 	 * Actualiza un listado de contactos venidos de Salesforce en BBDD de Heroku.
@@ -713,103 +709,111 @@ public class ContactDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int updateContactListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Contactos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoUpdateRecord = null;
+		ContactVO contactoToUpdate = null;
 		
-		int cont = 0;
-		boolean processOk;
-		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+				
+		for (Object object : objectList) {
+			historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_CONTACT);
 			historicoUpdateRecord.setProcessId(processId);
+			contactoToUpdate = new ContactVO();
 			
-			ContactVO contactoToUpdate = new ContactVO();
-			try{
-				contactoToUpdate=(ContactVO)object;
-				
+			try {
+				contactoToUpdate = (ContactVO) object;
 				historicoUpdateRecord.setSfidRecord(contactoToUpdate.getSfid());
-				
-				//1.- Seteamos los campos a actualizar distintos de String		
-				Date birthdate=contactoToUpdate.getFechaNacimiento();
-				Boolean repeatedcases__c=contactoToUpdate.getCasosReiterados();
-				Integer sf4twitter__twitter_follower_count__c=contactoToUpdate.getSeguidoresTwitter();
-
-				
+		
 				//1.2-Construimos la query							
-				Query sqlUpdateQuery =session.createQuery("UPDATE ContactVO SET "
-				+ "name= :name,birthdate="+birthdate+",preferredchannelcontact__c= :preferredchannelcontact__c,"
-				+ "associatedaccounttype__c= :associatedaccounttype__c,motherslastname__c= :motherslastname__c,"
-				+ "identitytype__c= :identitytype__c,secondaryphone__c= :secondaryphone__c,secondaryemail__c= :secondaryemail__c,"
-				+ "sf4twitter__fcbk_username__c= :sf4twitter__fcbk_username__c,repeatedcases__c="+repeatedcases__c+",email= :email,"
-				+ "identitynumber__c= :identitynumber__c,concatenatecontacaddress__c= :concatenatecontacaddress__c,"
-				+ "sf4twitter__twitter_user_id__c= :sf4twitter__twitter_user_id__c,sf4twitter__fcbk_user_id__c= :sf4twitter__fcbk_user_id__c,"		
-				+ "sf4twitter__twitter_username__c= :sf4twitter__twitter_username__c,contacttype__c= :contacttype__c,phone= :phone,"
-				+ "fatherslastname__c= :fatherslastname__c,sf4twitter__influencer__c= :sf4twitter__influencer__c,"
-				+ "sf4twitter__twitter_bio__c= :sf4twitter__twitter_bio__c,sf4twitter__influencer_type__c= :sf4twitter__influencer_type__c,"
-				+ "sf4twitter__twitter_follower_count__c="+sf4twitter__twitter_follower_count__c+",accountid= :accountid,firstname= :firstname,"
-				+ "contactaddress__c= :contactaddress__c"
-
-				+	
-				" WHERE sfid = :sfidFiltro");
+				Query sqlUpdateQuery =session.createQuery("UPDATE ContactVO "
+													   + "	  SET name = :name"
+													   + "		, birthdate = :birthdate"
+													   + "		, preferredchannelcontact__c = :preferredchannelcontact__c"
+													   + "		, associatedaccounttype__c = :associatedaccounttype__c"
+													   + "		, motherslastname__c = :motherslastname__c"
+													   + "		, identitytype__c = :identitytype__c"
+													   + "		, secondaryphone__c = :secondaryphone__c"
+													   + "		, secondaryemail__c = :secondaryemail__c"
+													   + "		, sf4twitter__fcbk_username__c = :sf4twitter__fcbk_username__c"
+													   + "		, repeatedcases__c = :repeatedcases__c"
+													   + "		, email = :email"
+													   + "		, identitynumber__c = :identitynumber__c"
+													   + "		, concatenatecontacaddress__c = :concatenatecontacaddress__c"
+													   + "		, sf4twitter__twitter_user_id__c = :sf4twitter__twitter_user_id__c"
+													   + "		, sf4twitter__fcbk_user_id__c = :sf4twitter__fcbk_user_id__c"		
+													   + "		, sf4twitter__twitter_username__c = :sf4twitter__twitter_username__c"
+													   + "		, contacttype__c = :contacttype__c"
+													   + "		, phone = :phone"
+													   + "		, fatherslastname__c = :fatherslastname__c"
+													   + "		, sf4twitter__influencer__c = :sf4twitter__influencer__c"
+													   + "		, sf4twitter__twitter_bio__c = :sf4twitter__twitter_bio__c"
+													   + "		, sf4twitter__influencer_type__c = :sf4twitter__influencer_type__c"
+													   + "		, sf4twitter__twitter_follower_count__c = :sf4twitter__twitter_follower_count__c"
+													   + "		, accountid = :accountid, firstname = :firstname"
+													   + "		, contactaddress__c = :contactaddress__c"
+													   + "  WHERE sfid = :sfidFiltro");
 				
-				//1.3-Seteamos los campos a actualizar de tipo String	
+				//1.3.1-Seteamos el campos que no filtren la query						
+				sqlUpdateQuery.setString("name", contactoToUpdate.getName());
+				sqlUpdateQuery.setTimestamp("birthdate", contactoToUpdate.getFechaNacimiento());
+				sqlUpdateQuery.setString("preferredchannelcontact__c", contactoToUpdate.getCanalPreferenteContacto());
+				sqlUpdateQuery.setString("associatedaccounttype__c", contactoToUpdate.getTipoCuentaAsociado());
+				sqlUpdateQuery.setString("motherslastname__c", contactoToUpdate.getApellidoMaterno());
+				sqlUpdateQuery.setString("identitytype__c", contactoToUpdate.getTipoIdentidad());
+				sqlUpdateQuery.setString("secondaryphone__c", contactoToUpdate.getTelefonoSecundario());
+				sqlUpdateQuery.setString("secondaryemail__c", contactoToUpdate.getEmailSecundario());
+				sqlUpdateQuery.setString("sf4twitter__fcbk_username__c", contactoToUpdate.getSf4twitterFcbkUsername());
+				sqlUpdateQuery.setBoolean("repeatedcases__c", contactoToUpdate.getCasosReiterados());
+				sqlUpdateQuery.setString("email", contactoToUpdate.getEmail());
+				sqlUpdateQuery.setString("identitynumber__c", contactoToUpdate.getRun());
+				sqlUpdateQuery.setString("concatenatecontacaddress__c", contactoToUpdate.getDirContacto());
+				sqlUpdateQuery.setString("sf4twitter__twitter_user_id__c", contactoToUpdate.getSf4twitterTwitterUserId());
+				sqlUpdateQuery.setString("sf4twitter__fcbk_user_id__c", contactoToUpdate.getSf4twitterFcbkUserId());
+				sqlUpdateQuery.setString("sf4twitter__twitter_username__c", contactoToUpdate.getSf4twitterTwitterUsername());
+				sqlUpdateQuery.setString("contacttype__c", contactoToUpdate.getTipoContacto());
+				sqlUpdateQuery.setString("phone", contactoToUpdate.getPhone());
+				sqlUpdateQuery.setString("fatherslastname__c", contactoToUpdate.getApellidoPaterno());
+				sqlUpdateQuery.setString("sf4twitter__influencer__c", contactoToUpdate.getInfluencer());
+				sqlUpdateQuery.setString("sf4twitter__twitter_bio__c", contactoToUpdate.getTwitterBio());
+				sqlUpdateQuery.setString("sf4twitter__influencer_type__c", contactoToUpdate.getInfluencerType());
+				sqlUpdateQuery.setDouble("sf4twitter__twitter_follower_count__c", contactoToUpdate.getSeguidoresTwitter());
+				sqlUpdateQuery.setString("accountid", contactoToUpdate.getAccountid());
+				sqlUpdateQuery.setString("firstname", contactoToUpdate.getFirstname());
+				sqlUpdateQuery.setString("contactaddress__c", contactoToUpdate.getIdDirContacto());
+				sqlUpdateQuery.setString("sfidFiltro", contactoToUpdate.getSfid());
 				
-					//1.3.1-Seteamos el campos que no filtren la query						
-					sqlUpdateQuery.setParameter("name", contactoToUpdate.getName());
-					sqlUpdateQuery.setParameter("preferredchannelcontact__c", contactoToUpdate.getCanalPreferenteContacto());
-					sqlUpdateQuery.setParameter("associatedaccounttype__c", contactoToUpdate.getTipoCuentaAsociado());
-					sqlUpdateQuery.setParameter("motherslastname__c", contactoToUpdate.getApellidoMaterno());
-					sqlUpdateQuery.setParameter("identitytype__c", contactoToUpdate.getTipoIdentidad());
-					sqlUpdateQuery.setParameter("secondaryphone__c", contactoToUpdate.getTelefonoSecundario());
-					sqlUpdateQuery.setParameter("secondaryemail__c", contactoToUpdate.getEmailSecundario());
-					sqlUpdateQuery.setParameter("sf4twitter__fcbk_username__c", contactoToUpdate.getSf4twitterFcbkUsername());
-					sqlUpdateQuery.setParameter("email", contactoToUpdate.getEmail());
-					sqlUpdateQuery.setParameter("identitynumber__c", contactoToUpdate.getRun());
-					sqlUpdateQuery.setParameter("concatenatecontacaddress__c", contactoToUpdate.getDirContacto());
-					sqlUpdateQuery.setParameter("sf4twitter__twitter_user_id__c", contactoToUpdate.getSf4twitterTwitterUserId());
-					sqlUpdateQuery.setParameter("sf4twitter__fcbk_user_id__c", contactoToUpdate.getSf4twitterFcbkUserId());
-					sqlUpdateQuery.setParameter("sf4twitter__twitter_username__c", contactoToUpdate.getSf4twitterTwitterUsername());
-					sqlUpdateQuery.setParameter("contacttype__c", contactoToUpdate.getTipoContacto());
-					sqlUpdateQuery.setParameter("phone", contactoToUpdate.getPhone());
-					sqlUpdateQuery.setParameter("fatherslastname__c", contactoToUpdate.getApellidoPaterno());
-					sqlUpdateQuery.setParameter("sf4twitter__influencer__c", contactoToUpdate.getInfluencer());
-					sqlUpdateQuery.setParameter("sf4twitter__twitter_bio__c", contactoToUpdate.getTwitterBio());
-					sqlUpdateQuery.setParameter("sf4twitter__influencer_type__c", contactoToUpdate.getInfluencerType());
-					sqlUpdateQuery.setParameter("accountid", contactoToUpdate.getAccountid());
-					sqlUpdateQuery.setParameter("firstname", contactoToUpdate.getFirstname());
-					sqlUpdateQuery.setParameter("contactaddress__c", contactoToUpdate.getIdDirContacto());
-					
-					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
-					sqlUpdateQuery.setParameter("sfidFiltro", contactoToUpdate.getSfid());
-											
-				//1.5-Ejecutamos la actualizacion
+				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-							
+				tx.commit();
 				logger.debug("--- Fin -- updateContacto ---" + contactoToUpdate.getSfid());
 				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en updateContacto: ---" + contactoToUpdate.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en updateContacto: ---" + contactoToUpdate.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
+
 			historicoUpdateRecord.setSuccess(processOk);
 			historicoUpdateRecord.setEndDate(new Date());
-			historicoUpdateRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicBatchDAO.insertHistoric(historicoUpdateRecord);							
+			historicoUpdateRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 		}
 		logger.debug("--- Fin -- update Listado Contactos ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
 		
 	/**
@@ -818,59 +822,53 @@ public class ContactDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int deleteContactListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Contactos ---");
-
-		int cont = 0;
-		boolean processOk;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoDeleteRecord = null;
+		ContactVO contactoToDelete = null;
 		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_CONTACT);
 			historicoDeleteRecord.setProcessId(processId);
+			contactoToDelete = new ContactVO();
 			
-			ContactVO contactoToDelete = new ContactVO();
-			try{
-				contactoToDelete=(ContactVO)object;
-				
+			try {
+				contactoToDelete = (ContactVO) object;
 				historicoDeleteRecord.setSfidRecord(contactoToDelete.getSfid());
-				
-				Query sqlDeleteQuery =session.createQuery("DELETE ContactVO  WHERE sfid = :sfidFiltro");
-				
+				Query sqlDeleteQuery = session.createQuery("DELETE ContactVO  WHERE sfid = :sfidFiltro");
 				//Seteamos el campo por el que filtramos el borrado			
-				sqlDeleteQuery.setParameter("sfidFiltro", contactoToDelete.getSfid());				
+				sqlDeleteQuery.setString("sfidFiltro", contactoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-							
+				tx.commit();
+				
 				logger.debug("--- Fin -- deleteContacto ---" + contactoToDelete.getSfid());
-				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteContacto: ---" + contactoToDelete.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en deleteContacto: ---" + contactoToDelete.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 
+
 			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setErrorCause(processErrorCause);
 			historicoDeleteRecord.setEndDate(new Date());
-			historicoDeleteRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_DELETE_RECORD);
-			historicBatchDAO.insertHistoric(historicoDeleteRecord);					
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 		}
 		logger.debug("--- Fin -- delete Listado Contactos ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
-	
-	
-	
-	
-	
-	
 }

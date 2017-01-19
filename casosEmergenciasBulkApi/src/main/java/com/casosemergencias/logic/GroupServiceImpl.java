@@ -11,18 +11,17 @@ public class GroupServiceImpl implements GroupService {
 	
 	@Override
 	public int insertGroupSfList(List<Object> groupList, String processId) {
-		int resultOk = groupDao.insertGroupListSf(groupList, processId);
-		return resultOk;
+		int processedRecords = groupDao.insertGroupListSf(groupList, processId);
+		return processedRecords;
 	}
 	@Override
 	public int updateGroupSfList(List<Object> groupList, String processId) {
-		int resultOk = groupDao.updateGroupListSf(groupList, processId);
-		return resultOk;
+		int processedRecords = groupDao.updateGroupListSf(groupList, processId);
+		return processedRecords;
 	}
 	@Override
 	public int deleteGroupSfList(List<Object> groupList, String processId) {
-		int resultOk = groupDao.deleteGroupListSf(groupList, processId);
-		return resultOk;
+		int processedRecords = groupDao.deleteGroupListSf(groupList, processId);
+		return processedRecords;
 	}
-
 }

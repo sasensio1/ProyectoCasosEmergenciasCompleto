@@ -14,19 +14,17 @@ public class TaskServiceImpl implements TaskService {
 	
 	@Override
 	public int insertTaskSfList(List<Object> taskList, String processId) {
-		int resultOk = taskDao.insertTaskListSf(taskList, processId);
-		return resultOk;
+		int processedRecords = taskDao.insertTaskListSf(taskList, processId);
+		return processedRecords;
 	}
 	@Override
 	public int updateTaskSfList(List<Object> taskList, String processId) {
-		int resultOk = taskDao.updateTaskListSf(taskList, processId);
-		return resultOk;
+		int processedRecords = taskDao.updateTaskListSf(taskList, processId);
+		return processedRecords;
 	}
 	@Override
 	public int deleteTaskSfList(List<Object> taskList, String processId) {
-		int resultOk = taskDao.deleteTaskListSf(taskList, processId);
-		return resultOk;
+		int processedRecords = taskDao.deleteTaskListSf(taskList, processId);
+		return processedRecords;
 	}
-	
-
 }

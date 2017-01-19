@@ -650,51 +650,49 @@ public class AccountDAO {
 	@Transactional
 	public int insertAccountListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Cuentas ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoInsertRecord = null;
+		AccountVO cuentaToInsert = null;
 		
-		int cont = 0;
-		boolean processOk;
-		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();		
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_ACCOUNT);
 			historicoInsertRecord.setProcessId(processId);
+			cuentaToInsert = new AccountVO();
 			
-			AccountVO cuentaToInsert = new AccountVO();
-			try{
-				cuentaToInsert=(AccountVO)object;
-				
+			try {
+				cuentaToInsert = (AccountVO) object;
 				historicoInsertRecord.setSfidRecord(cuentaToInsert.getSfid());
-				
 				session.save(cuentaToInsert);
 				tx.commit();
+				
 				logger.debug("--- Fin -- insertCuenta ---" + cuentaToInsert.getSfid());
-				
 				processOk = true;
-				
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			tx.rollback();
-			logger.error("--- Error en insertCuenta: ---" + cuentaToInsert.getSfid(), e);
-			processOk = false;
+				tx.rollback();
+				logger.error("--- Error en insertCuenta: ---" + cuentaToInsert.getSfid(), e);
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
+			
 			historicoInsertRecord.setSuccess(processOk);
 			historicoInsertRecord.setEndDate(new Date());
-			historicoInsertRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_INSERT_RECORD);
+			historicoInsertRecord.setErrorCause(processErrorCause);
 			historicBatchDAO.insertHistoric(historicoInsertRecord);
 		}
 		logger.debug("--- Fin -- insert Listado Cuentas ---");
 		session.close();
-		
-		return cont;
-		
+		return processedRecords;
 	}
-	
 
 	/**
 	 * Actualiza un listado de cuentas venidos de Salesforce en BBDD de Heroku.
@@ -702,91 +700,95 @@ public class AccountDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int updateAccountListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Cuentas ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoUpdateRecord = null;
+		AccountVO cuentaToUpdate = null;
 		
-		int cont = 0;
-		boolean processOk;
-		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+				
+		for (Object object : objectList) {
+			historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_ACCOUNT);
 			historicoUpdateRecord.setProcessId(processId);
+			cuentaToUpdate = new AccountVO();
 			
-			AccountVO cuentaToUpdate = new AccountVO();
-			try{
-				cuentaToUpdate=(AccountVO)object;
-				
+			try {
+				cuentaToUpdate = (AccountVO) object;
 				historicoUpdateRecord.setSfidRecord(cuentaToUpdate.getSfid());
+				//1.1-Construimos la query			
+				Query sqlUpdateQuery =session.createQuery("UPDATE AccountVO "
+													   + "    SET name = :name"
+													   + "	    , fatherslastname__c = :fatherslastname__c"
+													   + "		, motherslastname__c = :motherslastname__c"
+													   + "		, identitytype__c = :identitytype__c"
+													   + "		, parent__identityNumber__c = :parent__identityNumber__c"
+													   + "		, masterrecord__identitynumber__c = :masterrecord__identitynumber__c"
+													   + "		, identitynumber__c = :identitynumber__c"
+													   + "		, birthdate__c = :birthdate__c"
+													   + "		, phone = :phone"
+													   + "		, mainphone__c = :mainphone__c"
+													   + "		, secondaryphone__c = :secondaryphone__c"
+													   + "		, primaryemail__c = :primaryemail__c"
+													   + "		, secondaryemail__c = :secondaryemail__c"
+													   + "		, address__c = :address__c"
+													   + "		, accountsource = :accountsource"
+													   + "		, companyid__c = :companyid__c"
+													   + "		, type = :type"
+													   + "		, parentid = :parentid"					
+													   + "  WHERE sfid = :sfidFiltro");
 				
-				//1.1- Seteamos los campos a actualizar distintos de String				
-				Date birthdate__c=cuentaToUpdate.getFechaNacimiento();
-				
-				//1.2-Construimos la query			
-				Query sqlUpdateQuery =session.createQuery("UPDATE AccountVO SET "
-				+ "name= :name,fatherslastname__c= :fatherslastname__c,motherslastname__c= :motherslastname__c,"
-				+ "identitytype__c= :identitytype__c,parent__identityNumber__c= :parent__identityNumber__c,"
-				+ "masterrecord__identitynumber__c= :masterrecord__identitynumber__c,identitynumber__c= :identitynumber__c,"
-				+ "birthdate__c="+birthdate__c+",phone= :phone,mainphone__c= :mainphone__c,secondaryphone__c= :secondaryphone__c,"
-				+ "primaryemail__c= :primaryemail__c,secondaryemail__c= :secondaryemail__c,address__c= :address__c,"
-				+ "accountsource= :accountsource,companyid__c= :companyid__c,type= :type,parentid= :parentid"					
-				+	
-				" WHERE sfid = :sfidFiltro");
-				
-				//1.3-Seteamos los campos a actualizar de tipo String	
-				
-					//1.3.1-Seteamos el campos que no filtren la query						
-					sqlUpdateQuery.setParameter("name", cuentaToUpdate.getName());
-					sqlUpdateQuery.setParameter("fatherslastname__c", cuentaToUpdate.getApellidoPaterno());
-					sqlUpdateQuery.setParameter("motherslastname__c", cuentaToUpdate.getApellidoMaterno());
-					sqlUpdateQuery.setParameter("identitytype__c", cuentaToUpdate.getTipoIdentidad());
-					sqlUpdateQuery.setParameter("parent__identityNumber__c", cuentaToUpdate.getParentRutEmpresa());
-					sqlUpdateQuery.setParameter("masterrecord__identitynumber__c", cuentaToUpdate.getAccountRun());
-					sqlUpdateQuery.setParameter("identitynumber__c", cuentaToUpdate.getRun());
-					sqlUpdateQuery.setParameter("phone", cuentaToUpdate.getPhone());
-					sqlUpdateQuery.setParameter("mainphone__c", cuentaToUpdate.getTelefonoPrincipal());
-					sqlUpdateQuery.setParameter("secondaryphone__c", cuentaToUpdate.getTelefonoSecundario());
-					sqlUpdateQuery.setParameter("primaryemail__c", cuentaToUpdate.getEmailPrincipal());
-					sqlUpdateQuery.setParameter("secondaryemail__c", cuentaToUpdate.getEmailSecundario());
-					sqlUpdateQuery.setParameter("address__c", cuentaToUpdate.getDireccion());
-					sqlUpdateQuery.setParameter("accountsource", cuentaToUpdate.getAccountsource());
-					sqlUpdateQuery.setParameter("companyid__c", cuentaToUpdate.getIdEmpresa());
-					sqlUpdateQuery.setParameter("type", cuentaToUpdate.getTipo());
-					sqlUpdateQuery.setParameter("parentid", cuentaToUpdate.getParentid());
-				
-					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
-					sqlUpdateQuery.setParameter("sfidFiltro", cuentaToUpdate.getSfid());
-				
-								
-				//1.5-Ejecutamos la actualizacion
+				//1.2-Seteamos los campos
+				sqlUpdateQuery.setString("name", cuentaToUpdate.getName());
+				sqlUpdateQuery.setString("fatherslastname__c", cuentaToUpdate.getApellidoPaterno());
+				sqlUpdateQuery.setString("motherslastname__c", cuentaToUpdate.getApellidoMaterno());
+				sqlUpdateQuery.setString("identitytype__c", cuentaToUpdate.getTipoIdentidad());
+				sqlUpdateQuery.setString("parent__identityNumber__c", cuentaToUpdate.getParentRutEmpresa());
+				sqlUpdateQuery.setString("masterrecord__identitynumber__c", cuentaToUpdate.getAccountRun());
+				sqlUpdateQuery.setString("identitynumber__c", cuentaToUpdate.getRun());
+				sqlUpdateQuery.setTimestamp("birthdate__c", cuentaToUpdate.getFechaNacimiento());
+				sqlUpdateQuery.setString("phone", cuentaToUpdate.getPhone());
+				sqlUpdateQuery.setString("mainphone__c", cuentaToUpdate.getTelefonoPrincipal());
+				sqlUpdateQuery.setString("secondaryphone__c", cuentaToUpdate.getTelefonoSecundario());
+				sqlUpdateQuery.setString("primaryemail__c", cuentaToUpdate.getEmailPrincipal());
+				sqlUpdateQuery.setString("secondaryemail__c", cuentaToUpdate.getEmailSecundario());
+				sqlUpdateQuery.setString("address__c", cuentaToUpdate.getDireccion());
+				sqlUpdateQuery.setString("accountsource", cuentaToUpdate.getAccountsource());
+				sqlUpdateQuery.setString("companyid__c", cuentaToUpdate.getIdEmpresa());
+				sqlUpdateQuery.setString("type", cuentaToUpdate.getTipo());
+				sqlUpdateQuery.setString("parentid", cuentaToUpdate.getParentid());
+				sqlUpdateQuery.setString("sfidFiltro", cuentaToUpdate.getSfid());
+									
+				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-							
+				tx.commit();
 				logger.debug("--- Fin -- updateCuenta ---" + cuentaToUpdate.getSfid());
 				
 				processOk = true;
-				
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en updateCuenta: ---" + cuentaToUpdate.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en updateCuenta: ---" + cuentaToUpdate.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
+
 			historicoUpdateRecord.setSuccess(processOk);
 			historicoUpdateRecord.setEndDate(new Date());
-			historicoUpdateRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_UPDATE_RECORD);
+			historicoUpdateRecord.setErrorCause(processErrorCause);
 			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 		}
 		logger.debug("--- Fin -- update Listado Cuentas ---");
 		session.close();
-		
-		return cont;
-
+		return processedRecords;
 	}
 		
 	/**
@@ -795,67 +797,54 @@ public class AccountDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int deleteAccountListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Cuentas ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoDeleteRecord = null;
+		AccountVO cuentaToDelete = null;
 		
-		int cont = 0;
-		boolean processOk;
-		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_ACCOUNT);
 			historicoDeleteRecord.setProcessId(processId);
+			cuentaToDelete = new AccountVO();
 			
-			AccountVO cuentaToDelete = new AccountVO();
-			try{
-				cuentaToDelete=(AccountVO)object;
-				
+			try {
+				cuentaToDelete = (AccountVO) object;
 				historicoDeleteRecord.setSfidRecord(cuentaToDelete.getSfid());
-				
-				Query sqlDeleteQuery =session.createQuery("DELETE AccountVO  WHERE sfid = :sfidFiltro");
-				
+				Query sqlDeleteQuery = session.createQuery("DELETE AccountVO  WHERE sfid = :sfidFiltro");
 				//Seteamos el campo por el que filtramos el borrado			
-				sqlDeleteQuery.setParameter("sfidFiltro", cuentaToDelete.getSfid());				
+				sqlDeleteQuery.setString("sfidFiltro", cuentaToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-							
+				tx.commit();
+				
 				logger.debug("--- Fin -- deleteCuenta ---" + cuentaToDelete.getSfid());
-				
 				processOk = true;
-				
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteCuenta: ---" + cuentaToDelete.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en deleteCuenta: ---" + cuentaToDelete.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 
+
 			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setErrorCause(processErrorCause);
 			historicoDeleteRecord.setEndDate(new Date());
-			historicoDeleteRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_DELETE_RECORD);
-			historicBatchDAO.insertHistoric(historicoDeleteRecord);			
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 		}
 		logger.debug("--- Fin -- delete Listado Cuentas ---");
 		session.close();
-		
-		return cont;
-
+		return processedRecords;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

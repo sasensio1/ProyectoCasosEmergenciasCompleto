@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.casosemergencias.dao.vo.GroupVO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
 import com.casosemergencias.util.constants.ConstantesBatch;
@@ -30,48 +31,52 @@ public class GrupoDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int insertGroupListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado Grupos ---");
-
-		int cont = 0;
-		boolean processOk;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoInsertRecord = null;
+		GroupVO grupoToInsert = null;
 		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();		
-		for(Object object:objectList){
-			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoInsertRecord = new HistoricBatchVO();
 			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_GROUP);
 			historicoInsertRecord.setProcessId(processId);
-			GroupVO grupoToInsert = new GroupVO();
-			try{
-				grupoToInsert=(GroupVO)object;
-				
+			grupoToInsert = new GroupVO();
+			
+			try {
+				grupoToInsert = (GroupVO) object;
 				historicoInsertRecord.setSfidRecord(grupoToInsert.getSfid());
-				
 				session.save(grupoToInsert);
 				tx.commit();
+
 				logger.debug("--- Fin -- insertGrupo ---" + grupoToInsert.getSfid());
 				processOk = true;
-				cont++;
+				processedRecords++;
 			} catch (HibernateException e) {
-			tx.rollback();
-			logger.error("--- Error en insertGrupo: ---" + grupoToInsert.getSfid(), e);
-			processOk = false;
+				tx.rollback();
+				logger.error("--- Error en insertGrupo: ---" + grupoToInsert.getSfid(), e);
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
 			}
+			
 			historicoInsertRecord.setSuccess(processOk);
 			historicoInsertRecord.setEndDate(new Date());
-			historicoInsertRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_INSERT_RECORD);
-			historicBatchDAO.insertHistoric(historicoInsertRecord);						
+			historicoInsertRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoInsertRecord);
 		}
 		logger.debug("--- Fin -- insert Listado Grupos ---");
 		session.close();
-		return cont;	
+		return processedRecords;
 	}
-	
 
 	/**
 	 * Actualiza un listado de grupos venidos de Salesforce en BBDD de Heroku.
@@ -79,124 +84,119 @@ public class GrupoDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int updateGroupListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado Grupos ---");
-
-		int cont = 0;
-		boolean processOk;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoUpdateRecord = null;
+		GroupVO grupoToUpdate = null;
 		
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+				
+		for (Object object : objectList) {
+			historicoUpdateRecord = new HistoricBatchVO();
 			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_GROUP);
 			historicoUpdateRecord.setProcessId(processId);
+			grupoToUpdate = new GroupVO();
 			
-			GroupVO grupoToUpdate = new GroupVO();
-			try{
-				grupoToUpdate=(GroupVO)object;
-				
+			try {
+				grupoToUpdate = (GroupVO) object;
 				historicoUpdateRecord.setSfidRecord(grupoToUpdate.getSfid());
+				//1.1-Construimos la query							
+				Query sqlUpdateQuery = session.createQuery("UPDATE GroupVO "
+														+ "    SET name = :name"
+														+ "		 , createddate = :createddate"		
+														+ "  WHERE sfid = :sfidFiltro");
 				
-				//1.1- Seteamos los campos a actualizar distintos de String				
-				Date createddate=grupoToUpdate.getCreateddate();
+				//1.2-Seteamos los campos					
+				sqlUpdateQuery.setParameter("name", grupoToUpdate.getName());
+				sqlUpdateQuery.setTimestamp("createddate", grupoToUpdate.getCreateddate());
+				sqlUpdateQuery.setParameter("sfidFiltro", grupoToUpdate.getSfid());
 				
-				//1.2-Construimos la query							
-				Query sqlUpdateQuery =session.createQuery("UPDATE GroupVO SET "
-				+ "name= :name,createddate="+createddate			
-				+	
-				" WHERE sfid = :sfidFiltro");
-				
-				//1.3-Seteamos los campos a actualizar de tipo String	
-				
-					//1.3.1-Seteamos los campos que no filtren la query						
-					sqlUpdateQuery.setParameter("name", grupoToUpdate.getName());
-	
-					//1.3.2-Seteamos el sfid,campo por el que filtramos la query								
-					sqlUpdateQuery.setParameter("sfidFiltro", grupoToUpdate.getSfid());
-					
-				//1.5-Ejecutamos la actualizacion
+				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-							
+				tx.commit();
 				logger.debug("--- Fin -- updateGrupo ---" + grupoToUpdate.getSfid());
+				
 				processOk = true;
-				cont++;
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en updateGrupo: ---" + grupoToUpdate.getSfid(), e);
-			processOk = false;
+				logger.error("--- Error en updateGrupo: ---" + grupoToUpdate.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
+
 			historicoUpdateRecord.setSuccess(processOk);
 			historicoUpdateRecord.setEndDate(new Date());
-			historicoUpdateRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicBatchDAO.insertHistoric(historicoUpdateRecord); 						
+			historicoUpdateRecord.setErrorCause(processErrorCause);
+			historicBatchDAO.insertHistoric(historicoUpdateRecord);
 		}
 		logger.debug("--- Fin -- update Listado Grupos ---");
 		session.close();
-		return cont;
-
+		return processedRecords;
 	}
-		
+	
 	/**
 	 * Borra un listado de grupos venidos de Salesforce en BBDD de Heroku.
 	 * 
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
 	public int deleteGroupListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado Grupos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoDeleteRecord = null;
+		GroupVO grupoToDelete = null;
 		
-		int cont = 0;
-		boolean processOk;
-
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_GROUP);
 			historicoDeleteRecord.setProcessId(processId);
+			grupoToDelete = new GroupVO();
 			
-			GroupVO grupoToDelete = new GroupVO();
-			try{
-				grupoToDelete=(GroupVO)object;
-				
+			try {
+				grupoToDelete = (GroupVO) object;
 				historicoDeleteRecord.setSfidRecord(grupoToDelete.getSfid());
-				
-				Query sqlDeleteQuery =session.createQuery("DELETE GroupVO  WHERE sfid = :sfidFiltro");
-				
+				Query sqlDeleteQuery = session.createQuery("DELETE GroupVO  WHERE sfid = :sfidFiltro");
 				//Seteamos el campo por el que filtramos el borrado			
-				sqlDeleteQuery.setParameter("sfidFiltro", grupoToDelete.getSfid());				
+				sqlDeleteQuery.setString("sfidFiltro", grupoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-							
+				tx.commit();
+				
 				logger.debug("--- Fin -- deleteGrupo ---" + grupoToDelete.getSfid());
-				
 				processOk = true;
-				cont++;
-				
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteGrupo: ---" + grupoToDelete.getSfid(), e);
-			processOk = false;
-			} 
+				logger.error("--- Error en deleteGrupo: ---" + grupoToDelete.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
+			}
+
 			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setErrorCause(processErrorCause);
 			historicoDeleteRecord.setEndDate(new Date());
-			historicoDeleteRecord.setErrorCause(processOk ? null : ConstantesBatch.ERROR_DELETE_RECORD);
-			historicBatchDAO.insertHistoric(historicoDeleteRecord);						
+			historicBatchDAO.insertHistoric(historicoDeleteRecord);
 		}
 		logger.debug("--- Fin -- delete Listado Grupos ---");
 		session.close();
-		return cont;
-
-	}
-	
-	
-	
-
+		return processedRecords;
+	}	
 }

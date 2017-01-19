@@ -169,19 +169,19 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 	
 	@Override
 	public int insertCaseCommentSfList(List<Object> caseCommentList, String processId) {
-		int resultOk = caseCommentDAO.insertCaseCommentListSf(caseCommentList, processId);
-		return resultOk;
+		int processedRecords = caseCommentDAO.insertCaseCommentListSf(caseCommentList, processId);
+		return processedRecords;
 	}
 	
 	@Override
 	public int updateCaseCommentSfList(List<Object> caseCommentList, String processId) {
-		int resultOk = caseCommentDAO.updateCaseCommentListSf(caseCommentList, processId);
-		return resultOk;
+		int processedRecords = caseCommentDAO.updateCaseCommentListSf(caseCommentList, processId);
+		return processedRecords;
 	}
 	
 	@Override
 	public int deleteCaseCommentSfList(List<Object> caseCommentList, String processId) {
-		int resultOk = caseCommentDAO.deleteCaseCommentListSf(caseCommentList, processId);
-		return resultOk;
+		int processedRecords = caseCommentDAO.deleteCaseCommentListSf(caseCommentList, processId);
+		return processedRecords;
 	}
 }

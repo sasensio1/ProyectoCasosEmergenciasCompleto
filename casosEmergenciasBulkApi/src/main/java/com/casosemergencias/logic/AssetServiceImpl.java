@@ -11,21 +11,18 @@ public class AssetServiceImpl implements AssetService  {
 	
 	@Override
 	public int insertAssetSfList(List<Object> assetList, String processId) {
-		int resultOk = assetDao.insertAssetListSf(assetList, processId);
-		return resultOk;
+		int processedRecords = assetDao.insertAssetListSf(assetList, processId);
+		return processedRecords;
 	}
 	
 	@Override
 	public int updateAssetSfList(List<Object> assetList, String processId) {
-		int resultOk = assetDao.updateAssetListSf(assetList, processId);
-		return resultOk;
+		int processedRecords = assetDao.updateAssetListSf(assetList, processId);
+		return processedRecords;
 	}
 	@Override
 	public int deleteAssetSfList(List<Object> assetList, String processId) {
-		int resultOk = assetDao.deleteAssetListSf(assetList, processId);
-		return resultOk;
+		int processedRecords = assetDao.deleteAssetListSf(assetList, processId);
+		return processedRecords;
 	}
-	
-
-
 }
