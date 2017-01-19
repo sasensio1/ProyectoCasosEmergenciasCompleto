@@ -152,11 +152,21 @@ public class HistoricBatchDAO {
 						startDate=startDate.replace("T", " ");
 						String dateFilter="";
 						switch (startDateFilter) {
-							case "equal":  dateFilter = "=";break;
-							case "greaterOrEqual":  dateFilter = ">=";break;
-							case "lessOrEqual":  dateFilter = "<=";break;
-							case "greater":  dateFilter = ">";break;
-							case "less":  dateFilter = "<";break;
+							case "equal":
+								dateFilter = "=";
+								break;
+							case "greaterOrEqual":
+								dateFilter = ">=";
+								break;
+							case "lessOrEqual":
+								dateFilter = "<=";
+								break;
+							case "greater":
+								dateFilter = ">";
+								break;
+							case "less":
+								dateFilter = "<";
+								break;
 						}
 						query.append("start_date"+dateFilter+"'"+startDate+"'");
 						query.append(" AND ");
@@ -170,11 +180,21 @@ public class HistoricBatchDAO {
 						endDate=endDate.replace("T", " ");
 						String dateFilter="";
 						switch (endDateFilter) {
-							case "equal":  dateFilter = "=";break;
-							case "greaterOrEqual":  dateFilter = ">=";break;
-							case "lessOrEqual":  dateFilter = "<=";break;
-							case "greater":  dateFilter = ">";break;
-							case "less":  dateFilter = "<";break;
+							case "equal":
+								dateFilter = "=";
+								break;
+							case "greaterOrEqual":
+								dateFilter = ">=";
+								break;
+							case "lessOrEqual":
+								dateFilter = "<=";
+								break;
+							case "greater":
+								dateFilter = ">";
+								break;
+							case "less":
+								dateFilter = "<";
+								break;
 						}
 						query.append("end_date"+dateFilter+"'"+endDate+"'");
 						query.append(" AND ");
@@ -220,10 +240,10 @@ public class HistoricBatchDAO {
 		logger.debug("--- Inicio -- getNumHistoricBatchs ---");
 
 		Session session = sessionFactory.openSession();
-		String startDate =new String();
-		String endDate =new String();
-		String startDateFilter =new String();
-		String endDateFilter =new String();
+		String startDate = new String();
+		String endDate = new String();
+		String startDateFilter = new String();
+		String endDateFilter = new String();
 
 		int searchParamsCounter = 0;
 
@@ -299,11 +319,21 @@ public class HistoricBatchDAO {
 						startDate=startDate.replace("T", " ");
 						String dateFilter="";
 						switch (startDateFilter) {
-							case "equal":  dateFilter = "=";break;
-							case "greaterOrEqual":  dateFilter = ">=";break;
-							case "lessOrEqual":  dateFilter = "<=";break;
-							case "greater":  dateFilter = ">";break;
-							case "less":  dateFilter = "<";break;
+							case "equal":
+								dateFilter = "=";
+								break;
+							case "greaterOrEqual":
+								dateFilter = ">=";
+								break;
+							case "lessOrEqual":
+								dateFilter = "<=";
+								break;
+							case "greater":
+								dateFilter = ">";
+								break;
+							case "less":
+								dateFilter = "<";
+								break;
 						}
 						sqlQuery.append("start_date"+dateFilter+"'"+startDate+"'");
 						sqlQuery.append(" AND ");
@@ -317,11 +347,21 @@ public class HistoricBatchDAO {
 						endDate=endDate.replace("T", " ");
 						String dateFilter="";
 						switch (endDateFilter) {
-							case "equal":  dateFilter = "=";break;
-							case "greaterOrEqual":  dateFilter = ">=";break;
-							case "lessOrEqual":  dateFilter = "<=";break;
-							case "greater":  dateFilter = ">";break;
-							case "less":  dateFilter = "<";break;
+							case "equal":
+								dateFilter = "=";
+								break;
+							case "greaterOrEqual":
+								dateFilter = ">=";
+								break;
+							case "lessOrEqual":
+								dateFilter = "<=";
+								break;
+							case "greater":
+								dateFilter = ">";
+								break;
+							case "less":
+								dateFilter = "<";
+								break;
 						}
 						sqlQuery.append("end_date"+dateFilter+"'"+endDate+"'");
 						sqlQuery.append(" AND ");
@@ -351,10 +391,4 @@ public class HistoricBatchDAO {
 		}
 		return 0;
 	}
-	
-	
-	
-	
-	
-	
 }

@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
@@ -245,5 +247,23 @@ public class Utils {
 		urlQuery = urlQuery.replaceAll("-", "%2D");
 		urlQuery = urlQuery.replaceAll(":", "%3A");
 		return urlQuery;
+	}
+
+	/**
+	 * Generates and identifier based on the full current date, including time.
+	 * 
+	 * @return StringBuilder with the format 'yyyyMMddHHmmss'.
+	 */
+	public static StringBuilder generateDateId() {
+		StringBuilder dateIdBuilder = new StringBuilder();
+		ZonedDateTime fullCurrentDate = ZonedDateTime.now(ZoneOffset.UTC);
+		dateIdBuilder.append(fullCurrentDate.getYear());
+		dateIdBuilder.append((fullCurrentDate.getMonthValue() < 10 ? "0" + fullCurrentDate.getMonthValue() : fullCurrentDate.getMonthValue()));
+		dateIdBuilder.append((fullCurrentDate.getDayOfMonth() < 10 ? "0" + fullCurrentDate.getDayOfMonth() : fullCurrentDate.getDayOfMonth()));
+		dateIdBuilder.append((fullCurrentDate.getDayOfMonth() < 10 ? "0" + fullCurrentDate.getDayOfMonth() : fullCurrentDate.getDayOfMonth()));
+		dateIdBuilder.append((fullCurrentDate.getHour() < 10 ? "0" + fullCurrentDate.getHour() : fullCurrentDate.getHour()));
+		dateIdBuilder.append((fullCurrentDate.getMinute() < 10 ? "0" + fullCurrentDate.getMinute() : fullCurrentDate.getMinute()));
+		dateIdBuilder.append((fullCurrentDate.getSecond() < 10 ? "0" + fullCurrentDate.getSecond() : fullCurrentDate.getSecond()));
+		return dateIdBuilder;
 	}
 }
