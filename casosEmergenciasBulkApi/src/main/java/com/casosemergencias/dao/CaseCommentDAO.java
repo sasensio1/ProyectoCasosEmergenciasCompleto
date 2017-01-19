@@ -156,8 +156,6 @@ public class CaseCommentDAO {
 	 * @param CaseComment
 	 * @return
 	 */
-	
-	
 	@Transactional
 	public Boolean insertCaseComment(CaseCommentVO comentarioCaso) {
 
@@ -180,78 +178,57 @@ public class CaseCommentDAO {
 
 	}
 	
-	
-	
-	
-	
 	/**
 	 * Inserta un listado de ComentarioCasos venidos de Salesforce en BBDD de Heroku.
 	 * 
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
-	public boolean insertCaseCommentListSf(List<Object> objectList, String processId) {
+	public int insertCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- insert Listado ComentarioCasos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoInsertRecord = null;
+		CaseCommentVO comentarioCasoToInsert = null;
 		
-		Integer cont = 0;
-		
-		HistoricBatchVO historicoProcessInsert = new HistoricBatchVO();
-		historicoProcessInsert.setStartDate(new Date());
-		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
-		historicoProcessInsert.setTotalRecords(objectList.size());
-		historicoProcessInsert.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
-		historicoProcessInsert.setProcessId(processId);
-
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();		
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoInsertRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoInsertRecord = new HistoricBatchVO();
+			historicoInsertRecord.setStartDate(new Date());
 			historicoInsertRecord.setOperation(ConstantesBatch.INSERT_RECORD);
 			historicoInsertRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 			historicoInsertRecord.setProcessId(processId);
+			comentarioCasoToInsert = new CaseCommentVO();
 			
-			CaseCommentVO comentarioCasoToInsert = new CaseCommentVO();
-			try{
-				comentarioCasoToInsert=(CaseCommentVO)object;
-				
+			try {
+				comentarioCasoToInsert = (CaseCommentVO) object;
 				historicoInsertRecord.setSfidRecord(comentarioCasoToInsert.getSfid());
-				
 				session.save(comentarioCasoToInsert);
 				tx.commit();
-				logger.debug("--- Fin -- insertComentarioCaso ---" + comentarioCasoToInsert.getSfid());
-				
-				historicoInsertRecord.setSuccess(true);
-				historicBatchDAO.insertHistoric(historicoInsertRecord);
-				cont++;
-				
+				logger.debug("--- Insertado comentario de caso con id: " + comentarioCasoToInsert.getSfid());
+				processOk = true;
+				processedRecords++;
 			} catch (HibernateException e) {
-			tx.rollback();
-			logger.error("--- Error en insertComentarioCaso: ---" + comentarioCasoToInsert.getSfid(), e);
-			historicoInsertRecord.setSuccess(false);
-			historicoInsertRecord.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
+				tx.rollback();
+				logger.error("--- Error Insertando comentario de caso con id: " + comentarioCasoToInsert.getSfid(), e);
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
+			}
+			
+			historicoInsertRecord.setSuccess(processOk);
+			historicoInsertRecord.setErrorCause(processOk ? null : processErrorCause);
+			historicoInsertRecord.setEndDate(new Date());
 			historicBatchDAO.insertHistoric(historicoInsertRecord);
-			}						
 		}
 		logger.debug("--- Fin -- insert Listado ComentarioCasos ---");
 		session.close();
-		if(cont == objectList.size()){
-			historicoProcessInsert.setEndDate(new Date());
-			historicoProcessInsert.setSuccess(true);
-			historicoProcessInsert.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessInsert);
-		} else {
-			historicoProcessInsert.setEndDate(new Date());
-			historicoProcessInsert.setSuccess(false);
-			historicoProcessInsert.setErrorCause(ConstantesBatch.ERROR_INSERT_RECORD);
-			historicoProcessInsert.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessInsert);
-		}
-		return historicoProcessInsert.getSuccess();
+		return processedRecords;
 	}
-	
 
 	/**
 	 * Actualiza un listado de comentarioCasos venidos de Salesforce en BBDD de Heroku.
@@ -259,92 +236,73 @@ public class CaseCommentDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
-	public boolean updateCaseCommentListSf(List<Object> objectList, String processId) {
+	public int updateCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- update Listado ComentarioCasos ---");
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoUpdateRecord = null;
+		CaseCommentVO comentarioCasoToUpdate = null;
 		
-		Integer cont = 0;
-		
-		HistoricBatchVO historicoProcessUpdate = new HistoricBatchVO();
-		historicoProcessUpdate.setStartDate(new Date());
-		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
-		historicoProcessUpdate.setTotalRecords(objectList.size());
-		historicoProcessUpdate.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
-		historicoProcessUpdate.setProcessId(processId);
-
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoUpdateRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoUpdateRecord = new HistoricBatchVO();
+			historicoUpdateRecord.setStartDate(new Date());
 			historicoUpdateRecord.setOperation(ConstantesBatch.UPDATE_RECORD);
 			historicoUpdateRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 			historicoUpdateRecord.setProcessId(processId);
+			comentarioCasoToUpdate = new CaseCommentVO();
 			
-			CaseCommentVO comentarioCasoToUpdate = new CaseCommentVO();
-			try{
-				comentarioCasoToUpdate=(CaseCommentVO)object;
-				
+			try {
+				comentarioCasoToUpdate = (CaseCommentVO) object;
 				historicoUpdateRecord.setSfidRecord(comentarioCasoToUpdate.getSfid());
+				//1.1-Construimos la query			
+				Query sqlUpdateQuery = session.createQuery("UPDATE CaseCommentVO "
+														+ "    SET createdbyid = :createdbyid"
+														+ "      , createddate = :createddate"
+														+ "      , ispublished = :ispublished"
+														+ "      , parentid = :parentid"
+														+ "      , commentbody = :commentbody"
+														+ "      , lastmodifieddate = :lastmodifieddate"
+														+ "      , lastmodifiedbyid = :lastmodifiedbyid"
+														+ "  WHERE sfid = :sfidFiltro");
 				
-				
-				//1.1- Seteamos los campos a actualizar distintos de String				
-				Date createddate=comentarioCasoToUpdate.getCreateddate();
-				Boolean ispublished=comentarioCasoToUpdate.getIspublished();
-				Date lastmodifieddate=comentarioCasoToUpdate.getLastmodifieddate();
-				
-				
-				//1.2-Construimos la query			
-				Query sqlUpdateQuery =session.createQuery("UPDATE CaseCommentVO SET "
-				+ "createdbyid= :createdbyid,createddate="+createddate+","
-				+ "ispublished="+ispublished+",parentid= :parentid,"
-				+ "commentbody= :commentbody,lastmodifieddate="+lastmodifieddate+","
-				+ "lastmodifiedbyid= :lastmodifiedbyid"			
-				+	
-				" WHERE sfid = :sfidFiltro");
-				
-				//1.3-Seteamos los campos a actualizar de tipo String	
-				
-					//1.3.1-Seteamos el campos que no filtren la query						
-					sqlUpdateQuery.setParameter("createdbyid", comentarioCasoToUpdate.getCreatedbyid());
-					sqlUpdateQuery.setParameter("parentid", comentarioCasoToUpdate.getCaseid());
-					sqlUpdateQuery.setParameter("commentbody", comentarioCasoToUpdate.getComment());
-					sqlUpdateQuery.setParameter("lastmodifiedbyid", comentarioCasoToUpdate.getLastmodifiedbyid());
-					
-					//1.3.2-Seteamos el sfid,campo por el que filtramos la query				
-					sqlUpdateQuery.setParameter("sfidFiltro", comentarioCasoToUpdate.getSfid());
+				//1.2-Seteamos los campos de la query
+				sqlUpdateQuery.setString("createdbyid", comentarioCasoToUpdate.getCreatedbyid());
+				sqlUpdateQuery.setTimestamp("createddate", comentarioCasoToUpdate.getCreateddate());
+				sqlUpdateQuery.setBoolean("ispublished", comentarioCasoToUpdate.getIspublished());
+				sqlUpdateQuery.setString("parentid", comentarioCasoToUpdate.getCaseid());
+				sqlUpdateQuery.setString("commentbody", comentarioCasoToUpdate.getComment());
+				sqlUpdateQuery.setTimestamp("lastmodifieddate", comentarioCasoToUpdate.getLastmodifieddate());
+				sqlUpdateQuery.setString("lastmodifiedbyid", comentarioCasoToUpdate.getLastmodifiedbyid());
+				sqlUpdateQuery.setString("sfidFiltro", comentarioCasoToUpdate.getSfid());
 
-				//1.5-Ejecutamos la actualizacion
+				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-							
+				tx.commit();
 				logger.debug("--- Fin -- updateComentarioCaso ---" + comentarioCasoToUpdate.getSfid());
 				
-				historicoUpdateRecord.setSuccess(true);
-				historicBatchDAO.insertHistoric(historicoUpdateRecord);
-				cont++;
-				
+				processOk = true;
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en updateComentarioCaso: ---" + comentarioCasoToUpdate.getSfid(), e);
-			historicoUpdateRecord.setSuccess(false);
-			historicoUpdateRecord.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
+				logger.error("--- Error en updateComentarioCaso: ---" + comentarioCasoToUpdate.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
+			}
+			
+			historicoUpdateRecord.setSuccess(processOk);
+			historicoUpdateRecord.setErrorCause(processOk ? null : processErrorCause);
+			historicoUpdateRecord.setEndDate(new Date());
 			historicBatchDAO.insertHistoric(historicoUpdateRecord);
-			} 						
 		}
 		logger.debug("--- Fin -- update Listado ComentarioCasos ---");
 		session.close();
-		if(cont == objectList.size()){
-			historicoProcessUpdate.setEndDate(new Date());
-			historicoProcessUpdate.setSuccess(true);
-			historicoProcessUpdate.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessUpdate);
-		} else {
-			historicoProcessUpdate.setEndDate(new Date());
-			historicoProcessUpdate.setSuccess(false);
-			historicoProcessUpdate.setErrorCause(ConstantesBatch.ERROR_UPDATE_RECORD);
-			historicoProcessUpdate.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessUpdate);
-		}
-		return historicoProcessUpdate.getSuccess();
+		return processedRecords;
 
 	}
 		
@@ -354,74 +312,55 @@ public class CaseCommentDAO {
 	 * @param List<Object>
 	 * @return
 	 */
-		
 	@Transactional
-	public boolean deleteCaseCommentListSf(List<Object> objectList, String processId) {
+	public int deleteCaseCommentListSf(List<Object> objectList, String processId) {
 		logger.debug("--- Inicio -- delete Listado ComentarioCasos ---");
 		
-		Integer cont = 0;
+		int processedRecords = 0;
+		boolean processOk = false;
+		String processErrorCause = null;
+		HistoricBatchVO historicoDeleteRecord = null;
+		CaseCommentVO comentarioCasoToDelete = null;
 		
-		HistoricBatchVO historicoProcessDelete = new HistoricBatchVO();
-		historicoProcessDelete.setStartDate(new Date());
-		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
-		historicoProcessDelete.setTotalRecords(objectList.size());
-		historicoProcessDelete.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
-		historicoProcessDelete.setProcessId(processId);
-
+		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		for(Object object:objectList){
-			
-			HistoricBatchVO historicoDeleteRecord = new HistoricBatchVO();
+		Transaction tx = session.beginTransaction();
+		
+		for (Object object : objectList) {
+			historicoDeleteRecord = new HistoricBatchVO();
+			historicoDeleteRecord.setStartDate(new Date());
 			historicoDeleteRecord.setOperation(ConstantesBatch.DELETE_RECORD);
 			historicoDeleteRecord.setObject(ConstantesBatch.OBJECT_CASE_COMMENT);
 			historicoDeleteRecord.setProcessId(processId);
+			comentarioCasoToDelete = new CaseCommentVO();
 			
-			CaseCommentVO comentarioCasoToDelete = new CaseCommentVO();
-			try{
-				comentarioCasoToDelete=(CaseCommentVO)object;
-				
+			try {
+				comentarioCasoToDelete = (CaseCommentVO) object;
 				historicoDeleteRecord.setSfidRecord(comentarioCasoToDelete.getSfid());
-				
 				Query sqlDeleteQuery =session.createQuery("DELETE CaseCommentVO  WHERE sfid = :sfidFiltro");
-				
 				//Seteamos el campo por el que filtramos el borrado			
-				sqlDeleteQuery.setParameter("sfidFiltro", comentarioCasoToDelete.getSfid());				
+				sqlDeleteQuery.setString("sfidFiltro", comentarioCasoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-							
+				tx.commit();
+				
 				logger.debug("--- Fin -- deleteComentarioCaso ---" + comentarioCasoToDelete.getSfid());
-				
-				historicoDeleteRecord.setSuccess(true);
-				historicBatchDAO.insertHistoric(historicoDeleteRecord);
-				cont++;
-				
+				processOk = true;
+				processedRecords++;
 			} catch (HibernateException e) {
-			logger.error("--- Error en deleteComentarioCaso: ---" + comentarioCasoToDelete.getSfid(), e);
-			historicoDeleteRecord.setSuccess(false);
-			historicoDeleteRecord.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
+				logger.error("--- Error en deleteComentarioCaso: ---" + comentarioCasoToDelete.getSfid(), e);
+				tx.rollback();
+				processOk = false;
+				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
+			}
+			
+			historicoDeleteRecord.setSuccess(processOk);
+			historicoDeleteRecord.setErrorCause(processOk ? null : processErrorCause);
+			historicoDeleteRecord.setEndDate(new Date());
 			historicBatchDAO.insertHistoric(historicoDeleteRecord);
-			} 					
 		}
 		logger.debug("--- Fin -- delete Listado ComentarioCasos ---");
 		session.close();
-		if(cont == objectList.size()){
-			historicoProcessDelete.setEndDate(new Date());
-			historicoProcessDelete.setSuccess(true);
-			historicoProcessDelete.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessDelete);
-		} else {
-			historicoProcessDelete.setEndDate(new Date());
-			historicoProcessDelete.setSuccess(false);
-			historicoProcessDelete.setErrorCause(ConstantesBatch.ERROR_DELETE_RECORD);
-			historicoProcessDelete.setProcessedRecords(cont);
-			historicBatchDAO.insertHistoric(historicoProcessDelete);
-		}
-		return historicoProcessDelete.getSuccess();
-
+		return processedRecords;
 	}
-	
-	
-	
-	
-	
 }

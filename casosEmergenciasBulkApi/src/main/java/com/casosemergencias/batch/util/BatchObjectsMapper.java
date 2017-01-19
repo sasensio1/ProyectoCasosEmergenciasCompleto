@@ -20,6 +20,7 @@ import com.casosemergencias.dao.vo.StreetVO;
 import com.casosemergencias.dao.vo.SuministroVO;
 import com.casosemergencias.dao.vo.TaskVO;
 import com.casosemergencias.dao.vo.UserVO;
+import com.casosemergencias.util.constants.ConstantesBatch;
 import com.casosemergencias.util.constants.ConstantesBulkApi;
 
 @Resource
@@ -42,6 +43,7 @@ public class BatchObjectsMapper {
 	private Map<String, String> objectNamesServicesMap;
 	private Map<String, String> objectNamesServicesMethodsMap;
 	private Map<String, String> objectNamesAbbreviationsMap;
+	private Map<String, String> objectHistoricNamesMap;
 	private LinkedHashMap<String, String> objectSelectsMap;
 	
 	public BatchObjectsMapper() {
@@ -50,6 +52,7 @@ public class BatchObjectsMapper {
 		initObjectNamesServicesMap();
 		initObjectNamesServicesMethodsMap();
 		initObjectNamesAbbreviationsMap();
+		initObjectHistoricNamesMap();
 		initAccountMap();
 		initContactMap();
 		initAssetMap();
@@ -316,6 +319,24 @@ public class BatchObjectsMapper {
 		objectSelectsMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, ConstantesBulkApi.ENTITY_CASE_HISTORY_SELECT);
 	}
 	
+	private void initObjectHistoricNamesMap() {
+		objectHistoricNamesMap = new HashMap<String, String>();
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_STREET, ConstantesBatch.OBJECT_STREET);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_ADDRESS, ConstantesBatch.OBJECT_ADDRESS);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_POINT_OF_DELIVERY, ConstantesBatch.OBJECT_POINT_OF_DELIVERY);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_ACCOUNT, ConstantesBatch.OBJECT_ACCOUNT);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_CONTACT, ConstantesBatch.OBJECT_CONTACT);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_ASSET, ConstantesBatch.OBJECT_ASSET);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_SERVICE_PRODUCT, ConstantesBatch.OBJECT_SERVICE_PRODUCT);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_REPEATED_CASES, ConstantesBatch.OBJECT_REPEATED_CASES);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_GROUP, ConstantesBatch.OBJECT_GROUP);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_USER, ConstantesBatch.OBJECT_USER);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_HEROKU_USER, ConstantesBatch.OBJECT_HEROKU_USER);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_TASK, ConstantesBatch.OBJECT_TASK);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_CASE_COMMENT, ConstantesBatch.OBJECT_CASE_COMMENT);
+		objectHistoricNamesMap.put(ConstantesBulkApi.ENTITY_CASE_HISTORY, ConstantesBatch.OBJECT_CASE_HISTORY);
+	}
+		
 	private void initObjectNamesAbbreviationsMap() {
 		objectNamesAbbreviationsMap = new HashMap<String, String>();
 		objectNamesAbbreviationsMap.put(ConstantesBulkApi.ENTITY_STREET, "STR");
@@ -464,6 +485,10 @@ public class BatchObjectsMapper {
 		return objectNamesAbbreviationsMap;
 	}
 	
+	public Map<String, String> getObjectHistoricNamesMap() {
+		return objectHistoricNamesMap;
+	} 
+	
 	public Map<String, String> getParamsMap(Object object) {
 		Map<String, String> map = null;
 		if (object instanceof ContactVO) {
@@ -496,5 +521,5 @@ public class BatchObjectsMapper {
 			map = taskMap;
 		}
 		return map;
-	} 
+	}
 }

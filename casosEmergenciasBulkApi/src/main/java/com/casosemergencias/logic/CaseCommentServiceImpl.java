@@ -57,18 +57,6 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 		return casoRetorno;
 	}
 	
-	/*@Override
-	public Boolean insertCaseComment(CaseComment caseComment) {
-		CaseCommentVO caseCommentVO = new CaseCommentVO();
-		
-		caseCommentVO.setComment(caseComment.getComment());
-		caseCommentVO.setIspublished(false);
-		caseCommentVO.setCaseid(caseComment.getCaseid());
-		Boolean insert = caseCommentDAO.insertCaseComment(caseCommentVO);
-		return insert;
-	}*/
-	
-	
 	/*
 	 * Método que parsea una lista de CaseHistoryVO en CaseComment.
 	 * Ademas si 'createdate' coincide con 'lastmodifieddate', elimina el valor de 'lastmodifieddate' y 'lastmodifiedbyid', ya que el comentario no ha sido modificado
@@ -111,10 +99,6 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 		}
 		return null;
 	}
-	
-	
-	
-	
 	
 	@Override
 	public CaseComment insertSalesforceCaseComment(CaseComment comentarioCaso)throws EmergenciasException {
@@ -184,21 +168,20 @@ public class CaseCommentServiceImpl implements CaseCommentService{
 	}
 	
 	@Override
-	public boolean insertCaseCommentSfList(List<Object> caseCommentList, String processId) {
-		boolean resultOk = caseCommentDAO.insertCaseCommentListSf(caseCommentList, processId);
-		return resultOk;
+	public int insertCaseCommentSfList(List<Object> caseCommentList, String processId) {
+		int processedRecords = caseCommentDAO.insertCaseCommentListSf(caseCommentList, processId);
+		return processedRecords;
 	}
 	
 	@Override
-	public boolean updateCaseCommentSfList(List<Object> caseCommentList, String processId) {
-		boolean resultOk = caseCommentDAO.updateCaseCommentListSf(caseCommentList, processId);
-		return resultOk;
+	public int updateCaseCommentSfList(List<Object> caseCommentList, String processId) {
+		int processedRecords = caseCommentDAO.updateCaseCommentListSf(caseCommentList, processId);
+		return processedRecords;
 	}
+	
 	@Override
-	public boolean deleteCaseCommentSfList(List<Object> caseCommentList, String processId) {
-		boolean resultOk = caseCommentDAO.deleteCaseCommentListSf(caseCommentList, processId);
-		return resultOk;
+	public int deleteCaseCommentSfList(List<Object> caseCommentList, String processId) {
+		int processedRecords = caseCommentDAO.deleteCaseCommentListSf(caseCommentList, processId);
+		return processedRecords;
 	}
-
-
 }

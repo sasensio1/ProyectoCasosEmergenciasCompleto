@@ -12,13 +12,11 @@ public interface CaseCommentService {
 	
 	public Caso obtenerDatosCasoParaComentario(String caseSfid);
 	
-	//public Boolean insertCaseComment(CaseComment caseComment);
-	
 	public CaseComment insertSalesforceCaseComment(CaseComment caseComment)throws EmergenciasException;
 	
-	public boolean insertCaseCommentSfList(List<Object> caseCommentList, String processId);
+	public int insertCaseCommentSfList(List<Object> caseCommentList, String processId);
 	
-	public boolean updateCaseCommentSfList(List<Object> caseCommentList, String processId);
+	public int updateCaseCommentSfList(List<Object> caseCommentList, String processId);
 	
-	public boolean deleteCaseCommentSfList(List<Object> caseCommentList, String processId);
+	public int deleteCaseCommentSfList(List<Object> caseCommentList, String processId);
 }
