@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.casosemergencias.logic.BatchService;
 import com.casosemergencias.model.HistoricBatch;
 import com.casosemergencias.util.constants.Constantes;
+import com.casosemergencias.util.constants.ConstantesBatch;
 import com.casosemergencias.util.constants.ConstantesBulkApi;
 import com.casosemergencias.util.constants.ConstantesError;
 import com.casosemergencias.util.datatables.DataTableParser;
@@ -37,29 +38,30 @@ public class BatchController {
 	@Autowired
 	private BatchService batchService;
 	
-	@RequestMapping(value = "/updateHerokuPickListTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateHerokuPickListTable", method = RequestMethod.GET)
 	public void updateHerokuPickListHome() {
 		batchService.updateHerokuPickListTable();
 	}
 	
-	@RequestMapping(value = "/updateHerokuFieldLabelTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateHerokuFieldLabelTable", method = RequestMethod.GET)
 	public void updateHerokuFieldLabelHome() {
 		batchService.updateHerokuFieldLabelTable();
 	}
 	
-	@RequestMapping(value = "/updateHerokuCaseCommentTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateHerokuCaseCommentTable", method = RequestMethod.GET)
 	public void updateHerokuCaseCommentsHome() {
 		batchService.updateCaseCommentTable();	
 	}
 	
-	@RequestMapping(value = "/updateHerokuUserTable", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateHerokuUserTable", method = RequestMethod.GET)
 	public void updateHerokuUserHome() {
 		batchService.updateHerokuUserTable();	
 	}	
-	@RequestMapping(value = "/updateObjectTablesFromSalesforceApi", method = RequestMethod.GET)
+	@RequestMapping(value = "/private/updateObjectTablesFromSalesforceApi", method = RequestMethod.GET)
 	public ModelAndView updateObjectTablesFromSalesforceApi(@RequestParam String processStartDateString, @RequestParam String processEndDateString,@RequestParam String objectName) {
 		String processResult= new String();
 		ModelAndView model = new ModelAndView();
+		boolean resultProcess= false;
 		
 		//Parseamos las fechas de ejecucion		
 		Date processStartDate=Utils.parseStringToDate(processStartDateString);
@@ -69,14 +71,20 @@ public class BatchController {
 			objectName=null;
 		}
 		//Ejecutamos proceso batch
-		processResult=batchService.updateObjectsInfoTables(processStartDate, processEndDate,objectName);
-		model.setViewName("redirect:private/homeExecutionBatchMenu");
-
+		resultProcess=batchService.updateObjectsInfoTables(processStartDate, processEndDate,objectName);
 		
-		if(processResult!=null && processResult!=""){
-			model.addObject("mensajeResultado", processResult);
+		model.setViewName("redirect:homeExecutionBatchMenu");
+		
+		if(resultProcess!=true){
+			model.addObject("mostrarMensaje", true);
+			model.addObject("hayError", true);
+			model.addObject("mensajeResultado", ConstantesBatch.HEROKU_BULK_REST_API_CALL_ERROR);
 		}
-
+		else{
+			model.addObject("hayError", false);
+			model.addObject("mostrarMensaje", true);
+			model.addObject("mensajeResultado", ConstantesBatch.HEROKU_BULK_API_BATCH_CALL_OK);
+		}
 		return model;
 	}
 	
@@ -107,7 +115,7 @@ public class BatchController {
 	 *            Informaci&oacute;n de la request.
 	 * @return String Información devuelta de los historicBatchs en formato JSON.
 	 */
-	@RequestMapping(value = "/listarHistoricBatchs", method = RequestMethod.POST)
+	@RequestMapping(value = "/private/listarHistoricBatchs", method = RequestMethod.POST)
 	public @ResponseBody String listadoHistoricBatchsHome(@RequestBody String body,HttpServletRequest request){
 		
 		logger.info("--- Inicio -- listadoHistoricBatchsHome ---");

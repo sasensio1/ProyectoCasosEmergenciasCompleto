@@ -15,7 +15,7 @@ $(document).ready(function() {
 		"processing": true, 
 		"ajax": {
 			"type": "POST", 
-        	"url": urlTable +'/listarHistoricBatchs', 	        	
+        	"url": urlTable +'/private/listarHistoricBatchs', 	        	
         	"contentType": 'application/json; charset=utf-8' ,
         	/*"success":function(data) {
         		alert('sdfsfsf');

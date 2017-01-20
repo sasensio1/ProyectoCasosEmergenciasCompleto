@@ -77,16 +77,20 @@ public class BatchServiceImpl implements BatchService {
 	}
 	
 	@Override
-	public String updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName) {
-		String processResult= new String();
+	public boolean updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName) {
+		
+		boolean resultProcess=false;
 		
 		restApiInvokerBatch.setProcessStartDate(processStartDate);
 		restApiInvokerBatch.setProcessEndDate(processEndDate);
 		restApiInvokerBatch.setObjectName(objectName);	
 		restApiInvokerBatch.setManualProcess(true);
+		
+		restApiInvokerBatch.updateObjectsWithRestApiInfo();		
+		resultProcess=restApiInvokerBatch.isResultProccess();
+		
+		return resultProcess;
 
-		processResult=restApiInvokerBatch.updateObjectsWithRestApiInfo();
-		return processResult;
 	}
 	
 	@Override
@@ -97,6 +101,7 @@ public class BatchServiceImpl implements BatchService {
 		boolean updateOk = true;
 		boolean deleteOk = true;
 		String processErrorCause = null;
+
 		
 		HistoricBatchVO historicoProcess = new HistoricBatchVO();
 		historicoProcess.setStartDate(new Date());
@@ -360,6 +365,11 @@ public class BatchServiceImpl implements BatchService {
 	public Integer getNumHistoricBatchs(DataTableProperties propDatatable){
 		LOGGER.debug("--- getNumCasos ---");
 		return historicBatchDao.getNumHistoricBatchs(propDatatable);
+	}
+	
+	public String returnProcessResult(String processResult){
+		return processResult;
+				
 	}
 	
 	

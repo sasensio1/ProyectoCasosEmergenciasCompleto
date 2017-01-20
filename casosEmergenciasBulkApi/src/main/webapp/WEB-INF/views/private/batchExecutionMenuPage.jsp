@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %> 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <html>
 	<head>
@@ -20,17 +22,33 @@
 		<script src="../resources/js/utils.js"></script>
 		<script src="../resources/js/batch.js"></script>
 	</head>
-	<body onload="initHeader();">
+	<body onload="initHeader();showNotifications();">
 		<script type="text/javascript">var objetoSeleccionado='<s:message code="cabeceraPage_list_menuBatch"/>';</script>
 		<jsp:include page="cabeceraPage.jsp"/>
 		<!-- Mensajes de estado de procesos Batch -->		
-		<c:if test="${not empty param.mensajeResultado}">
-			<div>
-				<div id="divInsertError" >
-					<label class="labelDivAdvertencia"><s:message code="notificaciones_label_batch_process"/>&nbsp;${param.mensajeResultado}</label>
-				</div>
+		<c:if test="${not empty param.mostrarMensaje && param.mostrarMensaje eq true}">
+			<c:choose>
+				<c:when test="${not empty param.hayError && param.hayError eq true}">
+					<div>
+						<div class="divError" id="divInsertError">
+							<label class="labelDivError"><s:message code="notificaciones_label_error_mensaje"/>&nbsp;${param.mensajeResultado}</label>
+						</div>						
+					</div>
+					<br>					
+				</c:when>
+				<c:otherwise>
+					<div>
+						<div id="divInsertOk" class="divOk" >
+							<label class="labelDivOk">${param.mensajeResultado}</label>
+						</div>	
+					</div>
+					<br>					
+				</c:otherwise>
+			</c:choose>
+			<div >
+				<a href="<c:out value="http://localhost:8080/casosEmergencias/private/homeHistoricBatch"/>">Historial de registros</a>
 			</div>
-			<br>			
+			<br>
 		</c:if>
 		<!-- Mensajes de estado de procesos Batch -->
 		
@@ -46,14 +64,13 @@
 		<form name="formMenuBatch" action="homeHistoricBatchsAction" method="POST">
 			<input type="hidden" value="${maxProcessedDays}" id="maxProcessedDays"/>
 			<input type="hidden" value="" id="process"/>
-			
 			<div class="formBusqueda">
 				<div id="divBatchMenu">				
 					<table class="tablaBusqueda">	
 						<tr>
 							<td class="tablaBusquedaTitulo">
-						    	<s:message code="search_form_title_executeProcess"/>
-							</td>
+						    	<s:message code="search_form_title_executeProcess"/>						    	
+							</td>							
 					    </tr>			
 						<tr id="tableExecutionDate" style="display:none;">
 							<td>

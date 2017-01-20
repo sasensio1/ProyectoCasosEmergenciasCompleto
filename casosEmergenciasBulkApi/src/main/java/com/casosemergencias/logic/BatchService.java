@@ -12,7 +12,7 @@ public interface BatchService {
 	public void updateHerokuFieldLabelTable();
 	public void updateCaseCommentTable();
 	public void updateHerokuUserTable();
-	public String updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName);
+	public boolean updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName);
 	public boolean updateHerokuObjectsFromBulkApi(BulkApiInfoContainerBatch bulkApiInfoContainer, String processId);
 	public List<HistoricBatch> readAllHistoricBatch(DataTableProperties propDatatable);
 	public Integer getNumHistoricBatchs(DataTableProperties propDatatable);

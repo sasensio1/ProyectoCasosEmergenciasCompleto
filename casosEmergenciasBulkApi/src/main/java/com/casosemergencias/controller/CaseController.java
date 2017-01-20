@@ -642,7 +642,7 @@ public class CaseController {
 				model.addObject("hayError", true);
 				model.addObject("codigoError", ConstantesError.EMERG_ERROR_CODE_004);
 				model.addObject("mensajeResultado", ConstantesError.HEROKU_CASE_COMMENT_CREATION_GENERIC_ERROR);
-				model.setViewName("redirect:comentarioCasePage?sfid="+comentarioCaso.getCaseid());				
+				model.setViewName("redirect:casoComentarioPage?sfid="+comentarioCaso.getCaseid());				
 			}
 		}			
 		catch(EmergenciasException exception) {
@@ -651,7 +651,7 @@ public class CaseController {
 			model.addObject("hayError", true);
 			model.addObject("codigoError", exception.getCode());
 			model.addObject("mensajeResultado", exception.getMessage());
-			model.setViewName("redirect:comentarioCasePage?sfid="+comentarioCaso.getCaseid());
+			model.setViewName("redirect:casoComentarioPage?sfid=" + comentarioCaso.getCaseid());
 		}
 		
 		logger.info("--- Fin -- guardarComentarioCaso ---");
