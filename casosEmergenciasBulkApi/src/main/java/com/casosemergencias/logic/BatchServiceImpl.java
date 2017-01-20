@@ -77,16 +77,20 @@ public class BatchServiceImpl implements BatchService {
 	}
 	
 	@Override
-	public String updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName) {
-		String processResult= new String();
+	public boolean updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName) {
+		
+		boolean resultProcess=false;
 		
 		restApiInvokerBatch.setProcessStartDate(processStartDate);
 		restApiInvokerBatch.setProcessEndDate(processEndDate);
 		restApiInvokerBatch.setObjectName(objectName);	
 		restApiInvokerBatch.setManualProcess(true);
+		
+		restApiInvokerBatch.updateObjectsWithRestApiInfo();		
+		resultProcess=restApiInvokerBatch.isResultProccess();
+		
+		return resultProcess;
 
-		processResult=restApiInvokerBatch.updateObjectsWithRestApiInfo();
-		return processResult;
 	}
 	
 	@Override
@@ -259,7 +263,7 @@ public class BatchServiceImpl implements BatchService {
 		historicoProcessDelete.setStartDate(new Date());
 		historicoProcessDelete.setOperation(ConstantesBatch.DELETE_PROCESS);
 		historicoProcessDelete.setProcessId(processId);
-		historicoProcessDelete.setObject(bulkApiInfoContainer.getEntityName());
+		historicoProcessDelete.setObject(batchObjectsMapper.getObjectHistoricNamesMap().get(bulkApiInfoContainer.getEntityName()));
 		
 		if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.DELETE)
 				&& bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE) != null
@@ -360,6 +364,11 @@ public class BatchServiceImpl implements BatchService {
 	public Integer getNumHistoricBatchs(DataTableProperties propDatatable){
 		LOGGER.debug("--- getNumCasos ---");
 		return historicBatchDao.getNumHistoricBatchs(propDatatable);
+	}
+	
+	public String returnProcessResult(String processResult){
+		return processResult;
+				
 	}
 	
 	

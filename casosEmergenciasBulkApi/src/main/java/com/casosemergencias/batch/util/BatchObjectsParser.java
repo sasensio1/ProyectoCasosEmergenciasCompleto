@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -61,7 +60,7 @@ public class BatchObjectsParser {
 	 *             Exception thrown if there has been any problem during the
 	 *             populating process.
 	 */
-	public BulkApiInfoContainerBatch populateObjectListFromJsonObject(String entityName, String entityResponse, BatchObjectsMapper mapper, String historicProcessId) throws Exception {
+	public BulkApiInfoContainerBatch populateObjectListFromJsonObject(String entityName, String entityResponse, BatchObjectsMapper mapper, String historicProcessId, Date processStartDate) throws Exception {
 		LOGGER.trace("Entrando en populateObjectListFromJsonObject para obtener los registros actualizados");
 		
 		//Registro en tabla de historico
@@ -91,11 +90,14 @@ public class BatchObjectsParser {
 				JSONArray recordsArray = jsonResponse.getJSONArray(ConstantesBulkApi.RECORDS_NODE);
 				if (jsonResponse.getInt(ConstantesBulkApi.TOTAL_SIZE_NODE) > 0 && recordsArray != null && recordsArray.length() > 0) {
 					containerList.setTotalRecords(jsonResponse.getInt(ConstantesBulkApi.TOTAL_SIZE_NODE));
-					//2. Se obtiene el objeto a rellenar
-					getNewEntityObjectInfoFromJsonDocument(recordsArray.getJSONObject(0));
 					for (int i = 0; i < recordsArray.length(); i++) {
 						//3. Se parsea el documento y se rellenan los parametros del objeto
 						JSONObject record = recordsArray.getJSONObject(i);
+						//2. Se obtiene el objeto a rellenar
+						getNewEntityObjectInfoFromJsonDocument(recordsArray.getJSONObject(0));
+						isDeleted = false;
+						createdDateString = null;
+						modifyDateString = null;
 						//3.1. Se recorren todos los objetos encontrados
 						String[] recordParams = JSONObject.getNames(record);
 						for (String paramName : recordParams) {
@@ -149,10 +151,10 @@ public class BatchObjectsParser {
 							LOGGER.info("Registro guardado en borrados");
 							objectsToDelete.add(entityObject);
 						} else {
-							if (modifyDate == null || createdDate.equals(modifyDate) || DateUtils.isSameDay(modifyDate, createdDate)) {
+							if (modifyDate == null || createdDate.equals(modifyDate) || (createdDate.after(processStartDate) && modifyDate.after(processStartDate))) {
 								LOGGER.info("Registro guardado en insertados");
 								objectsToInsert.add(entityObject);
-							} else if (modifyDate.after(createdDate)) {
+							} else if (modifyDate.after(createdDate) || (createdDate.before(processStartDate) && modifyDate.after(processStartDate))) {
 								LOGGER.info("Registro guardado en modificados");
 								objectsToUpdate.add(entityObject);
 							}

@@ -21,27 +21,27 @@
 		<script src="../resources/js/casos.js"></script>
 	</head>
 	
-	<body onload="initHeader();">
+	<body onload="initHeader();showNotifications();">
 		<script type="text/javascript">var objetoSeleccionado='<s:message code="entidadCaso_title_label_comentario_caso"/>';</script>
 		<jsp:include page="cabeceraPage.jsp"/>
 		<!-- Mensajes de estado de operaciÃ³n -->
-		<c:if test="${not empty mostrarMensaje && mostrarMensaje eq true}">
+		<c:if test="${not empty param.mostrarMensaje && param.mostrarMensaje eq true}">
 			<c:choose>
-				<c:when test="${not empty hayError && hayError eq true}">
+				<c:when test="${not empty param.hayError && param.hayError eq true}">
 					<div>
 						<div class="divError" id="divInsertError"><!--  -->
 <%-- 							<label class="labelDivError"><s:message code="notificaciones_label_error_insercion"/></label>
 							<br/>
 							<label class="labelDivError"><s:message code="notificaciones_label_error_codigo"/>&nbsp;${codigoError}</label>
 							<br/> --%>
-							<label class="labelDivError"><s:message code="notificaciones_label_error_mensaje"/>&nbsp;${mensajeResultado}</label>
+							<label class="labelDivError"><s:message code="notificaciones_label_error_mensaje"/>&nbsp;${param.mensajeResultado}</label>
 						</div>
 					</div>
 				</c:when>
 				<c:otherwise>
 					<div>
 						<div id="divInsertOk" class="divOk" >
-							<label class="labelDivOk">${mensajeResultado}</label>
+							<label class="labelDivOk">${param.mensajeResultado}</label>
 						</div>	
 					</div>
 				</c:otherwise>
