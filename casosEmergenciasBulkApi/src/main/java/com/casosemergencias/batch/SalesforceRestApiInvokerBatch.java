@@ -27,7 +27,6 @@ import com.casosemergencias.batch.util.BatchObjectsMapper;
 import com.casosemergencias.batch.util.BatchObjectsParser;
 import com.casosemergencias.dao.HistoricBatchDAO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
-import com.casosemergencias.exception.EmergenciasException;
 import com.casosemergencias.logic.BatchService;
 import com.casosemergencias.logic.sf.util.SalesforceLoginChecker;
 import com.casosemergencias.model.UserSessionInfo;

@@ -23,6 +23,7 @@ import org.springframework.util.StringUtils;
 import com.casosemergencias.batch.bean.FieldLabelBatch;
 import com.casosemergencias.logic.sf.util.SalesforceLoginChecker;
 import com.casosemergencias.model.UserSessionInfo;
+import com.casosemergencias.util.Utils;
 import com.casosemergencias.util.constants.ConstantesBatch;
 import com.force.api.DescribeSObject;
 import com.force.api.DescribeSObject.Field;
@@ -39,10 +40,7 @@ public class FieldLabelTableCreatorBatch {
 		logger.trace("Comienzo del proceso de carga de los labels de campo de SalesForce a la base de datos de Heroku");
 		List<FieldLabelBatch> listaRecuperadaSF;
 		try {
-			UserSessionInfo sessionInfo = new UserSessionInfo();
-			sessionInfo.setUsername(ConstantesBatch.SF_USER_NAME_VALUE);
-			sessionInfo.setPassword(ConstantesBatch.SF_PASSWORD_VALUE);
-			sessionInfo.setAccessToken(ConstantesBatch.SF_USER_TOKEN_VALUE);
+			UserSessionInfo sessionInfo = Utils.getUserSessionInfoFromProperties();
 			ForceApi api = salesforceLoginChecker.getSalesforceApi(sessionInfo);
 			if (api != null) {
 				listaRecuperadaSF = getFieldLabelList(api);

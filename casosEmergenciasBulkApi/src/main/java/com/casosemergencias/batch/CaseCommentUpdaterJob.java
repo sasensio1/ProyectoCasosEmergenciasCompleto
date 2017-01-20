@@ -8,8 +8,6 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import com.casosemergencias.exception.EmergenciasException;
-
 public class CaseCommentUpdaterJob extends QuartzJobBean {
 	final static Logger LOGGER = Logger.getLogger(CaseCommentUpdaterJob.class);
 	

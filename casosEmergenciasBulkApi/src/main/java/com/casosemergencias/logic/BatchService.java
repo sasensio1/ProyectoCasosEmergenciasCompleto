@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.casosemergencias.batch.bean.BulkApiInfoContainerBatch;
-import com.casosemergencias.exception.EmergenciasException;
 import com.casosemergencias.model.HistoricBatch;
 import com.casosemergencias.util.datatables.DataTableProperties;
 
