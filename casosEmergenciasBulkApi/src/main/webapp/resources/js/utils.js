@@ -188,4 +188,18 @@ function restarFechas(f1,f2)
  }
 
 
+//Función para añadir los segundos al valor de un datetime cuando los seteamos a :00
+function addSeconsToDateValue(f1) {
+	if(f1!="" ){
+		 var aFecha1 = f1.split('-'); 
+		 var asubFecha1 = aFecha1[2].split('T'); 
+		 var aasubFecha = asubFecha1[1].split(':'); 
+		 if(aasubFecha[2]==null){
+			 f1=f1+":00";
+		 };
+	}
+ return f1;
+ }
+
+
 

@@ -30,7 +30,12 @@ function processBatchControllerMethodRedirection() {
 	var proccess= document.getElementById("process").value;
 	
 	$('#divErrorComienzoEjecucionSuperior').hide();	
-	$('#divErrorTiempoEjecucionSuperior').hide();			
+	$('#divErrorTiempoEjecucionSuperior').hide();		
+	
+	startProcess=addSeconsToDateValue(startProcess);
+	endProcess=addSeconsToDateValue(endProcess);
+
+
 	
 		switch (proccess)
 		{
