@@ -107,7 +107,7 @@ public class BatchServiceImpl implements BatchService {
 		historicoProcess.setStartDate(new Date());
 		historicoProcess.setOperation(ConstantesBatch.OBJECT_PROCESS);
 		historicoProcess.setProcessId(processId);
-		historicoProcess.setObject(bulkApiInfoContainer.getEntityName());
+		historicoProcess.setObject(batchObjectsMapper.getObjectHistoricNamesMap().get(bulkApiInfoContainer.getEntityName()));
 		
 		if (bulkApiInfoContainer != null && bulkApiInfoContainer.getRecordsMap() != null) {
 			if (bulkApiInfoContainer.getTotalRecords() > 0) {
@@ -159,7 +159,7 @@ public class BatchServiceImpl implements BatchService {
 		historicoProcessInsert.setStartDate(new Date());
 		historicoProcessInsert.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessInsert.setProcessId(processId);
-		historicoProcessInsert.setObject(bulkApiInfoContainer.getEntityName());
+		historicoProcessInsert.setObject(batchObjectsMapper.getObjectHistoricNamesMap().get(bulkApiInfoContainer.getEntityName()));
 		
 		if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.INSERT)
 				&& bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT) != null
@@ -212,7 +212,7 @@ public class BatchServiceImpl implements BatchService {
 		historicoProcessUpdate.setStartDate(new Date());
 		historicoProcessUpdate.setOperation(ConstantesBatch.INSERT_PROCESS);
 		historicoProcessUpdate.setProcessId(processId);
-		historicoProcessUpdate.setObject(bulkApiInfoContainer.getEntityName());
+		historicoProcessUpdate.setObject(batchObjectsMapper.getObjectHistoricNamesMap().get(bulkApiInfoContainer.getEntityName()));
 		
 		if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.UPDATE)
 				&& bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE) != null
