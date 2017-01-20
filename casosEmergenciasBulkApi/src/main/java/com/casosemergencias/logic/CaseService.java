@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.casosemergencias.dao.vo.CaseVO;
 import com.casosemergencias.exception.EmergenciasException;
-import com.casosemergencias.model.CaseComment;
 import com.casosemergencias.model.CaseHistory;
 import com.casosemergencias.model.Caso;
 import com.casosemergencias.util.datatables.DataTableProperties;
