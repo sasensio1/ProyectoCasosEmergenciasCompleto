@@ -230,7 +230,7 @@ public class TaskVO extends ObjectVO implements Serializable {
 		return whoId;
 	}
 
-	public void setwhoId(String whoId) {
+	public void setWhoId(String whoId) {
 		this.whoId = whoId;
 	}
 

@@ -191,7 +191,7 @@ public class BatchObjectsMapper {
 		herokuUserMap.put("Password__c", "Password");
 		herokuUserMap.put("Mail__c", "Email");
 		herokuUserMap.put("SentMail__c", "EnvioMailString");
-		herokuUserMap.put("Active__c", "si");
+		herokuUserMap.put("Active__c", "ActivoString");
 		herokuUserMap.put("Country__c", "Country");
 		herokuUserMap.put("Unity__c", "Unidad");
 	}
