@@ -8,7 +8,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,7 +175,6 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -190,7 +188,6 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 				casoReiteradoToInsert = (CasosReiteradosVO) object;
 				historicoInsertRecord.setSfidRecord(casoReiteradoToInsert.getSfid());
 				session.save(casoReiteradoToInsert);
-				tx.commit();
 
 				logger.debug("--- Fin -- insertCasoReiterado ---" + casoReiteradoToInsert.getSfid());
 				
@@ -198,7 +195,6 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertCasoReiterado: ---" + casoReiteradoToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -231,7 +227,6 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 				
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -247,27 +242,29 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 				//1.1-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE CasosReiteradosVO "
 													   + "	  SET name = :name"
-													   + "		, numbercases__c = :numbercases__c"
-													   + "		, numberdays__c = :numberdays__c"
+													   + (casoReiteradoToUpdate.getNumCasos() != null ? "		, numbercases__c = :numbercases__c" : "")
+													   + (casoReiteradoToUpdate.getNumDias() != null ? "		, numberdays__c = :numberdays__c" : "")
 													   + "		, createddate = :createddate"				
 													   + "  WHERE sfid = :sfidFiltro");
 				
 				//1.2-Seteamos los campos
 				sqlUpdateQuery.setString("name", casoReiteradoToUpdate.getName());
-				sqlUpdateQuery.setDouble("numbercases__c", casoReiteradoToUpdate.getNumCasos());
-				sqlUpdateQuery.setDouble("numberdays__c", casoReiteradoToUpdate.getNumDias());
+				if (casoReiteradoToUpdate.getNumCasos() != null) {
+					sqlUpdateQuery.setDouble("numbercases__c", casoReiteradoToUpdate.getNumCasos());
+				}
+				if (casoReiteradoToUpdate.getNumDias() != null) {
+					sqlUpdateQuery.setDouble("numberdays__c", casoReiteradoToUpdate.getNumDias());
+				}
 				sqlUpdateQuery.setTimestamp("createddate", casoReiteradoToUpdate.getCreatedDate());
 				sqlUpdateQuery.setString("sfidFiltro", casoReiteradoToUpdate.getSfid());
 				
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();		
 				logger.debug("--- Fin -- updateCasoReiterado ---" + casoReiteradoToUpdate.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateCasoReiterado: ---" + casoReiteradoToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -299,7 +296,6 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -317,14 +313,12 @@ final static Logger logger = Logger.getLogger(CasosReiteradosDAO.class);
 				sqlDeleteQuery.setString("sfidFiltro", casoReiteradoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteCasoReiterado ---" + casoReiteradoToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteCasoReiterado: ---" + casoReiteradoToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			}

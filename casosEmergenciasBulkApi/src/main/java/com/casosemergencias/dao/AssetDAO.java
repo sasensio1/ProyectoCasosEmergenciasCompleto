@@ -8,7 +8,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -143,7 +142,6 @@ public class AssetDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -157,13 +155,11 @@ public class AssetDAO {
 				activoToInsert = (AssetVO) object;
 				historicoInsertRecord.setSfidRecord(activoToInsert.getSfid());
 				session.save(activoToInsert);
-				tx.commit();
 
 				logger.debug("--- Fin -- insertActivo ---" + activoToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertActivo: ---" + activoToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -196,7 +192,6 @@ public class AssetDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -227,14 +222,12 @@ public class AssetDAO {
 													
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();		
 				logger.debug("--- Fin -- updateActivo ---" + activoToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateActivo: ---" + activoToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			}
@@ -266,7 +259,6 @@ public class AssetDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -284,14 +276,12 @@ public class AssetDAO {
 				sqlDeleteQuery.setString("sfidFiltro", activoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteActivo ---" + activoToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteActivo: ---" + activoToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 

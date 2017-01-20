@@ -78,19 +78,14 @@ public class BatchServiceImpl implements BatchService {
 	
 	@Override
 	public boolean updateObjectsInfoTables(Date processStartDate, Date processEndDate,String objectName) {
-		
-		boolean resultProcess=false;
-		
+		boolean resultProcess = false;
 		restApiInvokerBatch.setProcessStartDate(processStartDate);
 		restApiInvokerBatch.setProcessEndDate(processEndDate);
-		restApiInvokerBatch.setObjectName(objectName);	
+		restApiInvokerBatch.setObjectName(objectName);
 		restApiInvokerBatch.setManualProcess(true);
-		
-		restApiInvokerBatch.updateObjectsWithRestApiInfo();		
-		resultProcess=restApiInvokerBatch.isResultProccess();
-		
+		restApiInvokerBatch.updateObjectsWithRestApiInfo();
+		resultProcess = restApiInvokerBatch.isResultProccess();
 		return resultProcess;
-
 	}
 	
 	@Override
@@ -210,14 +205,14 @@ public class BatchServiceImpl implements BatchService {
 		String processUpdateErrorCause = null;
 		HistoricBatchVO historicoProcessUpdate = new HistoricBatchVO();
 		historicoProcessUpdate.setStartDate(new Date());
-		historicoProcessUpdate.setOperation(ConstantesBatch.INSERT_PROCESS);
+		historicoProcessUpdate.setOperation(ConstantesBatch.UPDATE_PROCESS);
 		historicoProcessUpdate.setProcessId(processId);
 		historicoProcessUpdate.setObject(batchObjectsMapper.getObjectHistoricNamesMap().get(bulkApiInfoContainer.getEntityName()));
 		
 		if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.UPDATE)
 				&& bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE) != null
 				&& !bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE).isEmpty()) {
-			historicoProcessUpdate.setTotalRecords(bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT).size());
+			historicoProcessUpdate.setTotalRecords(bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE).size());
 			try {
 				cont = callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.UPDATE, bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE), processId);
 				if (cont == bulkApiInfoContainer.getRecordsMap().get(OperationType.UPDATE).size()) {
@@ -269,7 +264,7 @@ public class BatchServiceImpl implements BatchService {
 		if (bulkApiInfoContainer.getRecordsMap().containsKey(OperationType.DELETE)
 				&& bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE) != null
 				&& !bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE).isEmpty()) {
-			historicoProcessDelete.setTotalRecords(bulkApiInfoContainer.getRecordsMap().get(OperationType.INSERT).size());
+			historicoProcessDelete.setTotalRecords(bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE).size());
 			try {
 				cont = callSpecificServiceByReflection(objectService, objectNameServicesMethods, OperationType.DELETE, bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE), processId);
 				if (cont == bulkApiInfoContainer.getRecordsMap().get(OperationType.DELETE).size()) {

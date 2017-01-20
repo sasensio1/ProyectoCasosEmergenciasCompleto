@@ -926,7 +926,6 @@ public class SuministroDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -940,13 +939,11 @@ public class SuministroDAO {
 				suministroToInsert = (SuministroVO) object;
 				historicoInsertRecord.setSfidRecord(suministroToInsert.getSfid());
 				session.save(suministroToInsert);
-				tx.commit();
 
 				logger.debug("--- Fin -- insertSuministro ---" + suministroToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertSuministro: ---" + suministroToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -979,7 +976,6 @@ public class SuministroDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 				
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -1022,7 +1018,7 @@ public class SuministroDAO {
 													    + "		 , electrodependant__c = :electrodependant__c"					
 													    + "		 , disciplinarymeasure__c = :disciplinarymeasure__c"
 													    + "		 , rationingschedule__c = :rationingschedule__c"
-													    + "		 , repeatedcases__c = :repeatedcases__c"
+													    + (suministroToUpdate.getCasosReiterados() != null ? "		 , repeatedcases__c = :repeatedcases__c" : "")
 													    + "		 , rate__c = :rate__c"					
 													    + "		 , feedernumber__c = :feedernumber__c"
 													    + "		 , distributionaddress__c = :distributionaddress__c"
@@ -1061,7 +1057,9 @@ public class SuministroDAO {
 				sqlUpdateQuery.setParameter("electrodependant__c", suministroToUpdate.getElectrodependiente());
 				sqlUpdateQuery.setParameter("disciplinarymeasure__c", suministroToUpdate.getMedidaDisciplina());
 				sqlUpdateQuery.setParameter("rationingschedule__c", suministroToUpdate.getHorarioRacionamiento());
-				sqlUpdateQuery.setDouble("repeatedcases__c", suministroToUpdate.getCasosReiterados());
+				if (suministroToUpdate.getCasosReiterados() != null) {
+					sqlUpdateQuery.setDouble("repeatedcases__c", suministroToUpdate.getCasosReiterados());
+				}
 				sqlUpdateQuery.setParameter("rate__c", suministroToUpdate.getTarifa());
 				sqlUpdateQuery.setParameter("feedernumber__c", suministroToUpdate.getAlimentador());
 				sqlUpdateQuery.setParameter("distributionaddress__c", suministroToUpdate.getDireccionBoleta());
@@ -1073,14 +1071,12 @@ public class SuministroDAO {
 									
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- updateSuministro ---" + suministroToUpdate.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateSuministro: ---" + suministroToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -1112,7 +1108,6 @@ public class SuministroDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -1130,14 +1125,12 @@ public class SuministroDAO {
 				sqlDeleteQuery.setString("sfidFiltro", suministroToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteSuministro ---" + suministroToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteSuministro: ---" + suministroToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 

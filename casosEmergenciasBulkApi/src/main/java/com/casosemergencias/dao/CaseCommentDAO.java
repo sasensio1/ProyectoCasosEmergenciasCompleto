@@ -195,7 +195,6 @@ public class CaseCommentDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -209,13 +208,11 @@ public class CaseCommentDAO {
 				comentarioCasoToInsert = (CaseCommentVO) object;
 				historicoInsertRecord.setSfidRecord(comentarioCasoToInsert.getSfid());
 				session.save(comentarioCasoToInsert);
-				tx.commit();
 				
 				logger.debug("--- Insertado comentario de caso con id: " + comentarioCasoToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error Insertando comentario de caso con id: " + comentarioCasoToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -248,7 +245,6 @@ public class CaseCommentDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -284,14 +280,12 @@ public class CaseCommentDAO {
 
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();
 				logger.debug("--- Fin -- updateComentarioCaso ---" + comentarioCasoToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateComentarioCaso: ---" + comentarioCasoToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			}
@@ -323,7 +317,6 @@ public class CaseCommentDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -341,14 +334,12 @@ public class CaseCommentDAO {
 				sqlDeleteQuery.setString("sfidFiltro", comentarioCasoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteComentarioCaso ---" + comentarioCasoToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteComentarioCaso: ---" + comentarioCasoToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			}

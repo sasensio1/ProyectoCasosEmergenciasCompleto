@@ -43,7 +43,7 @@ public class ConstantesBulkApi {
 	public static final String ENTITY_ACCOUNT_SELECT = "SELECT Id, Name, FathersLastName__c, MothersLastName__c"
 												          + ", IdentityType__c, IdentityNumber__c, BirthDate__c, Phone"
 												          + ", MainPhone__c, SecondaryPhone__c, PrimaryEmail__c, SecondaryEmail__c"
-												          + ", Address__c, AccountSource, CompanyID__c, Type, ParentId"
+												          + ", Address__c, AccountSource, CompanyID__c, Type, ParentId, RecordTypeId"
 												          + ", CreatedDate, LastModifiedDate, IsDeleted";
 		
 	public static final String ENTITY_ADDRESS_SELECT = "SELECT Id, Name, Region__c, Municipality__c"

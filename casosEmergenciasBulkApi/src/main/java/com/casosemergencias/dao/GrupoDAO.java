@@ -8,14 +8,15 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.casosemergencias.dao.vo.GroupVO;
 import com.casosemergencias.dao.vo.HistoricBatchVO;
 import com.casosemergencias.util.constants.ConstantesBatch;
 
+@Repository
 public class GrupoDAO {
 	final static Logger logger = Logger.getLogger(AccountDAO.class);
 
@@ -42,7 +43,6 @@ public class GrupoDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -56,13 +56,11 @@ public class GrupoDAO {
 				grupoToInsert = (GroupVO) object;
 				historicoInsertRecord.setSfidRecord(grupoToInsert.getSfid());
 				session.save(grupoToInsert);
-				tx.commit();
 
 				logger.debug("--- Fin -- insertGrupo ---" + grupoToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertGrupo: ---" + grupoToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -95,7 +93,6 @@ public class GrupoDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 				
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -115,20 +112,18 @@ public class GrupoDAO {
 														+ "  WHERE sfid = :sfidFiltro");
 				
 				//1.2-Seteamos los campos					
-				sqlUpdateQuery.setParameter("name", grupoToUpdate.getName());
+				sqlUpdateQuery.setString("name", grupoToUpdate.getName());
 				sqlUpdateQuery.setTimestamp("createddate", grupoToUpdate.getCreateddate());
-				sqlUpdateQuery.setParameter("sfidFiltro", grupoToUpdate.getSfid());
+				sqlUpdateQuery.setString("sfidFiltro", grupoToUpdate.getSfid());
 				
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();
 				logger.debug("--- Fin -- updateGrupo ---" + grupoToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateGrupo: ---" + grupoToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -160,7 +155,6 @@ public class GrupoDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -178,14 +172,12 @@ public class GrupoDAO {
 				sqlDeleteQuery.setString("sfidFiltro", grupoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteGrupo ---" + grupoToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteGrupo: ---" + grupoToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			}

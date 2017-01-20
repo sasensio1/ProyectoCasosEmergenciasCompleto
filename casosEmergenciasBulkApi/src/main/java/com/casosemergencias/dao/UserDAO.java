@@ -8,7 +8,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,7 +136,6 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -151,13 +149,11 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 				usuarioToInsert = (UserVO) object;
 				historicoInsertRecord.setSfidRecord(usuarioToInsert.getSfid());
 				session.save(usuarioToInsert);
-				tx.commit();
 				
 				logger.debug("--- Fin -- insertUsuario ---" + usuarioToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertUsuario: ---" + usuarioToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -190,7 +186,6 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -214,14 +209,12 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 				
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();
 				logger.debug("--- Fin -- updateUsuario ---" + usuarioToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateUsuario: ---" + usuarioToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -253,7 +246,6 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -271,14 +263,12 @@ final static Logger logger = Logger.getLogger(UserDAO.class);
 				sqlDeleteQuery.setParameter("sfidFiltro", usuarioToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteUsuario ---" + usuarioToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteUsuario: ---" + usuarioToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 

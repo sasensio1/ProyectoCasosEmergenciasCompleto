@@ -658,7 +658,6 @@ public class AccountDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -672,13 +671,11 @@ public class AccountDAO {
 				cuentaToInsert = (AccountVO) object;
 				historicoInsertRecord.setSfidRecord(cuentaToInsert.getSfid());
 				session.save(cuentaToInsert);
-				tx.commit();
 				
 				logger.debug("--- Fin -- insertCuenta ---" + cuentaToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertCuenta: ---" + cuentaToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -711,7 +708,6 @@ public class AccountDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 				
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -743,7 +739,8 @@ public class AccountDAO {
 													   + "		, accountsource = :accountsource"
 													   + "		, companyid__c = :companyid__c"
 													   + "		, type = :type"
-													   + "		, parentid = :parentid"					
+													   + "		, parentid = :parentid"	
+													   + "		, recordtypeid = :recordtypeid"	
 													   + "  WHERE sfid = :sfidFiltro");
 				
 				//1.2-Seteamos los campos
@@ -765,18 +762,17 @@ public class AccountDAO {
 				sqlUpdateQuery.setString("companyid__c", cuentaToUpdate.getIdEmpresa());
 				sqlUpdateQuery.setString("type", cuentaToUpdate.getTipo());
 				sqlUpdateQuery.setString("parentid", cuentaToUpdate.getParentid());
+				sqlUpdateQuery.setString("recordtypeid", cuentaToUpdate.getRecordTypeId());
 				sqlUpdateQuery.setString("sfidFiltro", cuentaToUpdate.getSfid());
 									
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();
 				logger.debug("--- Fin -- updateCuenta ---" + cuentaToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateCuenta: ---" + cuentaToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -808,7 +804,6 @@ public class AccountDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -826,14 +821,12 @@ public class AccountDAO {
 				sqlDeleteQuery.setString("sfidFiltro", cuentaToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteCuenta ---" + cuentaToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteCuenta: ---" + cuentaToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 

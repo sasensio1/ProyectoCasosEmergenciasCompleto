@@ -397,7 +397,6 @@ public class HerokuUserDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -411,13 +410,11 @@ public class HerokuUserDAO {
 				usuarioHerokuToInsert = (HerokuUserVO) object;
 				historicoInsertRecord.setSfidRecord(usuarioHerokuToInsert.getSfid());
 				session.save(usuarioHerokuToInsert);
-				tx.commit();
 				
 				logger.debug("--- Fin -- insertUsuarioHeroku ---" + usuarioHerokuToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertUsuarioHeroku: ---" + usuarioHerokuToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -450,7 +447,6 @@ public class HerokuUserDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 				
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -476,26 +472,24 @@ public class HerokuUserDAO {
 														+ "  WHERE sfid = :sfidFiltro");
 				
 				//1.2-Seteamos los campos
-				sqlUpdateQuery.setParameter("name", usuarioHerokuToUpdate.getName());
-				sqlUpdateQuery.setParameter("username__c", usuarioHerokuToUpdate.getUsername());
-				sqlUpdateQuery.setParameter("password__c", usuarioHerokuToUpdate.getPassword());
-				sqlUpdateQuery.setParameter("mail__c", usuarioHerokuToUpdate.getEmail());
+				sqlUpdateQuery.setString("name", usuarioHerokuToUpdate.getName());
+				sqlUpdateQuery.setString("username__c", usuarioHerokuToUpdate.getUsername());
+				sqlUpdateQuery.setString("password__c", usuarioHerokuToUpdate.getPassword());
+				sqlUpdateQuery.setString("mail__c", usuarioHerokuToUpdate.getEmail());
 				sqlUpdateQuery.setBoolean("sentmail__c", usuarioHerokuToUpdate.getEnvioMail());
 				sqlUpdateQuery.setBoolean("active__c", usuarioHerokuToUpdate.getActivo());
-				sqlUpdateQuery.setParameter("country__c", usuarioHerokuToUpdate.getCountry());
-				sqlUpdateQuery.setParameter("unity__c", usuarioHerokuToUpdate.getUnidad());
-				sqlUpdateQuery.setParameter("sfidFiltro", usuarioHerokuToUpdate.getSfid());
+				sqlUpdateQuery.setString("country__c", usuarioHerokuToUpdate.getCountry());
+				sqlUpdateQuery.setString("unity__c", usuarioHerokuToUpdate.getUnidad());
+				sqlUpdateQuery.setString("sfidFiltro", usuarioHerokuToUpdate.getSfid());
 				
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();
 				logger.debug("--- Fin -- updateUsuarioHeroku ---" + usuarioHerokuToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateUsuarioHeroku: ---" + usuarioHerokuToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -527,7 +521,6 @@ public class HerokuUserDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -545,14 +538,12 @@ public class HerokuUserDAO {
 				sqlDeleteQuery.setString("sfidFiltro", usuarioHerokuToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteUsuarioHeroku ---" + usuarioHerokuToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteUsuarioHeroku: ---" + usuarioHerokuToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 

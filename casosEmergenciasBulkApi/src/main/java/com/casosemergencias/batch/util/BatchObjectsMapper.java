@@ -88,6 +88,7 @@ public class BatchObjectsMapper {
 		accountMap.put("CompanyID__c", "IdEmpresa");
 		accountMap.put("Type", "Tipo");
 		accountMap.put("ParentId", "Parentid");
+		accountMap.put("RecordTypeId", "RecordTypeId");
 		/* ---- NO EXISTEN EN SALESFORCE ---- */
 		//accountMap.put("parent__identityNumber__c", "ParentRutEmpresa");
 		//accountMap.put("masterrecord__identitynumber__c", "AccountRun");

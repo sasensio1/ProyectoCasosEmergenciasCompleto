@@ -8,7 +8,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,7 +134,6 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -149,13 +147,11 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 				taskToInsert = (TaskVO) object;
 				historicoInsertRecord.setSfidRecord(taskToInsert.getSfid());
 				session.save(taskToInsert);
-				tx.commit();
 
 				logger.debug("--- Fin -- insertTaskListSf ---" + taskToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertTaskListSf: ---" + taskToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -188,7 +184,6 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 				
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -219,31 +214,29 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 													   + "  WHERE sfid = :sfidFiltro");
 							
 				//1.2-Seteamos los campos
-				sqlUpdateQuery.setParameter("tasktype__c", taskToUpdate.getTaskType());
+				sqlUpdateQuery.setString("tasktype__c", taskToUpdate.getTaskType());
 				sqlUpdateQuery.setTimestamp("activitydate", taskToUpdate.getActivityDate());
-				sqlUpdateQuery.setParameter("calldisposition", taskToUpdate.getCallDisposition());
-				sqlUpdateQuery.setParameter("casephone__c", taskToUpdate.getCasePhone());
-				sqlUpdateQuery.setParameter("status", taskToUpdate.getStatus());
-				sqlUpdateQuery.setParameter("description", taskToUpdate.getDescription());
+				sqlUpdateQuery.setString("calldisposition", taskToUpdate.getCallDisposition());
+				sqlUpdateQuery.setString("casephone__c", taskToUpdate.getCasePhone());
+				sqlUpdateQuery.setString("status", taskToUpdate.getStatus());
+				sqlUpdateQuery.setString("description", taskToUpdate.getDescription());
 				sqlUpdateQuery.setTimestamp("createddate", taskToUpdate.getCreatedDate());
-				sqlUpdateQuery.setParameter("subject", taskToUpdate.getSubject());
-				sqlUpdateQuery.setParameter("priority", taskToUpdate.getPriority());
-				sqlUpdateQuery.setParameter("whoid", taskToUpdate.getWhoId());
-				sqlUpdateQuery.setParameter("accountid", taskToUpdate.getAccountId());
-				sqlUpdateQuery.setParameter("ownerid", taskToUpdate.getOwnerId());
-				sqlUpdateQuery.setParameter("tasksubtype", taskToUpdate.getTaskSubtype());
-				sqlUpdateQuery.setParameter("sfidFiltro", taskToUpdate.getSfid());
+				sqlUpdateQuery.setString("subject", taskToUpdate.getSubject());
+				sqlUpdateQuery.setString("priority", taskToUpdate.getPriority());
+				sqlUpdateQuery.setString("whoid", taskToUpdate.getWhoId());
+				sqlUpdateQuery.setString("accountid", taskToUpdate.getAccountId());
+				sqlUpdateQuery.setString("ownerid", taskToUpdate.getOwnerId());
+				sqlUpdateQuery.setString("tasksubtype", taskToUpdate.getTaskSubtype());
+				sqlUpdateQuery.setString("sfidFiltro", taskToUpdate.getSfid());
 				
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();	
 				logger.debug("--- Fin -- updateTaskListSf ---" + taskToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateTaskListSf: ---" + taskToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -275,7 +268,6 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -293,14 +285,12 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 				sqlDeleteQuery.setString("sfidFiltro", taskToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteTaskListSf ---" + taskToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteTaskListSf: ---" + taskToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 

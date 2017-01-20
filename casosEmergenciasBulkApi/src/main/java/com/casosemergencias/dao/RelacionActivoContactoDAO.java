@@ -165,7 +165,6 @@ public class RelacionActivoContactoDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -179,13 +178,11 @@ public class RelacionActivoContactoDAO {
 				relacionActivoContactoToInsert = (RelacionActivoContactoVO) object;
 				historicoInsertRecord.setSfidRecord(relacionActivoContactoToInsert.getSfid());
 				session.save(relacionActivoContactoToInsert);
-				tx.commit();
 				
 				logger.debug("--- Fin -- insertRelacionActivoContacto ---" + relacionActivoContactoToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertRelacionActivoContacto: ---" + relacionActivoContactoToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -218,7 +215,6 @@ public class RelacionActivoContactoDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 				
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -242,24 +238,22 @@ public class RelacionActivoContactoDAO {
 														+ "  WHERE sfid = :sfidFiltro");
 				
 				//1.2-Seteamos los campos			
-				sqlUpdateQuery.setParameter("name", relacionActivoContactoToUpdate.getName());
+				sqlUpdateQuery.setString("name", relacionActivoContactoToUpdate.getName());
 				sqlUpdateQuery.setTimestamp("createddate", relacionActivoContactoToUpdate.getCreatedDate());
-				sqlUpdateQuery.setParameter("contact__c", relacionActivoContactoToUpdate.getContactoId());
+				sqlUpdateQuery.setString("contact__c", relacionActivoContactoToUpdate.getContactoId());
 				sqlUpdateQuery.setBoolean("principal__c", relacionActivoContactoToUpdate.getPrincipal());
-				sqlUpdateQuery.setParameter("asset__c", relacionActivoContactoToUpdate.getActivoId());
-				sqlUpdateQuery.setParameter("typeofrelationship__c", relacionActivoContactoToUpdate.getTipoRelacionActivoClave());
-				sqlUpdateQuery.setParameter("sfidFiltro", relacionActivoContactoToUpdate.getSfid());
+				sqlUpdateQuery.setString("asset__c", relacionActivoContactoToUpdate.getActivoId());
+				sqlUpdateQuery.setString("typeofrelationship__c", relacionActivoContactoToUpdate.getTipoRelacionActivoClave());
+				sqlUpdateQuery.setString("sfidFiltro", relacionActivoContactoToUpdate.getSfid());
 
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();		
 				logger.debug("--- Fin -- updateRelacionActivoContacto ---" + relacionActivoContactoToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateRelacionActivoContacto: ---" + relacionActivoContactoToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -291,7 +285,6 @@ public class RelacionActivoContactoDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -309,7 +302,6 @@ public class RelacionActivoContactoDAO {
 				sqlDeleteQuery.setString("sfidFiltro", relacionActivoContactoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteRelacionActivoContacto ---" + relacionActivoContactoToDelete.getSfid());
 				processOk = true;

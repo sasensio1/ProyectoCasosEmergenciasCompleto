@@ -12,14 +12,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import com.casosemergencias.model.UserSessionInfo;
 
@@ -35,14 +28,13 @@ public class Utils {
 	 */
 	public static Date parseStringToDate (String dateValue) {
 		Date javaDate = null;
-		DateFormat gmtFormat = null;
+		DateFormat dateFormat = null;
 	    if (!isNullOrEmptyString(dateValue)) {
 			String[] dateFormats = {"yyyy-MM-dd\'T\'HH:mm:ss.SSSZ","yyyy-MM-dd\'T\'HH:mm:ss","yyyy-MM-dd"};
 			for (String format : dateFormats) {
 				try {
-					gmtFormat = new SimpleDateFormat(format);
-					gmtFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-					javaDate = gmtFormat.parse(dateValue);
+					dateFormat = new SimpleDateFormat(format);
+					javaDate = dateFormat.parse(dateValue);
 					break;
 				} catch (ParseException e) {}
 			}
@@ -60,6 +52,7 @@ public class Utils {
 	public static String parseDateToString (Date javaDate) {
 		String dateValue = null;
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss\'Z\'");
+		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 		dateValue = dateFormat.format(javaDate);
 		return dateValue;
 	}
@@ -139,29 +132,6 @@ public class Utils {
 			} catch (NumberFormatException e) {}
 		}
 		return javaDouble;
-	}
-	
-	/**
-	 * Converts a xml document in InputStream format to DOM document format.
-	 * 
-	 * @param stream
-	 *            XML document to convert.
-	 * @return Document XML document converted.
-	 * @throws ParserConfigurationException
-	 *             It there is any error parsing the XML document.
-	 * @throws SAXException
-	 *             It there is any error parsing the XML document.
-	 * @throws IOException
-	 *             It there is any error parsing the XML document.
-	 */
-	public static Document convertInputStreamToXmlDocument(InputStream stream) throws ParserConfigurationException, SAXException, IOException {
-		DocumentBuilderFactory factory = null;
-		DocumentBuilder builder = null;
-		Document document = null;
-		factory = DocumentBuilderFactory.newInstance();
-		builder = factory.newDocumentBuilder();
-		document = builder.parse(new InputSource(stream));
-		return document;
 	}
 	
 	/**

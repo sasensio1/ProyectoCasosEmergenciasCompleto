@@ -144,14 +144,22 @@
  	<bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
 	<!-- Nombre de los Service de la aplicacion -->
-	<bean id="userService" class="com.casosemergencias.logic.HerokuUserServiceImpl"/>
-	<bean id="contactService" class="com.casosemergencias.logic.ContactServiceImpl"/>
-	<bean id="casoService" class="com.casosemergencias.logic.CaseServiceImpl"/>
-	<bean id="direccionService" class="com.casosemergencias.logic.DireccionServiceImpl"/>
-	<bean id="suministroService" class="com.casosemergencias.logic.SuministroServiceImpl"/>
 	<bean id="accountService" class="com.casosemergencias.logic.AccountServiceImpl"/>
-	<bean id="pickListsService" class="com.casosemergencias.logic.PickListsServiceImpl"/>
+	<bean id="assetService" class="com.casosemergencias.logic.AssetServiceImpl"/>
+	<bean id="direccionService" class="com.casosemergencias.logic.DireccionServiceImpl"/>
 	<bean id="caseCommentService" class="com.casosemergencias.logic.CaseCommentServiceImpl"/>
+	<bean id="caseHistoryService" class="com.casosemergencias.logic.CaseHistoryServiceImpl"/>
+	<bean id="contactService" class="com.casosemergencias.logic.ContactServiceImpl"/>
+	<bean id="groupService" class="com.casosemergencias.logic.GroupServiceImpl"/>
+	<bean id="herokuUserService" class="com.casosemergencias.logic.HerokuUserServiceImpl"/>
+	<bean id="suministroService" class="com.casosemergencias.logic.SuministroServiceImpl"/>
+	<bean id="casoService" class="com.casosemergencias.logic.CaseServiceImpl"/>
+	<bean id="pickListsService" class="com.casosemergencias.logic.PickListsServiceImpl"/>
+	<bean id="casosRetiradosService" class="com.casosemergencias.logic.CasosRetiradosServiceImpl"/>
+	<bean id="relacionActivoContactoService" class="com.casosemergencias.logic.RelacionActivoContactoServiceImpl"/>
+	<bean id="streetService" class="com.casosemergencias.logic.StreetServiceImpl"/>
+	<bean id="taskService" class="com.casosemergencias.logic.TaskServiceImpl"/>
+	<bean id="userService" class="com.casosemergencias.logic.UserServiceImpl"/>
 	<bean id="userSessionInfoService" class="com.casosemergencias.logic.UserSessionInfoServiceImpl"/>
 	<bean id="batchService" class="com.casosemergencias.logic.BatchServiceImpl"/>
 	

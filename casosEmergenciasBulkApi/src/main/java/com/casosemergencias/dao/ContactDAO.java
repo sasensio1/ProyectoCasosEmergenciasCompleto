@@ -667,7 +667,6 @@ public class ContactDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -681,13 +680,11 @@ public class ContactDAO {
 				contactoToInsert = (ContactVO) object;
 				historicoInsertRecord.setSfidRecord(contactoToInsert.getSfid());
 				session.save(contactoToInsert);
-				tx.commit();
 			
 				logger.debug("--- Fin -- insertContacto ---" + contactoToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertContacto: ---" + contactoToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -720,7 +717,6 @@ public class ContactDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 				
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -758,8 +754,9 @@ public class ContactDAO {
 													   + "		, sf4twitter__influencer__c = :sf4twitter__influencer__c"
 													   + "		, sf4twitter__twitter_bio__c = :sf4twitter__twitter_bio__c"
 													   + "		, sf4twitter__influencer_type__c = :sf4twitter__influencer_type__c"
-													   + "		, sf4twitter__twitter_follower_count__c = :sf4twitter__twitter_follower_count__c"
-													   + "		, accountid = :accountid, firstname = :firstname"
+													   + (contactoToUpdate.getSeguidoresTwitter() != null ? "		, sf4twitter__twitter_follower_count__c = :sf4twitter__twitter_follower_count__c" : "")
+													   + "		, accountid = :accountid"
+													   + "		, firstname = :firstname"
 													   + "		, contactaddress__c = :contactaddress__c"
 													   + "  WHERE sfid = :sfidFiltro");
 				
@@ -786,7 +783,9 @@ public class ContactDAO {
 				sqlUpdateQuery.setString("sf4twitter__influencer__c", contactoToUpdate.getInfluencer());
 				sqlUpdateQuery.setString("sf4twitter__twitter_bio__c", contactoToUpdate.getTwitterBio());
 				sqlUpdateQuery.setString("sf4twitter__influencer_type__c", contactoToUpdate.getInfluencerType());
-				sqlUpdateQuery.setDouble("sf4twitter__twitter_follower_count__c", contactoToUpdate.getSeguidoresTwitter());
+				if (contactoToUpdate.getSeguidoresTwitter() != null) {
+					sqlUpdateQuery.setDouble("sf4twitter__twitter_follower_count__c", contactoToUpdate.getSeguidoresTwitter());
+				}
 				sqlUpdateQuery.setString("accountid", contactoToUpdate.getAccountid());
 				sqlUpdateQuery.setString("firstname", contactoToUpdate.getFirstname());
 				sqlUpdateQuery.setString("contactaddress__c", contactoToUpdate.getIdDirContacto());
@@ -794,14 +793,12 @@ public class ContactDAO {
 				
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();
 				logger.debug("--- Fin -- updateContacto ---" + contactoToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateContacto: ---" + contactoToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -833,7 +830,6 @@ public class ContactDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {historicoDeleteRecord = new HistoricBatchVO();
 			historicoDeleteRecord.setStartDate(new Date());
@@ -850,14 +846,12 @@ public class ContactDAO {
 				sqlDeleteQuery.setString("sfidFiltro", contactoToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteContacto ---" + contactoToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteContacto: ---" + contactoToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 

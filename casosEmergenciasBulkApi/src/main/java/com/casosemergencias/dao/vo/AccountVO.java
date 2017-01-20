@@ -102,7 +102,9 @@ public class AccountVO extends ObjectVO implements Serializable {
 	@Column(name = "type")
 	private String tipo;
 	
-
+	@Column(name = "recordtypeid")
+	private String recordTypeId;
+	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "parentid", referencedColumnName = "sfid", insertable = false, updatable = false)
 	private AccountVO parent;
@@ -512,6 +514,14 @@ public class AccountVO extends ObjectVO implements Serializable {
 				+ ", telefonoSecundario=" + telefonoSecundario + ", emailPrincipal=" + emailPrincipal
 				+ ", emailSecundario=" + emailSecundario + ", direccion=" + direccion + ", accountsource="
 				+ accountsource + ", idEmpresa=" + idEmpresa + ", tipo=" + tipo + ", parentid=" + parentid + "]";
+	}
+
+	public String getRecordTypeId() {
+		return recordTypeId;
+	}
+
+	public void setRecordTypeId(String recordTypeId) {
+		this.recordTypeId = recordTypeId;
 	}
 
 		

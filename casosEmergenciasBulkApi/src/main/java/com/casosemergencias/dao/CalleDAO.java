@@ -106,7 +106,6 @@ public class CalleDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -120,13 +119,11 @@ public class CalleDAO {
 				calleToInsert = (StreetVO) object;
 				historicoInsertRecord.setSfidRecord(calleToInsert.getSfid());
 				session.save(calleToInsert);
-				tx.commit();
 				
 				logger.debug("--- Fin -- insertCalle ---" + calleToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertCalle: ---" + calleToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -159,7 +156,6 @@ public class CalleDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -215,14 +211,12 @@ public class CalleDAO {
 
 				//1.5-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();		
 				logger.debug("--- Fin -- updateCalle ---" + calleToUpdate.getSfid());
 				
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateCalle: ---" + calleToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -254,7 +248,6 @@ public class CalleDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -272,14 +265,12 @@ public class CalleDAO {
 				sqlDeleteQuery.setString("sfidFiltro", calleToDelete.getSfid());				
 				//Ejecutamos la actualizacion				
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 							
 				logger.debug("--- Fin -- deleteCalle ---" + calleToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteCalle: ---" + calleToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 

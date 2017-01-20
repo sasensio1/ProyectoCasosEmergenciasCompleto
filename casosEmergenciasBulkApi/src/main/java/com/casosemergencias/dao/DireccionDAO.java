@@ -551,7 +551,6 @@ public class DireccionDAO {
 
 		// Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 
 		for (Object object : objectList) {
 			historicoInsertRecord = new HistoricBatchVO();
@@ -565,13 +564,11 @@ public class DireccionDAO {
 				direccionToInsert = (DireccionVO) object;
 				historicoInsertRecord.setSfidRecord(direccionToInsert.getSfid());
 				session.save(direccionToInsert);
-				tx.commit();
 
 				logger.debug("--- Fin -- insertDireccion ---" + direccionToInsert.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
-				tx.rollback();
 				logger.error("--- Error en insertDireccion: ---" + direccionToInsert.getSfid(), e);
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_INSERT_RECORD;
@@ -605,7 +602,6 @@ public class DireccionDAO {
 
 		// Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 
 		for (Object object : objectList) {
 			historicoUpdateRecord = new HistoricBatchVO();
@@ -634,27 +630,25 @@ public class DireccionDAO {
 
 				//1.2-Seteamos los campos
 				sqlUpdateQuery.setTimestamp("createddate", direccionToUpdate.getCreateddate());
-				sqlUpdateQuery.setParameter("region__c", direccionToUpdate.getRegion());
-				sqlUpdateQuery.setParameter("municipality__c", direccionToUpdate.getComuna());
-				sqlUpdateQuery.setParameter("street_type__c", direccionToUpdate.getTipoCalle());
-				sqlUpdateQuery.setParameter("streetmd__c", direccionToUpdate.getCalle());
-				sqlUpdateQuery.setParameter("number__c", direccionToUpdate.getNumero());
-				sqlUpdateQuery.setParameter("department__c", direccionToUpdate.getDepartamento());
-				sqlUpdateQuery.setParameter("name", direccionToUpdate.getName());
-				sqlUpdateQuery.setParameter("concatenatedaddress__c", direccionToUpdate.getDireccionConcatenada());
-				sqlUpdateQuery.setParameter("corner__c", direccionToUpdate.getEsquina());
-				sqlUpdateQuery.setParameter("sfidFiltro", direccionToUpdate.getSfid());
+				sqlUpdateQuery.setString("region__c", direccionToUpdate.getRegion());
+				sqlUpdateQuery.setString("municipality__c", direccionToUpdate.getComuna());
+				sqlUpdateQuery.setString("street_type__c", direccionToUpdate.getTipoCalle());
+				sqlUpdateQuery.setString("streetmd__c", direccionToUpdate.getCalle());
+				sqlUpdateQuery.setString("number__c", direccionToUpdate.getNumero());
+				sqlUpdateQuery.setString("department__c", direccionToUpdate.getDepartamento());
+				sqlUpdateQuery.setString("name", direccionToUpdate.getName());
+				sqlUpdateQuery.setString("concatenatedaddress__c", direccionToUpdate.getDireccionConcatenada());
+				sqlUpdateQuery.setString("corner__c", direccionToUpdate.getEsquina());
+				sqlUpdateQuery.setString("sfidFiltro", direccionToUpdate.getSfid());
 
 				// 1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();
-				tx.commit();
 				logger.debug("--- Fin -- updateDireccion ---" + direccionToUpdate.getSfid());
 
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en updateDireccion: ---" + direccionToUpdate.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_UPDATE_RECORD;
 			} 
@@ -686,7 +680,6 @@ public class DireccionDAO {
 		
 		//Se crea la sesión y se inica la transaccion
 		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
 		
 		for (Object object : objectList) {
 			historicoDeleteRecord = new HistoricBatchVO();
@@ -704,14 +697,12 @@ public class DireccionDAO {
 				sqlDeleteQuery.setParameter("sfidFiltro", direccionToDelete.getSfid());
 				// Ejecutamos la actualizacion
 				sqlDeleteQuery.executeUpdate();
-				tx.commit();
 				
 				logger.debug("--- Fin -- deleteDireccion ---" + direccionToDelete.getSfid());
 				processOk = true;
 				processedRecords++;
 			} catch (HibernateException e) {
 				logger.error("--- Error en deleteDireccion: ---" + direccionToDelete.getSfid(), e);
-				tx.rollback();
 				processOk = false;
 				processErrorCause = ConstantesBatch.ERROR_DELETE_RECORD;
 			} 

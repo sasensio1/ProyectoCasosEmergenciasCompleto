@@ -109,7 +109,6 @@ public class SalesforceRestApiInvokerBatch {
 		BulkApiInfoContainerBatch containerList = null;
 		boolean processOk = false;
 		String processErrorCause = "";
-
 		HistoricBatchVO mainHistoricProcessInfo = new HistoricBatchVO();
 		try {
 			StringBuilder historicMainProcessId = Utils.generateDateId();
@@ -389,8 +388,4 @@ public class SalesforceRestApiInvokerBatch {
 	public void setResultProccess(boolean resultProccess) {
 		this.resultProccess = resultProccess;
 	}
-	
-	
-	
-	
 }
