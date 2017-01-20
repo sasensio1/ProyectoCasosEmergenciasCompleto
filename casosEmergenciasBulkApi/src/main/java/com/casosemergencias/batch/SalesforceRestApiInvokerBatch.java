@@ -60,9 +60,10 @@ public class SalesforceRestApiInvokerBatch {
 	private Date processEndDate;
 	private String objectName;
 	private boolean manualProcess = false;
-
+	
 	//Booleano que pasamos al controlador para mostrar mensaje en caso de carga manual	
 	private boolean resultProccess = false;
+
 	
 	public void updateObjectsWithRestApiInfo()  {
 		int dateSearchingRange = 0;

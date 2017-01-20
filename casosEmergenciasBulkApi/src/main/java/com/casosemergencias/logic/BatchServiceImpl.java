@@ -101,6 +101,7 @@ public class BatchServiceImpl implements BatchService {
 		boolean updateOk = true;
 		boolean deleteOk = true;
 		String processErrorCause = null;
+
 		
 		HistoricBatchVO historicoProcess = new HistoricBatchVO();
 		historicoProcess.setStartDate(new Date());
