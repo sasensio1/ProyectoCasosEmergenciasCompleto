@@ -64,6 +64,8 @@ public class Caso extends ObjectLogic {
 	private String recordtypeId;
 	private Caso casoPrincipalJoin;
 	private Group groupJoin;
+	private Boolean cancelar;
+
 	/*Joins caso*/
 	private String labelSubmotivoPickList;
 	private String labelEstadoPickList;
@@ -466,5 +468,13 @@ public class Caso extends ObjectLogic {
 	public void setRecordtypeId(String recordtypeId) {
 		this.recordtypeId = recordtypeId;
 	}
+	public Boolean getCancelar() {
+		return cancelar;
+	}
+	public void setCancelar(Boolean cancelar) {
+		this.cancelar = cancelar;
+	}
+	
+	
 		
 }

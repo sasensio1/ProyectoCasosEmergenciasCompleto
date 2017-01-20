@@ -2,6 +2,7 @@ package com.casosemergencias.logic;
 
 import java.util.List;
 
+import com.casosemergencias.dao.vo.CaseVO;
 import com.casosemergencias.exception.EmergenciasException;
 import com.casosemergencias.model.CaseComment;
 import com.casosemergencias.model.CaseHistory;
@@ -22,9 +23,12 @@ public interface CaseService {
 	
 	public Integer updateCase(Caso caso);
 	
-	public CaseComment cancelarCaso(Caso caso, String userName);
-	
+	public List<Object>  cancelarCaso(Caso caso,String userName);
+
 	public List<CaseHistory> obtenerListaHistorialDeUnCaso(String caseSfid, Integer numEntradas);
 	
 	public Integer getNumHistorialDeUnCaso(String sfidCase);
+	
+	public Integer updateCancelCase(CaseVO casoVO);
+
 }

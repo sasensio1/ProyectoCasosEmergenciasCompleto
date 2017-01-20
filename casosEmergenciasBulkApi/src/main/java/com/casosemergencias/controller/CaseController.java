@@ -36,6 +36,7 @@ import com.casosemergencias.controller.views.CaseView;
 import com.casosemergencias.controller.views.ContactView;
 import com.casosemergencias.controller.views.DireccionView;
 import com.casosemergencias.controller.views.SuministroView;
+import com.casosemergencias.dao.vo.CaseVO;
 import com.casosemergencias.exception.EmergenciasException;
 import com.casosemergencias.logic.AccountService;
 import com.casosemergencias.logic.CaseCommentService;
@@ -462,34 +463,32 @@ public class CaseController {
 		ModelAndView model = new ModelAndView();
 		Caso caso = new Caso();
 		CaseComment comentarioCasoInsertado = new CaseComment();
-
+		CaseComment comentarioCasoToInsert = new CaseComment();
+		CaseVO casoToUpdate = new CaseVO();
 
 		ParserModelVO.parseDataModelVO(casoRequest, caso);
-		CaseComment commentCasoCancelado = casoService.cancelarCaso(caso,  user.getName());
+		List<Object> comentarioAndCaso = casoService.cancelarCaso(caso,  user.getName());
 
-		
-		try {
-			comentarioCasoInsertado = caseCommentService.insertSalesforceCaseComment(commentCasoCancelado);			
+		try {			
+			if(comentarioAndCaso!=null&& !comentarioAndCaso.isEmpty() &&comentarioAndCaso.size()==2){
+				casoToUpdate =(CaseVO)comentarioAndCaso.get(0);
+				comentarioCasoToInsert=(CaseComment)comentarioAndCaso.get(1);		
+			}
+			
+			comentarioCasoInsertado = caseCommentService.insertSalesforceCaseComment(comentarioCasoToInsert);			
 			if (comentarioCasoInsertado != null) {
 				logger.info("Comentario guardado correctamente con sfid:" + comentarioCasoInsertado.getSfid());
+				casoService.updateCancelCase(casoToUpdate);
 				model.setViewName("redirect:entidadCaso?sfid=" + caso.getSfid()+"&editMode="+Constantes.CANCEL_CASE_OK);			
 			}
 			else{				
 				logger.info("Se ha producido un error guardando el comentario");
-				model.addObject("mostrarMensaje", true);
-				model.addObject("hayError", true);
-				model.addObject("codigoError", ConstantesError.EMERG_ERROR_CODE_004);
-				model.addObject("mensajeResultado", ConstantesError.HEROKU_CASE_COMMENT_CREATION_GENERIC_ERROR);
-				model.setViewName("private/entidadCaso?editMode=VIEW&sfid="+caso.getSfid());				
+				model.setViewName("redirect:entidadCaso?sfid=" + caso.getSfid()+"&editMode="+Constantes.CANCEL_CASE_ERROR);			
 			}
 		}			
 		catch(EmergenciasException exception) {
 			logger.info("No se ha guardado correctamente el comentario");
-			model.addObject("mostrarMensaje", true);
-			model.addObject("hayError", true);
-			model.addObject("codigoError", exception.getCode());
-			model.addObject("mensajeResultado", exception.getMessage());
-			model.setViewName("private/entidadCaso?editMode=VIEW&sfid="+caso.getSfid());
+			model.setViewName("redirect:entidadCaso?sfid=" + caso.getSfid()+"&editMode="+Constantes.CANCEL_CASE_ERROR);			
 		}
 		
 		logger.info("--- Fin -- guardarComentarioCaso ---");

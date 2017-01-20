@@ -133,7 +133,7 @@ function checkUpdates() {
 	  $('#divCaseCreatedError').show();
 	} else if ($('#editMode').val() == 'CANCEL_OK') {
 		$('#divCaseCancel').show();
-	} else if ($('#editMode').val() == 'CACEL_ERROR') {
+	} else if ($('#editMode').val() == 'CANCEL_ERROR') {
 	  $('#divCaseCancelError').show();
 	}
 }
@@ -154,7 +154,7 @@ function checkUpdates() {
 	  $('#divCaseCreatedError').show();
 	} else if ($('#editMode').val() == 'CANCEL_OK') {
 		$('#divCaseCancel').show();
-	} else if ($('#editMode').val() == 'CACEL_ERROR') {
+	} else if ($('#editMode').val() == 'CANCEL_ERROR') {
 	  $('#divCaseCancelError').show();
 	}
 }
