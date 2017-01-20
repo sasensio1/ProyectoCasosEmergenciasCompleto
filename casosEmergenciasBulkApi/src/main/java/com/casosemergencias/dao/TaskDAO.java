@@ -210,7 +210,7 @@ final static Logger logger = Logger.getLogger(TaskDAO.class);
 													   + "		, whoid = :whoid"
 													   + "		, accountid = :accountid"
 													   + "		, ownerid = :ownerid"
-													   + "		, tasksubtype = :tasksubtype,"					
+													   + "		, tasksubtype = :tasksubtype"					
 													   + "  WHERE sfid = :sfidFiltro");
 							
 				//1.2-Seteamos los campos
