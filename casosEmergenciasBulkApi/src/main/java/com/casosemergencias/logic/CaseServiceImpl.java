@@ -188,6 +188,13 @@ public class CaseServiceImpl implements CaseService{
 		casoVO = caseDao.readCaseBySfid(caso.getSfid());
 		
 		casoVO.setDescription(caso.getDescription());
+	
+		Integer id = caseDao.updateCase(casoVO);
+		return id;
+	}
+		
+	@Override
+	public Integer updateCancelCase(CaseVO casoVO) {
 		Integer id = caseDao.updateCase(casoVO);
 		return id;
 	}
@@ -206,7 +213,7 @@ public class CaseServiceImpl implements CaseService{
 	 * 
 	 * @return
 	 */
-	public CaseComment cancelarCaso(Caso caso, String userName) {
+	public List<Object> cancelarCaso(Caso caso, String userName) {
 		
 		String subestadoCancelacion = caso.getSubestado();
 		boolean esAlta;
@@ -253,20 +260,19 @@ public class CaseServiceImpl implements CaseService{
 		}
 
 		casoVO.setSubEstado(subestadoCancelacion);
-		casoVO.setCancelar(true);
-				
-		casoVO.setDescription(caso.getDescription());
-		caseDao.updateCase(casoVO);
-		
+		casoVO.setCancelar(true);				
+			
+		CaseComment comentarioCaso =new CaseComment();
 		comentarioVO.setCaseid(caso.getSfid());	
 		comentarioVO.setIspublished(false);
 		comentarioVO.setComment(comentarioBody);
-		
-		CaseComment comentarioCaso =new CaseComment();
 		ParserModelVO.parseDataModelVO(comentarioVO, comentarioCaso);
+		
+		List<Object> comentarioAndCaso=new ArrayList<Object>();
+		comentarioAndCaso.add(casoVO);
+		comentarioAndCaso.add(comentarioCaso);
 
-
-		return comentarioCaso;
+		return comentarioAndCaso;
 	}
 	
 	@Override

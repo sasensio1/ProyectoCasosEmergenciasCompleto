@@ -26,7 +26,7 @@ public class Constantes {
 	
 	//Cancelar caso
 	public static final String CANCEL_CASE_OK = "CANCEL_OK";
-	public static final String CANCEL_CASE_ERROR = "CACEL_ERROR";
+	public static final String CANCEL_CASE_ERROR = "CANCEL_ERROR";
 
 	//Caso
 	public static final String PICKLIST_CASO_DEFAULT = "Default";
