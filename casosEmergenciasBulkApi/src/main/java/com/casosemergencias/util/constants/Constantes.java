@@ -100,14 +100,14 @@ public class Constantes {
 	public static final String FINAL_DETAIL_PAGE_CONTACTO = "CONTACTO";
 	public static final String FINAL_DETAIL_PAGE_SUMINISTRO = "SUMINISTRO";
 	
-	//
 	//HerokuUser, GMT constantes. (estas constantes las podemos ver 'TimeZone.getTimeZone("America/New_York");')
-	public static final String ID_1CHILE = "America/Puerto_Rico"; //"Chile/Continental";
-	public static final String ID_2PERU = "Brazil/East";
-	public static final String ID_3COLOMBIA = "America/Bogota";
-	public static final String ID_4BRASIL = "America/Lima"; 
-
-
-
+	public static final String ID_1CHILE = "CHILE";
+	public static final String ID_2PERU = "PERU";
+	public static final String ID_3COLOMBIA = "COLOMBIA";
+	public static final String ID_4BRASIL = "BRASIL";
 	
+	public static final String ZONE_1CHILE = "America/Santiago"; //"Chile/Continental";
+	public static final String ZONE_2PERU = "America/Lima";
+	public static final String ZONE_3COLOMBIA = "America/Bogota";
+	public static final String ZONE_4BRASIL = "Brazil/East";
 }

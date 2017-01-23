@@ -123,25 +123,25 @@ public class LoginController {
 	private long getOffsetGMTHerokuUser(String idCountry){		
 		String cteTimeZone = "";	
 		
-		if("1".equals(idCountry)){
-			cteTimeZone = Constantes.ID_1CHILE;
-		}else if("2".equals(idCountry)){
-			cteTimeZone = Constantes.ID_2PERU;
-		}else if("3".equals(idCountry)){
-			cteTimeZone = Constantes.ID_3COLOMBIA;
-		}else if("4".equals(idCountry)){
-			cteTimeZone = Constantes.ID_4BRASIL;
+		if (Constantes.ID_1CHILE.equals(idCountry)) {
+			cteTimeZone = Constantes.ZONE_1CHILE;
+		} else if (Constantes.ID_2PERU.equals(idCountry)) {
+			cteTimeZone = Constantes.ZONE_2PERU;
+		} else if (Constantes.ID_3COLOMBIA.equals(idCountry)) {
+			cteTimeZone = Constantes.ZONE_3COLOMBIA;
+		} else if (Constantes.ID_4BRASIL.equals(idCountry)) {
+			cteTimeZone = Constantes.ZONE_4BRASIL;
 		}
 		
 		Calendar calen;
-		if("".equals(cteTimeZone)){
+		if ("".equals(cteTimeZone)) {
 			calen = new GregorianCalendar();
-		}else{
+		} else {
 			calen = new GregorianCalendar(TimeZone.getTimeZone(cteTimeZone));
 		}
-		
+
 		long offset = calen.getTimeZone().getRawOffset();
-		
+
 		return offset;
 	}
 }

@@ -115,8 +115,8 @@ public class BatchController {
 	 */
 	@RequestMapping(value = "/private/listarHistoricBatchs", method = RequestMethod.POST)
 	public @ResponseBody String listadoHistoricBatchsHome(@RequestBody String body,HttpServletRequest request){
-		
 		logger.info("--- Inicio -- listadoHistoricBatchsHome ---");
+		HttpSession session = request.getSession(true);
 		
 		// Se limpian los ids de las entidades.
 		cleanSessionEntityIds(request);	
@@ -131,6 +131,20 @@ public class BatchController {
 		
 		for (HistoricBatch historicBatch : listHistoricBatchs) {
 			jsonResult = new JSONObject();
+			long offset = (long) session.getAttribute("difGMTUser");
+			
+			if (historicBatch.getStartDate() != null) {
+				Date historicStartDate = historicBatch.getStartDate();
+				historicStartDate = new Date(historicStartDate.getTime() + offset);
+				historicBatch.setStartDate(historicStartDate);
+			}
+			
+			if (historicBatch.getEndDate() != null) {
+				Date historicEndDate = historicBatch.getEndDate();
+				historicEndDate = new Date(historicEndDate.getTime() + offset);
+				historicBatch.setEndDate(historicEndDate);
+			}
+			
 			jsonResult.put("object", historicBatch.getObject());
 			jsonResult.put("operation", historicBatch.getOperation());
 			jsonResult.put("startDate", historicBatch.getStartDate());

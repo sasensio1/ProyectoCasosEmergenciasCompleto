@@ -340,7 +340,7 @@ public class SalesforceRestApiInvokerBatch {
 		}
  		completeQuery.append(" >= ").append(Utils.parseDateToString(startDate));
 		if (ConstantesBulkApi.ENTITY_CASE_HISTORY.equals(entityName)) {
-			completeQuery.append(" AND ").append(ConstantesBulkApi.OBJECT_LAST_MODIFIED_DATE_WHERE_CLAUSE);
+			completeQuery.append(" AND ").append(ConstantesBulkApi.OBJECT_CREATED_DATE_WHERE_CLAUSE);
 		} else {
 			completeQuery.append(" AND ").append(ConstantesBulkApi.OBJECT_LAST_MODIFIED_DATE_WHERE_CLAUSE);
 		}
