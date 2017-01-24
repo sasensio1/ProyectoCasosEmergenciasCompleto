@@ -219,6 +219,8 @@ public class AssetDAO {
 				sqlUpdateQuery.setString("accountid", activoToUpdate.getAccountid());
 				sqlUpdateQuery.setString("pointofdelivery__c", activoToUpdate.getSuministroid());
 				sqlUpdateQuery.setString("sfidFiltro", activoToUpdate.getSfid());
+				sqlUpdateQuery.setTimestamp("createddate", activoToUpdate.getCreatedDate());
+
 													
 				//1.3-Ejecutamos la actualizacion
 				sqlUpdateQuery.executeUpdate();

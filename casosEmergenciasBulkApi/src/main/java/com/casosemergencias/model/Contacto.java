@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.casosemergencias.controller.views.ContactView;
 import com.casosemergencias.dao.vo.ContactVO;
+import com.casosemergencias.util.Utils;
 
 //Objeto que tiene el modelo de un contacto, se utiliza en el Servicio
 
@@ -46,7 +47,7 @@ public class Contacto extends ObjectLogic {
 	
 	private String influencerType;
 	
-	private Integer seguidoresTwitter;
+	private Double seguidoresTwitter;
 	
 	private Direccion dirContactoJoin;
 	
@@ -351,11 +352,11 @@ public class Contacto extends ObjectLogic {
 		this.influencerType = influencerType;
 	}
 
-	public Integer getSeguidoresTwitter() {
+	public Double getSeguidoresTwitter() {
 		return seguidoresTwitter;
 	}
 
-	public void setSeguidoresTwitter(Integer seguidoresTwitter) {
+	public void setSeguidoresTwitter(Double seguidoresTwitter) {
 		this.seguidoresTwitter = seguidoresTwitter;
 	}
 

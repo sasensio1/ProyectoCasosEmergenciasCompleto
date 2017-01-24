@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.casosemergencias.model.Contacto;
+import com.casosemergencias.util.Utils;
 
 public class ContactView extends ObjectView {
 	
@@ -40,7 +41,7 @@ public class ContactView extends ObjectView {
 	private String influencer;
 	private String twitterBio;
 	private String influencerType;
-	private Integer seguidoresTwitter;
+	private Double seguidoresTwitter;
 	
 	private DireccionView dirContactoJoin;
 
@@ -271,10 +272,10 @@ public class ContactView extends ObjectView {
 	public void setInfluencerType(String influencerType) {
 		this.influencerType = influencerType;
 	}
-	public Integer getSeguidoresTwitter() {
+	public Double getSeguidoresTwitter() {
 		return seguidoresTwitter;
 	}
-	public void setSeguidoresTwitter(Integer seguidoresTwitter) {
+	public void setSeguidoresTwitter(Double seguidoresTwitter) {
 		this.seguidoresTwitter = seguidoresTwitter;
 	}
 	public DireccionView getDirContactoJoin() {

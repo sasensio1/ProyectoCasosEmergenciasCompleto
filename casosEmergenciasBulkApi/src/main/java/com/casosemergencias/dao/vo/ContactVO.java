@@ -114,7 +114,7 @@ public class ContactVO extends ObjectVO implements Serializable {
 	private String influencerType;
 	
 	@Column(name = "sf4twitter__twitter_follower_count__c")
-	private Integer seguidoresTwitter;
+	private Double seguidoresTwitter;
 	
 	@Column(name = "accountid")
 	private String accountid;	
@@ -519,20 +519,20 @@ public class ContactVO extends ObjectVO implements Serializable {
 		this.influencerType = influencerType;
 	}
 
-	public Integer getSeguidoresTwitter() {
+	public Double getSeguidoresTwitter() {
 		return seguidoresTwitter;
 	}
 
-	public void setSeguidoresTwitter(Integer seguidoresTwitter) {
+	public void setSeguidoresTwitter(String seguidoresTwitterString) {
+		Double seguidoresTwitter=Utils.parseStringToDouble(seguidoresTwitterString);
 		this.seguidoresTwitter = seguidoresTwitter;
 	}
-
-	public void setSeguidoresTwitterString(String seguidoresTwitterString) {
-		Integer seguidoresInt = Utils.parseStringToInteger(seguidoresTwitterString);
-		if (seguidoresInt != null) {
-			setSeguidoresTwitter(seguidoresInt);
-		}
-	}
+	
+	/*public void setSeguidoresTwitter(String seguidoresTwitterString) {
+		Double seguidoresInt = Utils.parseStringToDouble(seguidoresTwitterString);
+		this.seguidoresTwitter = seguidoresInt;			
+	}	*/	
+	
 	
 	public DireccionVO getDirContactoJoin() {
 		return dirContactoJoin;

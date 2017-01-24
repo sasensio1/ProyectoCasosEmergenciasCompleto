@@ -131,7 +131,7 @@ public class BatchObjectsMapper {
 		assetMap.put("Name", "Name");
 		assetMap.put("ContactId", "Contactid");
 		assetMap.put("AccountId", "Accountid");
-		assetMap.put("PointofDelivery__c", "Pointofdelivery__c");
+		assetMap.put("PointofDelivery__c", "Suministroid");
 	}
 	
 	private void initAddressMap() {
@@ -253,7 +253,7 @@ public class BatchObjectsMapper {
 		serviceProductMap.put("Contact__c", "ContactoId");
 		serviceProductMap.put("Principal__c", "PrincipalString");
 		serviceProductMap.put("Asset__c", "ActivoId");
-		serviceProductMap.put("TypeofRelationship__c ", "TipoRelacionActivoClave");
+		serviceProductMap.put("TypeofRelationship__c", "TipoRelacionActivoClave");
 	}
 	
 	private void initStreetMap() {
