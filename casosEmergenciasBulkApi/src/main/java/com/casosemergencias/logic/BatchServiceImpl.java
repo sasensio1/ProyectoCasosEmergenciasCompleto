@@ -367,5 +367,9 @@ public class BatchServiceImpl implements BatchService {
 				
 	}
 	
+	public void borraHistoricoAntiguo(Date fechaABorrarAntes){
+		LOGGER.debug("--- borraHistoricoAntiguo ---");
+		historicBatchDao.deleteHistoric(fechaABorrarAntes);
+	}	
 	
 }

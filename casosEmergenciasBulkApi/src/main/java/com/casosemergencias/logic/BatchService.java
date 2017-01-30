@@ -16,4 +16,5 @@ public interface BatchService {
 	public boolean updateHerokuObjectsFromBulkApi(BulkApiInfoContainerBatch bulkApiInfoContainer, String processId);
 	public List<HistoricBatch> readAllHistoricBatch(DataTableProperties propDatatable);
 	public Integer getNumHistoricBatchs(DataTableProperties propDatatable);
+	public void borraHistoricoAntiguo(Date fechaABorrarAntes);
 }
