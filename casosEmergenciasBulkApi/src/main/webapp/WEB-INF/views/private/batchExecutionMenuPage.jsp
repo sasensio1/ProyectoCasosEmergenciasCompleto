@@ -46,7 +46,7 @@
 				</c:otherwise>
 			</c:choose>
 			<div >
-				<a href="<c:out value="http://localhost:8080/casosEmergencias/private/homeHistoricBatch"/>">Historial de registros</a>
+				<a href="<c:out value="homeHistoricBatch" />">Historial de registros</a>
 			</div>
 			<br>
 		</c:if>
