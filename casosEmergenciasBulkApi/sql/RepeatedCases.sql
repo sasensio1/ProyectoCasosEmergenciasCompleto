@@ -1,2 +1,0 @@
-INSERT INTO "repeatedcases__c" ("numberdays__c", "id", "_hc_lastop", "_hc_err", "isdeleted", "numbercases__c", "name", "sfid", "systemmodstamp", "createddate") VALUES (14, 1, NULL, NULL, E'false', 3, E'Contacto', E'a0F5B0000009VpJUAU', E'2016-09-29 11:03:26', E'2016-09-29 11:03:26');
-INSERT INTO "repeatedcases__c" ("numberdays__c", "id", "_hc_lastop", "_hc_err", "isdeleted", "numbercases__c", "name", "sfid", "systemmodstamp", "createddate") VALUES (14, 2, NULL, NULL, E'false', 3, E'Suministro', E'a0F5B0000009VpKUAU', E'2016-10-15 10:30:34', E'2016-09-29 11:03:26');

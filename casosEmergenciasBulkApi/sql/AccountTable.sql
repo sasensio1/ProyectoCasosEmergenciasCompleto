@@ -1,0 +1,46 @@
+CREATE TABLE "account" (
+	"createddate" TIMESTAMP NULL,
+	"_hc_err" TEXT NULL DEFAULT NULL,
+	"address__c" VARCHAR(18) NULL DEFAULT NULL,
+	"parentid" VARCHAR(18) NULL DEFAULT NULL,
+	"companycategory__c" VARCHAR(255) NULL DEFAULT NULL,
+	"identitynumber__c" VARCHAR(255) NULL DEFAULT NULL,
+	"masterrecordid" VARCHAR(18) NULL DEFAULT NULL,
+	"ownerid" VARCHAR(18) NULL DEFAULT NULL,
+	"secondaryemail__c" VARCHAR(80) NULL DEFAULT NULL,
+	"companyid__c" VARCHAR(255) NULL DEFAULT NULL,
+	"createdbyid" VARCHAR(18) NULL DEFAULT NULL,
+	"_hc_lastop" VARCHAR(32) NULL DEFAULT NULL,
+	"sector__c" VARCHAR(255) NULL DEFAULT NULL,
+	"businessname__c" VARCHAR(255) NULL DEFAULT NULL,
+	"identitytype__c" VARCHAR(255) NULL DEFAULT NULL,
+	"birthdate__c" DATE NULL DEFAULT NULL,
+	"name" VARCHAR(255) NULL DEFAULT NULL,
+	"systemmodstamp" TIMESTAMP NULL,
+	"mainphone__c" VARCHAR(40) NULL DEFAULT NULL,
+	"accountcode__c" VARCHAR(255) NULL DEFAULT NULL,
+	"additionalphone__c" VARCHAR(40) NULL DEFAULT NULL,
+	"lastmodifiedbyid" VARCHAR(18) NULL DEFAULT NULL,
+	"executive__c" VARCHAR(255) NULL DEFAULT NULL,
+	"secondaryphone__c" VARCHAR(40) NULL DEFAULT NULL,
+	"description" TEXT NULL DEFAULT NULL,
+	"id" INTEGER NOT NULL DEFAULT E'',
+	"usertypecompany__c" VARCHAR(255) NULL DEFAULT NULL,
+	"primaryemail__c" VARCHAR(80) NULL DEFAULT NULL,
+	"recordtypeid" VARCHAR(18) NOT NULL,
+	"isdeleted" BOOLEAN NULL DEFAULT NULL,
+	"type" VARCHAR(40) NULL DEFAULT NULL,
+	"sfid" VARCHAR(18) NULL DEFAULT NULL,
+	"phone" VARCHAR(40) NULL DEFAULT NULL,
+	"masterrecord__identitynumber__c" VARCHAR(255) NULL DEFAULT NULL,
+	"motherslastname__c" VARCHAR(255) NULL DEFAULT NULL,
+	"fatherslastname__c" VARCHAR(255) NULL DEFAULT NULL,
+	"parent__identitynumber__c" VARCHAR(255) NULL DEFAULT NULL,
+	"accountsource" VARCHAR(40) NULL DEFAULT NULL,
+	UNIQUE INDEX "UNIQUE" ("sfid")
+)
+;
+
+CREATE SEQUENCE account_id_seq MINVALUE 0;
+ALTER TABLE account ALTER id SET DEFAULT nextval('account_id_seq');
+ALTER SEQUENCE account_id_seq OWNED BY account.id;

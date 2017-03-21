@@ -182,6 +182,9 @@
 	<bean id="caseCommentUpdaterJob" class="com.casosemergencias.batch.CaseCommentUpdaterJob"/>
 	<bean id="herokuUserUpdaterJob" class="com.casosemergencias.batch.HerokuUserUpdaterJob"/>
 	
+	<bean id="borradoHistoricoCargasBatch" class="com.casosemergencias.batch.BorradoHistoricoCargasBatch"/>
+	<bean id="borradoHistoricoCargasJob" class="com.casosemergencias.batch.BorradoHistoricoCargasJob"/>
+	
 	<mvc:resources mapping="/resources/**" location="/resources/"/> 
 	
 	<!-- >>>>>>>>>>>>>>>>>> CONFIGURACIÓN DE TAREAS QUARTZ >>>>>>>>>>>>>>>>>> -->
@@ -214,6 +217,12 @@
         <property name="targetObject" ref="herokuUserUpdaterBatch" />
         <property name="targetMethod" value="updateHerokuUserInfo" />
     </bean>
+    
+    <!-- Job de Quartz que borra el historico de cargas -->
+    <bean id="borradoHistoricoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="borradoHistoricoCargasBatch" />
+        <property name="targetMethod" value="borraHistoricoAntiguo" />
+    </bean>
  
     <!-- Trigger de Quartz para el rellenado de la tabla Picklists -->
     <bean id="picklistsTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -244,6 +253,12 @@
         <property name="jobDetail" ref="caseCommentJob" />
         <property name="cronExpression" value="0 0/30 * * * ?" />
     </bean>
+    
+    <!-- Trigger de Quartz para el borrado de historico -->
+    <bean id="borradoHistoricoTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="borradoHistoricoJob" />
+        <property name="cronExpression" value="0 0 * * * ?" />
+    </bean>
   
     <!-- Scheduler de Quartz para rellenar las tablas de picklists y fieldLabels -->
     <bean id="batchProcessesCreatorScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -254,6 +269,7 @@
                 <ref bean="apiInvokerJob" />
                 <ref bean="caseCommentJob" />
                 <ref bean="herokuUserJob" />
+                <ref bean="borradoHistoricoJob" />
             </list>
         </property>
         <property name="triggers">
@@ -263,6 +279,7 @@
                 <ref bean="apiInvokerTrigger" />
                 <ref bean="caseCommentTrigger" />
                 <ref bean="herokuUserTrigger" />
+                <ref bean="borradoHistoricoTrigger" />
             </list>
         </property>
     </bean>

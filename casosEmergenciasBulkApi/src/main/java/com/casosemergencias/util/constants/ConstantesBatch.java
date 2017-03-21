@@ -91,6 +91,9 @@ public class ConstantesBatch {
 	public static final String OBJECT_TASK = "TASK";
 	public static final String OBJECT_USER = "USER";
 		
+	/**Valores para el batch Borrado del historico HistoricBatch*/
+	public static final int NUM_DIAS_ANTES_DE_BORRADO = 30;
+	
 	/**Mensaje de cargas batch Bulk Api*/	
 	public static final String HEROKU_BULK_API_BATCH_CALL_OK = "Proceso Batch ejecutado correctamente";
 	public static final String HEROKU_BULK_REST_API_CALL_ERROR = "Error en la ejecuci&oacuten del proceso Batch";

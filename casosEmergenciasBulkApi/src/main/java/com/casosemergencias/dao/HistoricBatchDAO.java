@@ -1,5 +1,6 @@
 package com.casosemergencias.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -390,5 +391,25 @@ public class HistoricBatchDAO {
 			session.close();
 		}
 		return 0;
+	}
+	
+	@Transactional
+	public void deleteHistoric(Date fechaAntesDe) {
+
+		logger.debug("--- Inicio -- deleteHistoric ---");
+		Session session = sessionFactory.openSession();
+		try{
+			Query sqlDeleteQuery =session.createQuery("DELETE HistoricBatchVO  WHERE endDate <= :fechaAntesDe");
+			//Seteamos el campo por el que filtramos el borrado			
+			sqlDeleteQuery.setParameter("fechaAntesDe", fechaAntesDe);				
+			//Ejecutamos la actualizacion				
+			sqlDeleteQuery.executeUpdate();
+
+			logger.debug("--- Fin -- deleteHistoric ---" + fechaAntesDe);
+		} catch (HibernateException e) {
+			logger.error("--- Error en deleteHistoric: ---" + fechaAntesDe, e);
+		} finally {
+			session.close();
+		}					
 	}
 }
