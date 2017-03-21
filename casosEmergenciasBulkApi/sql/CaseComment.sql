@@ -1,0 +1,1 @@
+ALTER SEQUENCE test_id_seq OWNED BY "cacasecommentsecomment".id
