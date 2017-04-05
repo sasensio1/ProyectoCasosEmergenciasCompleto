@@ -1,6 +1,6 @@
 CREATE TABLE "pointofdelivery__c" (
 	"municipalityallocation__c" VARCHAR(255) NULL DEFAULT NULL,
-	"id" INTEGER NOT NULL DEFAULT E'',
+	"id" INTEGER NOT NULL DEFAULT NULL,
 	"repeatedcases__c" DOUBLE PRECISION NULL DEFAULT NULL,
 	"createdbyid" VARCHAR(18) NULL DEFAULT NULL,
 	"meterproperty__c" VARCHAR(255) NULL DEFAULT NULL,
@@ -56,9 +56,67 @@ CREATE TABLE "pointofdelivery__c" (
 	"pointofdeliveryaddress__c" VARCHAR(1300) NULL DEFAULT NULL,
 	"detailaddress__c" VARCHAR(18) NULL DEFAULT NULL,
 	"distributionaddress__c" VARCHAR(255) NULL DEFAULT NULL,
-	UNIQUE INDEX "UNIQUE" ("sfid")
+	PRIMARY KEY ("sfid")
 )
 ;
+
+COMMENT ON COLUMN "pointofdelivery__c"."municipalityallocation__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."id" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."repeatedcases__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."createdbyid" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."meterproperty__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."transformertype__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."block__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."transformernumber__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."servicetype__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."opencases__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."metermodel__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."paymentprocess__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."connectionstatus__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."ballotname__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."electrodependant__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."sfid" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."readingprocess__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."grouptype__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."createddate" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."pointofdeliverystatus__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."municipality__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."cutoffdate__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."_hc_err" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."feedernumber__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."lastmodifiedbyid" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."condominiumsector__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."metertype__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."dangerzone__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."isdeleted" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."rate__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."housetype__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."disciplinarymeasure__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."pointofdeliverynumber__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."systemmodstamp" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."dvnumberpointofdelivery__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."segmenttype__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."fullelectric__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."customerrating__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."readingtype__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."meternumber__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."rationingschedule__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."name" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."electricalsubstationconnection__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."ownerid" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."meterbrand__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."cuttingdebt__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."connectiontype__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."navigationcontactid__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."transformername__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."vip__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."networkconnectionpoint__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."route__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."_hc_lastop" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."companyid__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."pointofdeliveryaddress__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."detailaddress__c" IS E'';
+COMMENT ON COLUMN "pointofdelivery__c"."distributionaddress__c" IS E'';
 
 CREATE SEQUENCE pointofdelivery__c_id_seq MINVALUE 0;
 ALTER TABLE pointofdelivery__c ALTER id SET DEFAULT nextval('pointofdelivery__c_id_seq');

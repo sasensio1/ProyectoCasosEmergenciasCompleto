@@ -5,7 +5,7 @@ CREATE TABLE "street__c" (
 	"currencyisocode" VARCHAR(3) NULL DEFAULT NULL,
 	"systemmodstamp" TIMESTAMP NULL,
 	"region__c" VARCHAR(255) NULL DEFAULT NULL,
-	"id" INTEGER NOT NULL DEFAULT E'',
+	"id" INTEGER NOT NULL DEFAULT NULL,
 	"createddate" TIMESTAMP NULL,
 	"sfid" VARCHAR(18) NULL DEFAULT NULL,
 	"name" VARCHAR(80) NULL DEFAULT NULL,
@@ -22,9 +22,34 @@ CREATE TABLE "street__c" (
 	"country__c" VARCHAR(255) NULL DEFAULT NULL,
 	"company__c" VARCHAR(255) NULL DEFAULT NULL,
 	"street_type__c" VARCHAR(255) NULL DEFAULT NULL,
-	UNIQUE INDEX "UNIQUE" ("sfid")
+	PRIMARY KEY ("sfid")
 )
 ;
+
+COMMENT ON COLUMN "street__c"."recordtypeid" IS E'';
+COMMENT ON COLUMN "street__c"."_hc_err" IS E'';
+COMMENT ON COLUMN "street__c"."isdeleted" IS E'';
+COMMENT ON COLUMN "street__c"."currencyisocode" IS E'';
+COMMENT ON COLUMN "street__c"."systemmodstamp" IS E'';
+COMMENT ON COLUMN "street__c"."region__c" IS E'';
+COMMENT ON COLUMN "street__c"."id" IS E'';
+COMMENT ON COLUMN "street__c"."createddate" IS E'';
+COMMENT ON COLUMN "street__c"."sfid" IS E'';
+COMMENT ON COLUMN "street__c"."name" IS E'';
+COMMENT ON COLUMN "street__c"."literal_region__c" IS E'';
+COMMENT ON COLUMN "street__c"."lastmodifiedbyid" IS E'';
+COMMENT ON COLUMN "street__c"."municipality__c" IS E'';
+COMMENT ON COLUMN "street__c"."literal_municipality__c" IS E'';
+COMMENT ON COLUMN "street__c"."_hc_lastop" IS E'';
+COMMENT ON COLUMN "street__c"."createdbyid" IS E'';
+COMMENT ON COLUMN "street__c"."lastmodifieddate" IS E'';
+COMMENT ON COLUMN "street__c"."literal_street_type__c" IS E'';
+COMMENT ON COLUMN "street__c"."street__c" IS E'';
+COMMENT ON COLUMN "street__c"."ownerid" IS E'';
+COMMENT ON COLUMN "street__c"."country__c" IS E'';
+COMMENT ON COLUMN "street__c"."company__c" IS E'';
+COMMENT ON COLUMN "street__c"."street_type__c" IS E'';
+
 
 CREATE SEQUENCE street__c_id_seq MINVALUE 0;
 ALTER TABLE street__c ALTER id SET DEFAULT nextval('street__c_id_seq');
