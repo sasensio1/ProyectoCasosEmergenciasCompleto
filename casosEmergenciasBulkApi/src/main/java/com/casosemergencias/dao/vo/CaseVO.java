@@ -117,7 +117,7 @@ public class CaseVO extends ObjectVO implements Serializable {
 	@Column(name = "mailbody__c")
 	private String cuerpoMail;
 
-	@Column(name = "contactphone")
+	@Column(name = "contactphone__c")
 	private String telefonoContacto;
 
 	@Column(name = "traceerrorinservice__c")

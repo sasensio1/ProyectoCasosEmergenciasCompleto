@@ -1,14 +1,25 @@
 package com.casosemergencias.util.constants;
 
 public class ConstantesBulkApi {
-	/** Constantes de conexión al Bulk API de Salesforce. */
-	public static final String BULK_API_LOGIN_USER = "herokuintegracion@enellatam.com.emerchdev";
+	/** Constantes de conexión al Bulk API de Salesforce DESA. */
+	/*public static final String BULK_API_LOGIN_USER = "herokuintegracion@enellatam.com.emerchdev";
 	public static final String BULK_API_LOGIN_PASS = "Del*Alvaro17";
 	public static final String BULK_API_LOGIN_TOKEN = "cXAEzrNLD2ZCoOqTfWpez0oP";
 	public static final String BULK_API_AUTH_ENDPOINT_URL = "https://test.salesforce.com/services/Soap/u/";
 	public static final String REST_API_QUERY_ALL_URL = "/services/data/v37.0/queryAll/";
 	public static final String API_VERSION = "37.0";
+	public static final int MAX_SEARCHING_DAYS = 30;*/
+	
+	/** Constantes de conexión al Bulk API de Salesforce UAT.*/
+	
+	public static final String BULK_API_LOGIN_USER = "sasensio@deloitte.es.heroku.int";
+	public static final String BULK_API_LOGIN_PASS = "deloitteEnelPeruHeroku2";
+	public static final String BULK_API_LOGIN_TOKEN = "r0K075JNDeq5hPhBV1oUiDv8j";
+	public static final String BULK_API_AUTH_ENDPOINT_URL = "https://test.salesforce.com/services/Soap/u/";
+	public static final String REST_API_QUERY_ALL_URL = "/services/data/v37.0/queryAll/";
+	public static final String API_VERSION = "37.0";
 	public static final int MAX_SEARCHING_DAYS = 30;
+	
 	
 	/** Constantes de paquetes de clases que se necesitan para llamar por reflexion. */
 	public static final String REFLECTION_DAO_BEAN_OBJECTS_PACKAGE = "com.casosemergencias.dao.vo.";
