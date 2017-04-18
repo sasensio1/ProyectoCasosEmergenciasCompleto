@@ -1054,14 +1054,14 @@ public class CaseDAO {
 				}
 			}
 			
-			if (caso.getPrioridad() != null) {
+			/*if (caso.getPrioridad() != null) {
 				if (isFirst) {
 					query.append(" WHERE caso.prioridad = :prioridad");
 					isFirst = false;
 				} else {
 					query.append(" AND caso.prioridad = :prioridad");
 				}
-			}
+			}*/
 			
 			if (caso.getValorSubestadoins() != null) {
 				if (isFirst) {
@@ -1448,9 +1448,9 @@ public class CaseDAO {
 				result.setString("comuna", caso.getComuna());
 			}
 			
-			if (caso.getPrioridad() != null) {
+			/*if (caso.getPrioridad() != null) {
 				result.setString("prioridad", caso.getPrioridad());
-			}
+			}*/
 			
 			if (caso.getValorSubestadoins() != null) {
 				result.setString("valorSubestadoins", caso.getValorSubestadoins());

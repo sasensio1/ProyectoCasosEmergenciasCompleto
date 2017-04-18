@@ -34,9 +34,6 @@ function processBatchControllerMethodRedirection() {
 	
 	startProcess=addSeconsToDateValue(startProcess);
 	endProcess=addSeconsToDateValue(endProcess);
-
-
-	
 		switch (proccess)
 		{
 		   case "pickListTableElection": 

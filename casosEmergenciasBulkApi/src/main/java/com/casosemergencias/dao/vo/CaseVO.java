@@ -282,8 +282,8 @@ public class CaseVO extends ObjectVO implements Serializable {
 	@Column(name = "municipality__c")
 	private String comuna;
 
-	@Column(name = "priority")
-	private String prioridad;
+	/*@Column(name = "priority")
+	private String prioridad;*/
 
 	@Column(name = "substatusinsvalue__c")
 	private String valorSubestadoins;
@@ -398,7 +398,7 @@ public class CaseVO extends ObjectVO implements Serializable {
 			String direccionSuministro, Date horaPendiente, String ani, String facebook, String peticion,
 			String direccion, Date horaAsignado, String nombreContacto, Date horaPredespacho, Date horaEnruta,
 			String idEmpresa, Date horaProgramado, Double numeroSeguidoresDel, String literalCategorias,
-			String recordtypeId, String comuna, String prioridad, String valorSubestadoins,
+			String recordtypeId, String comuna, /*String prioridad,*/ String valorSubestadoins,
 			Boolean controlElectrodependiente, Boolean cancelar, String condicionAgravante, String herokuUsername,
 			PickListsCaseVO subestadoPickList, PickListsCaseVO submotivoPickList, PickListsCaseVO peticionPickList,
 			PickListsCaseOriginVO canalOrigenPickList, PickListsCaseVO condicionAgravantePickList,
@@ -491,7 +491,7 @@ public class CaseVO extends ObjectVO implements Serializable {
 		this.literalCategorias = literalCategorias;
 		this.recordtypeId = recordtypeId;
 		this.comuna = comuna;
-		this.prioridad = prioridad;
+		//this.prioridad = prioridad;
 		this.valorSubestadoins = valorSubestadoins;
 		this.controlElectrodependiente = controlElectrodependiente;
 		this.cancelar = cancelar;
@@ -1190,13 +1190,13 @@ public class CaseVO extends ObjectVO implements Serializable {
 		this.comuna = comuna;
 	}
 
-	public String getPrioridad() {
+	/*public String getPrioridad() {
 		return prioridad;
 	}
 
 	public void setPrioridad(String prioridad) {
 		this.prioridad = prioridad;
-	}
+	}*/
 
 	public String getValorSubestadoins() {
 		return valorSubestadoins;
