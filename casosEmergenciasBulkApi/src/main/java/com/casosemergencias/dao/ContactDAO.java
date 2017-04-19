@@ -493,7 +493,7 @@ public class ContactDAO {
 		int searchParamsCounter = 0;
 				
 		try {
-			StringBuilder query = new StringBuilder("FROM ContactVO ");
+			StringBuilder query = new StringBuilder("FROM ContactVO as contact ");
 			
 			if (dataTableProperties.getColumsInfo() != null && !dataTableProperties.getColumsInfo().isEmpty()) {
 				query.append(" WHERE ");
@@ -508,7 +508,7 @@ public class ContactDAO {
 					
 					if ("name".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER("+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
+							query.append("UPPER(contact."+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							query.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -516,7 +516,7 @@ public class ContactDAO {
 					
 					if ("phone".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							query.append("UPPER(contact."+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							query.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -524,7 +524,7 @@ public class ContactDAO {
 					
 					if ("email".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER("+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
+							query.append("UPPER(contact."+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							query.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -581,14 +581,14 @@ public class ContactDAO {
 		int searchParamsCounter = 0;
 		
 		try {
-			StringBuilder sqlQuery = new StringBuilder("SELECT COUNT(id) FROM ContactVO ");
+			StringBuilder sqlQuery = new StringBuilder("SELECT COUNT(id) FROM ContactVO as contact ");
 			
 			if (dataTableProperties.getColumsInfo() != null && !dataTableProperties.getColumsInfo().isEmpty()) {
 				sqlQuery.append(" WHERE ");
 				for (DataTableColumnInfo columnInfo : dataTableProperties.getColumsInfo()) {
 					if ("identitynumber__c".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER("+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -596,7 +596,7 @@ public class ContactDAO {
 					
 					if ("name".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER(contact."+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -604,7 +604,7 @@ public class ContactDAO {
 					
 					if ("phone".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER(contact."+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -612,7 +612,7 @@ public class ContactDAO {
 					
 					if ("email".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER(contact."+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -620,7 +620,7 @@ public class ContactDAO {
 					
 					if ("sf4twitter__twitter_username__c".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER("+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}

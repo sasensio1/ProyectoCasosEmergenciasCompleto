@@ -224,22 +224,24 @@
         <property name="targetMethod" value="borraHistoricoAntiguo" />
     </bean>
  
-    <!-- Trigger de Quartz para el rellenado de la tabla Picklists -->
+    <!-- Trigger de Quartz para el rellenado de la tabla Picklists 
     <bean id="picklistsTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="picklistsJob" />
         <property name="cronExpression" value="0 0 0 * * ?" />
-    </bean>
+    </bean>-->
     
+    <!-- PROGRAMAR LOS JOBS TENIENDO EN CUENTA QUE HEROKU SE LLEVA 3 HORAS DE DIFERENCIA CON EL HORARIO DE CHILE -->
+    	
     <!-- Trigger de Quartz para el rellenado de la tabla FieldLabel -->
     <bean id="fieldlabelTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="fieldlabelJob" />
-        <property name="cronExpression" value="0 0 0 * * ?" />
+        <property name="cronExpression" value="0 0 4 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de registros desde el API de Salesforce -->
     <bean id="apiInvokerTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="apiInvokerJob" />
-        <property name="cronExpression" value="0 0 0 * * ?" />
+        <property name="cronExpression" value="0 0 5 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de comentarios de casos -->
@@ -250,7 +252,7 @@
     
     <!-- Trigger de Quartz para la actualizacion de los usuarios de Heroku -->
     <bean id="herokuUserTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="caseCommentJob" />
+        <property name="jobDetail" ref="herokuUserJob" />
         <property name="cronExpression" value="0 0/30 * * * ?" />
     </bean>
     
@@ -264,7 +266,7 @@
     <bean id="batchProcessesCreatorScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="jobDetails">
             <list>
-                <ref bean="picklistsJob" />
+                <!--<ref bean="picklistsJob" />-->
                 <ref bean="fieldlabelJob" />
                 <ref bean="apiInvokerJob" />
                 <ref bean="caseCommentJob" />
@@ -274,7 +276,7 @@
         </property>
         <property name="triggers">
             <list>
-                <ref bean="picklistsTrigger" />
+                <!--<ref bean="picklistsTrigger" />  -->
                 <ref bean="fieldlabelTrigger" />
                 <ref bean="apiInvokerTrigger" />
                 <ref bean="caseCommentTrigger" />

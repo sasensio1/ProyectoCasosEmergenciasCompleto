@@ -11,7 +11,7 @@ CREATE TABLE "herokuuser__c" (
 	"createddate" TIMESTAMP NULL,
 	"unity__c" VARCHAR(255) NULL DEFAULT NULL,
 	"username__c" VARCHAR(255) NULL DEFAULT NULL,
-	"password__c" VARCHAR(8) NULL DEFAULT NULL,
+	"password__c" VARCHAR(255) NULL DEFAULT NULL,
 	"name" VARCHAR(80) NULL DEFAULT NULL,
 	"active__c" BOOLEAN NULL DEFAULT NULL,
 	PRIMARY KEY ("sfid")

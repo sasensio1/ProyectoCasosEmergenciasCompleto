@@ -502,14 +502,14 @@ public class AccountDAO {
 		int searchParamsCounter = 0;
 		
 		try {
-			StringBuilder query = new StringBuilder("FROM AccountVO ");
+			StringBuilder query = new StringBuilder("FROM AccountVO as account ");
 			
 			if (dataTableProperties.getColumsInfo() != null && !dataTableProperties.getColumsInfo().isEmpty()) {
 				query.append(" WHERE ");
 				for (DataTableColumnInfo columnInfo : dataTableProperties.getColumsInfo()) {
 					if ("name".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER("+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
+							query.append("UPPER(account."+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							query.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -578,14 +578,14 @@ public class AccountDAO {
 		int searchParamsCounter = 0;
 		
 		try {
-			StringBuilder sqlQuery = new StringBuilder("SELECT COUNT(id) FROM AccountVO ");
+			StringBuilder sqlQuery = new StringBuilder("SELECT COUNT(id) FROM AccountVO as account ");
 			
 			if (dataTableProperties.getColumsInfo() != null && !dataTableProperties.getColumsInfo().isEmpty()) {
 				sqlQuery.append(" WHERE ");
 				for (DataTableColumnInfo columnInfo : dataTableProperties.getColumsInfo()) {
 					if ("name".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER(account."+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -601,7 +601,7 @@ public class AccountDAO {
 					
 					if ("primaryemail__c".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER("+columnInfo.getData()+")" + " LIKE UPPER('%" + columnInfo.getSearchValue() +"%'"+")");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}

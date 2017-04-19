@@ -11,14 +11,24 @@ public class ConstantesBatch {
 	public static final String SF_ACCESS_TOKEN_PARAMETER = "access_token";
 	public static final String SF_INSTANCE_URL_PARAMETER = "instance_url";
 	
-	/** Valores de los campos para el login con SalesForce. */
-	public static final String SF_CLIENT_ID_VALUE = "3MVG9jfQT7vUue.G57q9YxkeioLB1AE02bGctQ09wjCAcxfXK1OFwgt1YXFGm8HdTaXvIRCmF1pG259r4SsTz";
+	/** Valores de los campos para el login con SalesForce DESA. */
+	/*public static final String SF_CLIENT_ID_VALUE = "3MVG9jfQT7vUue.G57q9YxkeioLB1AE02bGctQ09wjCAcxfXK1OFwgt1YXFGm8HdTaXvIRCmF1pG259r4SsTz";
 	public static final String SF_CLIENT_SECRET_VALUE = "4907478524393614560";
 	public static final String SF_USER_NAME_VALUE = "herokuintegracion@enellatam.com.emerchdev";
 	public static final String SF_PASSWORD_VALUE = "Del*Alvaro16";
 	public static final String SF_USER_TOKEN_VALUE = "ZHmyxlWZa8Hfkjga1jCYiXsA";
 	public static final String SF_GRANT_TYPE_VALUE = "password";
 	public static final String SF_AUTH_URI_VALUE = "https://test.salesforce.com/services/oauth2/token";
+	public static final String SF_REDIRECT_URI_VALUE = "https://localhost:8443/_callback";*/
+	
+	/** Valores de los campos para el login con SalesForce PROD. */
+	public static final String SF_CLIENT_ID_VALUE = "3MVG9jfQT7vUue.G57q9YxkeioLB1AE02bGctQ09wjCAcxfXK1OFwgt1YXFGm8HdTaXvIRCmF1pG259r4SsTz";
+	public static final String SF_CLIENT_SECRET_VALUE = "4907478524393614560";
+	public static final String SF_USER_NAME_VALUE = "emergencias_heroku@enellatam.com";
+	public static final String SF_PASSWORD_VALUE = "deloitteEnelPeruHeroku2";
+	public static final String SF_USER_TOKEN_VALUE = " m9cZKmmUvcRR2AiGEfqfnnF1";
+	public static final String SF_GRANT_TYPE_VALUE = "password";
+	public static final String SF_AUTH_URI_VALUE = "https://login.salesforce.com/services/oauth2/token";
 	public static final String SF_REDIRECT_URI_VALUE = "https://localhost:8443/_callback";
 	
 	/** Valores de propiedades para recuperar Picklists desde SalesForce. */

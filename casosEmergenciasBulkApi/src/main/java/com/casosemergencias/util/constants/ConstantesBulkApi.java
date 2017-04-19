@@ -12,12 +12,22 @@ public class ConstantesBulkApi {
 	
 	/** Constantes de conexión al Bulk API de Salesforce UAT.*/
 	
-	public static final String BULK_API_LOGIN_USER = "sasensio@deloitte.es.heroku.int";
+	/*public static final String BULK_API_LOGIN_USER = "sasensio@deloitte.es.heroku.int";
 	public static final String BULK_API_LOGIN_PASS = "deloitteEnelPeruHeroku2";
 	public static final String BULK_API_LOGIN_TOKEN = "r0K075JNDeq5hPhBV1oUiDv8j";
 	public static final String BULK_API_AUTH_ENDPOINT_URL = "https://test.salesforce.com/services/Soap/u/";
 	public static final String REST_API_QUERY_ALL_URL = "/services/data/v37.0/queryAll/";
 	public static final String API_VERSION = "37.0";
+	public static final int MAX_SEARCHING_DAYS = 30;*/
+	
+	/** Constantes de conexión al Bulk API de Salesforce PROD.*/
+	
+	public static final String BULK_API_LOGIN_USER = "emergencias_heroku@enellatam.com";
+	public static final String BULK_API_LOGIN_PASS = "deloitteEnelPeruHeroku2";
+	public static final String BULK_API_LOGIN_TOKEN = " m9cZKmmUvcRR2AiGEfqfnnF1";
+	public static final String BULK_API_AUTH_ENDPOINT_URL = "https://login.salesforce.com/services/Soap/u/";
+	public static final String REST_API_QUERY_ALL_URL = "/services/data/v39.0/queryAll/";
+	public static final String API_VERSION = "39.0";
 	public static final int MAX_SEARCHING_DAYS = 30;
 	
 	

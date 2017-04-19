@@ -285,6 +285,13 @@ public class ContactController {
 			}
 
 		}		
+		
+		Integer numSuministros = suministroService.getNumSuministros(propDataTable);
+		
+		jsonObject.put("iTotalRecords", numSuministros); 
+		jsonObject.put("iTotalDisplayRecords", numSuministros); 
+		jsonObject.put("data", jsonArray);
+		jsonObject.put("draw", propDataTable.getDraw());
 
 		jsonObject.put("data", jsonArray);
 	

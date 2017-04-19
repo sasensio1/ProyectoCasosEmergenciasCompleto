@@ -256,7 +256,7 @@ public class HistoricBatchDAO {
 				for (DataTableColumnInfo columnInfo : dataTableProperties.getColumsInfo()) {
 					if ("object".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER(historicbatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -264,7 +264,7 @@ public class HistoricBatchDAO {
 					
 					if ("operation".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER(historicbatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -272,7 +272,7 @@ public class HistoricBatchDAO {
 										
 					if ("sfidRecord".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER(historicbatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -280,14 +280,14 @@ public class HistoricBatchDAO {
 					
 					if ("success".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData()+"="+columnInfo.getSearchValue());
+							sqlQuery.append("historicbatch."+columnInfo.getData()+"="+columnInfo.getSearchValue());
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
 					}
 					if ("errorCause".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							sqlQuery.append(columnInfo.getData() + " LIKE '%" + columnInfo.getSearchValue() +"%'");
+							sqlQuery.append("UPPER(historicbatch." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -336,7 +336,7 @@ public class HistoricBatchDAO {
 								dateFilter = "<";
 								break;
 						}
-						sqlQuery.append("start_date"+dateFilter+"'"+startDate+"'");
+						sqlQuery.append("historicbatch.startDate"+dateFilter+"'"+startDate+"'");
 						sqlQuery.append(" AND ");
 						searchParamsCounter=searchParamsCounter+1;
 					}					
@@ -364,7 +364,7 @@ public class HistoricBatchDAO {
 								dateFilter = "<";
 								break;
 						}
-						sqlQuery.append("end_date"+dateFilter+"'"+endDate+"'");
+						sqlQuery.append("historicbatch.endDate"+dateFilter+"'"+endDate+"'");
 						sqlQuery.append(" AND ");
 						searchParamsCounter=searchParamsCounter+1;
 					}					

@@ -767,9 +767,9 @@ public class SuministroDAO {
 		try {
 			//DESCOMENTAR Y PROBAR, NO ESTA FUNCIONANDO, PERO LA IDEA ES ADAPTARLO PARA USARLO EN EL DIALOG DE ASOCIAR SUMINISTRO
 			StringBuilder query = new StringBuilder("FROM SuministroVO suministro "
-					+ "LEFT JOIN FETCH suministro.estadoConexionPickList estadoConexion "
+					/*+ "LEFT JOIN FETCH suministro.estadoConexionPickList estadoConexion "
 					+ "LEFT JOIN FETCH suministro.estadoSuministroPickList estadoSuministro "
-					+ "LEFT JOIN FETCH suministro.dirSuministroJoin direccionSumi ");
+					+ "LEFT JOIN FETCH suministro.dirSuministroJoin direccionSumi "*/);
 			
 			if (dataTableProperties.getColumsInfo() != null && !dataTableProperties.getColumsInfo().isEmpty()) {
 				query.append(" WHERE ");
@@ -805,7 +805,7 @@ public class SuministroDAO {
 					}							
 					if ("numero".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
-							query.append("UPPER(direccionSumi." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
+							query.append("UPPER(suministro.dirSuministroJoin." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							query.append(" AND ");
 							searchParamsCounter++;
 						}
@@ -880,6 +880,14 @@ public class SuministroDAO {
 					if ("comuna".equals(columnInfo.getData())) {
 						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
 							sqlQuery.append("UPPER(suministro." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
+							sqlQuery.append(" AND ");
+							searchParamsCounter++;
+						}
+					}
+					
+					if ("numero".equals(columnInfo.getData())) {
+						if (columnInfo.getSearchValue() != null && !"".equals(columnInfo.getSearchValue())) {
+							sqlQuery.append("UPPER(suministro.dirSuministroJoin." + columnInfo.getData() + ") LIKE UPPER('%" + columnInfo.getSearchValue() +"%')");
 							sqlQuery.append(" AND ");
 							searchParamsCounter++;
 						}

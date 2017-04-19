@@ -12,16 +12,28 @@ public class ConstantesSalesforceLogin {
 	public static final String DEV_LOGIN_SALESFORCE_INSTANCE_URL_KEY = "instance_url";
 	public static final Integer DEV_LOGIN_SALESFORCE_TOKEN_CADUCATION_HOUR= 12;
 	
-	public static final String DEV_LOGIN_SALESFORCE_LOGIN_URI = "https://test.salesforce.com";
+	/*DESA y UAT*/
+	
+  /*public static final String DEV_LOGIN_SALESFORCE_LOGIN_URI = "https://test.salesforce.com";
 	public static final String DEV_LOGIN_SALESFORCE_REDIRECT_URI = "https://localhost:8443/_callback";
 	public static final String DEV_LOGIN_SALESFORCE_TOKEN_PATH_URI = "/services/oauth2/token";
 	public static final String DEV_LOGIN_SALESFORCE_INSTANCE_URL = "https://cs52.salesforce.com";
 	public static final String DEV_LOGIN_SALESFORCE_REST_SERVICE_NEW_CASE_PATH_URI = "/services/apexrest/CreateHerokuCase";
 	public static final String DEV_LOGIN_SALESFORCE_REST_SERVICE_SEARCH_DIRECTION_PATH_URI= "/services/apexrest/SearchHerokuAddress";
 	public static final String DEV_LOGIN_SALESFORCE_REST_SERVICE_NEW_CASE_COMMENT_PATH_URI= "/services/apexrest/CreateHerokuCaseComment";
+	public static final String DEV_LOGIN_SALESFORCE_REST_SERVICE_NEW_SERVICE_PRODUCT_PATH_URI= "/services/apexrest/CreateHerokuServiceProduct";*/
+
+	/*PROD*/
+	
+	public static final String DEV_LOGIN_SALESFORCE_LOGIN_URI = "https://login.salesforce.com";
+	public static final String DEV_LOGIN_SALESFORCE_REDIRECT_URI = "https://localhost:8443/_callback";
+	public static final String DEV_LOGIN_SALESFORCE_TOKEN_PATH_URI = "/services/oauth2/token";
+	public static final String DEV_LOGIN_SALESFORCE_INSTANCE_URL = "https://na30.salesforce.com";
+	public static final String DEV_LOGIN_SALESFORCE_REST_SERVICE_NEW_CASE_PATH_URI = "/services/apexrest/CreateHerokuCase";
+	public static final String DEV_LOGIN_SALESFORCE_REST_SERVICE_SEARCH_DIRECTION_PATH_URI= "/services/apexrest/SearchHerokuAddress";
+	public static final String DEV_LOGIN_SALESFORCE_REST_SERVICE_NEW_CASE_COMMENT_PATH_URI= "/services/apexrest/CreateHerokuCaseComment";
 	public static final String DEV_LOGIN_SALESFORCE_REST_SERVICE_NEW_SERVICE_PRODUCT_PATH_URI= "/services/apexrest/CreateHerokuServiceProduct";
-
-
+	
 	
 	public static final String DEV_LOGIN_SALESFORCE_GRANT_TYPE_VALUE = "password";
 	public static final String DEV_LOGIN_SALESFORCE_CLIENT_ID_VALUE = "3MVG9jfQT7vUue.G57q9YxkeioLB1AE02bGctQ09wjCAcxfXK1OFwgt1YXFGm8HdTaXvIRCmF1pG259r4SsTz";

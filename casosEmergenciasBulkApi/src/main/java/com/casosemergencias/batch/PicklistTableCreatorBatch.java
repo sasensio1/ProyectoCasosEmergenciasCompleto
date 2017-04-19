@@ -27,6 +27,7 @@ import com.force.api.DescribeSObject.Field;
 import com.force.api.DescribeSObject.PicklistEntry;
 import com.force.api.ForceApi;
 import com.sforce.soap.metadata.FieldType;
+import com.sforce.soap.partner.DescribeLayoutResult;
 
 @Resource
 public class PicklistTableCreatorBatch {

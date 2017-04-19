@@ -86,4 +86,5 @@ CREATE SEQUENCE account_id_seq MINVALUE 0;
 ALTER TABLE account ALTER id SET DEFAULT nextval('account_id_seq');
 ALTER SEQUENCE account_id_seq OWNED BY account.id;
 
-
+/*ALTER TABLE Persons
+ADD CONSTRAINT PK_Person PRIMARY KEY (ID,LastName);*/

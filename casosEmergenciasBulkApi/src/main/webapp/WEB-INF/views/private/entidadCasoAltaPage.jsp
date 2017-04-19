@@ -97,7 +97,22 @@
 						</div>
 						<div>
 							<div class="divObligatorio"></div>
-							<form:select path="estado" items="${caso.mapStatus}"/>
+							<!--<form:select path="estado" items="${caso.mapStatus}"/>-->
+							<select  name= "estado">
+								<c:forEach items="${caso.mapStatus}" var="status">
+									<c:if test="${status.key=='ESTA001' || 
+												  status.key=='ESTA002' ||  
+												  status.key=='ESTA003' ||  
+												  status.key=='ESTA004' ||  
+												  status.key=='ESTA005' ||  
+												  status.key=='ESTA006'   					
+												}">
+										<option value="${status.key}" >								
+											${status.value}								
+										</option>
+									</c:if>
+								</c:forEach>
+							</select>														
 						</div>
 					</div>
 					<div>
