@@ -175,12 +175,36 @@
 	<bean id="restApiInvokerBatch" class="com.casosemergencias.batch.SalesforceRestApiInvokerBatch"/>
 	<bean id="caseCommentUpdaterBatch" class="com.casosemergencias.batch.CaseCommentUpdaterBatch"/>
 	<bean id="herokuUserUpdaterBatch" class="com.casosemergencias.batch.HerokuUserUpdaterBatch"/>
+	<bean id="accountUpdaterBatch" class="com.casosemergencias.batch.AccountUpdaterBatch"/>
+	<bean id="addressUpdaterBatch" class="com.casosemergencias.batch.AddressUpdaterBatch"/>
+	<bean id="assetUpdaterBatch" class="com.casosemergencias.batch.AssetUpdaterBatch"/>
+	<bean id="caseHistoryUpdaterBatch" class="com.casosemergencias.batch.CaseHistoryUpdaterBatch"/>
+	<bean id="contactUpdaterBatch" class="com.casosemergencias.batch.ContactUpdaterBatch"/>
+	<bean id="groupUpdaterBatch" class="com.casosemergencias.batch.GroupUpdaterBatch"/>
+	<bean id="pointOfDeliveryUpdaterBatch" class="com.casosemergencias.batch.PointOfDeliveryUpdaterBatch"/>
+	<bean id="repeatedCasesUpdaterBatch" class="com.casosemergencias.batch.RepeatedCasesUpdaterBatch"/>
+	<bean id="serviceProductUpdaterBatch" class="com.casosemergencias.batch.ServiceProductUpdaterBatch"/>
+	<bean id="streetUpdaterBatch" class="com.casosemergencias.batch.StreetUpdaterBatch"/>
+	<bean id="taskUpdaterBatch" class="com.casosemergencias.batch.TaskUpdaterBatch"/>
+	<bean id="userUpdaterBatch" class="com.casosemergencias.batch.UserUpdaterBatch"/>
 	
 	<bean id="fieldLabelTableCreatorJob" class="com.casosemergencias.batch.FieldLabelTableCreatorJob"/>
 	<bean id="picklistTableCreatorJob" class="com.casosemergencias.batch.PicklistTableCreatorJob"/>
 	<bean id="salesforceApiInvokerJob" class="com.casosemergencias.batch.SalesforceApiInvokerJob"/>
 	<bean id="caseCommentUpdaterJob" class="com.casosemergencias.batch.CaseCommentUpdaterJob"/>
 	<bean id="herokuUserUpdaterJob" class="com.casosemergencias.batch.HerokuUserUpdaterJob"/>
+	<bean id="accountUpdaterJob" class="com.casosemergencias.batch.AccountUpdaterJob"/>
+	<bean id="addressUpdaterJob" class="com.casosemergencias.batch.AddressUpdaterJob"/>
+	<bean id="assetUpdaterJob" class="com.casosemergencias.batch.AssetUpdaterJob"/>
+	<bean id="caseHistoryUpdaterJob" class="com.casosemergencias.batch.CaseHistoryUpdaterJob"/>
+	<bean id="contactUpdaterJob" class="com.casosemergencias.batch.ContactUpdaterJob"/>
+	<bean id="groupUpdaterJob" class="com.casosemergencias.batch.GroupUpdaterJob"/>
+	<bean id="pointOfDeliveryUpdaterJob" class="com.casosemergencias.batch.PointOfDeliveryUpdaterJob"/>
+	<bean id="repeatedCasesUpdaterJob" class="com.casosemergencias.batch.RepeatedCasesUpdaterJob"/>
+	<bean id="serviceProductUpdaterJob" class="com.casosemergencias.batch.ServiceProductUpdaterJob"/>
+	<bean id="streetUpdaterJob" class="com.casosemergencias.batch.StreetUpdaterJob"/>
+	<bean id="taskUpdaterJob" class="com.casosemergencias.batch.TaskUpdaterJob"/>
+	<bean id="userUpdaterJob" class="com.casosemergencias.batch.UserUpdaterJob"/>
 	
 	<bean id="borradoHistoricoCargasBatch" class="com.casosemergencias.batch.BorradoHistoricoCargasBatch"/>
 	<bean id="borradoHistoricoCargasJob" class="com.casosemergencias.batch.BorradoHistoricoCargasJob"/>
@@ -201,11 +225,83 @@
     </bean>
     
     <!-- Job de Quartz para la actualizacion de registros desde el API de Salesforce -->
-    <bean id="apiInvokerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <!--  <bean id="apiInvokerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="restApiInvokerBatch" />
         <property name="targetMethod" value="updateObjectsWithRestApiInfo" />
+    </bean>-->
+    
+    <!-- Job de Quartz para la actualizacion de account -->
+    <bean id="accountJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="accountUpdaterBatch" />
+        <property name="targetMethod" value="updateAccountInfo" />
     </bean>
     
+    <!-- Job de Quartz para la actualizacion de address -->
+    <bean id="addressJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="addressUpdaterBatch" />
+        <property name="targetMethod" value="updateAddressInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de asset -->
+    <bean id="assetJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="assetUpdaterBatch" />
+        <property name="targetMethod" value="updateAssetInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de caseHistory -->
+    <bean id="caseHistoryJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="caseHistoryUpdaterBatch" />
+        <property name="targetMethod" value="updateCaseHistoryInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de contact -->
+    <bean id="contactJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="contactUpdaterBatch" />
+        <property name="targetMethod" value="updateContactInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de group -->
+    <bean id="groupJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="groupUpdaterBatch" />
+        <property name="targetMethod" value="updateGroupInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de pointOfDelivery -->
+    <bean id="pointOfDeliveryJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="pointOfDeliveryUpdaterBatch" />
+        <property name="targetMethod" value="updatePointOfDeliveryInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de repeatedCases -->
+    <bean id="repeatedCasesJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="repeatedCasesUpdaterBatch" />
+        <property name="targetMethod" value="updateRepeatedCasesInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de serviceProduct -->
+    <bean id="serviceProductJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="serviceProductUpdaterBatch" />
+        <property name="targetMethod" value="updateServiceProductInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de street -->
+    <bean id="streetJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="streetUpdaterBatch" />
+        <property name="targetMethod" value="updateStreetInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de task -->
+    <bean id="taskJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="taskUpdaterBatch" />
+        <property name="targetMethod" value="updateTaskInfo" />
+    </bean>
+    
+    <!-- Job de Quartz para la actualizacion de user -->
+    <bean id="userJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="userUpdaterBatch" />
+        <property name="targetMethod" value="updateUserInfo" />
+    </bean>
+        
     <!-- Job de Quartz para la actualizacion de comentarios de casos -->
     <bean id="caseCommentJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="caseCommentUpdaterBatch" />
@@ -238,11 +334,83 @@
         <property name="cronExpression" value="0 0 4 * * ?" />
     </bean>
     
-    <!-- Trigger de Quartz para la actualizacion de registros desde el API de Salesforce -->
-    <bean id="apiInvokerTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="apiInvokerJob" />
+    <!-- Trigger de Quartz para la actualizacion de los account-->
+    <bean id="accountTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="accountJob" />
         <property name="cronExpression" value="0 0 5 * * ?" />
     </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los address-->
+    <bean id="addressTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="addressJob" />
+        <property name="cronExpression" value="0 0 6 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los asset-->
+    <bean id="assetTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="assetJob" />
+        <property name="cronExpression" value="0 0 7 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los caseHistory-->
+    <bean id="caseHistoryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="caseHistoryJob" />
+        <property name="cronExpression" value="0 0/30 * * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los contact-->
+    <bean id="contactTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="contactJob" />
+        <property name="cronExpression" value="0 0 8 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los group-->
+    <bean id="groupTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="groupJob" />
+        <property name="cronExpression" value="0 0 9 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los pointOfDelivery-->
+    <bean id="pointOfDeliveryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="pointOfDeliveryJob" />
+        <property name="cronExpression" value="0 0 10 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los repeatedCases-->
+    <bean id="repeatedCasesTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="repeatedCasesJob" />
+        <property name="cronExpression" value="0 0 11 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los serviceProduct-->
+    <bean id="serviceProductTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="serviceProductJob" />
+        <property name="cronExpression" value="0 0 12 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los street-->
+    <bean id="streetTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="streetJob" />
+        <property name="cronExpression" value="0 0 13 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los task-->
+    <bean id="taskTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="taskJob" />
+        <property name="cronExpression" value="0 0 14 * * ?" />
+    </bean>
+    
+    <!-- Trigger de Quartz para la actualizacion de los user-->
+    <bean id="userTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="userJob" />
+        <property name="cronExpression" value="0 0 15 * * ?" />
+    </bean>
+   
+    <!-- Trigger de Quartz para la actualizacion de registros desde el API de Salesforce -->
+    <!--<bean id="apiInvokerTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="apiInvokerJob" />
+        <property name="cronExpression" value="0 0 5 * * ?" />
+    </bean>  -->
     
     <!-- Trigger de Quartz para la actualizacion de comentarios de casos -->
     <bean id="caseCommentTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -253,9 +421,9 @@
     <!-- Trigger de Quartz para la actualizacion de los usuarios de Heroku -->
     <bean id="herokuUserTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="herokuUserJob" />
-        <property name="cronExpression" value="0 0/30 * * * ?" />
+        <property name="cronExpression" value="0 0 0/1 * * ?" />
     </bean>
-    
+        
     <!-- Trigger de Quartz para el borrado de historico -->
     <bean id="borradoHistoricoTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="borradoHistoricoJob" />
@@ -268,7 +436,19 @@
             <list>
                 <!--<ref bean="picklistsJob" />-->
                 <ref bean="fieldlabelJob" />
-                <ref bean="apiInvokerJob" />
+                <ref bean="accountJob" />
+                <ref bean="addressJob" />
+                <ref bean="assetJob" />
+                <ref bean="caseHistoryJob" />
+                <ref bean="contactJob" />
+                <ref bean="groupJob" />
+                <ref bean="pointOfDeliveryJob" />
+                <ref bean="repeatedCasesJob" />
+                <ref bean="serviceProductJob" />
+                <ref bean="streetJob" />
+                <ref bean="taskJob" />
+                <ref bean="userJob" />               
+                <!--<ref bean="apiInvokerJob" />-->
                 <ref bean="caseCommentJob" />
                 <ref bean="herokuUserJob" />
                 <ref bean="borradoHistoricoJob" />
@@ -278,7 +458,19 @@
             <list>
                 <!--<ref bean="picklistsTrigger" />  -->
                 <ref bean="fieldlabelTrigger" />
-                <ref bean="apiInvokerTrigger" />
+                <ref bean="accountTrigger" />
+                <ref bean="addressTrigger" />
+                <ref bean="assetTrigger" />
+                <ref bean="caseHistoryTrigger" />
+                <ref bean="contactTrigger" />
+                <ref bean="groupTrigger" />
+                <ref bean="pointOfDeliveryTrigger" />
+                <ref bean="repeatedCasesTrigger" />
+                <ref bean="serviceProductTrigger" />
+                <ref bean="streetTrigger" />
+                <ref bean="taskTrigger" />
+                <ref bean="userTrigger" />  
+                <!-- <ref bean="apiInvokerTrigger" /> -->
                 <ref bean="caseCommentTrigger" />
                 <ref bean="herokuUserTrigger" />
                 <ref bean="borradoHistoricoTrigger" />

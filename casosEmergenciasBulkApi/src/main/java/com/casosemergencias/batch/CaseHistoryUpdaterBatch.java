@@ -11,26 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.casosemergencias.util.constants.ConstantesBulkApi;
 
 @Resource
-public class HerokuUserUpdaterBatch {
-final static Logger LOGGER = Logger.getLogger(HerokuUserUpdaterBatch.class);
+public class CaseHistoryUpdaterBatch {
+	final static Logger LOGGER = Logger.getLogger(CaseHistoryUpdaterBatch.class);
 	
 	@Autowired
 	SalesforceRestApiInvokerBatch restApiInvokerBatch;
 	
-	public void updateHerokuUserInfo(){
-		LOGGER.trace("Comienzo del proceso de actualizacion de los usuarios de Heroku de SalesForce a la base de datos de Heroku");
+	public void updateCaseHistoryInfo() {
+		LOGGER.trace("Comienzo del proceso de actualizacion de los comentarios de los casos de SalesForce a la base de datos de Heroku");
 		Date processEndDate = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(processEndDate);
-		cal.add(Calendar.HOUR, -1);
+		cal.add(Calendar.MINUTE, -30);
 		Date processStartDate = cal.getTime();
 		LOGGER.info("Hora inicial: " + processStartDate);
 		LOGGER.info("Hora final: " + processEndDate);
 		//FIXME: Comprobar zona horaria.
 		restApiInvokerBatch.setProcessStartDate(processStartDate);
 		restApiInvokerBatch.setProcessEndDate(processEndDate);
-		restApiInvokerBatch.setObjectName(ConstantesBulkApi.ENTITY_HEROKU_USER);
+		restApiInvokerBatch.setObjectName(ConstantesBulkApi.ENTITY_CASE_HISTORY);
 		restApiInvokerBatch.updateObjectsWithRestApiInfo();
-		LOGGER.trace("Proceso de actualizacion de los usuarios de Heroku de SalesForce a la base de datos de Heroku completado");
+		LOGGER.trace("Proceso de actualizacion de los comentarios de los casos de SalesForce a la base de datos de Heroku completado");
 	}
 }

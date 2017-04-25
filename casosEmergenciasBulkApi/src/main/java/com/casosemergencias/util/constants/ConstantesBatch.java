@@ -27,6 +27,9 @@ public class ConstantesBatch {
 	public static final String SF_USER_NAME_VALUE = "emergencias_heroku@enellatam.com";
 	public static final String SF_PASSWORD_VALUE = "deloitteEnelPeruHeroku2";
 	public static final String SF_USER_TOKEN_VALUE = " m9cZKmmUvcRR2AiGEfqfnnF1";
+	//public static final String SF_USER_NAME_VALUE = "integracionemerchile@enel.com";
+	//public static final String SF_PASSWORD_VALUE = "deloitte12";
+	//public static final String SF_USER_TOKEN_VALUE = "d92jrIstgHUWAIpF0Vyjaz8rA";
 	public static final String SF_GRANT_TYPE_VALUE = "password";
 	public static final String SF_AUTH_URI_VALUE = "https://login.salesforce.com/services/oauth2/token";
 	public static final String SF_REDIRECT_URI_VALUE = "https://localhost:8443/_callback";

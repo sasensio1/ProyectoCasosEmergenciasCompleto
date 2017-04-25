@@ -25,7 +25,10 @@ public class ConstantesBulkApi {
 	public static final String BULK_API_LOGIN_USER = "emergencias_heroku@enellatam.com";
 	public static final String BULK_API_LOGIN_PASS = "deloitteEnelPeruHeroku2";
 	public static final String BULK_API_LOGIN_TOKEN = " m9cZKmmUvcRR2AiGEfqfnnF1";
-	public static final String BULK_API_AUTH_ENDPOINT_URL = "https://login.salesforce.com/services/Soap/u/";
+	//public static final String BULK_API_LOGIN_USER = "integracionemerchile@enel.com";
+	//public static final String BULK_API_LOGIN_PASS = "deloitte12";
+	//public static final String BULK_API_LOGIN_TOKEN = "d92jrIstgHUWAIpF0Vyjaz8rA";
+	public static final String BULK_API_AUTH_ENDPOINT_URL = "https://na30.salesforce.com/services/Soap/u/";
 	public static final String REST_API_QUERY_ALL_URL = "/services/data/v39.0/queryAll/";
 	public static final String API_VERSION = "39.0";
 	public static final int MAX_SEARCHING_DAYS = 30;
