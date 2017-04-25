@@ -415,7 +415,7 @@
     <!-- Trigger de Quartz para la actualizacion de comentarios de casos -->
     <bean id="caseCommentTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="caseCommentJob" />
-        <property name="cronExpression" value="0 0 0/2 * * ?" />
+        <property name="cronExpression" value="0 0/45 * * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los usuarios de Heroku -->
