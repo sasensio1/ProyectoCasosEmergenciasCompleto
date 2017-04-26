@@ -331,79 +331,79 @@
     <!-- Trigger de Quartz para el rellenado de la tabla FieldLabel -->
     <bean id="fieldlabelTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="fieldlabelJob" />
-        <property name="cronExpression" value="0 10 2 * * ?" />
+        <property name="cronExpression" value="0 58 2 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los account-->
     <bean id="accountTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="accountJob" />
-        <property name="cronExpression" value="0 50 2 * * ?" />
+        <property name="cronExpression" value="0 58 3 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los address-->
     <bean id="addressTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="addressJob" />
-        <property name="cronExpression" value="0 10 3 * * ?" />
+        <property name="cronExpression" value="0 58 4 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los asset-->
     <bean id="assetTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="assetJob" />
-        <property name="cronExpression" value="0 50 3 * * ?" />
+        <property name="cronExpression" value="0 20/30 0-23 * * ?"  />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los caseHistory-->
     <bean id="caseHistoryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="caseHistoryJob" />
-        <property name="cronExpression" value="0 15/30 00-23 * * ?" />
+        <property name="cronExpression" value="0 05/30 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los contact-->
     <bean id="contactTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="contactJob" />
-        <property name="cronExpression" value="0 10 4 * * ?" />
+        <property name="cronExpression" value="0 10/30 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los group-->
     <bean id="groupTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="groupJob" />
-        <property name="cronExpression" value="0 50 4 * * ?" />
+        <property name="cronExpression" value="0 58 5 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los pointOfDelivery-->
     <bean id="pointOfDeliveryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="pointOfDeliveryJob" />
-        <property name="cronExpression" value="0 10 5 * * ?" />
+        <property name="cronExpression" value="0 15/30 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los repeatedCases-->
     <bean id="repeatedCasesTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="repeatedCasesJob" />
-        <property name="cronExpression" value="0 50 5 * * ?" />
+        <property name="cronExpression" value="0 58 6 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los serviceProduct-->
     <bean id="serviceProductTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="serviceProductJob" />
-        <property name="cronExpression" value="0 10 6 * * ?" />
+        <property name="cronExpression" value="0 25/30 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los street-->
     <bean id="streetTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="streetJob" />
-        <property name="cronExpression" value="0 50 6 * * ?" />
+        <property name="cronExpression" value="0 58 7 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los task-->
     <bean id="taskTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="taskJob" />
-        <property name="cronExpression" value="0 10 7 * * ?" />
+        <property name="cronExpression" value="0 58 8 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los user-->
     <bean id="userTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="userJob" />
-        <property name="cronExpression" value="0 50 7 * * ?" />
+        <property name="cronExpression" value="0 58 9 * * ?" />
     </bean>
    
     <!-- Trigger de Quartz para la actualizacion de registros desde el API de Salesforce -->
@@ -415,19 +415,19 @@
     <!-- Trigger de Quartz para la actualizacion de comentarios de casos -->
     <bean id="caseCommentTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="caseCommentJob" />
-        <property name="cronExpression" value="0 0/30 00-23 * * ?" />
+        <property name="cronExpression" value="0 0/30 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los usuarios de Heroku -->
     <bean id="herokuUserTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="herokuUserJob" />
-        <property name="cronExpression" value="0 0 0/1 * * ?" />
+        <property name="cronExpression" value="0 28/60 0-23 * * ?" />
     </bean>
         
     <!-- Trigger de Quartz para el borrado de historico -->
     <bean id="borradoHistoricoTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="borradoHistoricoJob" />
-        <property name="cronExpression" value="0 0 * * * ?" />
+        <property name="cronExpression" value="0 10 2 1 1/1 ? *" />
     </bean>
   
     <!-- Scheduler de Quartz para rellenar las tablas de picklists y fieldLabels -->

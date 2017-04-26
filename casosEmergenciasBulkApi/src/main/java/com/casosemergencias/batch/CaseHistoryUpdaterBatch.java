@@ -18,7 +18,7 @@ public class CaseHistoryUpdaterBatch {
 	SalesforceRestApiInvokerBatch restApiInvokerBatch;
 	
 	public void updateCaseHistoryInfo() {
-		LOGGER.trace("Comienzo del proceso de actualizacion de los comentarios de los casos de SalesForce a la base de datos de Heroku");
+		LOGGER.trace("Comienzo del proceso de actualizacion de caseHistory de SalesForce a la base de datos de Heroku");
 		Date processEndDate = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(processEndDate);
@@ -31,6 +31,6 @@ public class CaseHistoryUpdaterBatch {
 		restApiInvokerBatch.setProcessEndDate(processEndDate);
 		restApiInvokerBatch.setObjectName(ConstantesBulkApi.ENTITY_CASE_HISTORY);
 		restApiInvokerBatch.updateObjectsWithRestApiInfo();
-		LOGGER.trace("Proceso de actualizacion de los comentarios de los casos de SalesForce a la base de datos de Heroku completado");
+		LOGGER.trace("Proceso de actualizacion de caseHistory de SalesForce a la base de datos de Heroku completado");
 	}
 }
