@@ -28,11 +28,11 @@
 					</tr>
 					<tr>
 						<td align="right"><label for="user"><s:message code="login_form_label_user"/>:</label></td>
-						<td><input type="text" name="user" value="" class=""></td>
+						<td><input type="text" name="user" value="" class="" disabled></td>
 					</tr>
 					<tr>
 						<td align="right"><label for="pass"><s:message code="login_form_label_password"/>:</label></td>
-						<td><input type="password" name="pass" class="" /></td>
+						<td><input type="password" name="pass" class="" disabled /></td>
 					</tr>
 					<tr>
 						<td colspan="2" align="center"><input name="submit" type="submit" class="" value="<s:message code="login_form_button_submit"/>"/></td>
