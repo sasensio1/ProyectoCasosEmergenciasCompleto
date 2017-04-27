@@ -50,8 +50,8 @@ public class ContactVO extends ObjectVO implements Serializable {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "birthdate")
-	private Date fechaNacimiento;
+	/*@Column(name = "birthdate")
+	private Date fechaNacimiento;*/
 
 	@Column(name = "preferredchannelcontact__c")
 	private String canalPreferenteContacto;
@@ -175,7 +175,7 @@ public class ContactVO extends ObjectVO implements Serializable {
 		this.id = id;
 		this.sfid = sfid;
 		this.name = name;
-		this.fechaNacimiento = fechaNacimiento;
+		//this.fechaNacimiento = fechaNacimiento;
 		this.canalPreferenteContacto = canalPreferenteContacto;
 		this.tipoCuentaAsociado = tipoCuentaAsociado;
 		this.apellidoMaterno = apellidoMaterno;
@@ -257,20 +257,20 @@ public class ContactVO extends ObjectVO implements Serializable {
 		this.name = name;
 	}
 
-	public Date getFechaNacimiento() {
+	/*public Date getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
-	}
+	}*/
 	
-	public void setFechaNacimientoString(String fechaNacimientoString) {
+	/*public void setFechaNacimientoString(String fechaNacimientoString) {
 		Date fechaNacimientoDate = Utils.parseStringToDate(fechaNacimientoString);
 		if (fechaNacimientoDate != null) {
 			setFechaNacimiento(fechaNacimientoDate);
 		}
-	}
+	}*/
 
 	public String getCanalPreferenteContacto() {
 		return canalPreferenteContacto;
@@ -552,8 +552,7 @@ public class ContactVO extends ObjectVO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ContactVO [sfid=" + sfid + ", name=" + name + ", fechaNacimiento=" + fechaNacimiento
-				+ ", telefonoSecundario=" + telefonoSecundario + "]";
+		return "ContactVO [sfid=" + sfid + ", name=" + name + ", telefonoSecundario=" + telefonoSecundario + "]";
 	}
 	
 }

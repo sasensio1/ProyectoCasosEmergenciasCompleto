@@ -98,7 +98,7 @@ public class BatchObjectsMapper {
 		contactMap = new HashMap<String, String>();
 		contactMap.put("Id", "Sfid");
 		contactMap.put("Name", "Name");
-		contactMap.put("Birthdate", "FechaNacimientoString");
+		//contactMap.put("Birthdate", "FechaNacimientoString");
 		contactMap.put("PreferredChannelContact__c", "CanalPreferenteContacto");
 		contactMap.put("AssociatedAccountType__c", "TipoCuentaAsociado");
 		contactMap.put("MothersLastName__c", "ApellidoMaterno");

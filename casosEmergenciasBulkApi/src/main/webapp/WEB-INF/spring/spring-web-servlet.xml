@@ -337,7 +337,7 @@
     <!-- Trigger de Quartz para la actualizacion de los account-->
     <bean id="accountTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="accountJob" />
-        <property name="cronExpression" value="0 58 3 * * ?" />
+        <property name="cronExpression" value="0 20/30 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los address-->
@@ -349,7 +349,7 @@
     <!-- Trigger de Quartz para la actualizacion de los asset-->
     <bean id="assetTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="assetJob" />
-        <property name="cronExpression" value="0 20/30 0-23 * * ?"  />
+        <property name="cronExpression" value="0 58 3 * * ?"  />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los caseHistory-->

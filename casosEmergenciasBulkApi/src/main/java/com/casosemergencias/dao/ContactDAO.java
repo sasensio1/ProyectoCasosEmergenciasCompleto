@@ -167,14 +167,14 @@ public class ContactDAO {
 				}
 			}
 			
-			if (contact.getFechaNacimiento() != null) {
+			/*if (contact.getFechaNacimiento() != null) {
 				if (isFirst) {
 					query.append(" WHERE contact.fechaNacimiento = :fechaNacimiento");
 					isFirst = false;
 				} else {
 					query.append(" AND contact.fechaNacimiento = :fechaNacimiento");
 				}
-			}
+			}*/
 
 			if (contact.getCanalPreferenteContacto() != null) {
 				if (isFirst) {
@@ -347,9 +347,9 @@ public class ContactDAO {
 				result.setString("name", contact.getName());
 			}
 
-			if (contact.getFechaNacimiento() != null) {
+			/*if (contact.getFechaNacimiento() != null) {
 				result.setDate("fechaNacimiento", contact.getFechaNacimiento());
-			}
+			}*/
 
 			if (contact.getCanalPreferenteContacto() != null) {
 				result.setString("canalPreferenteContacto", contact.getCanalPreferenteContacto());
@@ -733,7 +733,7 @@ public class ContactDAO {
 				//1.2-Construimos la query							
 				Query sqlUpdateQuery =session.createQuery("UPDATE ContactVO "
 													   + "	  SET name = :name"
-													   + "		, birthdate = :birthdate"
+													   //+ "		, birthdate = :birthdate"
 													   + "		, preferredchannelcontact__c = :preferredchannelcontact__c"
 													   + "		, associatedaccounttype__c = :associatedaccounttype__c"
 													   + "		, motherslastname__c = :motherslastname__c"
@@ -762,7 +762,7 @@ public class ContactDAO {
 				
 				//1.3.1-Seteamos el campos que no filtren la query						
 				sqlUpdateQuery.setString("name", contactoToUpdate.getName());
-				sqlUpdateQuery.setTimestamp("birthdate", contactoToUpdate.getFechaNacimiento());
+				//sqlUpdateQuery.setTimestamp("birthdate", contactoToUpdate.getFechaNacimiento());
 				sqlUpdateQuery.setString("preferredchannelcontact__c", contactoToUpdate.getCanalPreferenteContacto());
 				sqlUpdateQuery.setString("associatedaccounttype__c", contactoToUpdate.getTipoCuentaAsociado());
 				sqlUpdateQuery.setString("motherslastname__c", contactoToUpdate.getApellidoMaterno());

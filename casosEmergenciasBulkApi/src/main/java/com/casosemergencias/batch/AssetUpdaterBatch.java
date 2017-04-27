@@ -20,11 +20,9 @@ public class AssetUpdaterBatch {
 	
 	public void updateAssetInfo() {
 		LOGGER.trace("Comienzo del proceso de actualizacion de Asset de SalesForce a la base de datos de Heroku");
-		Date processEndDate = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(processEndDate);
-		cal.add(Calendar.MINUTE, -30);
-		Date processStartDate = cal.getTime();
+		Date yesterday = Utils.substractDaysToDate(new Date(), 1);
+		Date processStartDate = Utils.setHourInDate(yesterday, 0, 0, 0, 0);
+		Date processEndDate = Utils.setHourInDate(yesterday, 23, 59, 59, 999);
 		LOGGER.info("Hora inicial: " + processStartDate);
 		LOGGER.info("Hora final: " + processEndDate);
 		//FIXME: Comprobar zona horaria.

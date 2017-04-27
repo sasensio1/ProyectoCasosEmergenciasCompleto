@@ -35,7 +35,7 @@
 						<td><input type="password" name="pass" class="" disabled /></td>
 					</tr>
 					<tr>
-						<td colspan="2" align="center"><input name="submit" type="submit" class="" value="<s:message code="login_form_button_submit"/>"/></td>
+						<td colspan="2" align="center"><input disabled name="submit" type="submit" class="" value="<s:message code="login_form_button_submit"/>"/></td>
 					</tr>
 				</table>
 			</form>

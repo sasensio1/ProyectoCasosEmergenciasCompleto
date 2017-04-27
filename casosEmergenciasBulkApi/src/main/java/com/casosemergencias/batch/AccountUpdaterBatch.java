@@ -20,9 +20,11 @@ public class AccountUpdaterBatch {
 	
 	public void updateAccountInfo() {
 		LOGGER.trace("Comienzo del proceso de actualizacion de Account de SalesForce a la base de datos de Heroku");
-		Date yesterday = Utils.substractDaysToDate(new Date(), 1);
-		Date processStartDate = Utils.setHourInDate(yesterday, 0, 0, 0, 0);
-		Date processEndDate = Utils.setHourInDate(yesterday, 23, 59, 59, 999);
+		Date processEndDate = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(processEndDate);
+		cal.add(Calendar.MINUTE, -30);
+		Date processStartDate = cal.getTime();
 		//FIXME: Comprobar zona horaria.
 		restApiInvokerBatch.setProcessStartDate(processStartDate);
 		restApiInvokerBatch.setProcessEndDate(processEndDate);

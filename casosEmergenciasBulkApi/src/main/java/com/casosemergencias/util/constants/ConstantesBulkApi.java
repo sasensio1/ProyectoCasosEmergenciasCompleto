@@ -84,7 +84,7 @@ public class ConstantesBulkApi {
 	public static final String ENTITY_CASE_HISTORY_SELECT = "SELECT Id, CreatedById, NewValue, OldValue, Field, CaseId"
 															   + ", CreatedDate, IsDeleted";
 	
-	public static final String ENTITY_CONTACT_SELECT = "SELECT Id, Name, Birthdate, PreferredChannelContact__c"
+	public static final String ENTITY_CONTACT_SELECT = "SELECT Id, Name, PreferredChannelContact__c"
 														  + ", AssociatedAccountType__c, MothersLastName__c, IdentityType__c, SecondaryPhone__c"
 														  + ", SecondaryEmail__c, RepeatedCases__c, Email, ContactAddress__c"
 														  + ", AccountId, FirstName, ContactType__c, Phone, FathersLastName__c"
