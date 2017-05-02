@@ -1,0 +1,2883 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:ns2="http://xmlns.endesa.com/CommonSchemasNeol" xmlns:ns1="http://xmlns.endesa.com/CommonSchemas" xmlns:tns="http://www.example.org/SIEME002/SIEME002" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://www.example.org/SIEME002_Schema/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="SIEME002" targetNamespace="http://www.example.org/SIEME002/SIEME002">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://xmlns.endesa.com/CommonSchemasNeol" targetNamespace="http://xmlns.endesa.com/CommonSchemasNeol" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <complexType name="AlianzaType">
+                <sequence>
+                    <element name="IdAlianza" type="tns:IdAlianza" minOccurs="0"/>
+                    <element name="IdProducto" type="tns:IdProducto" minOccurs="0"/>
+                    <element name="LineaNegocio" type="tns:LineaNegocio" minOccurs="0"/>
+                    <element name="Descripcion" type="tns:Comentario" minOccurs="0"/>
+                    <element name="FechaAlta" type="tns:Fecha" minOccurs="0"/>
+                    <element name="FechaBaja" type="tns:Fecha" minOccurs="0"/>
+                    <element name="Proveedor" type="tns:Proveedor" minOccurs="0"/>
+                    <element name="TelefProveedor" type="tns:NumTelefono" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Alias">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="AliasNEOL">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="AmbitoValidezCIE">
+                <restriction base="string">
+                    <maxLength value="2"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Anio">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Apellido">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ApellidosType">
+                <sequence>
+                    <element name="Apellido1" type="tns:Apellido" minOccurs="0"/>
+                    <element name="Apellido2" type="tns:Apellido" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="AutenticadoType">
+                <sequence>
+                    <element name="DatosAutenticado" type="tns:AutorizadoType"/>
+                    <element name="DatosFacturacion" type="tns:DatosFacturacionType"/>
+                    <element name="DireccionPersContAntenticado" type="tns:DireccionType" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Autorizacion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="AutorizadoNivelCliente">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="AutorizadoType">
+                <sequence>
+                    <element name="IdPersContacto" type="tns:IdPersContacto" minOccurs="0"/>
+                    <element name="Rol" type="tns:Rol" minOccurs="0"/>
+                    <element name="Email" type="tns:Email" minOccurs="0"/>
+                    <element name="Nombre" type="tns:NombreCompletoType" minOccurs="0"/>
+                    <element name="TipoDocIdentificativo" type="tns:TipoDocIdent" minOccurs="0"/>
+                    <element name="DocumentoIdentificativo" type="tns:NumDocIdent" minOccurs="0"/>
+                    <element name="Idioma" type="tns:Idioma" minOccurs="0"/>
+                    <element name="Nacionalidad" type="tns:Nacionalidad" minOccurs="0"/>
+                    <element name="DireccionPostalPrincipal" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="DatosBancariosCuentaPrincipal" type="tns:CuentaComercType" minOccurs="0"/>
+                    <element name="ListaContratosAutoriz" type="tns:ListaContratosType" minOccurs="0"/>
+                    <element name="AutorizadoNivelCliente" type="boolean" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Banco">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Boletin">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="BonoSocial">
+                <restriction base="string">
+                    <maxLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CIE">
+                <restriction base="string">
+                    <maxLength value="11"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CIEElectrico">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CIP">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CNAE">
+                <restriction base="string">
+                    <maxLength value="5"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CUPS">
+                <restriction base="string">
+                    <maxLength value="22"/>
+                </restriction>
+            </simpleType>
+            <complexType name="CUPSType">
+                <sequence>
+                    <element name="IdCUPS" type="string"/>
+                    <element name="TipoSuministro" type="tns:TipoSuministro"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Cadena">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Campania">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CampoOrdenacion">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="CampoType">
+                <sequence>
+                    <element name="Campo" type="tns:NombreCampo" minOccurs="0"/>
+                    <element name="ValorCampo" type="tns:ValorCampo" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="CamposSTPType">
+                <sequence>
+                    <element name="CUPS" type="tns:CUPS" minOccurs="0"/>
+                    <element name="Cantidad" type="tns:Cantidad" minOccurs="0"/>
+                    <element name="Tipo" type="tns:Tipo" minOccurs="0"/>
+                    <element name="Marca" type="tns:Marca" minOccurs="0"/>
+                    <element name="DireccionPs" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="Estado" type="tns:Estado" minOccurs="0"/>
+                    <element name="FechaInstalacion" type="tns:Fecha" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="CamposType">
+                <sequence>
+                    <element name="IdCampo" type="tns:IdCampo"/>
+                    <element name="NombreCampo" type="tns:NombreCampo"/>
+                    <element name="ValorDefecto" type="tns:ValorDefecto"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Canal">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Cantidad">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Caudal">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CaudalGas">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ClaseCliente">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ClientProPS">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="ClienteEmailAltaModType">
+                <sequence>
+                    <element name="Email" type="tns:Email" minOccurs="0"/>
+                    <element name="Cliente" type="tns:DatosClienteType" minOccurs="0"/>
+                    <element name="TipoAccion" type="tns:TipoAccion" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="CodCalle">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodMunicipio">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodPiso">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodPoblacion">
+                <restriction base="string">
+                    <maxLength value="8"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodProducto">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodProvincia">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodTipAcFin">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodTipoVia">
+                <restriction base="string">
+                    <maxLength value="2"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoAPM">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoAlianza">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodigoBIC">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoBarras">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoCliente">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                    <minLength value="1"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoControl">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoEmpresa">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodigoError">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoEstado">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodigoFactura">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoGestion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodigoPS">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodigoPais">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoPostal">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoPromocional">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodigoREIG">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodigoServicio">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CodigoValidacion">
+                <restriction base="string">
+                    <maxLength value="4"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Comentario">
+                <restriction base="string">
+                    <maxLength value="255"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Comercializadora">
+                <restriction base="string">
+                    <maxLength value="4"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ComparadorType">
+                <sequence>
+                    <element name="UsoSuministro" type="tns:Segmento"/>
+                    <element name="ComercializadoraLuz" type="tns:Comercializadora"/>
+                    <element name="TarifaLuz" type="tns:Tarifa"/>
+                    <element name="ComercializadoraGas" type="tns:Comercializadora"/>
+                    <element name="TarifaGas" type="tns:Tarifa"/>
+                </sequence>
+            </complexType>
+            <complexType name="CondicionLegal">
+                <sequence>
+                    <choice>
+                        <element name="IdProducto" type="tns:IdProducto"/>
+                        <element name="IdPromocion" type="tns:IdPromocion"/>
+                    </choice>
+                    <element name="TextoCondiciones" type="tns:TextoCondiciones"/>
+                </sequence>
+            </complexType>
+            <simpleType name="CondicionValue">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="CondicionesLegales">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="ConfiguracionType">
+                <sequence>
+                    <element name="IdConf" type="tns:IdConf" minOccurs="0"/>
+                    <element name="ValorConf" type="tns:ValorConf" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="ConfiguracionUsuario">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="ConfirmacionesPagoType">
+                <sequence>
+                    <element name="IdObligacion" type="tns:IdObligacion"/>
+                    <element name="Resultado" type="boolean" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Consumo">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="ConsumoMedio">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ContactoType">
+                <sequence>
+                    <element name="TipoDoc" type="tns:TipoDocIdent" minOccurs="0"/>
+                    <element name="NumDoc" type="tns:NumDocIdent" minOccurs="0"/>
+                    <element name="NombreEmpresa" type="tns:Empresa" minOccurs="0"/>
+                    <element name="Nombre" type="tns:NombreCompletoType" minOccurs="0"/>
+                    <element name="Nacionalidad" type="tns:Nacionalidad" minOccurs="0"/>
+                    <element name="Idioma" type="tns:Idioma" minOccurs="0"/>
+                    <element name="Telefono" type="tns:NumTelefono" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Contexto">
+                <restriction base="string">
+                    <enumeration value="Recomendador"/>
+                    <enumeration value="Comparador"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ContratoDeudaType">
+                <sequence>
+                    <element name="NumContrato" type="tns:NumContrato"/>
+                    <element name="ImporteDeudaAcumulada" type="tns:Importe"/>
+                </sequence>
+            </complexType>
+            <complexType name="ContratoGestionType">
+                <sequence>
+                    <element name="Contrato" type="tns:ContratoType"/>
+                    <element name="TipoGestion" type="tns:TipoGestion"/>
+                </sequence>
+            </complexType>
+            <complexType name="ContratoProductosType">
+                <sequence>
+                    <element name="NumContrato" type="tns:NumContrato"/>
+                    <element name="IdContrato" type="tns:IdContrato" minOccurs="0"/>
+                    <element name="ListaProductos" type="tns:ListaProductosType" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="ContratoType">
+                <sequence>
+                    <element name="NumContrato" type="tns:NumContrato" minOccurs="0"/>
+                    <element name="NombreContrato" type="tns:NombreContrato" minOccurs="0"/>
+                    <element name="Direccion" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="EmpresaTitular" type="tns:Empresa" minOccurs="0"/>
+                    <element name="Estado" type="tns:Estado" minOccurs="0"/>
+                    <element name="ListaLineasPedido" type="tns:ListaLineasPedidoType" minOccurs="0"/>
+                    <element name="FacturaDigital" type="boolean" minOccurs="0"/>
+                    <element name="LineaNegocio" type="tns:LineaNegocio" minOccurs="0"/>
+                    <element name="FechaAlta" type="tns:Fecha" minOccurs="0"/>
+                    <element name="ValidacionNoSuperada" type="tns:ValidacionType" minOccurs="0"/>
+                    <element name="IdContrato" type="tns:IdContrato" minOccurs="0"/>
+                    <element name="IdCuentaComercial" type="tns:IdCuenta" minOccurs="0"/>
+                    <element name="DescripcionCuentaComercial" type="tns:DescripcionCuenta" minOccurs="0"/>
+                    <element name="ListaContratosAsociados" type="tns:ListaDatosContratoType" minOccurs="0"/>
+                    <element name="Tarifa" type="tns:Tarifa" minOccurs="0"/>
+                    <element name="CUPS" type="tns:CUPS" minOccurs="0"/>
+                    <element name="ListaDocumentacionAdjunta" type="tns:ListaDocumentosAdjuntosType" minOccurs="0"/>
+                    <element name="ListaDocumentacionNoAdjunta" type="tns:ListaDocumentosPendientesType" minOccurs="0"/>
+                    <element name="FechaRescision" type="tns:Fecha" minOccurs="0"/>
+                    <element name="DeudaPendiente" type="tns:Deuda" minOccurs="0"/>
+                    <element name="ProductoAsociado" type="tns:ProductoType" minOccurs="0"/>
+                    <element name="CodigoUltimaFactura" type="tns:CodigoFactura" minOccurs="0"/>
+                    <element name="ImporteUltimaFactura" type="tns:Importe" minOccurs="0"/>
+                    <element name="BonoSocial" type="tns:BonoSocial" minOccurs="0"/>
+                    <element name="CuentaComercial" type="tns:CuentaComercType" minOccurs="0"/>
+                    <element name="Potencia" type="tns:Potencia" minOccurs="0"/>
+                    <element name="PropiedadEquipo" type="tns:PropiedadEquipo" minOccurs="0"/>
+                    <element name="ConsumoMedio" type="tns:ConsumoMedio" minOccurs="0"/>
+                    <element name="Caudal" type="tns:Caudal" minOccurs="0"/>
+                    <element name="Tension" type="tns:Tension" minOccurs="0"/>
+                    <element name="EquipoMedida" type="tns:EquipoMedida" minOccurs="0"/>
+                    <element name="DiscriminacionHoraria" type="tns:DiscHoraria" minOccurs="0"/>
+                    <element name="TarifaATR" type="string" minOccurs="0"/>
+                    <element name="Potencia1" type="tns:Potencia" minOccurs="0"/>
+                    <element name="Potencia2" type="tns:Potencia" minOccurs="0"/>
+                    <element name="Potencia3" type="tns:Potencia" minOccurs="0"/>
+                    <element name="TipoTension" type="tns:TipoTension" minOccurs="0"/>
+                    <element name="Presion" type="tns:Presion" minOccurs="0"/>
+                    <element name="ControlPotencia" type="tns:ControlPotencia" minOccurs="0"/>
+                    <element name="CNAE" type="tns:CNAE" minOccurs="0"/>
+                    <element name="TipoContrato" type="tns:TipoContrato" minOccurs="0"/>
+                    <element name="DatosTecnicos" type="tns:DatosTecnicos" minOccurs="0"/>
+                    <element name="FechaUltimaModificacion" type="tns:Fecha" minOccurs="0"/>
+                    <element name="IsSVE" type="boolean" minOccurs="0"/>
+                    <element name="ListaPersonasContacto" type="tns:ListaPersonAutorizaType" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="ContratoVigor">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="ControlPotencia">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Coordenadas">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <complexType name="CoordenadasType">
+                <sequence>
+                    <element name="Latitud" type="tns:Latitud" minOccurs="0"/>
+                    <element name="Longitud" type="tns:Longitud" minOccurs="0"/>
+                    <element name="RangoMaxAccion" type="tns:RangoAccion" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="CuentaComercType">
+                <sequence>
+                    <element name="TipoCuenta" type="tns:TipoCuenta" minOccurs="0"/>
+                    <element name="IdCuenta" type="tns:IdCuenta" minOccurs="0"/>
+                    <element name="Descripcion" type="tns:DescripcionCuenta" minOccurs="0"/>
+                    <element name="TitularPago" type="tns:DatosTitularPagoType" minOccurs="0"/>
+                    <element name="Alias" type="tns:Alias" minOccurs="0"/>
+                    <element name="TipoPuestaCobro" type="tns:TipoPuestaCobro" minOccurs="0"/>
+                    <element name="CodigoPais" type="tns:CodigoPais" minOccurs="0"/>
+                    <element name="CodigoControl" type="tns:CodigoControl" minOccurs="0"/>
+                    <element name="Entidad" type="tns:Entidad" minOccurs="0"/>
+                    <element name="Oficina" type="tns:Oficina" minOccurs="0"/>
+                    <element name="DC" type="tns:DigitoControl" minOccurs="0"/>
+                    <element name="NumCuenta" type="tns:NumCuenta" minOccurs="0"/>
+                    <element name="ListContratos" type="tns:ListaContratosType" minOccurs="0"/>
+                    <element name="DireccionFacturacion" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="BIC" type="tns:CodigoBIC" minOccurs="0"/>
+                    <element name="IBAN" type="tns:IBAN" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="CuentaType">
+                <sequence>
+                    <element name="SelectorAlias" type="tns:SelectorAlias"/>
+                    <element name="Alias" type="tns:Alias"/>
+                    <element name="Banco" type="tns:Banco"/>
+                    <element name="Oficina" type="tns:IdOficina"/>
+                    <element name="DigitoControl" type="tns:DigitoControl"/>
+                    <element name="Cuenta" type="tns:NumCuenta"/>
+                </sequence>
+            </complexType>
+            <simpleType name="DatoTecnico">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="DatosClienteType">
+                <sequence>
+                    <element name="IdCliente" type="tns:IdCliente" minOccurs="0"/>
+                    <element name="TipoPersona" type="tns:TipoPersona" minOccurs="0"/>
+                    <element name="Nombre" type="tns:NombreCompletoType" minOccurs="0"/>
+                    <element name="TipoDocumentoIdent" type="tns:TipoDocIdent" minOccurs="0"/>
+                    <element name="DocumentoIdentificativo" type="tns:NumDocIdent" minOccurs="0"/>
+                    <element name="Idioma" type="tns:Idioma" minOccurs="0"/>
+                    <element name="Nacionalidad" type="tns:Nacionalidad" minOccurs="0"/>
+                    <element name="RazonSocial" type="tns:RazonSocial" minOccurs="0"/>
+                    <element name="Contacto" type="tns:ContactoType" minOccurs="0"/>
+                    <element name="EstadoCliente" type="tns:EstadoCliente" minOccurs="0"/>
+                    <element name="TipoCliente" type="tns:TipoCliente" minOccurs="0"/>
+                    <element name="ClaseCliente" type="tns:ClaseCliente" minOccurs="0"/>
+                    <element name="DatosPostales" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="DatosFacturacion" type="tns:DatosFacturacionType" minOccurs="0"/>
+                    <element name="NumeroTelefono" type="tns:NumTelefono" minOccurs="0"/>
+                    <element name="FechaNacimiento" type="tns:Fecha" minOccurs="0"/>
+                    <element name="Profesion" type="tns:Profesion" minOccurs="0"/>
+                    <element name="Sexo" type="tns:Sexo" minOccurs="0"/>
+                    <element name="FacturaDigital" type="boolean" minOccurs="0"/>
+                    <element name="Fax" type="tns:NumFax" minOccurs="0"/>
+                    <element name="Rol" type="tns:Rol" minOccurs="0"/>
+                    <element name="MarcaPedidoVuelo" type="boolean" minOccurs="0"/>
+                    <element name="MarcaRobinson" type="boolean" minOccurs="0"/>
+                    <element name="TipoContacto" type="tns:TipoContacto" minOccurs="0"/>
+                    <element name="NumeroContacto" type="tns:NumTelefono" minOccurs="0"/>
+                    <element name="Email" type="tns:Email" minOccurs="0"/>
+                    <element name="Telefono" type="tns:NumTelefono" minOccurs="0"/>
+                    <element name="MetodoContactoEmail" type="boolean" minOccurs="0"/>
+                    <element name="AliasNEOL" type="tns:AliasNEOL" minOccurs="0"/>
+                    <element name="EntidadBancaria" type="tns:EntidadBancaria" minOccurs="0"/>
+                    <element name="IdClienteML" type="tns:IdClienteML" minOccurs="0"/>
+                    <element name="DireccionPuntoSuministro" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="DireccionCLiente" type="tns:DireccionType" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="DatosContrato">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="DatosContratoType">
+                <sequence>
+                    <element name="NumContrato" type="tns:NumContrato" minOccurs="0"/>
+                    <element name="Tarifa" type="tns:Tarifa" minOccurs="0"/>
+                    <element name="Nombre" type="tns:Nombre" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="DatosFacturacionType">
+                <sequence>
+                    <element name="TipoCuenta" type="tns:TipoCuenta" minOccurs="0"/>
+                    <element name="Entidad" type="tns:IdEntidad" minOccurs="0"/>
+                    <element name="Sucursal" type="tns:Sucursal" minOccurs="0"/>
+                    <element name="DC" type="tns:DigitoControl" minOccurs="0"/>
+                    <element name="NumeroCuenta" type="tns:NumCuenta" minOccurs="0"/>
+                    <element name="DireccionFacturacion" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="Domiciliada" type="tns:MetodoPuestaCobro" minOccurs="0"/>
+                    <element name="IBAN" type="tns:IBAN" minOccurs="0"/>
+                    <element name="BIC" type="tns:CodigoBIC" minOccurs="0"/>
+                    <element name="FormaPago" type="tns:FormaPago" minOccurs="0"/>
+                    <element name="PerteneceCuentaComercialPrincipal" type="boolean" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="DatosObligacion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DatosOpcionales">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="DatosPersonaContactoAutType">
+                <sequence>
+                    <element name="Rol" type="tns:Rol" minOccurs="0"/>
+                    <element name="AutorizadoNivelCliente" type="boolean" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="DatosPersonaContactoTitType">
+                <sequence>
+                    <element name="IdPersonaContacto" type="tns:IdPersContacto" minOccurs="0"/>
+                    <element name="Nombre" type="tns:NombreCompletoType" minOccurs="0"/>
+                    <element name="TipoDoc" type="tns:TipoDocIdent" minOccurs="0"/>
+                    <element name="NumDoc" type="tns:NumDocIdent" minOccurs="0"/>
+                    <element name="Email" type="tns:Email" minOccurs="0"/>
+                    <element name="Nacionalidad" type="tns:Nacionalidad" minOccurs="0"/>
+                    <element name="Idioma" type="tns:Idioma" minOccurs="0"/>
+                    <element name="MetodoContacto" type="tns:MetodoContacto" minOccurs="0"/>
+                    <element name="MetodoContactoEmail" type="boolean" minOccurs="0"/>
+                    <element name="Rol" type="tns:Rol" minOccurs="0"/>
+                    <element name="AliasNEOL" type="tns:AliasNEOL" minOccurs="0"/>
+                    <element name="MarcaRobinson" type="boolean" minOccurs="0"/>
+                    <element name="Estado" minOccurs="0">
+                        <simpleType>
+                            <restriction base="tns:EstadoPersonaContacto">
+                                <enumeration value="potencial"/>
+                                <enumeration value="activo"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element name="Profesion" type="tns:Profesion" minOccurs="0"/>
+                    <element name="Sexo" type="tns:Sexo" minOccurs="0"/>
+                    <element name="FechaDeNacimiento" type="tns:Fecha" minOccurs="0"/>
+                    <element name="Telefono" type="tns:NumTelefono" minOccurs="0"/>
+                    <element name="DireccionContacto" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="DatosFacturacion" type="tns:DatosFacturacionType" minOccurs="0"/>
+                    <element name="Contratos" type="tns:ListaNumContratoType" minOccurs="0"/>
+                    <element name="AutorizadoCliente" type="boolean" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="DatosProducto">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="DatosPuntoSuministroType">
+                <sequence>
+                    <element name="CodigoPS" type="tns:CodigoPS" minOccurs="0"/>
+                    <element name="TipoPS" type="tns:TipoPS" minOccurs="0"/>
+                    <element name="CUPS" type="tns:CUPS" minOccurs="0"/>
+                    <element name="IdCUPS" type="string" minOccurs="0"/>
+                    <element name="DescripcionPS" type="tns:DescripcionPS" minOccurs="0"/>
+                    <element name="DireccionPS" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="TipoSuministro" type="tns:TipoSuministro" minOccurs="0"/>
+                    <element name="ClientProPS" type="tns:ClientProPS" minOccurs="0"/>
+                    <element name="PSinCRM" type="boolean" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="DatosTarjetaType">
+                <sequence>
+                    <element name="Titular" type="tns:Titular"/>
+                    <element name="NumTarjeta" type="tns:NumTarjeta"/>
+                    <element name="Importe" type="tns:Importe" minOccurs="0"/>
+                    <element name="NumSeguridad" type="tns:NumSeguridad" minOccurs="0"/>
+                    <element name="MesCaducidad" type="tns:Mes" minOccurs="0"/>
+                    <element name="AnioCaducidad" type="tns:Anio" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="DatosTecnicos">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="DatosTitularPagoType">
+                <sequence>
+                    <element name="Email" type="tns:Email" minOccurs="0"/>
+                    <element name="IdCliente" type="tns:IdCliente" minOccurs="0"/>
+                    <element name="NombreCliente" type="tns:NombreCompletoType" minOccurs="0"/>
+                    <element name="RazonSocial" type="tns:RazonSocial" minOccurs="0"/>
+                    <element name="DocumentacionCliente" type="tns:DocumentacionType" minOccurs="0"/>
+                    <element name="TelefonoContacto" type="tns:NumTelefono" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="DescripcionCalle">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="DescripcionCuenta">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DescripcionDoc">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DescripcionGestion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DescripcionIntegrador">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DescripcionMunicipio">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="DescripcionPS">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DescripcionPais">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="DescripcionPoblacion">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="DescripcionProvincia">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="DescripcionValidacion">
+                <restriction base="string">
+                    <maxLength value="256"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Descuento">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <complexType name="DescuentoType">
+                <sequence>
+                    <element name="DetalleDescuento" type="tns:DetalleDescuento"/>
+                    <element name="IdDescuento" type="string"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Detalle">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DetalleCNAE">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DetalleCondicion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DetalleDescuento">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DetalleGasto">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DetalleListaIncompa">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DetalleListaPedido">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DetalleProducto">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DetallePromocion">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Deuda">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DigitoControl">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Direccion">
+                <restriction base="string">
+                    <maxLength value="255"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="DireccionPS">
+                <restriction base="string">
+                    <maxLength value="255"/>
+                </restriction>
+            </simpleType>
+            <complexType name="DireccionType">
+                <sequence>
+                    <element name="Alias" type="tns:Alias" minOccurs="0"/>
+                    <element name="TipoVia" type="tns:TipoVia" minOccurs="0"/>
+                    <element name="CodCalle" type="tns:CodCalle" minOccurs="0"/>
+                    <element name="DescripcionCalle" type="tns:DescripcionCalle" minOccurs="0"/>
+                    <element name="Numero" type="tns:Numero" minOccurs="0"/>
+                    <element name="Piso" type="tns:Piso" minOccurs="0"/>
+                    <element name="Puerta" type="tns:Puerta" minOccurs="0"/>
+                    <element name="Escalera" type="tns:Escalera" minOccurs="0"/>
+                    <element name="CodigoPostal" type="tns:CodigoPostal" minOccurs="0"/>
+                    <element name="CodPoblacion" type="tns:CodPoblacion" minOccurs="0"/>
+                    <element name="DescripcionPoblacion" type="tns:DescripcionPoblacion" minOccurs="0"/>
+                    <element name="CodMunicipio" type="tns:CodMunicipio" minOccurs="0"/>
+                    <element name="DescripcionMunicipio" type="tns:DescripcionMunicipio" minOccurs="0"/>
+                    <element name="CodProvincia" type="tns:CodProvincia" minOccurs="0"/>
+                    <element name="DescripcionProvincia" type="tns:DescripcionProvincia" minOccurs="0"/>
+                    <element name="CodigoPais" type="tns:CodigoPais" minOccurs="0"/>
+                    <element name="DescripcionPais" type="tns:DescripcionPais" minOccurs="0"/>
+                    <element name="CodTipAcFin" type="tns:CodTipAcFin" minOccurs="0"/>
+                    <element name="DireccionContactoPrincipal" type="boolean" minOccurs="0"/>
+                    <element name="DireccionNormalizada" type="boolean" minOccurs="0"/>
+                    <element name="DireccionMismaQueContacto" type="boolean" minOccurs="0"/>
+                    <element name="TipoDireccion" type="tns:TipoDireccion" minOccurs="0"/>
+                    <element name="IdDireccion" type="tns:IdDireccion" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="DiscHoraria">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="DispCaldera">
+                <restriction base="boolean"/>
+            </simpleType>
+            <simpleType name="Distribuidora">
+                <restriction base="string">
+                    <maxLength value="3"/>
+                </restriction>
+            </simpleType>
+            <complexType name="DocumentacionType">
+                <sequence>
+                    <element name="DocIdentificativo" type="tns:NumDocIdent"/>
+                    <element name="TipoIdentificativo" type="tns:TipoDocIdent"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Documento">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="DocumentoPendienteType">
+                <sequence>
+                    <element name="TipoDocumento" type="tns:TipoDocumento"/>
+                    <element name="Estado" type="tns:EstadoVerificacion"/>
+                </sequence>
+            </complexType>
+            <complexType name="DocumentoType">
+                <sequence>
+                    <element name="URLDocumento" type="tns:URL" minOccurs="0"/>
+                    <element name="TipoDocumento" type="tns:TipoDocumento" minOccurs="0"/>
+                    <element name="Comentario" type="tns:Comentario" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Email">
+                <restriction base="string">
+                    <maxLength value="256"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Emisor">
+                <restriction base="string">
+                    <maxLength value="60"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Empresa">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="EmpresaComContrato">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EndidadCobrante">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Entidad">
+                <restriction base="string">
+                    <maxLength value="100"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="EntidadBancaria">
+                <restriction base="string">
+                    <maxLength value="100"/>
+                </restriction>
+            </simpleType>
+            <complexType name="EntidadType">
+                <sequence>
+                    <element name="TipoEntidad" type="tns:TipoEntidad"/>
+                    <element name="IdEntidad" type="tns:IdEntidad"/>
+                    <element name="NumEntidadAsociada" type="tns:NumEntidad"/>
+                </sequence>
+            </complexType>
+            <complexType name="EquSTPType">
+                <sequence>
+                    <element name="CUPS" type="tns:CUPS" minOccurs="0"/>
+                    <element name="Cantidad" type="tns:Cantidad" minOccurs="0"/>
+                    <element name="Tipo" type="tns:Tipo" minOccurs="0"/>
+                    <element name="Marca" type="tns:Marca" minOccurs="0"/>
+                    <element name="DireccionPS" type="tns:DireccionPS" minOccurs="0"/>
+                    <element name="Estado" type="tns:Estado" minOccurs="0"/>
+                    <element name="FechaInstalacion" type="tns:Fecha" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="EquipoMedida">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="ErrorHeaderType">
+                <sequence>
+                    <element name="Error" type="tns:ErrorType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ErrorType">
+                <sequence>
+                    <element name="CodigoError" type="tns:CodigoError"/>
+                    <element name="MensajeError" type="tns:MensajeError"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Escalera">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Estado">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoCliente">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoContrato">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoDoc">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoFactura">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoLineaPedido">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoOfrecimiento">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoPedido">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="EstadoPersonaContacto">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoRobinson">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoUsuario">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="EstadoVerificacion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="ExisteDocAdjunta">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="FacturaDigital">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="FacturaType">
+                <sequence>
+                    <element name="IdFactura" type="tns:IdFactura"/>
+                    <element name="LineaNegocio" type="tns:LineaNegocio"/>
+                    <element name="AliasContrato" type="tns:Alias"/>
+                    <element name="DireccionContrato" type="tns:DireccionType"/>
+                    <element name="NumFactura" type="tns:NumFactura"/>
+                    <element name="Periodo" type="tns:PeriodoType"/>
+                    <element name="Importe" type="tns:Importe"/>
+                    <element name="Estado" type="tns:EstadoFactura"/>
+                    <element name="Vencimiento" type="tns:Fecha"/>
+                    <element name="URL" type="tns:URL"/>
+                    <element name="TipoFactura" type="tns:TipoFactura"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Fecha">
+                <restriction base="dateTime"/>
+            </simpleType>
+            <simpleType name="FechaHora">
+                <restriction base="tns:Fecha"/>
+            </simpleType>
+            <complexType name="FechaType">
+                <sequence>
+                    <element name="Mes" type="tns:Mes"/>
+                    <element name="Anio" type="tns:Anio"/>
+                </sequence>
+            </complexType>
+            <simpleType name="FormaPago">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Gas">
+                <restriction base="boolean"/>
+            </simpleType>
+            <complexType name="GastoType">
+                <sequence>
+                    <element name="ImporteGasto" type="tns:Importe"/>
+                    <element name="DetalleGasto" type="tns:Comentario" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="GrupoAPMType">
+                <sequence>
+                    <element name="CodigoAPM" type="tns:CodigoAPM" minOccurs="0"/>
+                    <element name="PotenciaInstalacionATKw" type="tns:Potencia" minOccurs="0"/>
+                    <element name="FechaEmisionAPM" type="tns:Fecha" minOccurs="0"/>
+                    <element name="FechaCaducidadAPM" type="tns:Fecha" minOccurs="0"/>
+                    <element name="PotMaxAutorizadaAPMKw" type="tns:Potencia" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="GrupoCIEType">
+                <sequence>
+                    <element name="CIEElectronico" type="tns:CIEElectrico" minOccurs="0"/>
+                    <element name="CodigoCIE" type="tns:CIE" minOccurs="0"/>
+                    <element name="HuellaSelloElectronico" type="tns:HuellaSelloElectronico" minOccurs="0"/>
+                    <element name="FechaEmisionCIE" type="tns:Fecha" minOccurs="0"/>
+                    <element name="FechaCaducidadCIE" type="tns:Fecha" minOccurs="0"/>
+                    <element name="NIFInstalador" type="tns:NIF" minOccurs="0"/>
+                    <element name="NombreRazSocialInstalador" type="tns:RazonSocial" minOccurs="0"/>
+                    <element name="IntensidadDiferencialA" type="tns:Intensidad" minOccurs="0"/>
+                    <element name="SensibilidadDiferencialmA" type="tns:Sensibilidad" minOccurs="0"/>
+                    <element name="SeccionCable" type="tns:SeccionCable" minOccurs="0"/>
+                    <element name="TipoSuministroCIE" type="tns:TipoSuministro" minOccurs="0"/>
+                    <element name="GrupoAPM" type="tns:GrupoAPMType" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="GrupoDatosOpcionalesType">
+                <sequence>
+                    <element name="PotAdscritaAccesoKw" type="tns:Potencia" minOccurs="0"/>
+                    <element name="FecLimiteDerAdscritos" type="tns:Fecha" minOccurs="0"/>
+                    <element name="PotenciaBaja" type="boolean" minOccurs="0"/>
+                    <element name="Perdidas" type="boolean" minOccurs="0"/>
+                    <element name="PotenciaTransformadorKw" type="tns:Potencia" minOccurs="0"/>
+                    <element name="TipoPuntoMedida" type="tns:TipoPuntoMedida" minOccurs="0"/>
+                    <element name="NCedulaHabitabilidad" type="tns:NumeroCedulaHabitabilidad" minOccurs="0"/>
+                    <element name="FecExpedicionCedula" type="tns:Fecha" minOccurs="0"/>
+                    <element name="FecultimoCambioComerc" type="tns:Fecha" minOccurs="0"/>
+                    <element name="FechaultimaLectura" type="tns:Fecha" minOccurs="0"/>
+                    <element name="AmbitoValidezCIE" type="tns:AmbitoValidezCIE" minOccurs="0"/>
+                    <element name="ViviendaHabitual" type="boolean" minOccurs="0"/>
+                    <element name="FechaultimaRevision" type="tns:Fecha" minOccurs="0"/>
+                    <element name="ResultadoUltimaRevision" type="tns:Resultado" minOccurs="0"/>
+                    <element name="FechaUltimaInspeccion" type="tns:Fecha" minOccurs="0"/>
+                    <element name="ResultadoUltimaInspeccion" type="tns:Resultado" minOccurs="0"/>
+                    <element name="FianzaDistribuidora" type="boolean" minOccurs="0"/>
+                    <element name="ImporteFianza" type="tns:Importe" minOccurs="0"/>
+                    <element name="Comentario" type="tns:Comentario" minOccurs="0"/>
+                    <element name="RedDistribucionGas" type="tns:RedDistribucionGas" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="GrupoDatostecnicosobligatoriosType">
+                <sequence>
+                    <element name="IdDireccion" type="tns:IdDireccion"/>
+                    <element name="CNAE" type="tns:CNAE"/>
+                    <element name="Segmento" type="tns:Segmento" minOccurs="0"/>
+                    <element name="Distribuidora" type="tns:Distribuidora"/>
+                    <element name="LineaNegocio" type="tns:LineaNegocio"/>
+                    <element name="TipoTension" type="tns:TipoTension" minOccurs="0"/>
+                    <element name="TensionV" type="tns:Tension" minOccurs="0"/>
+                    <element name="Tarifa" type="tns:Tarifa"/>
+                    <element name="PotenciaPeriodo1Kw" type="tns:Potencia"/>
+                    <element name="PotenciaPeriodo2Kw" type="tns:Potencia" minOccurs="0"/>
+                    <element name="PotenciaPeriodo3Kw" type="tns:Potencia" minOccurs="0"/>
+                    <element name="PotenciaPeriodo4Kw" type="tns:Potencia" minOccurs="0"/>
+                    <element name="PotenciaPeriodo5Kw" type="tns:Potencia" minOccurs="0"/>
+                    <element name="PotenciaPeriodo6Kw" type="tns:Potencia" minOccurs="0"/>
+                    <element name="ConsumoAnualEstKwhAnio" type="tns:Consumo" minOccurs="0"/>
+                    <element name="PropiedadEquipoMedida" type="tns:PropiedadEquipo" minOccurs="0"/>
+                    <element name="PropiedadICP" type="tns:PropiedadICP" minOccurs="0"/>
+                    <element name="ICPInstalado" type="boolean" minOccurs="0"/>
+                    <element name="PotenciaMaxAutorizadaCIE" type="tns:Potencia" minOccurs="0"/>
+                    <element name="PotenciaAdscritaExtension" type="tns:Potencia" minOccurs="0"/>
+                    <element name="RefCatas" type="tns:ReferenciaCatastral" minOccurs="0"/>
+                    <element name="CIEaportado" type="boolean" minOccurs="0"/>
+                    <element name="APMaportada" type="boolean" minOccurs="0"/>
+                    <element name="CodigoREIG" type="tns:CodigoREIG" minOccurs="0"/>
+                    <element name="PotenciaDisenyo" type="tns:Potencia" minOccurs="0"/>
+                    <element name="FechaCertificadoIRI" type="tns:Fecha" minOccurs="0"/>
+                    <element name="GrupoCIE" type="tns:GrupoCIEType" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="GrupoDocumentosAdjuntosType">
+                <sequence>
+                    <element name="Aportada" type="boolean" minOccurs="0"/>
+                    <element name="Comentario" type="tns:Comentario" minOccurs="0"/>
+                    <element name="Emisor" type="tns:Emisor" minOccurs="0"/>
+                    <element name="FechaAportacion" type="tns:Fecha" minOccurs="0"/>
+                    <element name="FechaEmision" type="tns:Fecha" minOccurs="0"/>
+                    <element name="FechaVigencia" type="tns:Fecha" minOccurs="0"/>
+                    <element name="NumeroDocumento" type="tns:Numerodocumento" minOccurs="0"/>
+                    <element name="TipoDocumento" type="tns:TipoDocumento" minOccurs="0"/>
+                    <element name="Url" type="tns:URL" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="GrupoGasObligatorioType">
+                <sequence>
+                    <element name="Presionbar" type="tns:Presion" minOccurs="0"/>
+                    <element name="CaudalMaximo" type="tns:Caudal" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="GrupoPeaje">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="GrupoPuntodesuministroType">
+                <sequence>
+                    <element name="IdCliente" type="tns:IdCliente"/>
+                    <element name="CUPS" type="tns:CUPS"/>
+                    <element name="Telemedida" type="tns:Telemedida" minOccurs="0"/>
+                    <element name="TipoPuntoMedida" type="tns:TipoPuntoMedida" minOccurs="0"/>
+                    <element name="GrupoDatostecnicosobligatorios" type="tns:GrupoDatostecnicosobligatoriosType" minOccurs="0"/>
+                    <element name="GrupoGasObligatorio" type="tns:GrupoGasObligatorioType" minOccurs="0"/>
+                    <element name="GrupoDocumentosAdjuntos" type="tns:GrupoDocumentosAdjuntosType" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Hora">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="HuellaSelloElectronico">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IBAN">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdActividad">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdAlianza">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdCampo">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdCliente">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdClienteML">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdCondicion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdConf">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdConfigUsuario">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdContrato">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdCuenta">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdCuentaComerc">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdDireccion">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdEntidad">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdFactura">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdFiscal">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdGestion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdLineaPedido">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdObligacion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdOficina">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdOfrecimiento">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdPS">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdPedido">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdPersCont">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdPersContacto">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdPeticion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdPeticionMandato">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdPlantilla">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdProceso">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdProducto">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdPromocion">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdRegistro">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdSolBonoSoc">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdSolicitud">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IdTitularPago">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdTransaccion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="IdUsuario">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="IdcPropertyListType">
+                <sequence>
+                    <element name="property" type="tns:IdcPropertyType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="IdcPropertyType">
+                <sequence>
+                    <element name="name" type="string" minOccurs="0"/>
+                    <element name="value" type="string" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="IdentificadorType">
+                <choice>
+                    <element name="CodigoClienteEndesa" type="tns:CodigoCliente"/>
+                    <element name="Documentacion" type="tns:DocumentacionType"/>
+                </choice>
+            </complexType>
+            <simpleType name="Idioma">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Importe">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <complexType name="IncompEncontType">
+                <sequence>
+                    <element name="DetalleListaIncompa" type="tns:DetalleListaIncompa" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="IncompatibilidadType">
+                <sequence>
+                    <element name="IdIncompatibilidad" type="string" minOccurs="0"/>
+                    <element name="IdProducto" type="string" minOccurs="0"/>
+                    <element name="Descripcion" type="string" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="IndCalidad">
+                <restriction base="string">
+                    <enumeration value="Alta"/>
+                    <enumeration value="Baja"/>
+                    <enumeration value="ModificacionRol"/>
+                    <enumeration value="ModificacionContratos"/>
+                </restriction>
+            </simpleType>
+            <complexType name="InfoCalidadType">
+                <sequence>
+                    <element name="Email" type="tns:Email"/>
+                    <element name="Alias" type="tns:Alias" minOccurs="0"/>
+                    <element name="EstadoRobinson" type="boolean" minOccurs="0"/>
+                    <element name="EstadoUsuario" type="tns:EstadoUsuario" minOccurs="0"/>
+                    <element name="FechaAlta" type="tns:Fecha" minOccurs="0"/>
+                    <element name="FechaBaja" type="tns:Fecha" minOccurs="0"/>
+                    <element name="UltFechaCambio" type="tns:Fecha" minOccurs="0"/>
+                    <element name="LOPD" type="boolean" minOccurs="0"/>
+                    <element name="IdUsuario" type="tns:IdUsuario" minOccurs="0"/>
+                    <element name="DatosOpcionales" type="tns:DatosOpcionales" minOccurs="0"/>
+                    <element name="IndCalidad" type="tns:IndCalidad"/>
+                </sequence>
+            </complexType>
+            <complexType name="InfoContratoType">
+                <sequence>
+                    <element name="NumContratoPedido" type="tns:NumContrato"/>
+                    <element name="NombreContrato" type="tns:Alias"/>
+                    <element name="DireccionContratoPedido" type="tns:DireccionType"/>
+                    <element name="EstadoContPedido" type="tns:Estado"/>
+                    <element name="LineasPedido" type="string"/>
+                    <element name="ImporteUltFactura" type="tns:Importe"/>
+                    <element name="FechaAlta" type="tns:Fecha"/>
+                    <element name="MotivoOfrecimiento" type="tns:MotivoOfrecimiento"/>
+                </sequence>
+            </complexType>
+            <complexType name="InfoGasType">
+                <sequence>
+                    <element name="GrupoPeaje" type="tns:GrupoPeaje"/>
+                    <element name="DispCaldera" type="tns:DispCaldera"/>
+                </sequence>
+            </complexType>
+            <complexType name="InfoLuzType">
+                <sequence>
+                    <element name="Potencia" type="tns:Potencia"/>
+                    <element name="DiscHoraria" type="tns:DiscHoraria"/>
+                </sequence>
+            </complexType>
+            <complexType name="InfoRobinsonType">
+                <sequence>
+                    <element name="Email" type="tns:Email"/>
+                    <element name="EstadoRobinson" type="tns:EstadoRobinson"/>
+                </sequence>
+            </complexType>
+            <simpleType name="IntegradorAsociado">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IntegradorLectura">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <complexType name="IntegradorType">
+                <sequence>
+                    <element name="Territorio" type="tns:Territorio" minOccurs="0"/>
+                    <element name="NumeroLectura" type="tns:NumLectura" minOccurs="0"/>
+                    <element name="Descripcion" type="tns:DescripcionIntegrador" minOccurs="0"/>
+                    <element name="Valor" type="tns:ValorIntegrador" minOccurs="0"/>
+                    <element name="FechaUltFactura" type="tns:Fecha" minOccurs="0"/>
+                    <element name="SolicitudesInteg" type="tns:SolicitudesIntegradorType" minOccurs="0" maxOccurs="unbounded"/>
+                    <element name="NumRuedas" type="tns:NumRuedas" minOccurs="0"/>
+                    <element name="Estimada" type="boolean" minOccurs="0"/>
+                    <element name="LecturaAutomatica" type="boolean" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Intensidad">
+                <restriction base="double"/>
+            </simpleType>
+            <simpleType name="InvocadorServicio">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Latitud">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <complexType name="LecturaORQType">
+                <sequence>
+                    <element name="IdIntegrador" type="string"/>
+                    <element name="ValorLectura" type="boolean"/>
+                </sequence>
+            </complexType>
+            <complexType name="LecturaType">
+                <sequence>
+                    <element name="FechaLectura" type="tns:Fecha"/>
+                    <element name="Valor" type="tns:ValorLectura"/>
+                    <element name="IntegradorAsociado" type="tns:ListaIntegradoresType"/>
+                    <element name="Estimada" type="boolean"/>
+                </sequence>
+            </complexType>
+            <complexType name="LecturasORQType">
+                <sequence>
+                    <element name="FechaLectura" type="tns:Fecha"/>
+                    <element name="IntegradorAsociado" type="tns:LecturaORQType" minOccurs="0" maxOccurs="unbounded"/>
+                    <element name="Estimada" type="boolean"/>
+                </sequence>
+            </complexType>
+            <simpleType name="LineaNegocio">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="LineaPedido">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <complexType name="LineaPedidoType">
+                <sequence>
+                    <element name="NumLinea" type="tns:NumLinea" minOccurs="0"/>
+                    <element name="ContratoAsociado" type="tns:ContratoType" minOccurs="0"/>
+                    <element name="IsAnulable" type="boolean" minOccurs="0"/>
+                    <element name="Estado" type="tns:Estado" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="LineasType">
+                <sequence>
+                    <element name="Descripcion" type="tns:Comentario"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListConfigIntroUsuarioType">
+                <sequence>
+                    <element name="IdConfigUsuario" type="tns:IdConfigUsuario"/>
+                    <element name="ConfiguracionUsuario" type="tns:ConfiguracionUsuario"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListDocumentosAdjuntadosType">
+                <sequence>
+                    <element name="Documento" type="tns:DocumentoType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaAutorizadosType">
+                <sequence>
+                    <element name="Autorizado" type="tns:AutorizadoType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaCampos">
+                <sequence>
+                    <element name="Campos" type="tns:CamposType" minOccurs="0" maxOccurs="unbounded"/>
+                    <element name="ListaPosibleValoresCampos" type="tns:ListaPosibleValoresCamposType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaCamposSIPS">
+                <sequence>
+                    <element name="Campo" type="tns:CampoType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaCamposSolicitar">
+                <sequence>
+                    <element name="Campo" type="tns:CampoType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaCamposType">
+                <sequence>
+                    <element name="Campos" type="tns:CamposType" maxOccurs="unbounded"/>
+                    <element name="ListaPosibleValoresCampos" type="tns:ListaPosibleValoresCamposType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaClientesEmailType">
+                <sequence>
+                    <element name="ClienteEmailAltaMod" type="tns:ClienteEmailAltaModType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaClientesType">
+                <sequence>
+                    <element name="Cliente" type="tns:DatosClienteType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaComparadorType">
+                <sequence>
+                    <element name="Comparador" type="tns:ComparadorType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaCondicionesLegalesType">
+                <sequence>
+                    <element name="CondicionLegal" type="tns:CondicionesLegales"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaCondicionesType">
+                <sequence>
+                    <element name="Condicion" type="tns:MapElementType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaConfiguracionesType">
+                <sequence>
+                    <element name="Configuracion" type="tns:ConfiguracionType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaContratoGestionType">
+                <sequence>
+                    <element name="ContratoGestion" type="tns:ContratoGestionType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaContratosDeudaType">
+                <sequence>
+                    <element name="ContratoDeuda" type="tns:ContratoDeudaType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaContratosProductosType">
+                <sequence>
+                    <element name="ContratoProductos" type="tns:ContratoProductosType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaContratosType">
+                <sequence>
+                    <element name="Contrato" type="tns:ContratoType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaCuentasComercType">
+                <sequence>
+                    <element name="CuentaComerc" type="tns:CuentaComercType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaCuentasType">
+                <sequence>
+                    <element name="Cuenta" type="tns:CuentaType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaDatosContratoType">
+                <sequence>
+                    <element name="DatosContrato" type="tns:DatosContratoType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaDescuentosType">
+                <sequence>
+                    <element name="Descuento" type="tns:MapType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaDireccionesType">
+                <sequence>
+                    <element name="Direccion" type="tns:DireccionType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaDocType">
+                <sequence>
+                    <element name="DescripcionDoc" type="tns:Comentario" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaDocumentosAdjuntosType">
+                <sequence>
+                    <element name="ListDocumentosAdjuntados" type="tns:ListDocumentosAdjuntadosType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaDocumentosPendientesType">
+                <sequence>
+                    <element name="DocumentoPendiente" type="tns:DocumentoPendienteType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaEntidadesType">
+                <sequence>
+                    <element name="Entidad" type="tns:EntidadType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaFacturasType">
+                <sequence>
+                    <element name="Factura" type="tns:FacturaType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaGastosType">
+                <sequence>
+                    <element name="Gasto" type="tns:GastoType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaGestionesRealizadaType">
+                <sequence>
+                    <element name="FechaGestion" type="tns:Fecha"/>
+                    <element name="CodigoGestion" type="tns:CodigoGestion"/>
+                    <element name="DescripcionGestion" type="tns:DescripcionGestion"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaIdPeticionesType">
+                <sequence>
+                    <element name="IdPeticion" type="tns:IdPeticion" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaIdentificadoresType">
+                <sequence>
+                    <element name="Identificador" type="tns:IdCliente"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaIncompEncontType">
+                <sequence>
+                    <element name="IncompEncont" type="tns:IncompEncontType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaIncompatibilidadesType">
+                <sequence>
+                    <element name="Incompatibilidad" type="tns:IncompatibilidadType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaIndiceCalidadType">
+                <sequence>
+                    <element name="InfoCalidad" type="tns:InfoCalidadType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaIntegradoresType">
+                <sequence>
+                    <element name="Integradores" type="tns:IntegradorType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaLecturasORQType">
+                <sequence>
+                    <element name="Lectura" type="tns:LecturasORQType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaLecturasType">
+                <sequence>
+                    <element name="Lectura" type="tns:LecturaType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaLineasPedidoType">
+                <sequence>
+                    <element name="LineaPedido" type="tns:LineaPedidoType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaNuevasCondicionesType">
+                <sequence>
+                    <element name="IdCondicion" type="tns:IdCondicion" maxOccurs="unbounded"/>
+                    <element name="DetalleCondicion" type="tns:DetalleCondicion" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaNumContratoType">
+                <sequence>
+                    <element name="NumContrato" type="tns:NumContrato" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaPedidosType">
+                <sequence>
+                    <element name="NumPedido" type="tns:NumPedido" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaPersonAutorizaType">
+                <sequence>
+                    <element name="PersonAutorizada" type="tns:PersonAutorizadaType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaPeticionesType">
+                <sequence>
+                    <element name="Peticiones" type="tns:PeticionType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaPoblacionesType">
+                <sequence>
+                    <element name="Poblacion" type="tns:PoblacionType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaPosibleValoresCamposType">
+                <sequence>
+                    <element name="Valor" type="tns:Valor" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaProductosContrType">
+                <sequence>
+                    <element name="ProductoContr" type="tns:ProductoContrType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaProductosType">
+                <sequence>
+                    <element name="Producto" type="tns:ProductoType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaPromocionesType">
+                <sequence>
+                    <element name="Promocion" type="tns:PromocionType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaProvinciasType">
+                <sequence>
+                    <element name="Provincia" type="tns:ProvinciaType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaPtoSuministroType">
+                <sequence>
+                    <element name="PS" type="tns:IdPS" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaPuntoSuministroType">
+                <sequence>
+                    <element name="PuntoSuministro" type="tns:DatosPuntoSuministroType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaRecomendadorType">
+                <sequence>
+                    <element name="Recomendador" type="tns:RecomendadorType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaRobinsonType">
+                <sequence>
+                    <element name="InfoRobinson" type="tns:InfoRobinsonType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaServiciosType">
+                <sequence>
+                    <element name="Servicio" type="tns:ServicioType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaTipoViaType">
+                <sequence>
+                    <element name="TipoVia" type="tns:TipoViaType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaTitularesType">
+                <sequence>
+                    <element name="Titular" type="tns:TitularType" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <complexType name="ListaValoresNormalizadosType">
+                <sequence>
+                    <element name="ValorNormalizado" type="tns:ValorNormalizadoType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Longitud">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Luz">
+                <restriction base="boolean"/>
+            </simpleType>
+            <complexType name="MapElementType">
+                <sequence>
+                    <element name="Key" type="string"/>
+                    <element name="Value" type="string"/>
+                </sequence>
+            </complexType>
+            <complexType name="MapType">
+                <sequence>
+                    <element name="Element" type="tns:MapElementType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Marca">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="MensajeError">
+                <restriction base="string">
+                    <maxLength value="255"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Mes">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="MetodoContacto">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="MetodoPuestaCobro">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="ModoControlPotencia">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="MotivoAnulacion">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="MotivoImposibilidadSolicitud">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="MotivoIncompatibilidad">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="MotivoKO">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="MotivoOfrecimiento">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NIF">
+                <restriction base="string">
+                    <maxLength value="9"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NIFInstalador">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Nacionalidad">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NivelActivacion">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NomClienCUPS">
+                <restriction base="string">
+                    <maxLength value="22"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Nombre">
+                <restriction base="string">
+                    <maxLength value="40"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NombreCampo">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="NombreCompletoType">
+                <sequence>
+                    <element name="Nombre" type="tns:Nombre" minOccurs="0"/>
+                    <element name="Apellidos" type="tns:ApellidosType" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="NombreContrato">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NombreInstalador">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NombreProducto">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NombreVia">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NumContrato">
+                <restriction base="string">
+                    <maxLength value="12"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumCuenta">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumDocIdent">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumEntidad">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumFactura">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NumFax">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumGestion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NumLectura">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NumLinea">
+                <restriction base="integer"/>
+            </simpleType>
+            <simpleType name="NumObligacion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NumPaginas">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NumPedido">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumRegistros">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NumRuedas">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumSeguridad">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NumTarjeta">
+                <restriction base="string">
+                    <maxLength value="16"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumTelefono">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NumTotalPaginas">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Numero">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="NumeroCedulaHabitabilidad">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Numerodocumento">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ObligacionPagoType">
+                <sequence>
+                    <element name="IdObligacion" type="tns:IdObligacion" minOccurs="0"/>
+                    <element name="NumObligacion" type="tns:NumObligacion" minOccurs="0"/>
+                    <element name="Importe" type="tns:Importe" minOccurs="0"/>
+                    <element name="Fecha" type="tns:Fecha" minOccurs="0"/>
+                    <element name="Estado" type="tns:Estado" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Oficina">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="OpcionesConfigType">
+                <sequence>
+                    <element name="Opcion" type="string"/>
+                    <element name="Valor" type="tns:Valor"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Oportunidad">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="OrdenOrdenacion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="OtrosDatos">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="PS">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="PSVA">
+                <restriction base="boolean"/>
+            </simpleType>
+            <simpleType name="PaginaActual">
+                <restriction base="int"/>
+            </simpleType>
+            <complexType name="PaginacionOutType">
+                <sequence>
+                    <element name="IdUltReg" type="tns:IdEntidad"/>
+                    <element name="NumGestiones" type="tns:Numero"/>
+                    <element name="HayMasResult" type="boolean"/>
+                </sequence>
+            </complexType>
+            <complexType name="PaginacionResponseType">
+                <sequence>
+                    <element name="nPagina" type="tns:NumPaginas"/>
+                    <element name="NTotalPag" type="tns:NumTotalPaginas"/>
+                    <element name="UltElemRec" type="tns:NumRegistros"/>
+                    <element name="UltRegPag" type="tns:IdRegistro"/>
+                </sequence>
+            </complexType>
+            <complexType name="PaginacionType">
+                <sequence>
+                    <element name="CampoOrdenacion" type="tns:CampoOrdenacion"/>
+                    <element name="OrdenOrdenacion" type="tns:OrdenOrdenacion"/>
+                    <element name="NumRegPag" type="tns:NumRegistros"/>
+                    <element name="UltRegPag" type="tns:IdRegistro"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Pais">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="PasarelaPago">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="PedidoConfig">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="PedidoVEType"/>
+            <complexType name="PeriodoType">
+                <sequence>
+                    <element name="IniPeriodo" type="tns:Fecha"/>
+                    <element name="FinPeriodo" type="tns:Fecha"/>
+                </sequence>
+            </complexType>
+            <complexType name="PersonAutorizadaType">
+                <sequence>
+                    <element name="Rol" type="tns:Rol" minOccurs="0"/>
+                    <element name="Email" type="tns:Email" minOccurs="0"/>
+                    <element name="NombreCompleto" type="tns:NombreCompletoType" minOccurs="0"/>
+                    <element name="Documentacion" type="tns:DocumentacionType" minOccurs="0"/>
+                    <element name="RazonSocial" type="tns:RazonSocial" minOccurs="0"/>
+                    <element name="Direccion" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="Telefono" type="tns:NumTelefono" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="PeticionType">
+                <sequence>
+                    <element name="IdCliente" type="tns:IdCliente"/>
+                    <element name="IdGestion" type="tns:IdGestion" minOccurs="0"/>
+                    <element name="NumGestion" type="tns:NumContrato" minOccurs="0"/>
+                    <element name="TipoGestion" type="tns:TipoGestion" minOccurs="0"/>
+                    <element name="Tipologia" type="tns:TipoPeticion" minOccurs="0"/>
+                    <element name="Subtipologia" type="tns:SubtipoPeticion" minOccurs="0"/>
+                    <element name="Estado" type="tns:Estado" minOccurs="0"/>
+                    <element name="Fecha" type="tns:Fecha" minOccurs="0"/>
+                    <element name="Direccion" type="tns:DireccionType" minOccurs="0"/>
+                    <element name="TipoProducto" type="tns:TipoProducto" minOccurs="0"/>
+                    <element name="Alias" type="tns:Alias" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Piso">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Poblacion">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <complexType name="PoblacionType">
+                <sequence>
+                    <element name="CodPoblacion" type="tns:CodPoblacion" minOccurs="0"/>
+                    <element name="NombrePoblacion" type="tns:Poblacion" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Portal">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Potencia">
+                <restriction base="decimal"/>
+            </simpleType>
+            <simpleType name="PotenciaConsumo">
+                <restriction base="decimal"/>
+            </simpleType>
+            <simpleType name="PotenciaLuz">
+                <restriction base="decimal"/>
+            </simpleType>
+            <simpleType name="Presion">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Proceso">
+                <restriction base="string">
+                    <maxLength value="10"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ProcesoAdjunto">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Producto">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ProductoContrType">
+                <sequence>
+                    <element name="IdProducto" type="tns:IdProducto"/>
+                    <element name="EquSTP" type="tns:EquSTPType" minOccurs="0"/>
+                    <element name="IdPromocion" type="tns:IdPromocion" minOccurs="0"/>
+                    <element name="EmprComercializadora" type="tns:Empresa" minOccurs="0"/>
+                    <element name="CUPS" type="tns:CUPS" minOccurs="0"/>
+                    <element name="TipoSolicitud" type="tns:TipoSolicitud" minOccurs="0"/>
+                    <element name="SubtipoSolicitud" type="tns:SubtipoSolicitud" minOccurs="0"/>
+                    <element name="TipoCambioTitular" type="tns:TipoCambioTitular" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="ProductoType">
+                <sequence>
+                    <element name="IdTitularAsociado" type="tns:IdCliente" minOccurs="0"/>
+                    <element name="IdContratoAsociado" type="tns:IdContrato" minOccurs="0"/>
+                    <element name="TipoProducto" type="tns:TipoProducto" minOccurs="0"/>
+                    <element name="Configuracion" type="tns:MapType" minOccurs="0"/>
+                    <element name="LineaNegocio" type="tns:LineaNegocio" minOccurs="0"/>
+                    <element name="ContratoAsociado" type="boolean" minOccurs="0"/>
+                    <element name="DetalleProducto" type="tns:DetalleProducto" minOccurs="0"/>
+                    <element name="Descripcion" type="tns:Comentario" minOccurs="0"/>
+                    <element name="IdProducto" type="tns:IdProducto" minOccurs="0"/>
+                    <element name="IsFullOnline" type="boolean" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Profesion">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Profile">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="PromocionType">
+                <sequence>
+                    <element name="DetallePromocion" type="tns:DetallePromocion"/>
+                </sequence>
+            </complexType>
+            <simpleType name="PropiedadEquipo">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="PropiedadICP">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Proveedor">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Provincia">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ProvinciaType">
+                <sequence>
+                    <element name="CodProvincia" type="tns:CodProvincia"/>
+                    <element name="NombreProvincia" type="tns:Provincia"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Puerta">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="RangoAccion">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="RangoImporteType">
+                <sequence>
+                    <element name="ImporteMinimo" type="tns:Importe"/>
+                    <element name="ImporteMaximo" type="tns:Importe"/>
+                </sequence>
+            </complexType>
+            <simpleType name="RazonSocial">
+                <restriction base="string">
+                    <maxLength value="45"/>
+                </restriction>
+            </simpleType>
+            <complexType name="RecomendadorType">
+                <sequence>
+                    <element name="TipoUtilizacion" type="tns:TipoUtilizacion"/>
+                    <element name="Npersonas" type="tns:Numero"/>
+                    <element name="Potencia" type="tns:Potencia"/>
+                    <element name="Suministro" type="string"/>
+                    <element name="TarifaLuz" type="tns:Tarifa"/>
+                </sequence>
+            </complexType>
+            <simpleType name="RedDistribucionGas">
+                <restriction base="string">
+                    <maxLength value="60"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ReferenciaCatastral">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ReferenciaDomic">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Resultado">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Rol">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="STP">
+                <restriction base="boolean"/>
+            </simpleType>
+            <simpleType name="SeccionCable">
+                <restriction base="string">
+                    <maxLength value="2"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Segmento">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="SelectorAlias">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Sensibilidad">
+                <restriction base="double"/>
+            </simpleType>
+            <complexType name="ServicioType">
+                <sequence>
+                    <element name="Codigo" type="tns:CodigoServicio"/>
+                    <element name="Descripcion" type="tns:Comentario"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Sexo">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="SolicitudContratacion">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <complexType name="SolicitudesIntegradorType">
+                <sequence>
+                    <element name="IdSolicitud" type="tns:IdSolicitud" maxOccurs="unbounded"/>
+                    <element name="Fecha" type="tns:Fecha" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="StatusCodeUCM">
+                <sequence>
+                    <element name="errorCode" type="string" minOccurs="0"/>
+                    <element name="errorMsg" type="string" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="StatusInfoUCM">
+                <sequence>
+                    <element name="statusCode" type="int" minOccurs="0"/>
+                    <element name="statusMessage" type="string" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="StringBoolean">
+                <restriction base="string">
+                    <length value="2"/>
+                    <enumeration value="OK"/>
+                    <enumeration value="KO"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="SubtipoDocumento">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="SubtipoEntidad">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="SubtipoOfrecimiento">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="SubtipoPedido">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="SubtipoPeticion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="SubtipoSolicitud">
+                <restriction base="string">
+                    <maxLength value="60"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Subtipologia">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Sucursal">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <complexType name="SuministrosInteresType">
+                <sequence>
+                    <element name="Luz" type="tns:Luz"/>
+                    <element name="Gas" type="tns:Gas"/>
+                    <element name="STP" type="tns:STP"/>
+                    <element name="PSVA" type="tns:PSVA"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Tarifa">
+                <restriction base="string">
+                    <maxLength value="4"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Telemedida">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Tension">
+                <restriction base="string">
+                    <maxLength value="2"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Territorio">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TextoCondiciones">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Tipo">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoAccion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoAutorizado">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoBaja">
+                <restriction base="string">
+                    <length value="1"/>
+                    <enumeration value="L"/>
+                    <enumeration value="N"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoCambioTitular">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoCliente">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoCobro">
+                <restriction base="string">
+                    <enumeration value="Domiciliada"/>
+                    <enumeration value="NoDomiciliada"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoContacto">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoContrato">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoCuenta">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoDireccion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoDocIdent">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoDocumento">
+                <restriction base="string">
+                    <maxLength value="75"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoElemento">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoEntidad">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoFactura">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoGestion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoOfrecimiento">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoOpAutorizacion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoOpCambio">
+                <restriction base="string">
+                    <enumeration value="CuentaComercial"/>
+                    <enumeration value="DireccionFacturacion"/>
+                    <enumeration value="FacturaDigital"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoOperacion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoOperacionDatoCli">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoOperacionFacDigital">
+                <restriction base="string">
+                    <enumeration value="Activacion"/>
+                    <enumeration value="Desactivacion"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoPS">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoPago">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoPedido">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoPersona">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoPeticion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoProducto">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoPromocion">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoPuestaCobro">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoPuntoMedida">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoReapertura">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoSolicitud">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoSuministro">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipoTension">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoUtilizacion">
+                <restriction base="string">
+                    <enumeration value="Habitual"/>
+                    <enumeration value="NoHabitual"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoVia">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="TipoViaType">
+                <sequence>
+                    <element name="CodTipoVia" type="tns:CodTipoVia" minOccurs="0"/>
+                    <element name="NomTipoVia" type="tns:NombreVia" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Tipologia">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TipologiaPedido">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="Titular">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="TitularType">
+                <sequence>
+                    <element name="DocIdentificativo" type="tns:NumDocIdent" minOccurs="0"/>
+                    <element name="TipoIdentificativo" type="tns:TipoDocIdent" minOccurs="0"/>
+                    <element name="Nombre" type="tns:NombreCompletoType" minOccurs="0"/>
+                    <element name="IdPersContacto" type="tns:IdPersContacto" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="TotalContratos">
+                <restriction base="int"/>
+            </simpleType>
+            <simpleType name="TotalFacturas">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="TotalPedidos">
+                <restriction base="int"/>
+            </simpleType>
+            <simpleType name="URL">
+                <restriction base="string">
+                    <maxLength value="255"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Ubicacion">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="UltfactAsocType">
+                <sequence>
+                    <element name="CodigoFact" type="tns:CodigoFactura"/>
+                    <element name="Importe" type="tns:Importe"/>
+                </sequence>
+            </complexType>
+            <complexType name="ValidacionType">
+                <sequence>
+                    <element name="CodigoValidacion" type="tns:CodigoValidacion" minOccurs="0"/>
+                    <element name="DescripcionValidacion" type="tns:DescripcionValidacion" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Valor">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="ValorCampo">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="ValorConf">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="ValorDefecto">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="ValorIntegrador">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="ValorLectura">
+                <restriction base="string">
+                    <maxLength value="22"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ValorNormalizadoType">
+                <sequence>
+                    <element name="IdLineaPedido" type="tns:IdLineaPedido" minOccurs="0"/>
+                    <element name="IdCampo" type="tns:IdCampo" minOccurs="0"/>
+                    <element name="NombreCampo" type="tns:NombreCampo" minOccurs="0"/>
+                    <element name="ListaPosibleValoresCampos" type="tns:ListaPosibleValoresCamposType" minOccurs="0"/>
+                    <element name="ValorDefecto" type="tns:ValorDefecto" minOccurs="0"/>
+                    <element name="IdLineaNegocio" type="tns:LineaNegocio" minOccurs="0"/>
+                    <element name="RequiereEnergetico" type="boolean" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="dDocName">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="dID">
+                <restriction base="int"/>
+            </simpleType>
+            <simpleType name="dRevClassID">
+                <restriction base="int"/>
+            </simpleType>
+            <simpleType name="dRevLabel">
+                <restriction base="string"/>
+            </simpleType>
+            <simpleType name="dRevisionID">
+                <restriction base="int"/>
+            </simpleType>
+        </schema>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:Q1="http://xmlns.endesa.com/CommonSchemas" xmlns:Q2="http://xmlns.endesa.com/CommonSchemasNeol" xmlns:tns="http://www.example.org/SIEME002_Schema/" targetNamespace="http://www.example.org/SIEME002_Schema/" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+            <import namespace="http://xmlns.endesa.com/CommonSchemasNeol"/>
+            <import namespace="http://xmlns.endesa.com/CommonSchemas"/>
+            <complexType name="CalleType">
+                <sequence>
+                    <element name="IdCalle" type="tns:IdCalle" minOccurs="0"/>
+                    <element name="NombreCalle" type="tns:NombreCalle" minOccurs="0"/>
+                    <element name="TipoCalle" type="tns:TipoCalle" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="CodigoPais">
+                <restriction base="string">
+                    <maxLength value="10"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Comuna">
+                <restriction base="string">
+                    <maxLength value="255"/>
+                </restriction>
+            </simpleType>
+            <complexType name="GetCalleMsgRequestType">
+                <sequence>
+                    <element name="CodigoPais" type="tns:CodigoPais" minOccurs="0"/>
+                    <element name="Token" type="tns:Token"/>
+                    <element name="Nombre" type="tns:Nombre"/>
+                    <element name="Comuna" type="tns:Comuna"/>
+                </sequence>
+            </complexType>
+            <complexType name="GetCalleMsgResponseType">
+                <sequence>
+                    <element name="ListadoCalles" type="tns:ListadoCallesType" minOccurs="0"/>
+                    <element name="ErrorHeader" type="Q2:ErrorHeaderType" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="GetCalleRequestType">
+                <sequence>
+                    <element name="SOAHeader" type="Q1:SOAHeaderType"/>
+                    <element name="GetCalleMsgRequest" type="tns:GetCalleMsgRequestType"/>
+                </sequence>
+            </complexType>
+            <complexType name="GetCalleResponseType">
+                <sequence>
+                    <element name="SOAHeaderResponse" type="Q1:SOAHeaderResponseType"/>
+                    <element name="GetCalleMsgResponse" type="tns:GetCalleMsgResponseType"/>
+                </sequence>
+            </complexType>
+            <simpleType name="IdCalle">
+                <restriction base="string">
+                    <maxLength value="22"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ListadoCallesType">
+                <sequence>
+                    <element name="Calle" type="tns:CalleType" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Nombre">
+                <restriction base="string">
+                    <maxLength value="80"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="NombreCalle">
+                <restriction base="string">
+                    <maxLength value="80"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TipoCalle">
+                <restriction base="string">
+                    <maxLength value="10"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Token">
+                <restriction base="string"/>
+            </simpleType>
+            <element name="GetCalleRequest" type="tns:GetCalleRequestType"/>
+            <element name="GetCalleResponse" type="tns:GetCalleResponseType"/>
+        </schema>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://xmlns.endesa.com/CommonSchemas" targetNamespace="http://xmlns.endesa.com/CommonSchemas" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <simpleType name="ArchitectureVersion">
+                <restriction base="string"/>
+            </simpleType>
+            <complexType name="AuditType">
+                <sequence>
+                    <element name="SOAId" type="tns:SOAId"/>
+                    <element name="SourceApplication" type="tns:SourceApplication"/>
+                    <element name="ServiceName" type="tns:ServiceName"/>
+                    <element name="ExternalId" type="tns:ExternalId" minOccurs="0"/>
+                    <element name="IP" type="tns:IP" minOccurs="0"/>
+                    <element name="Client" type="tns:Client" minOccurs="0"/>
+                    <element name="User" type="tns:User" minOccurs="0"/>
+                    <element name="Language" type="tns:Language" minOccurs="0"/>
+                    <element name="Version" type="tns:Version" minOccurs="0"/>
+                    <element name="ArchitectureVersion" type="tns:ArchitectureVersion" minOccurs="0"/>
+                    <element name="RequestRegisterFlag" type="tns:RequestRegisterFlag" minOccurs="0"/>
+                    <element name="Layer" type="tns:Layer"/>
+                    <element name="Status" type="tns:Status"/>
+                    <element name="TimeStamp" type="tns:TimeStamp"/>
+                    <element ref="tns:Message" minOccurs="0"/>
+                    <element name="InFunctional" type="tns:InFunctional" minOccurs="0"/>
+                    <element name="TimeLayer" type="tns:TimeLayer" minOccurs="0"/>
+                    <element ref="tns:Error" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Client">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="CodigoError">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Correction">
+                <restriction base="string">
+                    <maxLength value="2000"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ErrorCode">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ErrorDate">
+                <restriction base="dateTime"/>
+            </simpleType>
+            <simpleType name="ErrorMessage">
+                <restriction base="string">
+                    <maxLength value="2000"/>
+                </restriction>
+            </simpleType>
+            <complexType name="ErrorType">
+                <sequence>
+                    <element name="Correction" type="tns:Correction"/>
+                    <element name="ErrorCode" type="tns:ErrorCode"/>
+                    <element name="ErrorDate" type="tns:ErrorDate"/>
+                    <element name="ErrorMessage" type="tns:ErrorMessage"/>
+                    <element ref="tns:ErrorType"/>
+                    <element name="Module" type="tns:Module"/>
+                    <element name="Process" type="tns:Process"/>
+                    <element name="Severity" type="tns:Severity"/>
+                    <element name="StackTrace" type="tns:StackTrace"/>
+                    <element name="Task" type="tns:Task"/>
+                </sequence>
+            </complexType>
+            <simpleType name="ExternalId">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="FechaHora">
+                <restriction base="dateTime">
+                    <pattern value="dd-mm-YYYY HH:mm:ss"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Funcion">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="IP">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="InFunctional">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Language">
+                <restriction base="string">
+                    <maxLength value="3"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Layer">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <complexType name="MCDERROR">
+                <sequence>
+                    <element name="CodigoError" type="tns:CodigoError"/>
+                    <element name="MensajeError" type="tns:MensajeError"/>
+                    <element name="TipoError" type="tns:TipoError"/>
+                    <element name="FechaHora" type="tns:FechaHora"/>
+                    <element name="Programa" type="tns:Programa"/>
+                    <element name="Funcion" type="tns:Funcion"/>
+                    <element name="Traza" type="tns:Traza" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="MensajeError">
+                <restriction base="string">
+                    <maxLength value="2000"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Module">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Process">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Programa">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="RequestRegisterFlag">
+                <restriction base="boolean"/>
+            </simpleType>
+            <complexType name="SOAHeaderResponseType">
+                <sequence>
+                    <element name="SOAId" type="tns:SOAId" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <complexType name="SOAHeaderType">
+                <sequence>
+                    <element name="SOAId" type="tns:SOAId" minOccurs="0"/>
+                    <element name="SourceApplication" type="tns:SourceApplication"/>
+                    <element name="ServiceName" type="tns:ServiceName"/>
+                    <element name="ExternalId" type="tns:ExternalId"/>
+                    <element name="IP" type="tns:IP"/>
+                    <element name="Client" type="tns:Client"/>
+                    <element name="User" type="tns:User" minOccurs="0"/>
+                    <element name="Language" type="tns:Language"/>
+                    <element name="Version" type="tns:Version"/>
+                    <element name="ArchitectureVersion" type="tns:ArchitectureVersion" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="SOAId">
+                <restriction base="string">
+                    <maxLength value="36"/>
+                </restriction>
+            </simpleType>
+            <complexType name="SOAParametersType">
+                <sequence>
+                    <element name="SOAHeader" type="tns:SOAHeaderType"/>
+                    <element name="SOAFunctionalInfo" type="string" minOccurs="0"/>
+                </sequence>
+            </complexType>
+            <simpleType name="ServiceName">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="ServiceVersion">
+                <restriction base="string">
+                    <maxLength value="4"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Severity">
+                <restriction base="string">
+                    <maxLength value="7"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="SourceApplication">
+                <restriction base="string">
+                    <maxLength value="4"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="StackTrace">
+                <restriction base="string">
+                    <maxLength value="4000"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Status">
+                <restriction base="string">
+                    <maxLength value="15"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Task">
+                <restriction base="string">
+                    <maxLength value="50"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TimeLayer">
+                <restriction base="integer">
+                    <maxInclusive value="999999999"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="TimeStamp">
+                <restriction base="dateTime"/>
+            </simpleType>
+            <simpleType name="TipoError">
+                <restriction base="string">
+                    <maxLength value="25"/>
+                </restriction>
+            </simpleType>
+            <complexType name="TraceDataType">
+                <sequence>
+                    <element name="SOAId" type="tns:SOAId"/>
+                    <element name="ExternalId" type="tns:ExternalId"/>
+                    <element name="ServiceName" type="tns:ServiceName"/>
+                </sequence>
+            </complexType>
+            <simpleType name="Traza">
+                <restriction base="string">
+                    <maxLength value="4000"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="User">
+                <restriction base="string">
+                    <maxLength value="20"/>
+                </restriction>
+            </simpleType>
+            <simpleType name="Version">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <element name="Audit" type="tns:AuditType"/>
+            <element name="Error" type="tns:ErrorType"/>
+            <element name="ErrorType">
+                <simpleType>
+                    <restriction base="string">
+                        <maxLength value="25"/>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="MCD_Error" type="tns:MCDERROR"/>
+            <element name="Message" type="string"/>
+            <element name="SOAHeader" type="tns:SOAHeaderType"/>
+            <element name="SOAHeaderResponse" type="tns:SOAHeaderResponseType"/>
+            <element name="SOAParameters" type="tns:SOAParametersType"/>
+            <element name="TraceData" type="tns:TraceDataType"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="GetCalleRequest">
+        <wsdl:part name="request" element="ns0:GetCalleRequest"/>
+    </wsdl:message>
+    <wsdl:message name="GetCalleResponse">
+        <wsdl:part name="response" element="ns0:GetCalleResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetCalleFault">
+        <wsdl:part name="fault" element="ns1:MCD_Error"/>
+    </wsdl:message>
+    <wsdl:portType name="SIEME002">
+        <wsdl:operation name="GetCalle">
+            <wsdl:input message="tns:GetCalleRequest"/>
+            <wsdl:output message="tns:GetCalleResponse"/>
+            <wsdl:fault name="fault" message="tns:GetCalleFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="LDAPCH_SOAPService_SIEME002" type="tns:SIEME002">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="GetCalle">
+            <wsdl:documentation/>
+            <soap:operation style="document" soapAction="GetCalle"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="request"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="response"/>
+            </wsdl:output>
+            <wsdl:fault name="fault">
+                <soap:fault use="literal" name="fault"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="SIEME002">
+        <wsdl:port name="LDAPCH_SOAPService_SIEME002" binding="tns:LDAPCH_SOAPService_SIEME002">
+            <soap:address location="http://emtbcl102des.endesa.es:10414/SIEME002"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

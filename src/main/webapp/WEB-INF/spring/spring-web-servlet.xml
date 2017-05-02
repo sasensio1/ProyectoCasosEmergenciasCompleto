@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:http="http://cxf.apache.org/transports/http/configuration"
+	xmlns:sec="http://cxf.apache.org/configuration/security"
+	xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xmlns:conf-sec="http://cxf.apache.org/configuration/security"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+        http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd
+        http://cxf.apache.org/jaxws 
+        http://cxf.apache.org/schemas/jaxws.xsd
+        http://cxf.apache.org/configuration/security 
+        http://cxf.apache.org/schemas/configuration/security.xsd        
+        http://cxf.apache.org/transports/http/configuration 
+        http://cxf.apache.org/schemas/configuration/http-conf.xsd
+        http://cxf.apache.org/core 
+        http://cxf.apache.org/schemas/core.xsd
+        http://cxf.apache.org/transports/http/configuration
+        http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+
+	<context:component-scan base-package="com.casosemergencias" />
+	
+	<!-- Register the properties file -->	
+ 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:text_page"/>
+	    <property name="defaultEncoding" value="UTF-8"/>
+	</bean>
+	
+	<!-- config multilenguaje -->	
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="defaultLocale" value="es"/>
+	</bean>
+	
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	   		<property name="paramName" value="lang" />
+	  	</bean>
+	  	<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	  	</bean>
+	</mvc:interceptors>
+	
+	<bean id="urlMapping" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+		
+	<mvc:annotation-driven />
+	
+	<!-- Config datasource -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		 <property name="driverClassName" value="org.postgresql.Driver" />
+		  <property name="url" value="#{systemEnvironment['DATABASE_URL_JAVA']}" />
+		 <property name="username" value="#{systemEnvironment['DATABASE_USER']}" />
+		 <property name="password" value="#{systemEnvironment['DATABASE_PASSWORD']}" />  
+	</bean>
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		  <property name="dataSource" ref="dataSource" />
+		  <property name="annotatedClasses">  
+	            <list>  
+	                <value>com.casosemergencias.dao.vo.AccountVO</value> 
+	                <value>com.casosemergencias.dao.vo.CaseVO</value>
+	                <value>com.casosemergencias.dao.vo.ContactVO</value>
+	                <value>com.casosemergencias.dao.vo.DireccionVO</value>
+	                <value>com.casosemergencias.dao.vo.HerokuUserVO</value> 
+	                <value>com.casosemergencias.dao.vo.SuministroVO</value>
+	                <value>com.casosemergencias.dao.vo.RelacionActivoContactoVO</value>
+	                <value>com.casosemergencias.dao.vo.CaseHistoryVO</value>
+	                <value>com.casosemergencias.dao.vo.CaseCommentVO</value>
+	                <value>com.casosemergencias.dao.vo.UserVO</value>
+	                <value>com.casosemergencias.dao.vo.AssetVO</value>
+	                <value>com.casosemergencias.dao.vo.TaskVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsCaseHistoryFieldVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsCaseVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsCaseOriginVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsCaseCanalNotificacionVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsCaseCallCenterVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsContactCanalPreferenteContactoVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsContactTipoContactoVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsContactTipoIdentidadVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsAccountVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsAccountIdEmpresaVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsAccountTipoVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsAccountTipoIdentidadVO</value>	                
+	                <value>com.casosemergencias.dao.vo.PickListsDireccionTipoCalleVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsDireccionRegionVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsHerokuUserUnidadVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsRelacionActivoVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumComunaRepartoVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumFullElectricVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumMedidaDisciplinaVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumPropiedadMedidorVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumSubestacionElecVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumTipoConexionVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumTipoLecturaVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumTipoSegmentoVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumTipoTransfVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumEstadoConVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumEstadoSumVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumEmpresaVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsSumElectrodependienteVO</value>
+	                <value>com.casosemergencias.dao.vo.PickListsCaseTypeVO</value>
+	                <value>com.casosemergencias.dao.vo.UserSessionInfoVO</value>
+	                <value>com.casosemergencias.dao.vo.FieldLabelVO</value>
+	                <value>com.casosemergencias.dao.vo.UserSessionInfoVO</value>
+	                <value>com.casosemergencias.dao.vo.FieldLabelVO</value>
+	               	<value>com.casosemergencias.dao.vo.GroupVO</value>   
+	               	<value>com.casosemergencias.dao.vo.CasosReiteradosVO</value>                 
+	               	<value>com.casosemergencias.dao.vo.StreetVO</value>
+	               	<value>com.casosemergencias.dao.vo.PickListsStreetMunicipalityVO</value>
+	               	<value>com.casosemergencias.dao.vo.PickListsStreetRegionVO</value>
+	               	<value>com.casosemergencias.dao.vo.PickListsStreetTypeVO</value>
+	               	<value>com.casosemergencias.dao.vo.HistoricBatchVO</value>
+	            </list>
+		  </property>
+		  <property name="hibernateProperties">
+			   <props>
+				    <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				    <prop key="hibernate.show_sql">true</prop>
+				    <prop key="hibernate.connection.requireSSL">true</prop>
+				    <prop key="hibernate.connection.autocommit">false</prop>
+			   </props>
+		  </property>
+	</bean>
+
+	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+ 	<bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<!-- Nombre de los Service de la aplicacion -->
+	<bean id="accountService" class="com.casosemergencias.logic.AccountServiceImpl"/>
+	<bean id="assetService" class="com.casosemergencias.logic.AssetServiceImpl"/>
+	<bean id="direccionService" class="com.casosemergencias.logic.DireccionServiceImpl"/>
+	<bean id="caseCommentService" class="com.casosemergencias.logic.CaseCommentServiceImpl"/>
+	<bean id="caseHistoryService" class="com.casosemergencias.logic.CaseHistoryServiceImpl"/>
+	<bean id="contactService" class="com.casosemergencias.logic.ContactServiceImpl"/>
+	<bean id="groupService" class="com.casosemergencias.logic.GroupServiceImpl"/>
+	<bean id="herokuUserService" class="com.casosemergencias.logic.HerokuUserServiceImpl"/>
+	<bean id="suministroService" class="com.casosemergencias.logic.SuministroServiceImpl"/>
+	<bean id="casoService" class="com.casosemergencias.logic.CaseServiceImpl"/>
+	<bean id="pickListsService" class="com.casosemergencias.logic.PickListsServiceImpl"/>
+	<bean id="casosRetiradosService" class="com.casosemergencias.logic.CasosRetiradosServiceImpl"/>
+	<bean id="relacionActivoContactoService" class="com.casosemergencias.logic.RelacionActivoContactoServiceImpl"/>
+	<bean id="streetService" class="com.casosemergencias.logic.StreetServiceImpl"/>
+	<bean id="taskService" class="com.casosemergencias.logic.TaskServiceImpl"/>
+	<bean id="userService" class="com.casosemergencias.logic.UserServiceImpl"/>
+	<bean id="userSessionInfoService" class="com.casosemergencias.logic.UserSessionInfoServiceImpl"/>
+	<bean id="batchService" class="com.casosemergencias.logic.BatchServiceImpl"/>
+	
+	<!-- Batches y utilidades de SalesForce -->
+	<bean id="applicationContextProvider" class="com.casosemergencias.util.ApplicationContextProvider"/>
+	
+	<bean id="salesforceLoginChecker" class="com.casosemergencias.logic.sf.util.SalesforceLoginChecker"/>
+	<bean id="objectsParser" class="com.casosemergencias.batch.util.BatchObjectsParser"/> 
+	<bean id="objectsMapper" class="com.casosemergencias.batch.util.BatchObjectsMapper"/> 
+	
+	<bean id="fieldLabelTableCreatorBatch" class="com.casosemergencias.batch.FieldLabelTableCreatorBatch"/>
+	<bean id="picklistTableCreatorBatch" class="com.casosemergencias.batch.PicklistTableCreatorBatch"/>
+	<bean id="restApiInvokerBatch" class="com.casosemergencias.batch.SalesforceRestApiInvokerBatch"/>
+	<bean id="caseCommentUpdaterBatch" class="com.casosemergencias.batch.CaseCommentUpdaterBatch"/>
+	<bean id="herokuUserUpdaterBatch" class="com.casosemergencias.batch.HerokuUserUpdaterBatch"/>
+	<bean id="accountUpdaterBatch" class="com.casosemergencias.batch.AccountUpdaterBatch"/>
+	<bean id="addressUpdaterBatch" class="com.casosemergencias.batch.AddressUpdaterBatch"/>
+	<bean id="assetUpdaterBatch" class="com.casosemergencias.batch.AssetUpdaterBatch"/>
+	<bean id="caseHistoryUpdaterBatch" class="com.casosemergencias.batch.CaseHistoryUpdaterBatch"/>
+	<bean id="contactUpdaterBatch" class="com.casosemergencias.batch.ContactUpdaterBatch"/>
+	<bean id="groupUpdaterBatch" class="com.casosemergencias.batch.GroupUpdaterBatch"/>
+	<bean id="pointOfDeliveryUpdaterBatch" class="com.casosemergencias.batch.PointOfDeliveryUpdaterBatch"/>
+	<bean id="repeatedCasesUpdaterBatch" class="com.casosemergencias.batch.RepeatedCasesUpdaterBatch"/>
+	<bean id="serviceProductUpdaterBatch" class="com.casosemergencias.batch.ServiceProductUpdaterBatch"/>
+	<bean id="streetUpdaterBatch" class="com.casosemergencias.batch.StreetUpdaterBatch"/>
+	<bean id="taskUpdaterBatch" class="com.casosemergencias.batch.TaskUpdaterBatch"/>
+	<bean id="userUpdaterBatch" class="com.casosemergencias.batch.UserUpdaterBatch"/>
+	
+	<bean id="fieldLabelTableCreatorJob" class="com.casosemergencias.batch.FieldLabelTableCreatorJob"/>
+	<bean id="picklistTableCreatorJob" class="com.casosemergencias.batch.PicklistTableCreatorJob"/>
+	<bean id="salesforceApiInvokerJob" class="com.casosemergencias.batch.SalesforceApiInvokerJob"/>
+	<bean id="caseCommentUpdaterJob" class="com.casosemergencias.batch.CaseCommentUpdaterJob"/>
+	<bean id="herokuUserUpdaterJob" class="com.casosemergencias.batch.HerokuUserUpdaterJob"/>
+	<bean id="accountUpdaterJob" class="com.casosemergencias.batch.AccountUpdaterJob"/>
+	<bean id="addressUpdaterJob" class="com.casosemergencias.batch.AddressUpdaterJob"/>
+	<bean id="assetUpdaterJob" class="com.casosemergencias.batch.AssetUpdaterJob"/>
+	<bean id="caseHistoryUpdaterJob" class="com.casosemergencias.batch.CaseHistoryUpdaterJob"/>
+	<bean id="contactUpdaterJob" class="com.casosemergencias.batch.ContactUpdaterJob"/>
+	<bean id="groupUpdaterJob" class="com.casosemergencias.batch.GroupUpdaterJob"/>
+	<bean id="pointOfDeliveryUpdaterJob" class="com.casosemergencias.batch.PointOfDeliveryUpdaterJob"/>
+	<bean id="repeatedCasesUpdaterJob" class="com.casosemergencias.batch.RepeatedCasesUpdaterJob"/>
+	<bean id="serviceProductUpdaterJob" class="com.casosemergencias.batch.ServiceProductUpdaterJob"/>
+	<bean id="streetUpdaterJob" class="com.casosemergencias.batch.StreetUpdaterJob"/>
+	<bean id="taskUpdaterJob" class="com.casosemergencias.batch.TaskUpdaterJob"/>
+	<bean id="userUpdaterJob" class="com.casosemergencias.batch.UserUpdaterJob"/>
+	
+	<bean id="borradoHistoricoCargasBatch" class="com.casosemergencias.batch.BorradoHistoricoCargasBatch"/>
+	<bean id="borradoHistoricoCargasJob" class="com.casosemergencias.batch.BorradoHistoricoCargasJob"/>
+	
+	<mvc:resources mapping="/resources/**" location="/resources/"/> 
+	
+	<!-- >>>>>>>>>>>>>>>>>> CONFIGURACIÓN DE TAREAS QUARTZ >>>>>>>>>>>>>>>>>> -->
+	<!-- Job de Quartz para el rellenado de la tabla Picklists -->
+    <!-- <bean id="picklistsJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="picklistTableCreatorBatch" />
+        <property name="targetMethod" value="fillHerokuPicklistTable" />
+    </bean>
+    
+ 	Job de Quartz para el rellenado de la tabla FieldLabel
+    <bean id="fieldlabelJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="fieldLabelTableCreatorBatch" />
+        <property name="targetMethod" value="fillHerokuFieldLabelTable" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de registros desde el API de Salesforce
+     <bean id="apiInvokerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="restApiInvokerBatch" />
+        <property name="targetMethod" value="updateObjectsWithRestApiInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de account
+    <bean id="accountJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="accountUpdaterBatch" />
+        <property name="targetMethod" value="updateAccountInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de address
+    <bean id="addressJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="addressUpdaterBatch" />
+        <property name="targetMethod" value="updateAddressInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de asset
+    <bean id="assetJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="assetUpdaterBatch" />
+        <property name="targetMethod" value="updateAssetInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de caseHistory
+    <bean id="caseHistoryJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="caseHistoryUpdaterBatch" />
+        <property name="targetMethod" value="updateCaseHistoryInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de contact
+    <bean id="contactJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="contactUpdaterBatch" />
+        <property name="targetMethod" value="updateContactInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de group
+    <bean id="groupJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="groupUpdaterBatch" />
+        <property name="targetMethod" value="updateGroupInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de pointOfDelivery
+    <bean id="pointOfDeliveryJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="pointOfDeliveryUpdaterBatch" />
+        <property name="targetMethod" value="updatePointOfDeliveryInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de repeatedCases
+    <bean id="repeatedCasesJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="repeatedCasesUpdaterBatch" />
+        <property name="targetMethod" value="updateRepeatedCasesInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de serviceProduct
+    <bean id="serviceProductJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="serviceProductUpdaterBatch" />
+        <property name="targetMethod" value="updateServiceProductInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de street
+    <bean id="streetJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="streetUpdaterBatch" />
+        <property name="targetMethod" value="updateStreetInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de task
+    <bean id="taskJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="taskUpdaterBatch" />
+        <property name="targetMethod" value="updateTaskInfo" />
+    </bean>
+    
+    Job de Quartz para la actualizacion de user
+    <bean id="userJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="userUpdaterBatch" />
+        <property name="targetMethod" value="updateUserInfo" />
+    </bean>
+        
+    Job de Quartz para la actualizacion de comentarios de casos
+    <bean id="caseCommentJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="caseCommentUpdaterBatch" />
+        <property name="targetMethod" value="updateCaseCommentInfo" />
+    </bean>
+    
+     Job de Quartz para la actualizacion de los usuarios de Heroku
+    <bean id="herokuUserJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="herokuUserUpdaterBatch" />
+        <property name="targetMethod" value="updateHerokuUserInfo" />
+    </bean>
+    
+    Job de Quartz que borra el historico de cargas
+    <bean id="borradoHistoricoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="borradoHistoricoCargasBatch" />
+        <property name="targetMethod" value="borraHistoricoAntiguo" />
+    </bean>
+  -->
+    <!-- Trigger de Quartz para el rellenado de la tabla Picklists 
+    <bean id="picklistsTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="picklistsJob" />
+        <property name="cronExpression" value="0 0 0 * * ?" />
+    </bean>-->
+    
+    <!-- PROGRAMAR LOS JOBS TENIENDO EN CUENTA QUE HEROKU SE LLEVA 3 HORAS DE DIFERENCIA CON EL HORARIO DE CHILE -->
+    	
+<!--     Trigger de Quartz para el rellenado de la tabla FieldLabel
+    <bean id="fieldlabelTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="fieldlabelJob" />
+        <property name="cronExpression" value="0 58 2 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los account
+    <bean id="accountTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="accountJob" />
+        <property name="cronExpression" value="0 58 3 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los address
+    <bean id="addressTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="addressJob" />
+        <property name="cronExpression" value="0 58 4 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los asset
+    <bean id="assetTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="assetJob" />
+        <property name="cronExpression" value="0 20/30 0-23 * * ?"  />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los caseHistory
+    <bean id="caseHistoryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="caseHistoryJob" />
+        <property name="cronExpression" value="0 05/30 0-23 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los contact
+    <bean id="contactTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="contactJob" />
+        <property name="cronExpression" value="0 10/30 0-23 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los group
+    <bean id="groupTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="groupJob" />
+        <property name="cronExpression" value="0 58 5 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los pointOfDelivery
+    <bean id="pointOfDeliveryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="pointOfDeliveryJob" />
+        <property name="cronExpression" value="0 15/30 0-23 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los repeatedCases
+    <bean id="repeatedCasesTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="repeatedCasesJob" />
+        <property name="cronExpression" value="0 58 6 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los serviceProduct
+    <bean id="serviceProductTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="serviceProductJob" />
+        <property name="cronExpression" value="0 25/30 0-23 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los street
+    <bean id="streetTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="streetJob" />
+        <property name="cronExpression" value="0 58 7 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los task
+    <bean id="taskTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="taskJob" />
+        <property name="cronExpression" value="0 58 8 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los user
+    <bean id="userTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="userJob" />
+        <property name="cronExpression" value="0 58 9 * * ?" />
+    </bean>
+   
+    Trigger de Quartz para la actualizacion de registros desde el API de Salesforce
+    <bean id="apiInvokerTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="apiInvokerJob" />
+        <property name="cronExpression" value="0 0 5 * * ?" />
+    </bean> 
+    
+    Trigger de Quartz para la actualizacion de comentarios de casos
+    <bean id="caseCommentTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="caseCommentJob" />
+        <property name="cronExpression" value="0 0/30 0-23 * * ?" />
+    </bean>
+    
+    Trigger de Quartz para la actualizacion de los usuarios de Heroku
+    <bean id="herokuUserTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="herokuUserJob" />
+        <property name="cronExpression" value="0 28/60 0-23 * * ?" />
+    </bean>
+        
+    Trigger de Quartz para el borrado de historico
+    <bean id="borradoHistoricoTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="borradoHistoricoJob" />
+        <property name="cronExpression" value="0 10 2 1 1/1 ? *" />
+    </bean> -->
+  
+    <!-- Scheduler de Quartz para rellenar las tablas de picklists y fieldLabels -->
+    <bean id="batchProcessesCreatorScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <!--<ref bean="picklistsJob" />-->
+<!--                 <ref bean="fieldlabelJob" />
+                <ref bean="accountJob" />
+                <ref bean="addressJob" />
+                <ref bean="assetJob" />
+                <ref bean="caseHistoryJob" />
+                <ref bean="contactJob" />
+                <ref bean="groupJob" />
+                <ref bean="pointOfDeliveryJob" />
+                <ref bean="repeatedCasesJob" />
+                <ref bean="serviceProductJob" />
+                <ref bean="streetJob" />
+                <ref bean="taskJob" />
+                <ref bean="userJob" /> -->               
+                <!--<ref bean="apiInvokerJob" />-->
+<!--                 <ref bean="caseCommentJob" />
+                <ref bean="herokuUserJob" />
+                <ref bean="borradoHistoricoJob" /> -->
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <!--<ref bean="picklistsTrigger" />  -->
+               <!--  <ref bean="fieldlabelTrigger" />
+                <ref bean="accountTrigger" />
+                <ref bean="addressTrigger" />
+                <ref bean="assetTrigger" />
+                <ref bean="caseHistoryTrigger" />
+                <ref bean="contactTrigger" />
+                <ref bean="groupTrigger" />
+                <ref bean="pointOfDeliveryTrigger" />
+                <ref bean="repeatedCasesTrigger" />
+                <ref bean="serviceProductTrigger" />
+                <ref bean="streetTrigger" />
+                <ref bean="taskTrigger" />
+                <ref bean="userTrigger" />   -->
+                <!-- <ref bean="apiInvokerTrigger" /> -->
+<!--                 <ref bean="caseCommentTrigger" />
+                <ref bean="herokuUserTrigger" />
+                <ref bean="borradoHistoricoTrigger" /> -->
+            </list>
+        </property>
+    </bean>
+    <!-- <<<<<<<<<<<<<<<<<< CONFIGURACIÓN DE TAREAS QUARTZ <<<<<<<<<<<<<<<<<< -->
+    
+    <!-- >>>>>>>>>>>>>>>>>> CONFIGURACIÓN DE WEB SERVICES >>>>>>>>>>>>>>>>>> -->
+	<import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:webservices/env/pro.properties</value>
+		</property>
+	</bean>
+	
+    <!-- Handler para incluir las credenciales a la cabecera WSS de la peticion SOAP -->
+    <bean id="tibcoRequestsSOAPHandler" class="com.casosemergencias.logic.ws.handlers.TibcoRequestsSOAPHandler">
+    	<property name="username" value="${wss.header.username}"/>
+    	<property name="password" value="${wss.header.password}"/>
+    </bean>
+    
+    <!-- Configuracion del servicio web SIRES033 para consultar datos de un suministro -->
+    <bean id="consultaDatosSuministroWSClient" class="com.casosemergencias.logic.ws.clients.ConsultaDatosSuministroWSClient"/>
+    <jaxws:client id="sires033Service" serviceClass="org.example.sires033.SIRES033" address="${sires033.endpoint}">
+		<jaxws:handlers>
+      		<ref bean="tibcoRequestsSOAPHandler" />
+    	</jaxws:handlers>
+	</jaxws:client>
+    
+    <!-- Configuracion del servicio web SIEME002 para consultar calles -->
+    <bean id="getCalleWSClient" class="com.casosemergencias.logic.ws.clients.GetCalleWSClient"/>
+    <jaxws:client id="sieme002Service" serviceClass="org.example.sieme002.SIEME002" address="${sieme002.endpoint}">
+		<jaxws:handlers>
+      		<ref bean="tibcoRequestsSOAPHandler" />
+    	</jaxws:handlers>
+	</jaxws:client>
+    
+    <!-- Configuracion del servicio web SIEME009 para consultar eventos relacionados de un suministro -->
+    <bean id="getEventosRelacionadosWSClient" class="com.casosemergencias.logic.ws.clients.GetEventosRelacionadosWSClient"/>
+    <jaxws:client id="sieme009Service" serviceClass="org.example.sieme009.SIEME009" address="${sieme009.endpoint}">
+		<jaxws:handlers>
+      		<ref bean="tibcoRequestsSOAPHandler" />
+    	</jaxws:handlers>
+	</jaxws:client>
+	
+    <!-- Autenticacion SSL para conectar con los servicios de TIBCO -->
+    <http:conduit id="siresConduit" name="*">
+        <http:tlsClientParameters><!-- parametro disableCNCheck="true" para no comprobar que el CN del cert de servidor concuerte con el hostname -->
+            <sec:trustManagers>
+                <sec:keyStore password="${ssl.jks.password}"
+                    file="../classes/webservices/certs/${ssl.jks.name}" type="${ssl.jks.type}"/>
+            </sec:trustManagers>
+            <sec:cipherSuitesFilter>
+                <sec:include>.*_WITH_3DES_.*</sec:include>
+                <sec:include>.*_WITH_DES_.*</sec:include>
+                <sec:exclude>.*_WITH_NULL_.*</sec:exclude>
+                <sec:exclude>.*_DH_anon_.*</sec:exclude>
+            </sec:cipherSuitesFilter>
+        </http:tlsClientParameters>
+    </http:conduit>
+    <!-- <<<<<<<<<<<<<<<<<< CONFIGURACIÓN DE WEBSERVICES <<<<<<<<<<<<<<<<<< -->
+</beans>
