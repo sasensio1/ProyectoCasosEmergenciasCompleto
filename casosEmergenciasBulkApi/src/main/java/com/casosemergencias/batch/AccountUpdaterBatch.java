@@ -23,7 +23,6 @@ public class AccountUpdaterBatch {
 		Date yesterday = Utils.substractDaysToDate(new Date(), 1);
 		Date processStartDate = Utils.setHourInDate(yesterday, 0, 0, 0, 0);
 		Date processEndDate = Utils.setHourInDate(yesterday, 23, 59, 59, 999);
-		Date processStartDate = cal.getTime();
 		//FIXME: Comprobar zona horaria.
 		restApiInvokerBatch.setProcessStartDate(processStartDate);
 		restApiInvokerBatch.setProcessEndDate(processEndDate);
