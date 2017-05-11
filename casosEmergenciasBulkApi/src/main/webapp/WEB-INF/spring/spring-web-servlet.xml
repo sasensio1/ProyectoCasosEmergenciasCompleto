@@ -335,7 +335,7 @@
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los account-->
-    <bean id="accountTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <bean id="caseHistoryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="accountJob" />
         <property name="cronExpression" value="0 20/30 0-23 * * ?" />
     </bean>
@@ -404,6 +404,11 @@
     <bean id="userTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="userJob" />
         <property name="cronExpression" value="0 58 9 * * ?" />
+    </bean>
+	
+    <bean id="accountTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="accountJob" />
+        <property name="cronExpression" value="0 58 10 * * ?" />
     </bean>
    
     <!-- Trigger de Quartz para la actualizacion de registros desde el API de Salesforce -->
