@@ -334,12 +334,6 @@
         <property name="cronExpression" value="0 58 2 * * ?" />
     </bean>
     
-    <!-- Trigger de Quartz para la actualizacion de los account-->
-    <bean id="caseHistoryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="accountJob" />
-        <property name="cronExpression" value="0 20/30 0-23 * * ?" />
-    </bean>
-    
     <!-- Trigger de Quartz para la actualizacion de los address-->
     <bean id="addressTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="addressJob" />
@@ -355,7 +349,7 @@
     <!-- Trigger de Quartz para la actualizacion de los caseHistory-->
     <bean id="caseHistoryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="caseHistoryJob" />
-        <property name="cronExpression" value="0 05/30 0-23 * * ?" />
+        <property name="cronExpression" value="0 05/15 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los contact-->
@@ -406,6 +400,7 @@
         <property name="cronExpression" value="0 58 9 * * ?" />
     </bean>
 	
+    <!-- Trigger de Quartz para la actualizacion de los account-->
     <bean id="accountTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="accountJob" />
         <property name="cronExpression" value="0 58 10 * * ?" />
