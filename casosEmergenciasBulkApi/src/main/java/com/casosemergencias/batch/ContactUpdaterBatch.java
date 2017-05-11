@@ -23,7 +23,7 @@ public class ContactUpdaterBatch {
 		Date processEndDate = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(processEndDate);
-		cal.add(Calendar.MINUTE, -15);
+		cal.add(Calendar.MINUTE, -30);
 		Date processStartDate = cal.getTime();
 		LOGGER.info("Hora inicial: " + processStartDate);
 		LOGGER.info("Hora final: " + processEndDate);
