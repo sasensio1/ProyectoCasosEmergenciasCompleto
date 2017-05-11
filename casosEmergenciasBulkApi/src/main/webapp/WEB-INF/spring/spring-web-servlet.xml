@@ -355,7 +355,7 @@
     <!-- Trigger de Quartz para la actualizacion de los comentario de caso-->
     <bean id="caseCommentTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="caseCommentJob" />
-        <property name="cronExpression" value="0 10/30 0-23 * * ?" />
+        <property name="cronExpression" value="0 10/15 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los group-->
