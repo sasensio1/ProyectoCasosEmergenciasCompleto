@@ -23,7 +23,7 @@ public class ServiceProductUpdaterBatch {
 		Date processEndDate = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(processEndDate);
-		cal.add(Calendar.HOUR, -1);
+		cal.add(Calendar.MINUTE, -30);
 		Date processStartDate = cal.getTime();
 		LOGGER.info("Hora inicial: " + processStartDate);
 		LOGGER.info("Hora final: " + processEndDate);
