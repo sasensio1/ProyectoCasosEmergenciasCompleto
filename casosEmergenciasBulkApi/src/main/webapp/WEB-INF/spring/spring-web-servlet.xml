@@ -349,13 +349,13 @@
     <!-- Trigger de Quartz para la actualizacion de los caseHistory-->
     <bean id="caseHistoryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="caseHistoryJob" />
-        <property name="cronExpression" value="0 05/15 0-23 * * ?" />
+        <property name="cronExpression" value="0 0/10 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los comentario de caso-->
     <bean id="caseCommentTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="caseCommentJob" />
-        <property name="cronExpression" value="0 10/15 0-23 * * ?" />
+        <property name="cronExpression" value="0 05/10 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los group-->
@@ -367,7 +367,7 @@
     <!-- Trigger de Quartz para la actualizacion de los pointOfDelivery-->
     <bean id="pointOfDeliveryTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="pointOfDeliveryJob" />
-        <property name="cronExpression" value="0 15/30 0-23 * * ?" />
+        <property name="cronExpression" value="0 13/30 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los repeatedCases-->
@@ -415,7 +415,7 @@
     <!-- Trigger de Quartz para la actualizacion de contactos -->
     <bean id="contactTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="contactJob" />
-        <property name="cronExpression" value="0 0/30 0-23 * * ?" />
+        <property name="cronExpression" value="0 08/30 0-23 * * ?" />
     </bean>
     
     <!-- Trigger de Quartz para la actualizacion de los usuarios de Heroku -->
